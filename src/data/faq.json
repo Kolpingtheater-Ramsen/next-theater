@@ -1,0 +1,30 @@
+[
+  {
+    "q": "Wo findet die Veranstaltung statt?",
+    "a": "Wir spielen als Open-Air-Theater auf der Kolpingwiese in Ramsen (Klosterhof 7).",
+    "button": "Google Maps",
+    "link": "https://maps.app.goo.gl/4crMgUbbeFeVaHkj7"
+  },
+  {
+    "q": "Gibt es einen Kartenvorverkauf?",
+    "a": "Nein, da unsere Vorstellungen kostenlos sind, gibt es keinen Kartenvorverkauf."
+  },
+  {
+    "q": "Gibt es eine feste Platzvergabe?",
+    "a": "Nein, es gibt freie Platzwahl."
+  },
+  {
+    "q": "Was kostet der Eintritt?",
+    "a": "Wie auch schon die Jahre zuvor ist der Eintritt kostenlos. Wer möchte darf uns gerne mit einer freiwilligen Spende unterstützen."
+  },
+  {
+    "q": "Wo kann ich parken?",
+    "a": "Neben den Parkmöglichkeiten im Klosterhof in Ramsen besteht noch die Möglichkeit hier zu parken:",
+    "button": "Google Maps",
+    "link": "https://goo.gl/maps/6Jr2paPszKuscUEZ9"
+  },
+  {
+    "q": "Gibt es vor Ort Essen / Getränke?",
+    "a": "Wir bieten sowohl Getränke, als auch einen obligatorischen Laugensnack zum Verkauf an."
+  }
+]

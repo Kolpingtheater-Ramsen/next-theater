@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+
+/* Theme derived from logo: Kolping orange + deep stage black */
+@theme inline {
+  --color-kolping-400: #ff7a00;
+  --color-kolping-500: #ff6a00;
+  --color-kolping-600: #e65e00;
+  --color-site-950: #0a0a0a;
+  --color-site-900: #0f0f10;
+  --color-site-800: #18181a;
+  --color-site-700: #232326;
+  --color-site-100: #e6e6e6;
+  --color-site-50: #f3f3f3;
+}
+
+/* Light theme overrides using the same semantic tokens */
+[data-theme='light'] {
+  --color-site-950: #ffffff;
+  --color-site-900: #ffffff; /* primary background */
+  --color-site-800: #f7f7f8; /* elevated surfaces */
+  --color-site-700: #e4e4e7; /* borders */
+  --color-site-100: #374151; /* muted text */
+  --color-site-50: #0f0f10; /* primary text */
+}
+
+/* Pragmatic overrides to Tailwind utility classes in light mode */
+[data-theme='light'] .bg-site-900 {
+  background-color: #ffffff !important;
+}
+[data-theme='light'] .bg-site-800 {
+  background-color: #f7f7f8 !important;
+}
+[data-theme='light'] .bg-site-900\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+[data-theme='light'] .bg-site-900\/80 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+[data-theme='light'] .text-site-50 {
+  color: #0f0f10 !important;
+}
+[data-theme='light'] .text-site-100 {
+  color: #374151 !important;
+}
+[data-theme='light'] .text-site-300 {
+  color: #6b7280 !important;
+}
+[data-theme='light'] .border-site-700 {
+  border-color: #e4e4e7 !important;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+::selection {
+  background: var(--color-kolping-500);
+  color: white;
+}

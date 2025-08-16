@@ -1,0 +1,873 @@
+{
+  "plays": [
+    "2016 “Die Geschichte der Black Swan”",
+    "2017 “Verrat im Kloster”",
+    "2018 “Bluttribut”",
+    "2019 “Dystopia”",
+    "2020 “Der Kristall der Träume”",
+    "2021 “Malleus Maleficarum”",
+    "2022 “Goldfieber”",
+    "2023 “Traum von Freiheit”",
+    "2023 “Sagenhaft” (Kreativbühne)",
+    "2024 “Nexus”",
+    "2024 “Eine höllische Herausforderung” (Kreativbühne)",
+    "2025 “Alles hat eine Geschichte”"
+  ],
+  "current": [
+    {
+      "name": "Anton",
+      "roles": [
+        "Sir Richard Black",
+        "Hauptmann Lorentz",
+        "Graf Harras",
+        "Alan",
+        "Kaiser Richard",
+        "Fürstbischof Reinhard",
+        "Morgan Bullock",
+        "Laurent",
+        null,
+        "Hunter",
+        null,
+        "Graf Gottfried"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Carina",
+      "roles": [
+        "Jacky",
+        "Prinzessin Helen",
+        "Lisa",
+        "Cobra",
+        "Kaiserin Theresa",
+        "Helene",
+        "Maggy",
+        "Marry Reed",
+        null,
+        "Alesa",
+        null,
+        "Maribel / Mathilde"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Elena",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Johanna",
+        "Aria",
+        "Lucy",
+        "Johanna"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Fernanda",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Magd",
+        "Ensemble",
+        "Mammonia",
+        "Gräfin Hedwig"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Fynn",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "George",
+        "Admiral Rodrigo",
+        null,
+        "Ensemble",
+        null,
+        "Pater Rabanus"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Hatice",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Asmodia",
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Jonas",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Jesse",
+        "Ensemble",
+        "Berthold von Winzingen",
+        "Ripper",
+        "Teufel",
+        "Berthold von Winzingen"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Jule",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Julian",
+      "roles": [
+        "Bühnentechnik",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Hofarzt",
+        "Ensemble",
+        "Jim / John",
+        "Ensemble",
+        "Bühnentechnik",
+        "Richter / Ensemble",
+        null,
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Lea",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        "Riccarda",
+        "Maren",
+        "Kate O`Hara",
+        "Anne Bonny",
+        null,
+        "Raven",
+        null,
+        "Ysabel"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Leon",
+      "roles": [
+        null,
+        "Graf Philipp",
+        "Johann",
+        "Lizard",
+        "Jens",
+        "Georg",
+        "Ben McConnell",
+        "Ensemble",
+        null,
+        "Collin Charleston / Ensemble",
+        null,
+        "Dorfvogt Roderich"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Louis",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        "Arno",
+        "Pater Heinrich",
+        "Frank McConnel",
+        "Edward Teach “Blackbeard”",
+        null,
+        "Blade",
+        null,
+        "Barde Mattes"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Lina",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Rose",
+        "Ensemble",
+        "Junge Johanna/ Ensemble",
+        "Daria",
+        "Teufelchen",
+        "Emma (jung)"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Magdalena",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Carmen",
+        null,
+        "Serentiy Chrome",
+        null,
+        "Fiora"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Maria",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Ruth",
+        "Lilly",
+        "Isabella Mendoza",
+        null,
+        "Seraphina Chrome",
+        null,
+        "Talina"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Max",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Bill",
+        "Ensemble",
+        "Bühnentechnik",
+        "Ensemble",
+        null,
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Maximilian",
+      "roles": [
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Zeitungsausträger",
+        "Ensemble",
+        null,
+        "Ensemble",
+        null,
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Nela",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Junge Marie/ Ensemble",
+        "Freya",
+        "Teufelchen",
+        "Marie (jung)"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Nele",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Annie",
+        "Megan",
+        "Marie",
+        "Vega",
+        "Seele 2/Gabriel",
+        "Marie"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Niko",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Will",
+        "Ensemble",
+        "Knappe/ Ensemble",
+        "Jakko",
+        "Beelzebub",
+        "Knappe Fridolin"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Nora",
+      "roles": [
+        null,
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Katharina",
+        "Lisa",
+        "Jolene",
+        "Chronistin",
+        "Sybella Chrome",
+        "Seele 1/Prof. Dr. Dr. Glutheiß",
+        "Agnes"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Philipp",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ],
+      "images": 2
+    },
+    {
+      "name": "Raphael",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Liebhaber/ Ensemble",
+        null,
+        null,
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Sebastian",
+      "roles": [
+        "Regie",
+        "Ensemble / Regie",
+        "Albert / Regie",
+        "Ensemble / Regie",
+        "Ensemble / Regie",
+        "Ensemble / Regie",
+        "Doc William Mc Allister / Regie",
+        "Capitan Javier / Regie",
+        "Regie",
+        "Dante / Regie",
+        "Regie",
+        "Konrad / Regie"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Sophie",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Johanna (jung)"
+      ],
+      "placeholderAvatar": false,
+      "images": 3
+    },
+    {
+      "name": "Theo",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        null,
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Theresa",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Emma",
+        "Nyra",
+        "Lillith",
+        "Emma"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Tobias",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Edward Smith",
+        "Ensemble",
+        "Bär/ Ensemble",
+        "Barkeeper",
+        null,
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Vanessa",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Monster",
+        "Delya Delloraine",
+        "Engel",
+        "Ensemble"
+      ],
+      "images": 3
+    },
+    {
+      "name": "Yunus",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Technik",
+        "Thomas",
+        "Jack Rackham",
+        null,
+        "Xion Venom",
+        null,
+        "Lothar von Greifenfels"
+      ],
+      "images": 3
+    }
+  ],
+  "former": [
+    {
+      "name": "Anna",
+      "roles": [
+        "Susan Campbell",
+        "Anne",
+        "Ida",
+        "Moon",
+        "Emily",
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Anna R",
+      "roles": [
+        "Alice",
+        "Stumpfwaldhexe",
+        "Hausgeist Anastasia",
+        "Lilly"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Anika",
+      "roles": [
+        "Ensemble",
+        "Ensemble",
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Frankie",
+      "roles": [
+        null,
+        null,
+        null,
+        "Vyper"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Franek",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Richie",
+        "Matteo",
+        null
+      ],
+      "images": 1
+    },
+    {
+      "name": "Jack",
+      "roles": [
+        null,
+        null,
+        null,
+        "Cover Moon/ Ensemble",
+        "Dr. von Hofmannsthal",
+        "Pater Markus"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Laura",
+      "roles": [
+        "Lucy",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Logge",
+      "roles": [
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Bestatter",
+        "Ensemble",
+        "Vater/Bote",
+        "KI",
+        null,
+        "Ensemble"
+      ],
+      "images": 2
+    },
+    {
+      "name": "Luisa",
+      "roles": [
+        null,
+        null,
+        null,
+        "Cat",
+        "Merle",
+        "Klara",
+        "Jane",
+        "Sofia Mendoza",
+        null
+      ],
+      "images": 1
+    },
+    {
+      "name": "Leonhard",
+      "roles": [
+        "Gouverneur Campbell",
+        "Kaiser Heinrich",
+        "Wirt Otto",
+        "Richy"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Leni",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Marc",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        "Theodor",
+        "Wilhelm"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Marleen",
+      "roles": [
+        "Kate Campbell",
+        "Prinzessin Elisabeth",
+        "Martha",
+        "Mira"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Paul",
+      "roles": [
+        null,
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Paulina",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Sophia",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Till",
+      "roles": [
+        null,
+        "Mattes",
+        "Hans",
+        "Python",
+        "Archibald",
+        "Barde Mattes",
+        "Eddie"
+      ],
+      "images": 1
+    },
+    {
+      "name": "Toni",
+      "roles": [
+        "Captain Anne",
+        "Agnes",
+        "Emma"
+      ],
+      "images": 1
+    }
+  ],
+  "tech": [
+    {
+      "name": "Christian",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        }
+      ],
+      "images": 2
+    },
+    {
+      "name": "Daniel",
+      "placeholderAvatar": true,
+      "jobs": [
+        {
+          "job": "Lichttechnik",
+          "icon": "lightbulb"
+        }
+      ],
+      "images": 1
+    },
+    {
+      "name": "Florian",
+      "icon": "settings",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        }
+      ],
+      "images": 3
+    },
+    {
+      "name": "Leo",
+      "icon": "settings",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        },
+        {
+          "job": "Fotografie",
+          "icon": "camera"
+        }
+      ],
+      "images": 2
+    },
+    {
+      "name": "Jonas",
+      "icon": "lightbulb",
+      "jobs": [
+        {
+          "job": "Lichttechnik",
+          "icon": "lightbulb"
+        }
+      ],
+      "images": 3
+    },
+    {
+      "name": "Wolfgang",
+      "icon": "headphones",
+      "jobs": [
+        {
+          "job": "Tontechnik",
+          "icon": "headphones"
+        }
+      ],
+      "images": 1
+    },
+    {
+      "name": "Julian",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        }
+      ],
+      "images": 3
+    },
+    {
+      "name": "Logge",
+      "jobs": [
+        {
+          "job": "Website",
+          "icon": "explore"
+        }
+      ],
+      "images": 2
+    }
+  ]
+}
