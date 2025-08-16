@@ -46,6 +46,9 @@ export default function ClientGrid({
           src={`/img/gallery_full/${play}/Bild_${
             metas[openIndex].index + 1
           }.jpg`}
+          thumbSrc={`/img/gallery_thumbs/${play}/Bild_${
+            metas[openIndex].index + 1
+          }.jpg`}
           alt={metas[openIndex].alt}
           caption={captions[openIndex] ?? metas[openIndex].alt}
           downloadHref={`/img/gallery_full/${play}/Bild_${

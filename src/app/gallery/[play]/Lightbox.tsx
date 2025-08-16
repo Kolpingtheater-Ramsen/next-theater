@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 export function Lightbox({
   src,
   alt,
+  thumbSrc,
   caption,
   onClose,
   onPrev,
@@ -14,6 +15,7 @@ export function Lightbox({
 }: {
   src: string
   alt: string
+  thumbSrc?: string
   caption?: string
   onClose: () => void
   onPrev: () => void
@@ -44,11 +46,20 @@ export function Lightbox({
         className='relative max-w-5xl w-full h-[80vh]'
         onClick={(e) => e.stopPropagation()}
       >
-        {loading ? (
+        {/* Low-res placeholder while full image loads */}
+        {loading && thumbSrc ? (
+          <Image
+            src={thumbSrc}
+            alt={alt}
+            fill
+            className='object-contain blur-sm'
+          />
+        ) : null}
+        {!loading ? null : (
           <div className='absolute inset-0 grid place-items-center'>
             <div className='w-10 h-10 rounded-full border-2 border-white/50 border-t-transparent animate-spin' />
           </div>
-        ) : null}
+        )}
         <Image
           key={src}
           src={src}
@@ -103,4 +114,3 @@ export function Lightbox({
     </div>
   )
 }
-
