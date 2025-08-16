@@ -28,7 +28,7 @@ export default function ClientGrid({
               onClick={() => setOpenIndex(i)}
             >
               <Image
-                src={thumb}
+                src={encodeURI(thumb)}
                 alt={m.alt}
                 width={m.width}
                 height={m.height}
@@ -43,10 +43,14 @@ export default function ClientGrid({
       </div>
       {openIndex !== null && (
         <Lightbox
-          src={`/img/gallery_full/${play}/Bild (${metas[openIndex].index + 1}).jpg`}
+          src={encodeURI(
+            `/img/gallery_full/${play}/Bild (${metas[openIndex].index + 1}).jpg`
+          )}
           alt={metas[openIndex].alt}
           caption={captions[openIndex] ?? metas[openIndex].alt}
-          downloadHref={`/img/gallery_full/${play}/Bild (${metas[openIndex].index + 1}).jpg`}
+          downloadHref={encodeURI(
+            `/img/gallery_full/${play}/Bild (${metas[openIndex].index + 1}).jpg`
+          )}
           onClose={() => setOpenIndex(null)}
           onPrev={() =>
             setOpenIndex((i) => (i! - 1 + metas.length) % metas.length)
@@ -57,4 +61,3 @@ export default function ClientGrid({
     </>
   )
 }
-
