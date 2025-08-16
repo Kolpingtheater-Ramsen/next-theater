@@ -18,17 +18,20 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Kolpingtheater Ramsen',
   description:
-    'Kolping-Open-Air-Theater Ramsen – Produktionen, Ensemble, Timeline und Galerie.',
+    'Leidenschaft für Theater unter freiem Himmel – Erlebe unsere bewegenden Eigenproduktionen in Ramsen.',
   metadataBase: new URL('https://kolpingtheater-ramsen.de'),
   openGraph: {
     title: 'Kolpingtheater Ramsen',
     description:
-      'Kolping-Open-Air-Theater Ramsen – Produktionen, Ensemble, Timeline und Galerie.',
+      'Leidenschaft für Theater unter freiem Himmel – Erlebe unsere bewegenden Eigenproduktionen in Ramsen.',
     type: 'website',
     images: ['/img/logo.png'],
   },
   twitter: {
     card: 'summary',
+    title: 'Kolpingtheater Ramsen',
+    description:
+      'Leidenschaft für Theater unter freiem Himmel – Erlebe unsere bewegenden Eigenproduktionen in Ramsen.',
     images: ['/img/logo.png'],
   },
   icons: {
