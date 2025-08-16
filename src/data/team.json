@@ -11,7 +11,7 @@
     "2023 “Sagenhaft” (Kreativbühne)",
     "2024 “Nexus”",
     "2024 “Eine höllische Herausforderung” (Kreativbühne)",
-    "2025 “Alles hat eine Geschichte”"
+    "2025 “Anno 1146”"
   ],
   "current": [
     {
@@ -105,25 +105,6 @@
       "images": 3
     },
     {
-      "name": "Hatice",
-      "placeholderAvatar": true,
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Asmodia",
-        "Ensemble"
-      ],
-      "images": 3
-    },
-    {
       "name": "Jonas",
       "roles": [
         null,
@@ -197,6 +178,24 @@
       "images": 3
     },
     {
+      "name": "Lena",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ]
+    },
+    {
       "name": "Leon",
       "roles": [
         null,
@@ -249,6 +248,24 @@
         "Emma (jung)"
       ],
       "images": 3
+    },
+    {
+      "name": "Lina",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ]
     },
     {
       "name": "Magdalena",
@@ -614,6 +631,23 @@
       "images": 1
     },
     {
+      "name": "Hatice",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Asmodia"
+      ]
+    },
+    {
       "name": "Jack",
       "roles": [
         null,
@@ -651,7 +685,7 @@
         null,
         "Ensemble"
       ],
-      "images": 2
+      "images": 1
     },
     {
       "name": "Luisa",
@@ -786,6 +820,10 @@
         {
           "job": "Bühnentechnik",
           "icon": "settings"
+        },
+        {
+          "job": "Videotechnik",
+          "icon": "camera"
         }
       ],
       "images": 2
@@ -806,8 +844,8 @@
       "icon": "settings",
       "jobs": [
         {
-          "job": "Bühnentechnik",
-          "icon": "settings"
+          "job": "Lichttechnik",
+          "icon": "lightbulb"
         }
       ],
       "images": 3
