@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     card: 'summary',
     images: ['/img/logo.png'],
   },
+  icons: {
+    icon: ['/favicon.svg'],
+    apple: ['/img/logo.png'],
+  },
 }
 
 export default function RootLayout({
