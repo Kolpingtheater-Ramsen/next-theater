@@ -1,7 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+if (process.env.NODE_ENV === 'development') {
+  // Enable Cloudflare bindings during `pnpm dev`
+  await setupDevPlatform()
+}
 
-export default nextConfig;
+const nextConfig: NextConfig = {}
+
+export default nextConfig

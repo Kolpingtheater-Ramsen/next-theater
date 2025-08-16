@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang='de' data-theme='dark' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-site-900 text-site-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-site-900 text-site-50 min-h-screen flex flex-col`}
       >
         <header className='sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-site-900/80 bg-site-900/95 border-b border-site-700'>
           <div className='mx-auto max-w-6xl px-4 py-3 flex items-center gap-4'>
@@ -70,7 +70,7 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
-        <main className='mx-auto max-w-6xl px-4 py-8'>{children}</main>
+        <main className='mx-auto max-w-6xl px-4 py-8 flex-1'>{children}</main>
         <footer className='border-t border-site-700 py-8 text-sm text-site-300'>
           <div className='mx-auto max-w-6xl px-4 flex flex-wrap items-center justify-between gap-4'>
             <span>
