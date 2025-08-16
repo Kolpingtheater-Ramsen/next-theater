@@ -4,75 +4,118 @@ export default function PrivacyPage() {
   return (
     <div className='space-y-8'>
       <h1 className='text-3xl font-bold'>Datenschutz</h1>
+      {/* Owner card */}
+      <div className='rounded-lg border border-site-700 bg-site-800 p-4'>
+        <div className='font-semibold mb-1'>Verantwortlich für den Inhalt</div>
+        <div>Johannes Stüber</div>
+        <div>Fischerstraße 12</div>
+        <div>01945 Ruhland</div>
+        <div className='mt-2 text-sm'>
+          E-Mail:{' '}
+          <a
+            className='underline text-kolping-400'
+            href='mailto:hyper.xjo@gmail.com'
+          >
+            hyper.xjo@gmail.com
+          </a>
+        </div>
+      </div>
+
       <section className='prose prose-invert max-w-none'>
-        <h2>Verantwortlich für den Inhalt</h2>
+        <h2>Allgemeines</h2>
         <p>
-          Johannes Stüber
-          <br />
-          Fischerstraße 12
-          <br />
-          01945 Ruhland
+          Nachfolgend informieren wir über die Verarbeitung personenbezogener
+          Daten beim Besuch dieser Website.
         </p>
 
         <h2>Hosting (Cloudflare Pages)</h2>
+        <ul className='list-disc pl-6 space-y-1'>
+          <li>Auslieferung über das CDN von Cloudflare Pages</li>
+          <li>
+            Verarbeitete Daten: IP-Adresse, Datum/Zeit, angefragte URL/Assets,
+            Referrer, User-Agent, Geräte-/Browser-Infos
+          </li>
+          <li>
+            Zwecke: Bereitstellung der Website, Stabilität, DDoS-Schutz,
+            Fehlersuche
+          </li>
+          <li>
+            Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)
+          </li>
+          <li>Rolle von Cloudflare: Auftragsverarbeiter</li>
+        </ul>
         <p>
-          Diese Website wird über Cloudflare Pages ausgeliefert. Beim Aufruf der
-          Seiten verarbeitet Cloudflare technisch notwendige Daten, um die
-          Auslieferung und Sicherheit (DDoS-Schutz, Fehlerdiagnose) zu
-          gewährleisten. Dazu gehören insbesondere IP-Adresse, Datum/Uhrzeit,
-          aufgerufene Ressourcen, Referrer, User-Agent sowie
-          Geräte-/Browser-Informationen. Die Verarbeitung erfolgt auf Grundlage
-          von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem
-          sicheren und zuverlässigen Betrieb der Website). Cloudflare agiert als
-          Auftragsverarbeiter. Weitere Informationen finden Sie in der
-          Datenschutzerklärung von Cloudflare.
+          Weitere Informationen finden Sie in der{' '}
+          <a
+            className='underline text-kolping-400'
+            href='https://www.cloudflare.com/privacypolicy/'
+            target='_blank'
+            rel='noreferrer'
+          >
+            Datenschutzerklärung von Cloudflare
+          </a>
+          .
         </p>
 
         <h2>Keine Cookies, keine Analyse</h2>
-        <p>
-          Diese Website setzt keine Tracking-Cookies ein und verwendet keine
-          Analyse- oder Marketing-Dienste.
-        </p>
+        <ul className='list-disc pl-6 space-y-1'>
+          <li>Es werden keine Tracking-Cookies gesetzt.</li>
+          <li>
+            Es werden von uns keine Analyse-, Werbe- oder Profiling-Dienste
+            eingesetzt.
+          </li>
+        </ul>
 
         <h2>Server-Logdaten</h2>
-        <p>
-          Server- bzw. Edge-Protokolle werden ausschließlich zum Zweck der
-          Betriebssicherheit und Fehleranalyse verarbeitet und anschließend
-          kurzzeitig vorgehalten. Eine Zusammenführung dieser Daten mit anderen
-          Datenquellen oder eine Profilbildung findet nicht statt.
-        </p>
+        <ul className='list-disc pl-6 space-y-1'>
+          <li>
+            Verwendung ausschließlich für Betriebssicherheit und Fehleranalyse
+          </li>
+          <li>
+            Kurzfristige Aufbewahrung, keine Zusammenführung mit anderen Daten
+          </li>
+          <li>Keine Erstellung von Nutzerprofilen</li>
+        </ul>
 
         <h2>Externe Inhalte & Verlinkungen</h2>
-        <p>
-          Wir binden keine externen Widgets ein. Verlinkte Inhalte (z. B.
-          YouTube-Trailer) werden erst beim Anklicken der Links geöffnet; ab
-          diesem Zeitpunkt gelten die Datenschutzbestimmungen der jeweiligen
-          Anbieter.
-        </p>
+        <ul className='list-disc pl-6 space-y-1'>
+          <li>Keine eingebetteten externen Widgets</li>
+          <li>
+            Verlinkte Inhalte (z. B. YouTube) werden erst beim Klick geladen
+          </li>
+          <li>
+            Ab dem Aufruf gelten die Datenschutzbestimmungen der Drittanbieter
+          </li>
+        </ul>
 
         <h2>Kontakt</h2>
         <p>
           Bei Fragen zum Datenschutz wenden Sie sich bitte an den oben genannten
           Verantwortlichen. E-Mail:{' '}
-          <a href='mailto:hyper.xjo@gmail.com'>hyper.xjo@gmail.com</a>. Bei
-          einer Kontaktaufnahme per E-Mail werden Ihre Angaben ausschließlich
-          zur Bearbeitung der Anfrage verarbeitet (Art. 6 Abs. 1 lit. b oder f
-          DSGVO) und anschließend gelöscht, sofern keine gesetzlichen
-          Aufbewahrungspflichten bestehen.
+          <a
+            className='underline text-kolping-400'
+            href='mailto:hyper.xjo@gmail.com'
+          >
+            hyper.xjo@gmail.com
+          </a>
+          . Bei einer Kontaktaufnahme per E-Mail werden Ihre Angaben
+          ausschließlich zur Bearbeitung der Anfrage verarbeitet (Art. 6 Abs. 1
+          lit. b oder f DSGVO) und anschließend gelöscht, sofern keine
+          gesetzlichen Aufbewahrungspflichten bestehen.
         </p>
 
         <h2>Ihre Rechte</h2>
-        <p>
-          Ihnen stehen die Rechte auf Auskunft, Berichtigung, Löschung,
-          Einschränkung der Verarbeitung, Datenübertragbarkeit sowie Widerspruch
-          gegen bestimmte Verarbeitungen zu. Sie haben außerdem das Recht, sich
-          bei einer Datenschutzaufsichtsbehörde zu beschweren.
-        </p>
+        <ul className='list-disc pl-6 space-y-1'>
+          <li>Auskunft, Berichtigung, Löschung</li>
+          <li>Einschränkung der Verarbeitung und Datenübertragbarkeit</li>
+          <li>Widerspruch gegen bestimmte Verarbeitungen</li>
+          <li>Beschwerderecht bei einer Datenschutzaufsichtsbehörde</li>
+        </ul>
 
         <h2>Änderungen</h2>
         <p>
-          Wir passen diese Hinweise an, sobald sich technische oder rechtliche
-          Änderungen ergeben.
+          Diese Hinweise werden aktualisiert, sobald sich technische oder
+          rechtliche Rahmenbedingungen ändern.
         </p>
       </section>
     </div>
