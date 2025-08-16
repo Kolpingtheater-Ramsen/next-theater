@@ -6,12 +6,6 @@ if (process.env.NODE_ENV === 'development') {
   await setupDevPlatform()
 }
 
-const nextConfig: NextConfig = {
-  images: {
-    // Disable Next.js image optimization so images are served directly from /public
-    // This is required for Cloudflare Pages with next-on-pages
-    unoptimized: true,
-  },
-}
+const nextConfig: NextConfig = {}
 
 export default nextConfig
