@@ -60,6 +60,12 @@ export default function RootLayout({
               <Link href='/gallery' className='hover:text-kolping-400'>
                 Galerie
               </Link>
+              <Link href='/impressum' className='hover:text-kolping-400'>
+                Impressum
+              </Link>
+              <Link href='/privacy' className='hover:text-kolping-400'>
+                Datenschutz
+              </Link>
               <ThemeToggle />
             </nav>
           </div>
