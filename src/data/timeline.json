@@ -144,8 +144,8 @@
   },
   {
     "date": "August 2024",
-    "header": "“Neuxs”",
-    "text": "Das Stück Nexus” hatte seine Premiere. Eine packende Geschichte in einer nicht so fernen dystopischen Zukunft.",
+    "header": "“Nexus”",
+    "text": "Das Stück “Nexus” hatte seine Premiere. Eine packende Geschichte in einer nicht so fernen dystopischen Zukunft.",
     "image": "banners/nexus.jpg",
     "galleryHash": "nexus"
   },
@@ -155,5 +155,16 @@
     "text": "Das Stück “Eine höllische Herausforderung” hatte seine Premiere. Eine Komödie über das Innenleben der Hölle.",
     "image": "banners/hell.jpg",
     "galleryHash": "hell"
+  },
+  {
+    "date": "März 2025",
+    "header": "Probenstart",
+    "text": "Probenstart für “Anno 1146”"
+  },
+  {
+    "date": "August 2025",
+    "header": "“Anno 1146”",
+    "text": "Unser großes Sommerstück “Anno 1146 – Alles hat eine Geschichte” feiert Premiere.",
+    "image": "banners/anno.jpg"
   }
 ]
