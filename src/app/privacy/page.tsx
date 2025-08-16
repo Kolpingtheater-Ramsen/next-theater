@@ -57,14 +57,40 @@ export default function PrivacyPage() {
           .
         </p>
 
-        <h2>Keine Cookies, keine Analyse</h2>
+        <h2>Webanalyse (Cloudflare Web Analytics)</h2>
         <ul className='list-disc pl-6 space-y-1'>
-          <li>Es werden keine Tracking-Cookies gesetzt.</li>
+          <li>Datenschutzfreundliche Webanalyse von Cloudflare</li>
           <li>
-            Es werden von uns keine Analyse-, Werbe- oder Profiling-Dienste
-            eingesetzt.
+            Erfasste Metriken in aggregierter Form, z. B. Seitenaufrufe,
+            Referer, Gerät/Browser, Land/Region
+          </li>
+          <li>
+            Keine personenbezogene Identifikation, kein Cross‑Site‑Tracking
+          </li>
+          <li>
+            Es werden keine Tracking-Cookies gesetzt und keine
+            Werbe-/Profiling-Dienste eingesetzt
+          </li>
+          <li>
+            Zweck: Reichweitenmessung und Stabilitätsverbesserung der Website
+          </li>
+          <li>
+            Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse
+            an anonymisierter Nutzungsanalyse)
           </li>
         </ul>
+        <p>
+          Weitere Informationen:{' '}
+          <a
+            className='underline text-kolping-400'
+            href='https://www.cloudflare.com/web-analytics/'
+            target='_blank'
+            rel='noreferrer'
+          >
+            Cloudflare Web Analytics
+          </a>
+          .
+        </p>
 
         <h2>Server-Logdaten</h2>
         <ul className='list-disc pl-6 space-y-1'>
