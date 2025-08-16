@@ -1,11 +1,17 @@
 import type { NextConfig } from 'next'
 import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
 
-if (process.env.NODE_ENV === 'development') {
-  // Enable Cloudflare bindings during `pnpm dev`
-  await setupDevPlatform()
+const nextConfig: NextConfig = {
+  images: {
+    unoptimized: false,
+  },
 }
 
-const nextConfig: NextConfig = {}
+// Setup development platform in an async context
+if (process.env.NODE_ENV === 'development') {
+  ;(async () => {
+    await setupDevPlatform()
+  })()
+}
 
 export default nextConfig

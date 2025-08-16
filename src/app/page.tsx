@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import timeline from '@/data/timeline.json'
 import faq from '@/data/faq.json'
+import CountdownTimer from '@/components/CountdownTimer'
 
 type TimelineEntry = {
   date: string
@@ -15,6 +16,10 @@ type TimelineEntry = {
 export default function Home() {
   return (
     <div className='space-y-12'>
+      <CountdownTimer
+        targetDate='2025-08-23T20:00:00+02:00'
+        title='Countdown zur Premiere'
+      />
       <section className='relative w-full max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto aspect-[1968/2756] md:max-h-[80vh] overflow-hidden rounded-lg border border-site-700 bg-site-900'>
         <div className='absolute inset-0 z-0'>
           <Image
