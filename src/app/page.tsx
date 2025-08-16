@@ -35,17 +35,17 @@ export default function Home() {
         />
         <div className='pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/70 via-black/30 to-transparent' />
         <div className='absolute bottom-0 left-0 right-0 z-30 p-6 md:p-10'>
-          <div className='max-w-3xl space-y-2'>
-            <span className='inline-block text-sm tracking-wide text-site-100'>
+          <div className='max-w-3xl space-y-2 text-shadow'>
+            <span className='inline-block text-sm tracking-wide text-site-100 text-shadow'>
               Kolpingtheater Ramsen
             </span>
-            <h1 className='text-4xl md:text-5xl font-extrabold tracking-tight'>
+            <h1 className='text-4xl md:text-5xl font-extrabold tracking-tight text-shadow-lg'>
               Anno 1146
             </h1>
-            <p className='text-lg md:text-xl font-semibold text-kolping-400'>
+            <p className='text-lg md:text-xl font-semibold text-kolping-400 text-shadow'>
               Alles hat eine Geschichte
             </p>
-            <p className='text-site-50'>
+            <p className='text-site-50 text-shadow'>
               Taucht ein in das Jahr 1146! Unser großes Sommerstück &quot;Anno
               1146&quot; entführt euch in eine Zeit voller Geheimnisse, Intrigen
               und mittelalterlicher Abenteuer. Lasst euch von einer fesselnden
