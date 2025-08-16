@@ -20,6 +20,17 @@ export const metadata: Metadata = {
   description:
     'Kolping-Open-Air-Theater Ramsen – Produktionen, Ensemble, Timeline und Galerie.',
   metadataBase: new URL('https://theater.kolping-ramsen.de'),
+  openGraph: {
+    title: 'Kolpingtheater Ramsen',
+    description:
+      'Kolping-Open-Air-Theater Ramsen – Produktionen, Ensemble, Timeline und Galerie.',
+    type: 'website',
+    images: ['/img/logo.png'],
+  },
+  twitter: {
+    card: 'summary',
+    images: ['/img/logo.png'],
+  },
 }
 
 export default function RootLayout({
