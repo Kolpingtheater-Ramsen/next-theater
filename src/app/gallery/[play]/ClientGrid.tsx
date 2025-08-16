@@ -20,7 +20,7 @@ export default function ClientGrid({
     <>
       <div className='columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]'>
         {metas.map((m: PhotoMeta, i: number) => {
-          const thumb = `/img/gallery_thumbs/${play}/Bild (${m.index + 1}).jpg`
+          const thumb = `/img/gallery_thumbs/${play}/Bild_${m.index + 1}.jpg`
           return (
             <button
               key={i}
@@ -28,7 +28,7 @@ export default function ClientGrid({
               onClick={() => setOpenIndex(i)}
             >
               <Image
-                src={encodeURI(thumb)}
+                src={thumb}
                 alt={m.alt}
                 width={m.width}
                 height={m.height}
@@ -43,14 +43,14 @@ export default function ClientGrid({
       </div>
       {openIndex !== null && (
         <Lightbox
-          src={encodeURI(
-            `/img/gallery_full/${play}/Bild (${metas[openIndex].index + 1}).jpg`
-          )}
+          src={`/img/gallery_full/${play}/Bild_${
+            metas[openIndex].index + 1
+          }.jpg`}
           alt={metas[openIndex].alt}
           caption={captions[openIndex] ?? metas[openIndex].alt}
-          downloadHref={encodeURI(
-            `/img/gallery_full/${play}/Bild (${metas[openIndex].index + 1}).jpg`
-          )}
+          downloadHref={`/img/gallery_full/${play}/Bild_${
+            metas[openIndex].index + 1
+          }.jpg`}
           onClose={() => setOpenIndex(null)}
           onPrev={() =>
             setOpenIndex((i) => (i! - 1 + metas.length) % metas.length)

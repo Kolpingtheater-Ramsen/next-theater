@@ -60,8 +60,8 @@ Semantic tokens (`--color-site-*`, `--color-kolping-*`) are defined in `src/app/
 
 ### Gallery
 
-- Thumbnails: `public/img/gallery_thumbs/<hash>/Bild (n).jpg`
-- Full size: `public/img/gallery_full/<hash>/Bild (n).jpg`
+- Thumbnails: `public/img/gallery_thumbs/<hash>/Bild_n.jpg`
+- Full size: `public/img/gallery_full/<hash>/Bild_n.jpg`
 - Metadata: `src/data/images.json` per show with `{ width, height, alt, index }`
 
 ### Deployment
