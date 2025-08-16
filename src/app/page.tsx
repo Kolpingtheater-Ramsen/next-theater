@@ -38,7 +38,7 @@ export default function Home() {
           priority
           className='object-contain relative z-10'
         />
-        <div className='pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/70 via-black/30 to-transparent' />
+        <div className='pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/80 via-black/60 to-transparent' />
         <div className='absolute bottom-0 left-0 right-0 z-30 p-6 md:p-10'>
           <div className='max-w-3xl space-y-2 text-shadow'>
             <span className='inline-block text-sm tracking-wide text-site-100 text-shadow'>

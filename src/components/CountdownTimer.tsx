@@ -135,7 +135,7 @@ function TimeUnit({
         >
           <span className='text-4xl sm:text-5xl tabular-nums'>{display}</span>
         </div>
-        <div className='text-center text-[11px] font-medium uppercase tracking-wide text-site-200'>
+        <div className='text-center text-[11px] font-medium uppercase tracking-wide text-white'>
           {label}
         </div>
       </div>
