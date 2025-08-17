@@ -214,6 +214,25 @@
       "images": 3
     },
     {
+      "name": "Logge",
+      "placeholderAvatar": true,
+      "roles": [
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Bestatter",
+        "Ensemble",
+        "Vater/Bote",
+        "KI",
+        null,
+        "Ensemble"
+      ],
+      "images": 2
+    },
+    {
       "name": "Louis",
       "roles": [
         null,
@@ -594,7 +613,7 @@
         "Hausgeist Anastasia",
         "Lilly"
       ],
-      "images": 1
+      "placeholderAvatar": true
     },
     {
       "name": "Anika",
@@ -665,24 +684,6 @@
         "Lucy",
         "Ensemble",
         "Ensemble",
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "name": "Logge",
-      "roles": [
-        null,
-        "Ensemble",
-        "Ensemble",
-        "Ensemble",
-        "Ensemble",
-        "Ensemble",
-        "Bestatter",
-        "Ensemble",
-        "Vater/Bote",
-        "KI",
-        null,
         "Ensemble"
       ],
       "images": 1
