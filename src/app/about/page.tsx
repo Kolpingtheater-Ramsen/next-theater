@@ -23,18 +23,7 @@ export default function AboutPage() {
           eigene Stücke und bringen sie jeden Sommer auf der Kolpingwiese zur
           Premiere. Der Eintritt ist frei – Theater für alle.
         </p>
-        <p>
-          Spielort: Klosterhof 7, 67305 Ramsen. Mehr Informationen findest du
-          auf unserer ehemaligen Seite unter{' '}
-          <a
-            href='https://theater.kolping-ramsen.de/'
-            target='_blank'
-            rel='noreferrer'
-          >
-            theater.kolping-ramsen.de
-          </a>
-          .
-        </p>
+        <p>Spielort: Klosterhof 7, 67305 Ramsen.</p>
         <div className='not-prose mt-6'>
           <div className='relative w-full aspect-[16/9] rounded-lg overflow-hidden border border-site-700'>
             <Image
@@ -63,12 +52,12 @@ export default function AboutPage() {
                   <div className='space-y-2'>
                     <div className='font-semibold'>{t.header}</div>
                     {t.image ? (
-                      <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700'>
+                      <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black'>
                         <Image
                           src={`/img/${t.image}`}
                           alt={t.header}
                           fill
-                          className='object-cover'
+                          className='object-contain'
                         />
                       </div>
                     ) : null}
