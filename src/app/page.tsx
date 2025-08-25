@@ -3,6 +3,7 @@ import Link from 'next/link'
 import timeline from '@/data/timeline.json'
 import faq from '@/data/faq.json'
 import CountdownTimer from '@/components/CountdownTimer'
+import ShowSchedule from '@/components/ShowSchedule'
 
 type TimelineEntry = {
   date: string
@@ -56,32 +57,7 @@ export default function Home() {
               und mittelalterlicher Abenteuer. Lasst euch von einer fesselnden
               Geschichte in vergangene Zeiten versetzen.
             </p>
-            <div className='rounded-lg border border-white/20 bg-black/70 p-4 backdrop-blur text-white'>
-              <p className='font-medium'>Aufführungstermine</p>
-              <ul className='text-sm space-y-1'>
-                <li>
-                  <span className='opacity-90'>23.08.25</span> ·{' '}
-                  <span>20 Uhr</span>
-                </li>
-                <li>
-                  <span className='opacity-90'>24.08.25</span> ·{' '}
-                  <span>19 Uhr</span>
-                </li>
-                <li>
-                  <span className='opacity-90'>30.08.25</span> ·{' '}
-                  <span>20 Uhr</span>
-                </li>
-                <li>
-                  <span className='opacity-90'>31.08.25</span> ·{' '}
-                  <span>19 Uhr</span>
-                </li>
-              </ul>
-              <div className='mt-2 text-sm opacity-95'>
-                Open Air auf der{' '}
-                <span className='font-medium'>Kolpingwiese in Ramsen</span>
-              </div>
-              <div className='text-sm mt-1'>Eintritt frei</div>
-            </div>
+            <ShowSchedule />
             <p className='text-kolping-400 font-semibold'>
               Der Trailer ist da – schau rein und hol dir Gänsehaut!
             </p>
