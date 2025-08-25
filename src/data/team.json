@@ -179,7 +179,7 @@
     },
     {
       "name": "Lena",
-      "placeholderAvatar": false,
+      "placeholderAvatar": true,
       "roles": [
         null,
         null,
