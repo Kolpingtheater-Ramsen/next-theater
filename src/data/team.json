@@ -852,6 +852,17 @@
       "images": 3
     },
     {
+      "name": "Jonas",
+      "icon": "lightbulb",
+      "jobs": [
+        {
+          "job": "Lichttechnik",
+          "icon": "lightbulb"
+        }
+      ],
+      "images": 3
+    },
+    {
       "name": "Leo",
       "icon": "settings",
       "jobs": [
@@ -865,9 +876,9 @@
         }
       ],
       "images": 2
-    },
-    {
-      "name": "Jonas",
+      },
+      {
+      "name": "Noah",
       "icon": "lightbulb",
       "jobs": [
         {
@@ -875,7 +886,7 @@
           "icon": "lightbulb"
         }
       ],
-      "images": 3
+      "images": 1
     },
     {
       "name": "Wolfgang",
