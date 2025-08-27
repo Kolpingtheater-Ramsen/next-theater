@@ -18,33 +18,16 @@ const SHOWS: ShowTime[] = [
 export default function ShowSchedule() {
   const now = Date.now()
 
-  const { nextShowIndex, allDone } = useMemo(() => {
-    let nextIndex: number | null = null
-    for (let i = 0; i < SHOWS.length; i++) {
-      const start = new Date(SHOWS[i].dateTime).getTime()
-      if (start > now) {
-        nextIndex = i
-        break
-      }
-    }
-    return {
-      nextShowIndex: nextIndex,
-      allDone: nextIndex === null,
-    }
+  const upcomingShows = useMemo(() => {
+    return SHOWS.filter((show) => new Date(show.dateTime).getTime() > now)
   }, [now])
+
+  const allDone = upcomingShows.length === 0
 
   if (allDone) {
     return (
       <div className='rounded-lg border border-white/20 bg-black/70 p-4 backdrop-blur text-white'>
         <p className='font-medium'>Aufführungstermine</p>
-        <ul className='text-sm space-y-1'>
-          {SHOWS.map((s, idx) => (
-            <li key={idx} className='opacity-75'>
-              <span className='opacity-90'>{s.displayDate}</span> ·{' '}
-              <span>{s.displayTime}</span>
-            </li>
-          ))}
-        </ul>
         <div className='mt-3 rounded-md border border-green-500/30 bg-green-500/10 px-3 py-2 text-sm text-green-300'>
           Danke fürs Vorbeischauen! Alle Aufführungen sind vorbei – bis zum nächsten Mal!
         </div>
@@ -56,8 +39,8 @@ export default function ShowSchedule() {
     <div className='rounded-lg border border-white/20 bg-black/70 p-4 backdrop-blur text-white'>
       <p className='font-medium'>Aufführungstermine</p>
       <ul className='text-sm space-y-1'>
-        {SHOWS.map((s, idx) => {
-          const isNext = idx === nextShowIndex
+        {upcomingShows.map((s, idx) => {
+          const isNext = idx === 0
           return (
             <li key={idx} className={isNext ? 'font-semibold text-kolping-300' : ''}>
               <span className={isNext ? 'opacity-100' : 'opacity-90'}>{s.displayDate}</span> ·{' '}
