@@ -3,13 +3,14 @@ import Link from 'next/link'
 import teamData from '@/data/team.json'
 
 type Person = {
-  name: string
+  id: string
+  name?: string
   images?: number
   placeholderAvatar?: boolean
 }
 
-function avatarPath(name: string) {
-  const filename = `${name}.jpg`
+function avatarPath(id: string) {
+  const filename = `${id}.jpg`
   return `/img/team/avatar/${filename}`
 }
 
@@ -18,15 +19,19 @@ export default function TeamPage() {
     .current
   const former: Person[] = (teamData as unknown as { former: Person[] }).former
   const tech: {
-    name: string
+    id: string
+    name?: string
     placeholderAvatar?: boolean
     jobs?: { job: string; icon?: string }[]
+    images?: number
   }[] = (
     teamData as unknown as {
       tech: {
-        name: string
+        id: string
+        name?: string
         placeholderAvatar?: boolean
         jobs?: { job: string; icon?: string }[]
+        images?: number
       }[]
     }
   ).tech
@@ -38,8 +43,8 @@ export default function TeamPage() {
         <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {current.map((p: Person) => (
             <Link
-              key={p.name}
-              href={`/team/${encodeURIComponent(p.name)}`}
+              key={p.id}
+              href={`/team/${encodeURIComponent(p.id)}`}
               className='group rounded-lg overflow-hidden border border-site-700 hover:border-kolping-500 transition-colors'
             >
               <div className='relative aspect-[3/4]'>
@@ -47,15 +52,15 @@ export default function TeamPage() {
                   src={
                     p.placeholderAvatar
                       ? '/img/team/avatar/placeholder.svg'
-                      : avatarPath(p.name)
+                      : avatarPath(p.id)
                   }
-                  alt={p.name}
+                  alt={p.name ?? p.id}
                   fill
                   className='object-cover'
                 />
               </div>
               <div className='p-4 bg-site-800'>
-                <div className='font-medium text-lg'>{p.name}</div>
+                <div className='font-medium text-lg'>{p.name ?? p.id}</div>
               </div>
             </Link>
           ))}
@@ -67,8 +72,8 @@ export default function TeamPage() {
         <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {tech.map((t) => (
             <Link
-              key={t.name}
-              href={`/team/${encodeURIComponent(t.name)}`}
+              key={t.id}
+              href={`/team/${encodeURIComponent(t.id)}`}
               className='rounded-lg overflow-hidden border border-site-700 hover:border-kolping-500 transition-colors'
             >
               <div className='relative aspect-[3/4] bg-site-800'>
@@ -76,15 +81,15 @@ export default function TeamPage() {
                   src={
                     t.placeholderAvatar
                       ? '/img/team/avatar/placeholder.svg'
-                      : `/img/team/avatar/${t.name}.jpg`
+                      : `/img/team/avatar/${t.id}.jpg`
                   }
-                  alt={t.name}
+                  alt={t.name ?? t.id}
                   fill
                   className='object-cover'
                 />
               </div>
               <div className='p-4 bg-site-800'>
-                <div className='font-medium text-lg'>{t.name}</div>
+                <div className='font-medium text-lg'>{t.name ?? t.id}</div>
                 {t.jobs && t.jobs.length ? (
                   <ul className='mt-1 flex flex-wrap gap-2 text-xs text-site-100'>
                     {t.jobs.map((j, i) => (
@@ -121,8 +126,8 @@ export default function TeamPage() {
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {former.map((p: Person) => (
             <Link
-              key={p.name}
-              href={`/team/${encodeURIComponent(p.name)}`}
+              key={p.id}
+              href={`/team/${encodeURIComponent(p.id)}`}
               className='group rounded-lg overflow-hidden border border-site-700 hover:border-kolping-500 transition-colors'
             >
               <div className='relative aspect-[3/4]'>
@@ -130,15 +135,15 @@ export default function TeamPage() {
                   src={
                     p.placeholderAvatar
                       ? '/img/team/avatar/placeholder.svg'
-                      : avatarPath(p.name)
+                      : avatarPath(p.id)
                   }
-                  alt={p.name}
+                  alt={p.name ?? p.id}
                   fill
                   className='object-cover filter sepia'
                 />
               </div>
               <div className='p-3 bg-site-800'>
-                <div className='font-medium text-sm'>{p.name}</div>
+                <div className='font-medium text-sm'>{p.name ?? p.id}</div>
               </div>
             </Link>
           ))}

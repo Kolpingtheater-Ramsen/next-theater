@@ -15,7 +15,7 @@
   ],
   "current": [
     {
-      "name": "Anton",
+      "id": "Anton",
       "roles": [
         "Sir Richard Black",
         "Hauptmann Lorentz",
@@ -33,7 +33,7 @@
       "images": 3
     },
     {
-      "name": "Carina",
+      "id": "Carina",
       "roles": [
         "Jacky",
         "Prinzessin Helen",
@@ -51,7 +51,7 @@
       "images": 3
     },
     {
-      "name": "Elena",
+      "id": "Elena",
       "roles": [
         null,
         null,
@@ -69,7 +69,7 @@
       "images": 3
     },
     {
-      "name": "Fernanda",
+      "id": "Fernanda",
       "roles": [
         null,
         null,
@@ -87,7 +87,7 @@
       "images": 3
     },
     {
-      "name": "Fynn",
+      "id": "Fynn",
       "roles": [
         null,
         null,
@@ -105,7 +105,7 @@
       "images": 3
     },
     {
-      "name": "Jonas",
+      "id": "Jonas",
       "roles": [
         null,
         null,
@@ -123,7 +123,7 @@
       "images": 3
     },
     {
-      "name": "Jule",
+      "id": "Jule",
       "placeholderAvatar": true,
       "roles": [
         null,
@@ -142,7 +142,7 @@
       "images": 1
     },
     {
-      "name": "Julian",
+      "id": "Julian",
       "roles": [
         "Bühnentechnik",
         "Ensemble",
@@ -160,7 +160,7 @@
       "images": 3
     },
     {
-      "name": "Lea",
+      "id": "Lea",
       "roles": [
         null,
         null,
@@ -178,7 +178,7 @@
       "images": 3
     },
     {
-      "name": "Lena",
+      "id": "Lena",
       "placeholderAvatar": true,
       "roles": [
         null,
@@ -196,7 +196,7 @@
       ]
     },
     {
-      "name": "Leon",
+      "id": "Leon",
       "roles": [
         null,
         "Graf Philipp",
@@ -214,7 +214,7 @@
       "images": 3
     },
     {
-      "name": "Logge",
+      "id": "Logge",
       "placeholderAvatar": true,
       "roles": [
         null,
@@ -233,7 +233,7 @@
       "images": 2
     },
     {
-      "name": "Louis",
+      "id": "Louis",
       "roles": [
         null,
         null,
@@ -251,7 +251,7 @@
       "images": 3
     },
     {
-      "name": "Lina",
+      "id": "Lina",
       "roles": [
         null,
         null,
@@ -269,6 +269,7 @@
       "images": 3
     },
     {
+      "id": "LinaK",
       "name": "Lina",
       "placeholderAvatar": true,
       "roles": [
@@ -287,7 +288,7 @@
       ]
     },
     {
-      "name": "Magdalena",
+      "id": "Magdalena",
       "roles": [
         null,
         null,
@@ -305,7 +306,7 @@
       "images": 3
     },
     {
-      "name": "Maria",
+      "id": "Maria",
       "roles": [
         null,
         null,
@@ -323,7 +324,7 @@
       "images": 3
     },
     {
-      "name": "Max",
+      "id": "Max",
       "roles": [
         null,
         null,
@@ -341,7 +342,7 @@
       "images": 3
     },
     {
-      "name": "Maximilian",
+      "id": "Maximilian",
       "roles": [
         null,
         "Ensemble",
@@ -359,7 +360,7 @@
       "images": 3
     },
     {
-      "name": "Nela",
+      "id": "Nela",
       "roles": [
         null,
         null,
@@ -377,7 +378,7 @@
       "images": 3
     },
     {
-      "name": "Nele",
+      "id": "Nele",
       "roles": [
         null,
         null,
@@ -395,7 +396,7 @@
       "images": 3
     },
     {
-      "name": "Niko",
+      "id": "Niko",
       "roles": [
         null,
         null,
@@ -413,7 +414,7 @@
       "images": 3
     },
     {
-      "name": "Nora",
+      "id": "Nora",
       "roles": [
         null,
         null,
@@ -431,7 +432,7 @@
       "images": 3
     },
     {
-      "name": "Philipp",
+      "id": "Philipp",
       "roles": [
         null,
         null,
@@ -447,7 +448,7 @@
       "images": 2
     },
     {
-      "name": "Raphael",
+      "id": "Raphael",
       "roles": [
         null,
         null,
@@ -465,7 +466,7 @@
       "images": 3
     },
     {
-      "name": "Sebastian",
+      "id": "Sebastian",
       "roles": [
         "Regie",
         "Ensemble / Regie",
@@ -483,7 +484,7 @@
       "images": 3
     },
     {
-      "name": "Sophie",
+      "id": "Sophie",
       "roles": [
         null,
         null,
@@ -502,7 +503,7 @@
       "images": 3
     },
     {
-      "name": "Theo",
+      "id": "Theo",
       "roles": [
         null,
         null,
@@ -520,7 +521,7 @@
       "images": 3
     },
     {
-      "name": "Theresa",
+      "id": "Theresa",
       "roles": [
         null,
         null,
@@ -538,7 +539,7 @@
       "images": 3
     },
     {
-      "name": "Tobias",
+      "id": "Tobias",
       "roles": [
         null,
         null,
@@ -556,7 +557,7 @@
       "images": 3
     },
     {
-      "name": "Vanessa",
+      "id": "Vanessa",
       "roles": [
         null,
         null,
@@ -574,7 +575,7 @@
       "images": 3
     },
     {
-      "name": "Yunus",
+      "id": "Yunus",
       "roles": [
         null,
         null,
@@ -594,7 +595,7 @@
   ],
   "former": [
     {
-      "name": "Anna",
+      "id": "Anna",
       "roles": [
         "Susan Campbell",
         "Anne",
@@ -606,7 +607,7 @@
       "images": 1
     },
     {
-      "name": "Anna R",
+      "id": "Anna R",
       "roles": [
         "Alice",
         "Stumpfwaldhexe",
@@ -616,7 +617,7 @@
       "placeholderAvatar": true
     },
     {
-      "name": "Anika",
+      "id": "Anika",
       "roles": [
         "Ensemble",
         "Ensemble",
@@ -625,7 +626,7 @@
       "images": 1
     },
     {
-      "name": "Frankie",
+      "id": "Frankie",
       "roles": [
         null,
         null,
@@ -635,7 +636,7 @@
       "images": 1
     },
     {
-      "name": "Franek",
+      "id": "Franek",
       "roles": [
         null,
         null,
@@ -650,7 +651,7 @@
       "images": 1
     },
     {
-      "name": "Hatice",
+      "id": "Hatice",
       "placeholderAvatar": true,
       "roles": [
         null,
@@ -667,7 +668,7 @@
       ]
     },
     {
-      "name": "Jack",
+      "id": "Jack",
       "roles": [
         null,
         null,
@@ -679,7 +680,7 @@
       "images": 1
     },
     {
-      "name": "Laura",
+      "id": "Laura",
       "roles": [
         "Lucy",
         "Ensemble",
@@ -689,7 +690,7 @@
       "images": 1
     },
     {
-      "name": "Luisa",
+      "id": "Luisa",
       "roles": [
         null,
         null,
@@ -704,7 +705,7 @@
       "images": 1
     },
     {
-      "name": "Leonhard",
+      "id": "Leonhard",
       "roles": [
         "Gouverneur Campbell",
         "Kaiser Heinrich",
@@ -714,7 +715,7 @@
       "images": 1
     },
     {
-      "name": "Leni",
+      "id": "Leni",
       "placeholderAvatar": true,
       "roles": [
         null,
@@ -732,7 +733,7 @@
       "images": 1
     },
     {
-      "name": "Marc",
+      "id": "Marc",
       "roles": [
         null,
         null,
@@ -744,7 +745,7 @@
       "images": 1
     },
     {
-      "name": "Marleen",
+      "id": "Marleen",
       "roles": [
         "Kate Campbell",
         "Prinzessin Elisabeth",
@@ -754,7 +755,7 @@
       "images": 1
     },
     {
-      "name": "Paul",
+      "id": "Paul",
       "roles": [
         null,
         null,
@@ -765,7 +766,7 @@
       "images": 1
     },
     {
-      "name": "Paulina",
+      "id": "Paulina",
       "roles": [
         null,
         null,
@@ -777,7 +778,7 @@
       "images": 1
     },
     {
-      "name": "Sophia",
+      "id": "Sophia",
       "roles": [
         null,
         null,
@@ -791,7 +792,7 @@
       "images": 1
     },
     {
-      "name": "Till",
+      "id": "Till",
       "roles": [
         null,
         "Mattes",
@@ -804,7 +805,7 @@
       "images": 1
     },
     {
-      "name": "Toni",
+      "id": "Toni",
       "roles": [
         "Captain Anne",
         "Agnes",
@@ -815,7 +816,7 @@
   ],
   "tech": [
     {
-      "name": "Christian",
+      "id": "Christian",
       "jobs": [
         {
           "job": "Bühnentechnik",
@@ -829,7 +830,7 @@
       "images": 2
     },
     {
-      "name": "Daniel",
+      "id": "Daniel",
       "placeholderAvatar": true,
       "jobs": [
         {
@@ -840,7 +841,7 @@
       "images": 1
     },
     {
-      "name": "Florian",
+      "id": "Florian",
       "icon": "settings",
       "jobs": [
         {
@@ -851,7 +852,7 @@
       "images": 3
     },
     {
-      "name": "Jonas",
+      "id": "Jonas",
       "icon": "lightbulb",
       "jobs": [
         {
@@ -862,7 +863,7 @@
       "images": 3
     },
     {
-      "name": "Leo",
+      "id": "Leo",
       "icon": "settings",
       "jobs": [
         {
@@ -875,9 +876,9 @@
         }
       ],
       "images": 2
-      },
-      {
-      "name": "Noah",
+    },
+    {
+      "id": "Noah",
       "icon": "lightbulb",
       "jobs": [
         {
@@ -888,7 +889,7 @@
       "images": 1
     },
     {
-      "name": "Wolfgang",
+      "id": "Wolfgang",
       "icon": "headphones",
       "jobs": [
         {
@@ -899,7 +900,7 @@
       "images": 1
     },
     {
-      "name": "Julian",
+      "id": "Julian",
       "jobs": [
         {
           "job": "Bühnentechnik",
@@ -909,7 +910,7 @@
       "images": 3
     },
     {
-      "name": "Logge",
+      "id": "Logge",
       "jobs": [
         {
           "job": "Website",

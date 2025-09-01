@@ -5,7 +5,8 @@ import data from '@/data/team.json'
 import Slideshow from './slideshow'
 
 type Entry = {
-  name: string
+  id: string
+  name?: string
   roles?: (string | null)[]
   images?: number
   placeholderAvatar?: boolean
@@ -14,16 +15,16 @@ type Entry = {
 
 const plays: string[] = (data as unknown as { plays: string[] }).plays
 
-function findPerson(name: string): Entry | undefined {
-  const lower = name.toLowerCase()
+function findPerson(id: string): Entry | undefined {
+  const lower = id.toLowerCase()
   const current = (
     (data as unknown as { current: Entry[] }).current || []
-  ).find((p) => p.name.toLowerCase() === lower)
+  ).find((p) => p.id.toLowerCase() === lower)
   const former = ((data as unknown as { former: Entry[] }).former || []).find(
-    (p) => p.name.toLowerCase() === lower
+    (p) => p.id.toLowerCase() === lower
   )
   const tech = ((data as unknown as { tech: Entry[] }).tech || []).find(
-    (p) => p.name.toLowerCase() === lower
+    (p) => p.id.toLowerCase() === lower
   ) as Entry | undefined
 
   if (!current && !former && !tech) return undefined
@@ -44,6 +45,7 @@ function findPerson(name: string): Entry | undefined {
   )
 
   return {
+    id: base.id,
     name: base.name,
     roles,
     images: images || base.images,
@@ -64,14 +66,14 @@ export default async function PersonPage({
   const hasPlaceholder = Boolean(person.placeholderAvatar)
   const avatar = hasPlaceholder
     ? `/img/team/avatar/placeholder.svg`
-    : `/img/team/avatar/${person.name}.jpg`
+    : `/img/team/avatar/${person.id}.jpg`
 
   return (
     <div className='space-y-8'>
       <div className='grid md:grid-cols-[320px_1fr] gap-8 items-start'>
         <div className='space-y-4'>
           <Slideshow
-            name={person.name}
+            name={person.id}
             count={person.images ?? 0}
             aspect='portrait'
             placeholder={hasPlaceholder}
@@ -79,7 +81,7 @@ export default async function PersonPage({
         </div>
         <div className='space-y-4'>
           <div>
-            <h1 className='text-3xl font-bold'>{person.name}</h1>
+            <h1 className='text-3xl font-bold'>{person.name ?? person.id}</h1>
             <p className='text-site-100'>Mitglied des Kolpingtheaters</p>
           </div>
           {person.roles ? (
