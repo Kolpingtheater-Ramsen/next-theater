@@ -1,26 +1,8 @@
 import Image from 'next/image'
-import Link from 'next/link'
-import timeline from '@/data/timeline.json'
-import faq from '@/data/faq.json'
-import CountdownTimer from '@/components/CountdownTimer'
-import ShowSchedule from '@/components/ShowSchedule'
-
-type TimelineEntry = {
-  date: string
-  header: string
-  text: string
-  image?: string
-  galleryHash?: string
-  newYear?: boolean
-}
 
 export default function Home() {
   return (
     <div className='space-y-12'>
-      <CountdownTimer
-        targetDate='2025-08-23T20:00:00+02:00'
-        title='Countdown zur Premiere'
-      />
       <section className='relative w-full max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto aspect-[1968/2756] md:max-h-[80vh] overflow-hidden rounded-lg border border-site-700 bg-site-900'>
         <div className='absolute inset-0 z-0'>
           <Image
@@ -49,81 +31,27 @@ export default function Home() {
               Anno 1146
             </h1>
             <p className='text-lg md:text-xl font-semibold text-kolping-400 text-shadow'>
-              Alles hat eine Geschichte
+              Danke für euren Besuch!
             </p>
             <p className='text-site-50 text-shadow'>
-              Taucht ein in das Jahr 1146! Unser großes Sommerstück &quot;Anno
-              1146&quot; entführt euch in eine Zeit voller Geheimnisse, Intrigen
-              und mittelalterlicher Abenteuer. Lasst euch von einer fesselnden
-              Geschichte in vergangene Zeiten versetzen.
+              Wir freuen uns, dass ihr dabei wart. Bleibt gespannt – 2025 und 2026
+              erwarten euch neue Produktionen und besondere Highlights. Mehr Infos
+              folgen.
             </p>
-            <ShowSchedule />
-            <p className='text-kolping-400 font-semibold'>
-              Der Trailer ist da – schau rein und hol dir Gänsehaut!
-            </p>
-            <div className='flex gap-3'>
-              <a
-                href='https://www.youtube.com/watch?v=My0Tlczguo4'
-                target='_blank'
-                rel='noreferrer'
-                className='inline-flex items-center gap-2 px-4 py-2 rounded bg-kolping-500 hover:bg-kolping-400 text-black font-medium'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 24 24'
-                  width='18'
-                  height='18'
-                  aria-hidden='true'
-                  className='shrink-0'
-                  fill='currentColor'
-                >
-                  <path d='M23.498 6.186a3 3 0 0 0-2.118-2.118C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.38.568A3 3 0 0 0 .502 6.186C0 7.766 0 12 0 12s0 4.234.502 5.814a3 3 0 0 0 2.118 2.118C4.2 20.5 12 20.5 12 20.5s7.8 0 9.38-.568a3 3 0 0 0 2.118-2.118C24 16.234 24 12 24 12s0-4.234-.502-5.814zM9.75 15.568V8.432L15.818 12l-6.068 3.568z' />
-                </svg>
-                <span>Trailer</span>
-              </a>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className='space-y-4'>
-        <h2 className='text-2xl font-semibold'>Häufige Fragen</h2>
-        <div className='grid md:grid-cols-2 gap-4'>
-          {(
-            faq as unknown as {
-              q: string
-              a: string
-              button?: string
-              link?: string
-            }[]
-          ).map((item, i) => (
-            <div
-              key={i}
-              className='rounded-lg border border-site-700 bg-site-800 p-4 space-y-2'
-            >
-              <div className='font-medium'>{item.q}</div>
-              <p className='text-sm text-site-100'>{item.a}</p>
-              {item.link ? (
-                <a
-                  className='inline-block text-sm px-3 py-1 rounded bg-kolping-500 text-black font-medium hover:bg-kolping-400'
-                  href={item.link}
-                  target='_blank'
-                  rel='noreferrer'
-                >
-                  {item.button ?? 'Mehr'}
-                </a>
-              ) : null}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className='space-y-4'>
-        <h2 className='text-2xl font-semibold'>Bleib auf dem Laufenden</h2>
+      <section className='max-w-3xl mx-auto text-center space-y-4 py-4'>
+        <h2 className='text-2xl md:text-3xl font-bold tracking-tight'>
+          Mehr kommt schon bald
+        </h2>
         <p className='text-site-100'>
-          Folge uns für Neuigkeiten, Probenblicke und Ankündigungen.
+          Wir arbeiten bereits an den nächsten Projekten für 2025 und 2026. Schau
+          regelmäßig vorbei oder folge uns für Neuigkeiten, Probenblicke und
+          Ankündigungen.
         </p>
-        <div className='flex flex-wrap gap-3'>
+        <div className='flex items-center justify-center gap-3 pt-2'>
           <a
             href='https://www.youtube.com/@kolpingtheaterramsen'
             target='_blank'
