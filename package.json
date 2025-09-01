@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "node scripts/generate-images.js",
     "build": "next build",
     "pages:build": "npx @cloudflare/next-on-pages",
     "preview": "pnpm run pages:build && wrangler pages dev",
@@ -14,7 +15,9 @@
   "dependencies": {
     "next": "15.4.6",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "blurhash": "^2.0.5",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.13",

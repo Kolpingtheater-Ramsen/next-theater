@@ -4,7 +4,16 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Lightbox } from './Lightbox'
 
-type PhotoMeta = { width: number; height: number; alt: string; index: number }
+type PhotoMeta = {
+  width: number
+  height: number
+  alt: string
+  index: number
+  tw?: number
+  th?: number
+  blurhash?: string
+  blurDataURL?: string
+}
 
 export default function ClientGrid({
   play,
@@ -30,9 +39,12 @@ export default function ClientGrid({
               <Image
                 src={thumb}
                 alt={m.alt}
-                width={m.width}
-                height={m.height}
+                width={m.tw ?? m.width}
+                height={m.th ?? m.height}
                 className='w-full h-auto object-cover'
+                sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                placeholder={m.blurDataURL ? 'blur' : undefined}
+                blurDataURL={m.blurDataURL}
               />
               <div className='p-3 bg-site-800 text-sm text-site-100'>
                 {captions[i] ?? m.alt}

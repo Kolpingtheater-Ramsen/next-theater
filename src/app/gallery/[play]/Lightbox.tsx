@@ -53,6 +53,8 @@ export function Lightbox({
             alt={alt}
             fill
             className='object-contain blur-sm'
+            sizes='100vw'
+            priority
           />
         ) : null}
         {!loading ? null : (
@@ -66,6 +68,7 @@ export function Lightbox({
           alt={alt}
           fill
           className='object-contain'
+          sizes='100vw'
           onLoadingComplete={() => setLoading(false)}
         />
 
