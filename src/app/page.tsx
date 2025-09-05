@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import JulianCalendar from '@/components/JulianCalendar'
 
 export default function Home() {
   return (
@@ -40,6 +41,18 @@ export default function Home() {
             </p>
           </div>
         </div>
+      </section>
+
+      <section className='max-w-4xl mx-auto space-y-6 py-8'>
+        <div className='text-center space-y-4'>
+          <h2 className='text-2xl md:text-3xl font-bold tracking-tight'>
+            Spielplan
+          </h2>
+          <p className='text-site-100'>
+            Hier findest du alle Termine für Aufführungen, Proben und besondere Events.
+          </p>
+        </div>
+        <JulianCalendar />
       </section>
 
       <section className='max-w-3xl mx-auto text-center space-y-4 py-4'>
