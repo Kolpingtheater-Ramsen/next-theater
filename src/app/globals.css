@@ -52,6 +52,7 @@
 html,
 body {
   min-height: 100%;
+  overflow-x: hidden; /* Prevent horizontal scroll caused by wide transforms/effects */
 }
 
 ::selection {
