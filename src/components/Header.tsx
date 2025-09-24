@@ -11,7 +11,7 @@ export default function Header() {
   return (
     <header className='sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-site-900/80 bg-site-900/95 border-b border-site-700'>
       <div className='mx-auto max-w-6xl px-4 py-3 flex items-center gap-4'>
-        <Link href='/' className='flex items-center gap-2 font-semibold text-site-50'>
+        <Link href='/' className='flex items-center gap-2 font-semibold text-site-50 flex-1 min-w-0'>
           <Image
             src='/img/logo.png'
             alt='Kolpingtheater Ramsen'
@@ -19,7 +19,7 @@ export default function Header() {
             height={36}
             className='rounded-sm'
           />
-          <span>Kolpingtheater Ramsen</span>
+          <span className='truncate'>Kolpingtheater Ramsen</span>
         </Link>
         <nav className='ml-auto hidden md:flex items-center gap-6 text-sm'>
           <Link href='/' className='hover:text-kolping-400'>

@@ -43,6 +43,12 @@ export const metadata: Metadata = {
     icon: ['/favicon.svg'],
     apple: ['/img/logo.png'],
   },
+  viewport: 'width=device-width, initial-scale=1',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -53,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang='de' data-theme='dark' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased bg-site-900 text-site-50 min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased bg-site-900 text-site-50 min-h-screen overflow-x-hidden flex flex-col`}
       >
         <Header />
         <main className='mx-auto max-w-6xl px-4 py-8 flex-1'>{children}</main>
