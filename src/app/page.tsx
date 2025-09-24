@@ -60,7 +60,7 @@ export default function Home() {
               Ob Schauspiel, Technik oder Organisation – bei uns ist Platz für alle, die Theater lieben.
             </p>
           </div>
-          <div className='flex items-center gap-3'>
+          <div className='flex flex-wrap items-center gap-3'>
             <a
               href='https://www.instagram.com/kolpingjugend_ramsen/'
               target='_blank'
