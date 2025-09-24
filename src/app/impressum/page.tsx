@@ -2,9 +2,9 @@ export const dynamic = 'force-static'
 
 export default function ImpressumPage() {
   return (
-    <div className='space-y-8'>
-      <h1 className='text-3xl font-bold'>Impressum</h1>
-      <div className='rounded-lg border border-site-700 bg-site-800 p-4'>
+    <div className='space-y-12'>
+      <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>Impressum</h1>
+      <div className='glass rounded-xl p-6 md:p-8'>
         <div className='font-semibold mb-1'>Angaben gemäß § 5 TMG</div>
         <div>Johannes Stüber</div>
         <div>Fischerstraße 12</div>
@@ -20,7 +20,7 @@ export default function ImpressumPage() {
         </div>
       </div>
 
-      <section className='prose prose-invert max-w-none'>
+      <section className='prose prose-invert max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:font-extrabold prose-h2:text-2xl md:prose-h2:text-3xl'>
         <h2>Haftung für Inhalte</h2>
         <ul className='list-disc pl-6 space-y-1'>
           <li>Eigene Inhalte nach § 7 Abs. 1 TMG, nach allgemeinen Gesetzen</li>

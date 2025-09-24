@@ -1,7 +1,7 @@
 export default function AnnoGalleryComingSoon() {
   return (
-    <div className='space-y-6'>
-      <h1 className='text-3xl font-bold'>Anno 1146</h1>
+    <div className='space-y-12'>
+      <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>Anno 1146</h1>
       <div className='glass rounded-xl p-6 md:p-8'>
         <p className='text-site-100'>
           Die Galerie ist bald verfügbar. Schaut in der Zwischenzeit gerne auf unserer

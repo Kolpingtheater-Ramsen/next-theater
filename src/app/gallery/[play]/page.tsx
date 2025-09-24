@@ -28,8 +28,8 @@ export default async function PlayGalleryPage({
   const title = show?.header ?? play
 
   return (
-    <div className='space-y-6'>
-      <h1 className='text-3xl font-bold'>{title}</h1>
+    <div className='space-y-12'>
+      <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>{title}</h1>
       <ClientGrid play={play} metas={metas} captions={captions} />
     </div>
   )

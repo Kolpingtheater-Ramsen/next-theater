@@ -2,10 +2,10 @@ export const dynamic = 'force-static'
 
 export default function PrivacyPage() {
   return (
-    <div className='space-y-8'>
-      <h1 className='text-3xl font-bold'>Datenschutz</h1>
+    <div className='space-y-12'>
+      <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>Datenschutz</h1>
       {/* Owner card */}
-      <div className='rounded-lg border border-site-700 bg-site-800 p-4'>
+      <div className='glass rounded-xl p-6 md:p-8'>
         <div className='font-semibold mb-1'>Verantwortlich für den Inhalt</div>
         <div>Johannes Stüber</div>
         <div>Fischerstraße 12</div>
@@ -21,7 +21,7 @@ export default function PrivacyPage() {
         </div>
       </div>
 
-      <section className='prose prose-invert max-w-none'>
+      <section className='prose prose-invert max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:font-extrabold prose-h2:text-2xl md:prose-h2:text-3xl'>
         <h2>Allgemeines</h2>
         <p>
           Nachfolgend informieren wir über die Verarbeitung personenbezogener

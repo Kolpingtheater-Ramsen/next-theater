@@ -37,9 +37,9 @@ export default function TeamPage() {
   ).tech
 
   return (
-    <div className='space-y-10'>
+    <div className='space-y-12'>
       <div>
-        <h1 className='text-3xl font-bold mb-4'>Ensemble</h1>
+        <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight mb-4'>Ensemble</h1>
         <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {current.map((p: Person) => (
             <Link
@@ -68,7 +68,7 @@ export default function TeamPage() {
       </div>
 
       <div>
-        <h2 className='text-2xl font-semibold mb-4'>Technik & Crew</h2>
+        <h2 className='font-display text-2xl md:text-3xl font-extrabold tracking-tight mb-4'>Technik & Crew</h2>
         <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {tech.map((t) => (
             <Link
@@ -122,7 +122,7 @@ export default function TeamPage() {
       </div>
 
       <div>
-        <h2 className='text-2xl font-semibold mb-4'>Ehemalige</h2>
+        <h2 className='font-display text-2xl md:text-3xl font-extrabold tracking-tight mb-4'>Ehemalige</h2>
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
           {former.map((p: Person) => (
             <Link
