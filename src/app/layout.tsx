@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Header from '@/components/Header'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Cinzel } from 'next/font/google'
 import './globals.css'
 
 const geistSans = Geist({
@@ -12,6 +12,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+})
+
+const display = Cinzel({
+  variable: '--font-display',
+  subsets: ['latin'],
+  weight: ['400', '700', '900'],
 })
 
 export const metadata: Metadata = {
@@ -47,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang='de' data-theme='dark' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-site-900 text-site-50 min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased bg-site-900 text-site-50 min-h-screen flex flex-col`}
       >
         <Header />
         <main className='mx-auto max-w-6xl px-4 py-8 flex-1'>{children}</main>

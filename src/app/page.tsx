@@ -1,49 +1,28 @@
-import Image from 'next/image'
+import Hero from '@/components/Hero'
+import CountdownTimer from '@/components/CountdownTimer'
+import ShowSchedule from '@/components/ShowSchedule'
 
 export default function Home() {
   return (
     <div className='space-y-12'>
-      <section className='relative w-full max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto aspect-[1968/2756] md:max-h-[80vh] overflow-hidden rounded-lg border border-site-700 bg-site-900'>
-        <div className='absolute inset-0 z-0'>
-          <Image
-            src='/img/banners/anno.jpg'
-            alt=''
-            aria-hidden
-            fill
-            priority
-            className='object-cover blur-3xl scale-125 opacity-60'
-          />
+      <Hero
+        imageSrc='/img/banners/anno.jpg'
+        title='Anno 1146'
+        tagline='Kolping-Open-Air-Theater Ramsen'
+        subtitle='Danke für euren Besuch! Bleibt gespannt – 2025 und 2026 erwarten euch neue Produktionen und besondere Highlights.'
+      />
+
+      <section className='mx-auto grid max-w-5xl gap-4 md:grid-cols-3'>
+        <div className='md:col-span-2'>
+          <CountdownTimer targetDate='2025-08-23T20:00:00+02:00' title='Nächste Premiere startet in' />
         </div>
-        <Image
-          src='/img/banners/anno.jpg'
-          alt='Sommerstück 2025 Banner - Anno 1146'
-          fill
-          priority
-          className='object-contain relative z-10'
-        />
-        <div className='pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-black/80 via-black/60 to-transparent' />
-        <div className='absolute bottom-0 left-0 right-0 z-30 p-6 md:p-10'>
-          <div className='max-w-3xl space-y-2 text-shadow'>
-            <span className='inline-block text-sm tracking-wide text-site-100 text-shadow'>
-              Kolpingtheater Ramsen
-            </span>
-            <h1 className='text-4xl md:text-5xl font-extrabold tracking-tight text-shadow-lg'>
-              Anno 1146
-            </h1>
-            <p className='text-lg md:text-xl font-semibold text-kolping-400 text-shadow'>
-              Danke für euren Besuch!
-            </p>
-            <p className='text-site-50 text-shadow'>
-              Wir freuen uns, dass ihr dabei wart. Bleibt gespannt – 2025 und 2026
-              erwarten euch neue Produktionen und besondere Highlights. Mehr Infos
-              folgen.
-            </p>
-          </div>
+        <div>
+          <ShowSchedule />
         </div>
       </section>
 
-      <section className='max-w-3xl mx-auto text-center space-y-4 py-4'>
-        <h2 className='text-2xl md:text-3xl font-bold tracking-tight'>
+      <section className='max-w-4xl mx-auto text-center space-y-4 py-4'>
+        <h2 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>
           Mehr kommt schon bald
         </h2>
         <p className='text-site-100'>
