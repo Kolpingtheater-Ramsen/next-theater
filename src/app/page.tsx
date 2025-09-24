@@ -1,6 +1,5 @@
 import Hero from '@/components/Hero'
 import CountdownTimer from '@/components/CountdownTimer'
-import ShowSchedule from '@/components/ShowSchedule'
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
 
@@ -30,13 +29,8 @@ export default function Home() {
             { date: '2025', title: 'Anno 1146' },
           ]}
         />
-        <div className='grid gap-4 md:grid-cols-3'>
-          <div className='md:col-span-2'>
-            <CountdownTimer targetDate='2025-08-23T20:00:00+02:00' title='Nächste Premiere startet in' />
-          </div>
-          <div>
-            <ShowSchedule />
-          </div>
+        <div className='grid gap-4'>
+          <CountdownTimer targetDate='2025-08-23T20:00:00+02:00' title='Nächste Premiere startet in' />
         </div>
       </section>
 
@@ -46,12 +40,12 @@ export default function Home() {
         </h2>
         <FeaturedProductions
           items={[
-            { title: 'Anno 1146', image: '/img/banners/anno.jpg', href: '/gallery?play=anno', tag: 'Neu' },
-            { title: 'Nexus', image: '/img/banners/nexus.jpg', href: '/gallery?play=nexus' },
-            { title: 'Traum von Freiheit', image: '/img/banners/freiheit.jpg', href: '/gallery?play=freiheit' },
-            { title: 'Dystopia', image: '/img/banners/dystopia.jpg', href: '/gallery?play=dystopia' },
-            { title: 'Der Kristall der Träume', image: '/img/banners/kristall.jpg', href: '/gallery?play=kristall' },
-            { title: 'Goldfieber', image: '/img/banners/goldfieber.jpg', href: '/gallery?play=goldfieber' },
+            { title: 'Anno 1146', image: '/img/banners/anno.jpg', href: '/gallery/anno', tag: 'Neu' },
+            { title: 'Nexus', image: '/img/banners/nexus.jpg', href: '/gallery/nexus' },
+            { title: 'Traum von Freiheit', image: '/img/banners/freiheit.jpg', href: '/gallery/freiheit' },
+            { title: 'Dystopia', image: '/img/banners/dystopia.jpg', href: '/gallery/dystopia' },
+            { title: 'Der Kristall der Träume', image: '/img/banners/kristall.jpg', href: '/gallery/kristall' },
+            { title: 'Goldfieber', image: '/img/banners/goldfieber.jpg', href: '/gallery/goldfieber' },
           ]}
         />
       </section>
@@ -68,10 +62,12 @@ export default function Home() {
           </div>
           <div className='flex items-center gap-3'>
             <a
-              href='mailto:kontakt@kolpingtheater-ramsen.de'
+              href='https://www.instagram.com/kolpingjugend_ramsen/'
+              target='_blank'
+              rel='noopener noreferrer'
               className='inline-flex items-center gap-2 px-4 py-2 rounded border border-site-700 hover:border-kolping-500 bg-site-800'
             >
-              Schreiben
+              Instagram
             </a>
             <a
               href='/about'
