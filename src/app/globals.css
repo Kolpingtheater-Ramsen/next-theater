@@ -156,3 +156,51 @@ body {
 .animate-kenburns {
   animation: kenburns 18s ease-in-out forwards;
 }
+
+/* Glass effect utility */
+.glass {
+  background-color: rgba(15, 15, 16, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Tilt-on-hover utility */
+.tilt {
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+.tilt:hover {
+  transform: perspective(900px) rotateX(2deg) rotateY(-3deg) translateY(-2px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Poster frame utility */
+.poster-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.6),
+    inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* Marquee utilities */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+.marquee__track {
+  display: flex;
+  gap: 2rem;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
