@@ -15,8 +15,8 @@ export default function GalleryPage() {
     .filter((t) => t.image && t.galleryHash)
     .reverse()
   return (
-    <div className='space-y-6'>
-      <h1 className='text-3xl font-bold'>Galerie</h1>
+    <div className='space-y-12'>
+      <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>Galerie</h1>
       <div className='grid sm:grid-cols-2 lg:grid-cols-3 gap-4'>
         {shows.map((t: TimelineEntry) => (
           <Link

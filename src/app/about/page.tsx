@@ -15,8 +15,8 @@ export const dynamic = 'force-static'
 
 export default function AboutPage() {
   return (
-    <div className='space-y-10'>
-      <section className='prose prose-invert max-w-none'>
+    <div className='space-y-12'>
+      <section className='prose prose-invert max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:font-extrabold prose-h1:text-3xl md:prose-h1:text-4xl prose-h2:text-2xl md:prose-h2:text-3xl'>
         <h1>Über uns</h1>
         <p>
           Wir sind das Kolping-Open-Air-Theater Ramsen. Seit 2014 entwickeln wir
@@ -38,7 +38,7 @@ export default function AboutPage() {
       </section>
 
       <section className='space-y-4'>
-        <h2 className='text-2xl font-semibold'>Chronik</h2>
+        <h2 className='font-display text-2xl md:text-3xl font-extrabold tracking-tight'>Chronik</h2>
         <ol className='space-y-8'>
           {(timeline as unknown as TimelineEntry[])
             .slice()

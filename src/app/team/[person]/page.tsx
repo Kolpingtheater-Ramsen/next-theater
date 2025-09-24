@@ -69,7 +69,7 @@ export default async function PersonPage({
     : `/img/team/avatar/${person.id}.jpg`
 
   return (
-    <div className='space-y-8'>
+    <div className='space-y-12'>
       <div className='grid md:grid-cols-[320px_1fr] gap-8 items-start'>
         <div className='space-y-4'>
           <Slideshow
@@ -81,7 +81,7 @@ export default async function PersonPage({
         </div>
         <div className='space-y-4'>
           <div>
-            <h1 className='text-3xl font-bold'>{person.name ?? person.id}</h1>
+            <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>{person.name ?? person.id}</h1>
             <p className='text-site-100'>Mitglied des Kolpingtheaters</p>
           </div>
           {person.roles ? (
