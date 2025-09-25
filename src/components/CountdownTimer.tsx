@@ -102,6 +102,11 @@ export default function CountdownTimer({
             transform: rotate(1turn);
           }
         }
+        @media (prefers-reduced-motion: reduce) {
+          .epic-card::before {
+            animation: none;
+          }
+        }
       `}</style>
     </div>
   )
@@ -164,6 +169,11 @@ function TimeUnit({
           100% {
             transform: translateZ(0) scale(1);
             opacity: 1;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-pop {
+            animation: none;
           }
         }
       `}</style>
