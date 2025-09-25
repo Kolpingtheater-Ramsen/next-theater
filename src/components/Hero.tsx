@@ -18,6 +18,7 @@ export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'po
           aria-hidden
           fill
           priority
+          sizes='(max-width: 768px) 100vw, 1152px'
           className='object-cover opacity-60 blur-2xl scale-110'
         />
       </div>
@@ -31,6 +32,7 @@ export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'po
                 alt={title}
                 fill
                 priority
+                sizes='(max-width: 768px) 100vw, 360px'
                 className='object-cover animate-kenburns'
               />
             </div>
@@ -62,6 +64,7 @@ export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'po
             alt={title}
             fill
             priority
+            sizes='(max-width: 768px) 100vw, 1152px'
             className='object-cover md:object-contain animate-kenburns'
           />
           <div className='spotlight' />
