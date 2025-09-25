@@ -205,3 +205,15 @@ body {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* Home page: simplified media containers (scoped) */
+.home .media {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+.home img {
+  max-width: 100%;
+  height: auto;
+}
