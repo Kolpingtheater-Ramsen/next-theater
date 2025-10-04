@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import Hero from '@/components/Hero'
 import timeline from '@/data/timeline.json'
 
 type TimelineEntry = {
@@ -16,61 +17,104 @@ export const dynamic = 'force-static'
 export default function AboutPage() {
   return (
     <div className='space-y-8 sm:space-y-10 md:space-y-12'>
-      <section className='prose prose-invert max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:font-extrabold prose-h1:text-3xl md:prose-h1:text-4xl prose-h2:text-2xl md:prose-h2:text-3xl'>
-        <h1>Über uns</h1>
-        <p>
-          Wir sind das Kolping-Open-Air-Theater Ramsen. Seit 2014 entwickeln wir
-          eigene Stücke und bringen sie jeden Sommer auf der Kolpingwiese zur
-          Premiere. Der Eintritt ist frei – Theater für alle.
-        </p>
-        <p>Spielort: Klosterhof 7, 67305 Ramsen.</p>
-        <div className='not-prose mt-6'>
-          <div className='relative w-full aspect-[16/9] rounded-lg overflow-hidden border border-site-700'>
-            <Image
-              src='/img/other_images/Gruppenbild.webp'
-              alt='Gruppenbild des Kolpingtheaters Ramsen'
-              fill
-              className='object-cover'
-              priority={false}
-            />
+      {/* Hero Section */}
+      <Hero
+        variant='wide'
+        imageSrc='/img/other_images/Gruppenbild.webp'
+        title='Über uns'
+        tagline='Kolping-Open-Air-Theater Ramsen'
+        subtitle='Leidenschaft für Theater unter freiem Himmel seit 2014'
+      />
+
+      {/* Introduction Section */}
+      <section className='glass rounded-xl p-6 sm:p-8 md:p-10 space-y-4'>
+        <div className='prose prose-invert max-w-none prose-p:text-base sm:prose-p:text-lg prose-p:leading-relaxed'>
+          <p className='text-site-50'>
+            Wir sind das Kolping-Open-Air-Theater Ramsen. Seit 2014 entwickeln wir
+            eigene Stücke und bringen sie jeden Sommer auf der Kolpingwiese zur
+            Premiere. Der Eintritt ist frei – Theater für alle.
+          </p>
+          <div className='flex items-center gap-3 mt-6 text-sm sm:text-base text-site-100'>
+            <svg 
+              xmlns='http://www.w3.org/2000/svg' 
+              viewBox='0 0 24 24' 
+              fill='currentColor' 
+              className='w-5 h-5 text-kolping-400 flex-shrink-0'
+            >
+              <path fillRule='evenodd' d='m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z' clipRule='evenodd' />
+            </svg>
+            <span>Spielort: Klosterhof 7, 67305 Ramsen</span>
           </div>
         </div>
       </section>
 
-      <section className='space-y-4' aria-labelledby='timeline-heading'>
-        <h2 id='timeline-heading' className='font-display text-2xl md:text-3xl font-extrabold tracking-tight'>Chronik</h2>
-        <ol className='space-y-6 sm:space-y-8'>
+      {/* Timeline Section */}
+      <section className='space-y-6' aria-labelledby='timeline-heading'>
+        <div className='flex items-center gap-4'>
+          <h2 id='timeline-heading' className='font-display text-2xl md:text-3xl font-extrabold tracking-tight'>
+            Chronik
+          </h2>
+          <div className='flex-1 h-px bg-gradient-to-r from-site-700 to-transparent' />
+        </div>
+        
+        <ol className='relative space-y-6 sm:space-y-8 border-l-2 border-site-700 pl-6 sm:pl-8 ml-2'>
           {(timeline as unknown as TimelineEntry[])
             .slice()
             .reverse()
             .map((t, i) => (
-              <li key={i} className='relative'>
-                <div className='grid md:grid-cols-[220px_1fr] gap-6'>
-                  <div className='text-xs md:text-sm font-semibold text-kolping-400 whitespace-nowrap'>
-                    {t.date}
+              <li key={i} className='relative group'>
+                {/* Timeline dot */}
+                <div className='absolute -left-[27px] sm:-left-[35px] top-1 w-4 h-4 rounded-full bg-kolping-400 border-4 border-site-900 group-hover:scale-125 transition-transform' />
+                
+                {/* Year marker for new years */}
+                {t.newYear && (
+                  <div className='absolute -left-[47px] sm:-left-[55px] -top-8 px-3 py-1 rounded-full bg-kolping-400 text-site-950 text-xs font-bold'>
+                    {t.date.split(' ')[1]}
                   </div>
-                  <div className='space-y-2'>
-                    <div className='font-semibold'>{t.header}</div>
-                    {t.image ? (
-                      <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black'>
-                        <Image
-                          src={`/img/${t.image}`}
-                          alt={t.header}
-                          fill
-                          className='object-contain'
-                        />
-                      </div>
-                    ) : null}
-                    <p className='text-sm text-site-100'>{t.text}</p>
-                    {t.galleryHash ? (
-                      <Link
-                        href={`/gallery/${t.galleryHash}`}
-                        className='text-kolping-400 underline hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors'
+                )}
+                
+                {/* Content card */}
+                <div className='glass rounded-lg p-4 sm:p-6 space-y-3 hover:border-kolping-400/30 transition-colors'>
+                  <div className='flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4'>
+                    <time className='text-xs sm:text-sm font-bold text-kolping-400 whitespace-nowrap uppercase tracking-wider'>
+                      {t.date}
+                    </time>
+                    <h3 className='font-display text-lg sm:text-xl font-bold text-site-50'>
+                      {t.header}
+                    </h3>
+                  </div>
+                  
+                  {t.image && (
+                    <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame'>
+                      <Image
+                        src={`/img/${t.image}`}
+                        alt={t.header}
+                        fill
+                        className='object-cover hover:scale-105 transition-transform duration-500'
+                      />
+                    </div>
+                  )}
+                  
+                  <p className='text-sm sm:text-base text-site-100 leading-relaxed'>
+                    {t.text}
+                  </p>
+                  
+                  {t.galleryHash && (
+                    <Link
+                      href={`/gallery/${t.galleryHash}`}
+                      className='inline-flex items-center gap-2 text-sm font-semibold text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors group/link'
+                    >
+                      <span>Galerie ansehen</span>
+                      <svg 
+                        xmlns='http://www.w3.org/2000/svg' 
+                        viewBox='0 0 20 20' 
+                        fill='currentColor' 
+                        className='w-4 h-4 group-hover/link:translate-x-1 transition-transform'
                       >
-                        Galerie ansehen
-                      </Link>
-                    ) : null}
-                  </div>
+                        <path fillRule='evenodd' d='M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z' clipRule='evenodd' />
+                      </svg>
+                    </Link>
+                  )}
                 </div>
               </li>
             ))}
