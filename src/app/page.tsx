@@ -5,7 +5,7 @@ import FeaturedProductions from '@/components/FeaturedProductions'
 
 export default function Home() {
   return (
-    <div className='space-y-10 sm:space-y-12'>
+    <div className='space-y-8 sm:space-y-10 md:space-y-12'>
       <Hero
         variant='poster'
         imageSrc='/img/banners/anno.jpg'
@@ -40,8 +40,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className='mx-auto max-w-6xl space-y-4'>
-        <h2 className='font-display text-2xl md:text-3xl font-extrabold tracking-tight'>
+      <section className='mx-auto max-w-6xl space-y-4' aria-labelledby='productions-heading'>
+        <h2 id='productions-heading' className='font-display text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight'>
           Produktionen
         </h2>
         <FeaturedProductions
@@ -56,13 +56,13 @@ export default function Home() {
         />
       </section>
 
-      <section className='mx-auto max-w-6xl'>
-        <div className='glass rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6'>
-          <div className='flex-1'>
-            <h3 className='font-display text-xl md:text-2xl font-extrabold tracking-tight'>
+      <section className='mx-auto max-w-6xl' aria-labelledby='join-heading'>
+        <div className='glass rounded-xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6'>
+          <div className='flex-1 text-center md:text-left'>
+            <h3 id='join-heading' className='font-display text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight'>
               Werde Teil der Bühne
             </h3>
-            <p className='text-site-100 mt-1'>
+            <p className='text-site-100 mt-1 text-sm sm:text-base'>
               Ob Schauspiel, Technik oder Organisation – bei uns ist Platz für alle, die Theater lieben.
             </p>
           </div>
@@ -71,13 +71,14 @@ export default function Home() {
               href='https://www.instagram.com/kolpingjugend_ramsen/'
               target='_blank'
               rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 px-4 py-2 rounded border border-site-700 hover:border-kolping-500 bg-site-800'
+              className='inline-flex items-center gap-2 px-4 py-2 rounded border border-site-700 hover:border-kolping-500 bg-site-800 transition-colors'
+              aria-label='Besuche uns auf Instagram'
             >
               Instagram
             </a>
             <a
               href='/about'
-              className='inline-flex items-center gap-2 px-4 py-2 rounded border border-site-700 hover:border-kolping-500 bg-site-800'
+              className='inline-flex items-center gap-2 px-4 py-2 rounded border border-site-700 hover:border-kolping-500 bg-site-800 transition-colors'
             >
               Über uns
             </a>

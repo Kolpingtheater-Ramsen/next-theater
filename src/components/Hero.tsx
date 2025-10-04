@@ -37,20 +37,20 @@ export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'po
               />
             </div>
           </div>
-          <div className='relative p-6 md:p-10 flex items-end'>
+          <div className='relative p-4 sm:p-6 md:p-10 flex items-end'>
             <div className='absolute inset-0 spotlight' />
             <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/0 md:bg-gradient-to-l md:from-black/85 md:via-black/50 md:to-transparent' />
             <div className='relative z-10 max-w-2xl'>
               {tagline ? (
-                <div className='mb-2 text-xs md:text-sm font-semibold tracking-[0.2em] text-kolping-400 text-shadow uppercase'>
+                <div className='mb-1 sm:mb-2 text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.15em] sm:tracking-[0.2em] text-kolping-400 text-shadow uppercase'>
                   {tagline}
                 </div>
               ) : null}
-              <h1 className='font-display text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-shadow-lg'>
+              <h1 className='font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-shadow-lg'>
                 {title}
               </h1>
               {subtitle ? (
-                <p className='mt-3 text-base md:text-lg text-site-50 text-shadow max-w-xl'>
+                <p className='mt-2 sm:mt-3 text-sm sm:text-base md:text-lg text-site-50 text-shadow max-w-xl'>
                   {subtitle}
                 </p>
               ) : null}

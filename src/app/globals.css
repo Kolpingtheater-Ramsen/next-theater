@@ -179,18 +179,29 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Light theme glass override */
+[data-theme='light'] .glass {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
 /* Tilt-on-hover utility */
 /* Enable tilt only on devices with hover & fine pointer (desktops/laptops) */
 @media (hover: hover) and (pointer: fine) {
   .tilt {
     transform-style: preserve-3d;
     will-change: transform, box-shadow;
-    transition: transform 300ms ease, box-shadow 300ms ease;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   .tilt:hover {
     transform: perspective(900px) rotateX(2deg) rotateY(-3deg) translateY(-2px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   }
+}
+
+/* Light theme tilt shadow */
+[data-theme='light'] .tilt:hover {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
 }
 
 /* Poster frame utility */
