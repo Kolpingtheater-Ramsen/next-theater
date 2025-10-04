@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function Lightbox({
   src,
@@ -43,7 +43,7 @@ export function Lightbox({
       onClick={onClose}
     >
       <div
-        className='relative max-w-5xl w-full h-[80vh]'
+        className='relative max-w-5xl w-full h-[80vh] max-w-full'
         onClick={(e) => e.stopPropagation()}
       >
         {/* Low-res placeholder while full image loads */}
@@ -52,7 +52,7 @@ export function Lightbox({
             src={thumbSrc}
             alt={alt}
             fill
-            className='object-contain blur-sm'
+            className='object-contain blur-sm w-full h-full'
             sizes='100vw'
             priority
           />
@@ -67,7 +67,7 @@ export function Lightbox({
           src={src}
           alt={alt}
           fill
-          className='object-contain'
+          className='object-contain w-full h-full'
           sizes='100vw'
           onLoadingComplete={() => setLoading(false)}
         />

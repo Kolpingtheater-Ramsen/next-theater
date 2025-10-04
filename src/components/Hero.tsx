@@ -11,7 +11,7 @@ type HeroProps = {
 export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'poster' }: HeroProps) {
   return (
     <section className='relative mx-auto w-full max-w-6xl overflow-hidden rounded-xl border border-site-700 bg-site-900 border-epic grain vignette'>
-      <div className='absolute inset-0 -z-10'>
+      <div className='absolute inset-0 -z-10 w-full h-full'>
         <Image
           src={imageSrc}
           alt=''
@@ -19,21 +19,21 @@ export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'po
           fill
           priority
           sizes='(max-width: 768px) 100vw, 1152px'
-          className='object-cover opacity-60 blur-2xl scale-110'
+          className='object-cover opacity-60 blur-2xl scale-110 w-full h-full'
         />
       </div>
 
       {variant === 'poster' ? (
         <div className='relative grid grid-cols-1 md:grid-cols-[minmax(280px,360px)_1fr] gap-0'>
           <div className='relative poster-frame md:rounded-none md:rounded-l-xl md:overflow-hidden'>
-            <div className='relative aspect-[1968/2756] md:aspect-[3/4]'>
+            <div className='relative aspect-[1968/2756] md:aspect-[3/4] w-full'>
               <Image
                 src={imageSrc}
                 alt={title}
                 fill
                 priority
                 sizes='(max-width: 768px) 100vw, 360px'
-                className='object-cover animate-kenburns'
+                className='object-cover animate-kenburns w-full h-full'
               />
             </div>
           </div>
@@ -58,14 +58,14 @@ export default function Hero({ title, subtitle, tagline, imageSrc, variant = 'po
           </div>
         </div>
       ) : (
-        <div className='relative aspect-[21/9] md:aspect-[16/5] lg:aspect-[21/6]'>
+        <div className='relative aspect-[21/9] md:aspect-[16/5] lg:aspect-[21/6] w-full'>
           <Image
             src={imageSrc}
             alt={title}
             fill
             priority
             sizes='(max-width: 768px) 100vw, 1152px'
-            className='object-cover md:object-contain animate-kenburns'
+            className='object-cover md:object-contain animate-kenburns w-full h-full'
           />
           <div className='spotlight' />
           <div className='curtain-left hidden sm:block' />
