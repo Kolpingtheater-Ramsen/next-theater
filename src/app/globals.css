@@ -61,6 +61,24 @@ img {
   height: auto;
 }
 
+/* Next.js Image component improvements for responsive behavior */
+img[loading],
+img[decoding] {
+  display: block;
+}
+
+/* Prevent layout shift for Next.js fill images */
+[data-nimg='fill'] {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  object-fit: cover;
+}
+
 ::selection {
   background: var(--color-kolping-500);
   color: white;
