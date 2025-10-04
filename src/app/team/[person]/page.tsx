@@ -1,5 +1,4 @@
 export const runtime = 'edge'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import data from '@/data/team.json'
 import Slideshow from './slideshow'
@@ -64,9 +63,6 @@ export default async function PersonPage({
   if (!person) return notFound()
 
   const hasPlaceholder = Boolean(person.placeholderAvatar)
-  const avatar = hasPlaceholder
-    ? `/img/team/avatar/placeholder.svg`
-    : `/img/team/avatar/${person.id}.jpg`
 
   return (
     <div className='space-y-12'>

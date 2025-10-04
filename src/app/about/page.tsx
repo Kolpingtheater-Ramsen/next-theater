@@ -15,7 +15,7 @@ export const dynamic = 'force-static'
 
 export default function AboutPage() {
   return (
-    <div className='space-y-12'>
+    <div className='space-y-8 sm:space-y-10 md:space-y-12'>
       <section className='prose prose-invert max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:font-extrabold prose-h1:text-3xl md:prose-h1:text-4xl prose-h2:text-2xl md:prose-h2:text-3xl'>
         <h1>Über uns</h1>
         <p>
@@ -37,9 +37,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className='space-y-4'>
-        <h2 className='font-display text-2xl md:text-3xl font-extrabold tracking-tight'>Chronik</h2>
-        <ol className='space-y-8'>
+      <section className='space-y-4' aria-labelledby='timeline-heading'>
+        <h2 id='timeline-heading' className='font-display text-2xl md:text-3xl font-extrabold tracking-tight'>Chronik</h2>
+        <ol className='space-y-6 sm:space-y-8'>
           {(timeline as unknown as TimelineEntry[])
             .slice()
             .reverse()
@@ -65,7 +65,7 @@ export default function AboutPage() {
                     {t.galleryHash ? (
                       <Link
                         href={`/gallery/${t.galleryHash}`}
-                        className='text-kolping-400 underline'
+                        className='text-kolping-400 underline hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors'
                       >
                         Galerie ansehen
                       </Link>

@@ -1,5 +1,4 @@
 export const runtime = 'edge'
-import Image from 'next/image'
 import ClientGrid from './ClientGrid'
 import pics from '@/data/pics.json'
 import imagesMeta from '@/data/images.json'

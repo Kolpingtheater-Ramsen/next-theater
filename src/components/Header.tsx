@@ -22,16 +22,16 @@ export default function Header() {
           <span className='truncate'>Kolpingtheater Ramsen</span>
         </Link>
         <nav className='ml-auto hidden md:flex items-center gap-6 text-sm'>
-          <Link href='/' className='hover:text-kolping-400'>
+          <Link href='/' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Home
           </Link>
-          <Link href='/about' className='hover:text-kolping-400'>
+          <Link href='/about' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Über uns
           </Link>
-          <Link href='/team' className='hover:text-kolping-400'>
+          <Link href='/team' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Team
           </Link>
-          <Link href='/gallery' className='hover:text-kolping-400'>
+          <Link href='/gallery' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Galerie
           </Link>
         </nav>
@@ -72,22 +72,22 @@ export default function Header() {
       {isMobileOpen && (
         <div id='mobile-menu' className='md:hidden border-t border-site-700'>
           <nav className='mx-auto max-w-6xl px-4 py-3 flex flex-col gap-3 text-sm'>
-            <Link href='/' className='hover:text-kolping-400' onClick={() => setIsMobileOpen(false)}>
+            <Link href='/' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Home
             </Link>
-            <Link href='/about' className='hover:text-kolping-400' onClick={() => setIsMobileOpen(false)}>
+            <Link href='/about' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Über uns
             </Link>
-            <Link href='/team' className='hover:text-kolping-400' onClick={() => setIsMobileOpen(false)}>
+            <Link href='/team' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Team
             </Link>
-            <Link href='/gallery' className='hover:text-kolping-400' onClick={() => setIsMobileOpen(false)}>
+            <Link href='/gallery' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Galerie
             </Link>
-            <Link href='/impressum' className='hover:text-kolping-400' onClick={() => setIsMobileOpen(false)}>
+            <Link href='/impressum' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Impressum
             </Link>
-            <Link href='/privacy' className='hover:text-kolping-400' onClick={() => setIsMobileOpen(false)}>
+            <Link href='/privacy' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Datenschutz
             </Link>
           </nav>

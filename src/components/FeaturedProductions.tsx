@@ -11,7 +11,7 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
       {items.map((item, idx) => (
-        <a key={idx} href={item.href} className='group block tilt'>
+        <a key={idx} href={item.href} className='group block tilt' aria-label={`Zur Galerie von ${item.title}`}>
           <div className='poster-frame border border-site-700 bg-site-900 overflow-hidden'>
             <div className='relative aspect-[4/5] w-full'>
               <Image
@@ -26,9 +26,9 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
                   {item.tag}
                 </span>
               ) : null}
-              <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
+              <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/90' />
               <div className='absolute bottom-0 left-0 right-0 p-3'>
-                <h3 className='font-display text-lg font-extrabold tracking-tight text-site-50'>
+                <h3 className='font-display text-lg font-extrabold tracking-tight text-site-50 transition-colors group-hover:text-kolping-400'>
                   {item.title}
                 </h3>
               </div>

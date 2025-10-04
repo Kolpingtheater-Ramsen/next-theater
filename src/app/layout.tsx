@@ -69,17 +69,17 @@ export default function RootLayout({
               © {new Date().getFullYear()} Kolping-Open-Air-Theater Ramsen
             </span>
             <div className='flex items-center gap-4'>
-              <Link href='/impressum' className='hover:text-kolping-400 hidden md:inline'>
+              <Link href='/impressum' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors hidden md:inline'>
                 Impressum
               </Link>
-              <Link href='/privacy' className='hover:text-kolping-400 hidden md:inline'>
+              <Link href='/privacy' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors hidden md:inline'>
                 Datenschutz
               </Link>
               <a
                 href='https://www.youtube.com/@kolpingtheaterramsen'
                 target='_blank'
                 rel='noreferrer'
-                className='inline-flex items-center gap-2 hover:text-kolping-400'
+                className='inline-flex items-center gap-2 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded transition-colors'
                 aria-label='YouTube'
               >
                 <svg
@@ -98,7 +98,7 @@ export default function RootLayout({
                 href='https://www.instagram.com/kolpingjugend_ramsen/'
                 target='_blank'
                 rel='noreferrer'
-                className='inline-flex items-center gap-2 hover:text-kolping-400'
+                className='inline-flex items-center gap-2 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded transition-colors'
                 aria-label='Instagram'
               >
                 <svg
