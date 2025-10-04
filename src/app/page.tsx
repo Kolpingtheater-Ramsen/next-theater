@@ -5,7 +5,7 @@ import FeaturedProductions from '@/components/FeaturedProductions'
 
 export default function Home() {
   return (
-    <main className='w-full space-y-8 sm:space-y-10 md:space-y-12'>
+    <div className='page-container'>
       <Hero
         variant='poster'
         imageSrc='/img/banners/anno.jpg'
@@ -14,8 +14,8 @@ export default function Home() {
         subtitle='Danke für euren Besuch! Bleibt gespannt – 2025 und 2026 erwarten euch neue Produktionen und besondere Highlights.'
       />
 
-      <section className='w-full px-4 mx-auto max-w-6xl'>
-        <div className='flex flex-col gap-3 sm:gap-4'>
+      <section className='page-section'>
+        <div className='countdown-marquee-section'>
           <div className='order-1 md:order-2'>
             <CountdownTimer targetDate='2025-08-23T20:00:00+02:00' title='Nächste Premiere startet in' />
           </div>
@@ -38,8 +38,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className='w-full px-4 mx-auto max-w-6xl' aria-labelledby='productions-heading'>
-        <h2 id='productions-heading' className='font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-4'>
+      <section className='page-section' aria-labelledby='productions-heading'>
+        <h2 id='productions-heading' className='section-heading'>
           Produktionen
         </h2>
         <FeaturedProductions
@@ -54,35 +54,32 @@ export default function Home() {
         />
       </section>
 
-      <section className='w-full px-4 mx-auto max-w-6xl' aria-labelledby='join-heading'>
-        <div className='glass rounded-xl p-6 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-6'>
-          <div className='flex-1 text-center md:text-left'>
-            <h3 id='join-heading' className='font-display text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight'>
+      <section className='page-section' aria-labelledby='join-heading'>
+        <div className='cta-card glass'>
+          <div className='cta-content'>
+            <h3 id='join-heading' className='cta-heading'>
               Werde Teil der Bühne
             </h3>
-            <p className='text-site-100 mt-2 text-sm sm:text-base'>
+            <p className='cta-text'>
               Ob Schauspiel, Technik oder Organisation – bei uns ist Platz für alle, die Theater lieben.
             </p>
           </div>
-          <div className='flex flex-wrap items-center justify-center gap-3'>
+          <div className='cta-buttons'>
             <a
               href='https://www.instagram.com/kolpingjugend_ramsen/'
               target='_blank'
               rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-site-700 hover:border-kolping-500 bg-site-800 transition-colors text-sm font-medium'
+              className='cta-button'
               aria-label='Besuche uns auf Instagram'
             >
               Instagram
             </a>
-            <a
-              href='/about'
-              className='inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-site-700 hover:border-kolping-500 bg-site-800 transition-colors text-sm font-medium'
-            >
+            <a href='/about' className='cta-button'>
               Über uns
             </a>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   )
 }

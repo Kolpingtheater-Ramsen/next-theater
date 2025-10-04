@@ -9,37 +9,30 @@ type Item = {
 
 export default function FeaturedProductions({ items }: { items: Item[] }) {
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+    <div className='productions-grid'>
       {items.map((item, idx) => (
         <a 
           key={idx} 
           href={item.href} 
-          className='group block tilt' 
+          className='production-card group' 
           aria-label={`Zur Galerie von ${item.title}`}
         >
-          <div className='poster-frame border border-site-700 bg-site-900 overflow-hidden'>
-            <div className='relative w-full' style={{ paddingBottom: '125%' }}>
-              <div className='absolute inset-0'>
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-                  style={{ objectFit: 'cover' }}
-                  className='transition-transform duration-500 group-hover:scale-105'
-                />
-              </div>
-              {item.tag && (
-                <span className='absolute left-2 top-2 z-10 rounded bg-kolping-400 px-2 py-1 text-xs font-bold uppercase text-black'>
-                  {item.tag}
-                </span>
-              )}
-              <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/90' />
-              <div className='absolute bottom-0 left-0 right-0 p-4'>
-                <h3 className='font-display text-lg font-extrabold tracking-tight text-site-50 transition-colors group-hover:text-kolping-400'>
-                  {item.title}
-                </h3>
-              </div>
+          <div className='production-card-inner'>
+            <div className='production-image'>
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px'
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+            {item.tag && (
+              <span className='production-tag'>{item.tag}</span>
+            )}
+            <div className='production-overlay' />
+            <div className='production-title-wrapper'>
+              <h3 className='production-title'>{item.title}</h3>
             </div>
           </div>
         </a>
