@@ -5,7 +5,8 @@ import FeaturedProductions from '@/components/FeaturedProductions'
 
 export default function Home() {
   return (
-    <div className='space-y-8 sm:space-y-10 md:space-y-12'>
+    <div className='w-full space-y-8 sm:space-y-10 md:space-y-12'>
+      {/* Hero Section */}
       <Hero
         variant='poster'
         imageSrc='/img/banners/anno.jpg'
@@ -14,7 +15,8 @@ export default function Home() {
         subtitle='Danke für euren Besuch! Bleibt gespannt – 2025 und 2026 erwarten euch neue Produktionen und besondere Highlights.'
       />
 
-      <section className='mx-auto max-w-6xl'>
+      {/* Countdown and Marquee Section */}
+      <section className='w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8'>
         <div className='flex flex-col gap-3 sm:gap-4'>
           <div className='order-1 md:order-2'>
             <div className='grid gap-3 sm:gap-4'>
@@ -40,7 +42,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className='mx-auto max-w-6xl space-y-4' aria-labelledby='productions-heading'>
+      {/* Productions Section */}
+      <section className='w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-4' aria-labelledby='productions-heading'>
         <h2 id='productions-heading' className='font-display text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight'>
           Produktionen
         </h2>
@@ -56,7 +59,8 @@ export default function Home() {
         />
       </section>
 
-      <section className='mx-auto max-w-6xl' aria-labelledby='join-heading'>
+      {/* Call to Action Section */}
+      <section className='w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8' aria-labelledby='join-heading'>
         <div className='glass rounded-xl p-5 sm:p-6 md:p-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6'>
           <div className='flex-1 text-center md:text-left'>
             <h3 id='join-heading' className='font-display text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight'>
@@ -66,7 +70,7 @@ export default function Home() {
               Ob Schauspiel, Technik oder Organisation – bei uns ist Platz für alle, die Theater lieben.
             </p>
           </div>
-          <div className='flex flex-wrap items-center gap-3'>
+          <div className='flex flex-wrap items-center justify-center gap-3'>
             <a
               href='https://www.instagram.com/kolpingjugend_ramsen/'
               target='_blank'
