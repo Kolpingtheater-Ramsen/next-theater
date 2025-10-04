@@ -13,13 +13,13 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
       {items.map((item, idx) => (
         <a key={idx} href={item.href} className='group block tilt'>
           <div className='poster-frame border border-site-700 bg-site-900 overflow-hidden'>
-            <div className='relative aspect-[4/5]'>
+            <div className='relative aspect-[4/5] w-full'>
               <Image
                 src={item.image}
                 alt={item.title}
                 fill
                 sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-                className='object-cover transition-transform duration-500 group-hover:scale-[1.04]'
+                className='object-cover transition-transform duration-500 group-hover:scale-[1.04] w-full h-full'
               />
               {item.tag ? (
                 <span className='absolute left-2 top-2 z-10 rounded bg-kolping-400 px-2 py-[2px] text-[11px] font-bold uppercase text-black'>

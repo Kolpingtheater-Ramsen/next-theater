@@ -55,6 +55,12 @@ body {
   overflow-x: hidden; /* Prevent horizontal scroll caused by wide transforms/effects */
 }
 
+/* Ensure images are always responsive and never overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 ::selection {
   background: var(--color-kolping-500);
   color: white;
