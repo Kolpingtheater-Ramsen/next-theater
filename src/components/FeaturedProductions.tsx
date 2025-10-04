@@ -18,22 +18,24 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
           aria-label={`Zur Galerie von ${item.title}`}
         >
           <div className='poster-frame border border-site-700 bg-site-900 overflow-hidden'>
-            <div className='relative w-full aspect-[4/5]'>
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-                className='transition-transform duration-500 group-hover:scale-[1.04]'
-                style={{ objectFit: 'cover' }}
-              />
+            <div className='relative w-full' style={{ paddingBottom: '125%' }}>
+              <div className='absolute inset-0'>
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                  style={{ objectFit: 'cover' }}
+                  className='transition-transform duration-500 group-hover:scale-105'
+                />
+              </div>
               {item.tag && (
-                <span className='absolute left-2 top-2 z-10 rounded bg-kolping-400 px-2 py-[2px] text-[11px] font-bold uppercase text-black'>
+                <span className='absolute left-2 top-2 z-10 rounded bg-kolping-400 px-2 py-1 text-xs font-bold uppercase text-black'>
                   {item.tag}
                 </span>
               )}
               <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/90' />
-              <div className='absolute bottom-0 left-0 right-0 p-3'>
+              <div className='absolute bottom-0 left-0 right-0 p-4'>
                 <h3 className='font-display text-lg font-extrabold tracking-tight text-site-50 transition-colors group-hover:text-kolping-400'>
                   {item.title}
                 </h3>
