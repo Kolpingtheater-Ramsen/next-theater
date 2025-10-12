@@ -86,8 +86,30 @@ async function generate() {
 
       const img = sharp(fullPath)
       const meta = await img.metadata()
-      const width = meta.width || 0
-      const height = meta.height || 0
+      let width = meta.width || 0
+      let height = meta.height || 0
+
+      // Resize and compress source images larger than 3MB
+      const stats = await fs.promises.stat(fullPath)
+      const fileSizeMB = stats.size / (1024 * 1024)
+      const MAX_SIZE_MB = 3
+      
+      if (fileSizeMB > MAX_SIZE_MB) {
+        console.log(`Compressing ${play}/${file} (${fileSizeMB.toFixed(2)}MB → target <${MAX_SIZE_MB}MB)`)
+        const MAX_DIMENSION = 4000
+        await sharp(fullPath)
+          .resize(MAX_DIMENSION, MAX_DIMENSION, { fit: 'inside', withoutEnlargement: true })
+          .jpeg({ quality: 85, progressive: true, mozjpeg: true })
+          .toFile(fullPath + '.tmp')
+        
+        // Replace original with resized version
+        await fs.promises.rename(fullPath + '.tmp', fullPath)
+        
+        // Update dimensions
+        const newMeta = await sharp(fullPath).metadata()
+        width = newMeta.width || 0
+        height = newMeta.height || 0
+      }
 
       // thumbnail target width per column layout (~3 columns desktop)
       const TARGET_W = 1200
