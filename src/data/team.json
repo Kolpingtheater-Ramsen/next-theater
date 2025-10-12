@@ -179,7 +179,6 @@
     },
     {
       "id": "Lena",
-      "placeholderAvatar": true,
       "roles": [
         null,
         null,
@@ -193,7 +192,8 @@
         null,
         null,
         "Ensemble"
-      ]
+      ],
+      "images": 3
     },
     {
       "id": "Leon",
@@ -215,7 +215,6 @@
     },
     {
       "id": "Logge",
-      "placeholderAvatar": true,
       "roles": [
         null,
         "Ensemble",
@@ -230,7 +229,7 @@
         null,
         "Ensemble"
       ],
-      "images": 2
+      "images": 3
     },
     {
       "id": "Louis",
@@ -271,7 +270,6 @@
     {
       "id": "LinaK",
       "name": "Lina",
-      "placeholderAvatar": true,
       "roles": [
         null,
         null,
@@ -285,7 +283,8 @@
         null,
         null,
         "Ensemble"
-      ]
+      ],
+      "images": 3
     },
     {
       "id": "Magdalena",
