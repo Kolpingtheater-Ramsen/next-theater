@@ -218,13 +218,17 @@ img {
 .marquee {
   position: relative;
   overflow: hidden;
+  max-width: calc(100vw - 4rem);
+  box-sizing: border-box;
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
+
 .marquee__track {
   display: flex;
   gap: 2rem;
   width: max-content;
   animation: marquee 30s linear infinite;
+  will-change: transform;
 }
 .marquee:hover .marquee__track {
   animation-play-state: paused;
