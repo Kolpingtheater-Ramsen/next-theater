@@ -2,6 +2,7 @@ export const runtime = 'edge'
 import { notFound } from 'next/navigation'
 import data from '@/data/team.json'
 import Slideshow from './slideshow'
+import RolesList from './roles-list'
 
 type Entry = {
   id: string
@@ -85,24 +86,13 @@ export default async function PersonPage({
               <div className='text-sm text-site-100'>
                 Rollen in unseren Stücken
               </div>
-              <ul className='mt-2 grid sm:grid-cols-2 gap-2 text-sm'>
-                {person.roles
+              <RolesList
+                roles={person.roles
                   .map((role, index) => ({ role, play: plays[index] }))
                   .filter((x) => x.role && x.role.trim().length > 0)
-                  .map((x, i) => (
-                    <li
-                      key={`${x.play}-${i}`}
-                      className='flex items-start gap-2 rounded border border-site-700 bg-site-800 p-2'
-                    >
-                      <span className='min-w-0'>
-                        <span className='text-site-100 block text-xs'>
-                          {x.play}
-                        </span>
-                        <span className='font-medium'>{x.role}</span>
-                      </span>
-                    </li>
-                  ))}
-              </ul>
+                  .map((x) => ({ role: x.role!, play: x.play }))}
+                personId={person.id}
+              />
             </div>
           ) : null}
           {person.jobs && person.jobs.length ? (
