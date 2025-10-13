@@ -48,7 +48,12 @@ export default function RolesList({ roles, personId }: RolesListProps) {
   const play8BitExplosion = () => {
     if (typeof window === 'undefined') return
 
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+    const AudioContextCtor =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext })
+        .webkitAudioContext
+    if (!AudioContextCtor) return
+    const audioContext = new AudioContextCtor()
     const now = audioContext.currentTime
 
     // Create oscillators for the explosion sound
@@ -259,9 +264,9 @@ export default function RolesList({ roles, personId }: RolesListProps) {
                   boxShadow: '0 0 12px rgba(255,255,255,0.15)',
                   borderRadius: '2px',
                   // custom variables to target in keyframes
-                  ['--shard-x' as any]: `${s.x}px`,
-                  ['--shard-y' as any]: `${s.y}px`,
-                  ['--shard-rot' as any]: `${s.rotate}deg`,
+                  ['--shard-x' as '--shard-x']: `${s.x}px`,
+                  ['--shard-y' as '--shard-y']: `${s.y}px`,
+                  ['--shard-rot' as '--shard-rot']: `${s.rotate}deg`,
                 } as React.CSSProperties}
               />
             ))}
@@ -287,7 +292,7 @@ export default function RolesList({ roles, personId }: RolesListProps) {
                   filter: 'blur(6px)',
                   transform: 'translate(-50%, -50%)',
                   animation: `smoke-rise ${sm.duration}s ease-out ${sm.delay}s forwards`,
-                  ['--smoke-x' as any]: `${sm.x}px`,
+                  ['--smoke-x' as '--smoke-x']: `${sm.x}px`,
                 } as React.CSSProperties}
               />
             ))}
