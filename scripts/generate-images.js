@@ -47,6 +47,14 @@ async function ensureDir(dir) {
 }
 
 async function generate() {
+  // Check if full images directory exists (won't exist in CI/CD)
+  try {
+    await fs.promises.access(FULL_DIR)
+  } catch {
+    console.log(`${FULL_DIR} not found - skipping image generation (using existing images.json)`)
+    return
+  }
+
   const plays = await fs.promises.readdir(FULL_DIR)
   /** @type {Record<string, { width:number, height:number, alt:string, index:number, blurhash:string, blurDataURL:string, tw:number, th:number }[]>} */
   const output = {}

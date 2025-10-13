@@ -13,14 +13,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "blurhash": "^2.0.5",
     "next": "15.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "blurhash": "^2.0.5",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.13",
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
