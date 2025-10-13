@@ -264,9 +264,9 @@ export default function RolesList({ roles, personId }: RolesListProps) {
                   boxShadow: '0 0 12px rgba(255,255,255,0.15)',
                   borderRadius: '2px',
                   // custom variables to target in keyframes
-                  ['--shard-x' as '--shard-x']: `${s.x}px`,
-                  ['--shard-y' as '--shard-y']: `${s.y}px`,
-                  ['--shard-rot' as '--shard-rot']: `${s.rotate}deg`,
+                  ['--shard-x' as const]: `${s.x}px`,
+                  ['--shard-y' as const]: `${s.y}px`,
+                  ['--shard-rot' as const]: `${s.rotate}deg`,
                 } as React.CSSProperties}
               />
             ))}
@@ -292,7 +292,7 @@ export default function RolesList({ roles, personId }: RolesListProps) {
                   filter: 'blur(6px)',
                   transform: 'translate(-50%, -50%)',
                   animation: `smoke-rise ${sm.duration}s ease-out ${sm.delay}s forwards`,
-                  ['--smoke-x' as '--smoke-x']: `${sm.x}px`,
+                  ['--smoke-x' as const]: `${sm.x}px`,
                 } as React.CSSProperties}
               />
             ))}

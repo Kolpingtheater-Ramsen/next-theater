@@ -43,7 +43,6 @@ export const metadata: Metadata = {
     icon: ['/favicon.svg'],
     apple: ['/img/logo.png'],
   },
-  viewport: 'width=device-width, initial-scale=1',
 }
 
 export const viewport = {
