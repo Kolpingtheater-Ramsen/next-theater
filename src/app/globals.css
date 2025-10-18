@@ -242,3 +242,23 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .marquee__track { animation: none !important; }
 }
+
+/* Print styles for ticket */
+@media print {
+  body {
+    background: white !important;
+  }
+  header, footer {
+    display: none !important;
+  }
+  .glass {
+    background: white !important;
+    border: 2px solid #000 !important;
+  }
+  .print\:shadow-none {
+    box-shadow: none !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}
