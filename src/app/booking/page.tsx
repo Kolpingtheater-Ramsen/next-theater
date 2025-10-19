@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
-import TicketConfirmation from '@/components/booking/TicketConfirmation'
 import VIPCodeInput from '@/components/booking/VIPCodeInput'
 import CountdownTimer from '@/components/CountdownTimer'
 
@@ -43,6 +43,7 @@ export default function BookingPage() {
   const [hasVIPAccess, setHasVIPAccess] = useState(false)
   const [isBookingLocked, setIsBookingLocked] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
+  const router = useRouter()
 
   // Check if booking is locked
   useEffect(() => {
@@ -139,17 +140,11 @@ export default function BookingPage() {
       .flatMap((b) => b.seats)
   }
 
-  if (bookingStep === 'confirmation' && confirmedBooking && selectedPlay && bookingData) {
-    return (
-      <TicketConfirmation
-        booking={confirmedBooking}
-        play={selectedPlay}
-        name={bookingData.name}
-        email={bookingData.email}
-        onNewBooking={handleNewBooking}
-      />
-    )
-  }
+  useEffect(() => {
+    if (bookingStep === 'confirmation' && confirmedBooking && selectedPlay && bookingData) {
+      router.push(`/booking/view/${confirmedBooking.id}?new=true`)
+    }
+  }, [bookingStep, confirmedBooking, selectedPlay, bookingData, router])
 
   return (
     <div className='max-w-5xl mx-auto'>
@@ -157,7 +152,7 @@ export default function BookingPage() {
         <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>
           Winterstück 2025
         </h1>
-        <p className='text-xl text-site-100 mb-1'>&bdquo;Schicksalfäden&ldquo;</p>
+        <p className='text-xl text-site-100 mb-1'>„Schicksalfäden"</p>
         <p className='text-site-100'>
           Kostenfrei • Maximal 5 Sitzplätze pro Buchung
         </p>

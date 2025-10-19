@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
 import type { Booking } from '@/app/booking/page'
 
@@ -16,8 +16,10 @@ const PLAYS = [
 
 export default function BookingViewPage() {
   const params = useParams()
+  const searchParams = useSearchParams()
   const router = useRouter()
   const bookingId = params.bookingId as string
+  const isNewBooking = searchParams.get('new') === 'true'
   
   const [booking, setBooking] = useState<Booking | null>(null)
   const [loading, setLoading] = useState(true)
@@ -101,11 +103,22 @@ export default function BookingViewPage() {
   return (
     <div className='max-w-2xl mx-auto'>
       <div className='mb-6 text-center print:mb-4'>
+        {isNewBooking && (
+          <div className='inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-900/30 mb-4 print:hidden'>
+            <svg className='w-8 h-8 text-green-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+            </svg>
+          </div>
+        )}
         <h1 className='font-display text-3xl md:text-4xl font-bold mb-2 print:text-2xl'>
-          Ihre Buchung
+          {isNewBooking ? 'Buchung bestätigt!' : 'Ihre Buchung'}
         </h1>
         <p className='text-site-100 print:text-sm'>
-          Winterstück 2025 &bdquo;Schicksalfäden&ldquo;
+          {isNewBooking ? (
+            `Eine Bestätigung wurde an ${booking?.email} gesendet.`
+          ) : (
+            'Winterstück 2025 „Schicksalfäden"'
+          )}
         </p>
       </div>
 
@@ -115,7 +128,7 @@ export default function BookingViewPage() {
           <h2 className='font-display text-xl md:text-2xl font-bold mb-1 print:text-lg'>
             Winterstück 2025
           </h2>
-          <p className='text-base md:text-lg print:text-sm'>&bdquo;Schicksalfäden&ldquo;</p>
+          <p className='text-base md:text-lg print:text-sm'>„Schicksalfäden"</p>
         </div>
 
         <div className='p-4 md:p-6 space-y-4 print:p-3 print:space-y-2'>
@@ -195,17 +208,28 @@ export default function BookingViewPage() {
           </span>
         </button>
         
-        <button
-          onClick={() => setShowCancelConfirm(true)}
-          className='px-6 py-3 rounded-lg border border-red-700 hover:bg-red-900/30 text-red-400 transition-colors font-medium'
-        >
-          <span className='flex items-center gap-2'>
-            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
-            </svg>
-            Buchung stornieren
-          </span>
-        </button>
+        {isNewBooking && (
+          <button
+            onClick={() => router.push('/booking')}
+            className='px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors'
+          >
+            Weitere Buchung
+          </button>
+        )}
+        
+        {!isNewBooking && (
+          <button
+            onClick={() => setShowCancelConfirm(true)}
+            className='px-6 py-3 rounded-lg border border-red-700 hover:bg-red-900/30 text-red-400 transition-colors font-medium'
+          >
+            <span className='flex items-center gap-2'>
+              <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+              </svg>
+              Buchung stornieren
+            </span>
+          </button>
+        )}
       </div>
 
       {/* Important info */}
