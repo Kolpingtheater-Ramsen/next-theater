@@ -10,11 +10,13 @@
     "preview": "pnpm run pages:build && wrangler pages dev",
     "deploy": "pnpm run pages:build && wrangler pages deploy",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "fix-exif": "node scripts/rotate-and-strip-exif.js"
   },
   "dependencies": {
     "blurhash": "^2.0.5",
     "next": "15.4.6",
+    "qrcode.react": "^4.2.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "sharp": "^0.33.5"
