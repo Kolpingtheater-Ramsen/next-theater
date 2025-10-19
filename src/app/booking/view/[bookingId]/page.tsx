@@ -117,7 +117,7 @@ export default function BookingViewPage() {
           {isNewBooking ? (
             `Eine Bestätigung wurde an ${booking?.email} gesendet.`
           ) : (
-            'Winterstück 2025 „Schicksalfäden"'
+            `Winterstück 2025 „Schicksalfäden"`
           )}
         </p>
       </div>
@@ -128,7 +128,7 @@ export default function BookingViewPage() {
           <h2 className='font-display text-xl md:text-2xl font-bold mb-1 print:text-lg'>
             Winterstück 2025
           </h2>
-          <p className='text-base md:text-lg print:text-sm'>„Schicksalfäden"</p>
+          <p className='text-base md:text-lg print:text-sm'>„Schicksalfäden&rdquo;</p>
         </div>
 
         <div className='p-4 md:p-6 space-y-4 print:p-3 print:space-y-2'>

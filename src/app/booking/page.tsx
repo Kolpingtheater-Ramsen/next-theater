@@ -119,14 +119,6 @@ export default function BookingPage() {
     setBookingStep('seat-selection')
   }
 
-  const handleNewBooking = () => {
-    setSelectedPlay(null)
-    setSelectedSeats([])
-    setBookingData(null)
-    setConfirmedBooking(null)
-    setBookingStep('play-selection')
-  }
-
   const getBookings = (): Booking[] => {
     if (typeof window === 'undefined') return []
     const stored = localStorage.getItem('bookings')
@@ -152,7 +144,7 @@ export default function BookingPage() {
         <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>
           Winterstück 2025
         </h1>
-        <p className='text-xl text-site-100 mb-1'>„Schicksalfäden"</p>
+        <p className='text-xl text-site-100 mb-1'>„Schicksalfäden&rdquo;</p>
         <p className='text-site-100'>
           Kostenfrei • Maximal 5 Sitzplätze pro Buchung
         </p>
