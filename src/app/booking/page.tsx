@@ -24,10 +24,10 @@ export type Booking = {
 }
 
 const PLAYS: Play[] = [
-  { id: 'play-1', date: '2025-12-27', time: '14:00', displayDate: 'Sa, 27.12.2025 - 14:00 Uhr' },
-  { id: 'play-2', date: '2025-12-27', time: '19:00', displayDate: 'Sa, 27.12.2025 - 19:00 Uhr' },
-  { id: 'play-3', date: '2025-12-28', time: '14:00', displayDate: 'So, 28.12.2025 - 14:00 Uhr' },
-  { id: 'play-4', date: '2025-12-28', time: '19:00', displayDate: 'So, 28.12.2025 - 19:00 Uhr' },
+  { id: 'play-1', date: '2025-12-27', time: '17:00', displayDate: 'Sa, 27.12.2025 - 17:00 Uhr' },
+  { id: 'play-2', date: '2025-12-27', time: '20:00', displayDate: 'Sa, 27.12.2025 - 20:00 Uhr' },
+  { id: 'play-3', date: '2025-12-28', time: '14:30', displayDate: 'So, 28.12.2025 - 14:30 Uhr' },
+  { id: 'play-4', date: '2025-12-28', time: '17:30', displayDate: 'So, 28.12.2025 - 17:30 Uhr' },
 ]
 
 // Mock data: Tickets locked until this date (unless VIP code is used)
