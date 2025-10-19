@@ -5,6 +5,7 @@ import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
 import TicketConfirmation from '@/components/booking/TicketConfirmation'
 import VIPCodeInput from '@/components/booking/VIPCodeInput'
+import CountdownTimer from '@/components/CountdownTimer'
 
 export type Play = {
   id: string
@@ -158,26 +159,31 @@ export default function BookingPage() {
       </div>
 
       {isBookingLocked && (
-        <div className='glass rounded-xl p-6 mb-8'>
-          <div className='flex items-start gap-4'>
-            <div className='flex-shrink-0 text-kolping-400'>
-              <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' />
-              </svg>
+        <div>
+          <div className='glass rounded-xl p-4 md:p-6 mb-6 -mx-4 px-4 md:mx-0 md:px-0'>
+            <div className='flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4'>
+              <div className='flex-shrink-0 text-kolping-400'>
+                <svg className='w-5 h-5 sm:w-6 sm:h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' />
+                </svg>
+              </div>
+              <div className='flex-1 min-w-0'>
+                <h3 className='text-lg font-semibold mb-2'>Buchung noch nicht geöffnet</h3>
+                <p className='text-site-100 mb-4 text-sm sm:text-base'>
+                  Die allgemeine Buchung öffnet am {BOOKING_UNLOCK_DATE.toLocaleDateString('de-DE', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })} Uhr.
+                </p>
+                <VIPCodeInput onSubmit={handleVIPCodeSubmit} />
+              </div>
             </div>
-            <div className='flex-1'>
-              <h3 className='text-lg font-semibold mb-2'>Buchung noch nicht geöffnet</h3>
-              <p className='text-site-100 mb-4'>
-                Die allgemeine Buchung öffnet am {BOOKING_UNLOCK_DATE.toLocaleDateString('de-DE', { 
-                  day: '2-digit', 
-                  month: '2-digit', 
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })} Uhr.
-              </p>
-              <VIPCodeInput onSubmit={handleVIPCodeSubmit} />
-            </div>
+          </div>
+          <div className='mb-8'>
+            <CountdownTimer targetDate={BOOKING_UNLOCK_DATE.toISOString()} title='Buchung öffnet in' />
           </div>
         </div>
       )}
