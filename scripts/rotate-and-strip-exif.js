@@ -10,7 +10,7 @@ const fs = require('fs')
 const path = require('path')
 const sharp = require('sharp')
 
-const ROOT = process.cwd() + '/..'
+const ROOT = process.cwd()
 const FULL_DIR = path.join(ROOT, 'public', 'img', 'gallery_full')
 
 async function ensureDir(dir) {

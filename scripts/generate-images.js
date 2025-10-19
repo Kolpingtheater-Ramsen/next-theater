@@ -97,6 +97,22 @@ async function generate() {
       let width = meta.width || 0
       let height = meta.height || 0
 
+      // Check if image has EXIF orientation and needs rotation
+      const hasExifOrientation = meta.orientation && meta.orientation > 1
+      if (hasExifOrientation) {
+        console.log(`Rotating ${play}/${file} (EXIF orientation: ${meta.orientation})`)
+        // Rotate based on EXIF and strip all metadata
+        await sharp(fullPath)
+          .rotate() // Sharp automatically rotates based on EXIF orientation
+          .toFile(fullPath + '.tmp')
+        await fs.promises.rename(fullPath + '.tmp', fullPath)
+        
+        // Re-read metadata after rotation
+        const rotatedMeta = await sharp(fullPath).metadata()
+        width = rotatedMeta.width || 0
+        height = rotatedMeta.height || 0
+      }
+
       // Resize and compress source images larger than 3MB
       const stats = await fs.promises.stat(fullPath)
       const fileSizeMB = stats.size / (1024 * 1024)
