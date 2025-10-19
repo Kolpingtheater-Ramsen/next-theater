@@ -69,7 +69,7 @@ export default function SeatSelection({
   }
 
   return (
-    <div className='glass rounded-xl p-4 md:p-8'>
+    <div className='glass rounded-xl p-4 md:p-8 max-w-[calc(100vw-2rem)]'>
       {/* Stage */}
       <div className='mb-8'>
         <div className='bg-gradient-to-b from-kolping-500 to-kolping-600 text-white text-center py-3 rounded-lg font-semibold shadow-lg'>
