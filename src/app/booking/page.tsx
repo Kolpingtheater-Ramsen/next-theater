@@ -42,12 +42,17 @@ export default function BookingPage() {
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null)
   const [hasVIPAccess, setHasVIPAccess] = useState(false)
   const [isBookingLocked, setIsBookingLocked] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
 
   // Check if booking is locked
   useEffect(() => {
     const now = new Date()
     setIsBookingLocked(now < BOOKING_UNLOCK_DATE && !hasVIPAccess)
   }, [hasVIPAccess])
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleVIPCodeSubmit = (code: string) => {
     if (VIP_CODES.includes(code)) {
@@ -210,11 +215,11 @@ export default function BookingPage() {
                 >
                   <div className='text-lg font-semibold mb-2'>{play.displayDate}</div>
                   <div className='text-site-100'>
-                    {isSoldOut ? (
+                    {isMounted && isSoldOut ? (
                       <span className='text-red-400'>Ausverkauft</span>
                     ) : (
                       <span>
-                        {availableSeats} von 70 Plätzen verfügbar
+                        {isMounted ? `${availableSeats} von 70 Plätzen verfügbar` : '70 von 70 Plätzen verfügbar'}
                       </span>
                     )}
                   </div>

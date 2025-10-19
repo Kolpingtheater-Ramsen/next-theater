@@ -268,6 +268,33 @@ img {
   background: var(--color-site-600);
 }
 
+/* Booked seat styling for light/dark themes */
+.seat-booked {
+  @apply bg-site-800 hover:bg-site-700 text-site-100 cursor-not-allowed;
+}
+
+[data-theme='light'] .seat-booked {
+  @apply bg-site-800 hover:bg-site-700 text-site-100 ;
+}
+
+/* Available seat styling */
+.seat-available {
+  @apply bg-gray-500 text-gray-200 hover:scale-105 cursor-pointer;
+}
+
+[data-theme='light'] .seat-available {
+  @apply bg-gray-400 text-white hover:scale-105 cursor-pointer;
+}
+
+/* Selected seat styling */
+.seat-selected {
+  @apply bg-kolping-500 text-white shadow-lg scale-105;
+}
+
+[data-theme='light'] .seat-selected {
+  @apply bg-kolping-500 text-white shadow-lg scale-105;
+}
+
 /* Print styles for ticket */
 @media print {
   @page {

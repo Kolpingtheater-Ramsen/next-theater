@@ -110,10 +110,10 @@ export default function SeatSelection({
                       className={`
                         w-8 h-8 md:w-10 md:h-10 rounded-md text-xs font-medium transition-all
                         ${booked 
-                          ? 'bg-site-700 text-site-500 cursor-not-allowed' 
+                          ? 'seat-booked' 
                           : selected
-                          ? 'bg-kolping-500 text-white shadow-lg scale-105'
-                          : 'bg-site-800 hover:bg-site-700 text-site-100 hover:scale-105'
+                          ? 'seat-selected'
+                          : 'seat-available'
                         }
                       `}
                       aria-label={`Platz ${getSeatLabel(seatNumber)} ${booked ? 'belegt' : selected ? 'ausgewählt' : 'verfügbar'}`}
@@ -143,10 +143,10 @@ export default function SeatSelection({
                       className={`
                         w-8 h-8 md:w-10 md:h-10 rounded-md text-xs font-medium transition-all
                         ${booked 
-                          ? 'bg-site-700 text-site-500 cursor-not-allowed' 
+                          ? 'seat-booked' 
                           : selected
-                          ? 'bg-kolping-500 text-white shadow-lg scale-105'
-                          : 'bg-site-800 hover:bg-site-700 text-site-100 hover:scale-105'
+                          ? 'seat-selected'
+                          : 'seat-available'
                         }
                       `}
                       aria-label={`Platz ${getSeatLabel(seatNumber)} ${booked ? 'belegt' : selected ? 'ausgewählt' : 'verfügbar'}`}
@@ -165,15 +165,15 @@ export default function SeatSelection({
       {/* Legend */}
       <div className='flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-6 text-sm'>
         <div className='flex items-center gap-2'>
-          <div className='w-6 h-6 bg-site-800 rounded-md' />
+          <div className='w-6 h-6 seat-available rounded-md' />
           <span className='text-site-100'>Verfügbar</span>
         </div>
         <div className='flex items-center gap-2'>
-          <div className='w-6 h-6 bg-kolping-500 rounded-md' />
+          <div className='w-6 h-6 seat-selected rounded-md' />
           <span className='text-site-100'>Ausgewählt</span>
         </div>
         <div className='flex items-center gap-2'>
-          <div className='w-6 h-6 bg-site-700 rounded-md' />
+          <div className='w-6 h-6 seat-booked rounded-md' />
           <span className='text-site-100'>Belegt</span>
         </div>
       </div>
