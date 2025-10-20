@@ -1,17 +1,17 @@
-import Hero from '@/components/Hero'
 import CountdownTimer from '@/components/CountdownTimer'
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
+import PrivacyVideo from '@/components/PrivacyVideo'
 
 export default function Home() {
   return (
     <div className='space-y-8 sm:space-y-10 md:space-y-12'>
-      <Hero
-        variant='poster'
-        imageSrc='/img/banners/anno.jpg'
+      <PrivacyVideo
+        videoId='7Xzys_0LkpE'
+        posterSrc='/img/banners/anno.jpg'
         title='Anno 1146'
-        tagline='Kolping-Open-Air-Theater Ramsen'
-        subtitle='Danke für euren Besuch! Bleibt gespannt – 2025 und 2026 erwarten euch neue Produktionen und besondere Highlights.'
+        tagline='2025 - Unsere aktuelle Produktion'
+        subtitle='Erlebe die faszinierenden Momente unserer Theaterproduktion. Ein Blick hinter die Kulissen und die Höhepunkte von Anno 1146 – live auf der Bühne des Kolpingtheaters Ramsen.'
       />
 
       <section className='mx-auto max-w-6xl'>
