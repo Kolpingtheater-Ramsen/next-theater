@@ -877,7 +877,20 @@
       "images": 2
     },
     {
+      "id": "Maren",
+      "placeholderAvatar": true,
+      "icon": "lightbulb",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        }
+      ],
+      "images": 1
+    },
+    {
       "id": "Noah",
+      "placeholderAvatar": true,
       "icon": "lightbulb",
       "jobs": [
         {
@@ -889,6 +902,7 @@
     },
     {
       "id": "Wolfgang",
+      "placeholderAvatar": true,
       "icon": "headphones",
       "jobs": [
         {
