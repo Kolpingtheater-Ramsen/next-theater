@@ -20,7 +20,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <Hero
         variant='wide'
-        imageSrc='/img/other_images/Gruppenbild.webp'
+        imageSrc='/img/other_images/Gruppenbild.jpg'
         title='Über uns'
         tagline='Kolping-Open-Air-Theater Ramsen'
         subtitle='Leidenschaft für Theater unter freiem Himmel seit 2014'
@@ -61,65 +61,78 @@ export default function AboutPage() {
           {(timeline as unknown as TimelineEntry[])
             .slice()
             .reverse()
-            .map((t, i) => (
-              <li key={i} className='relative group'>
-                {/* Timeline dot */}
-                <div className='absolute -left-[27px] sm:-left-[35px] top-1 w-4 h-4 rounded-full bg-kolping-400 border-4 border-site-900 group-hover:scale-125 transition-transform' />
-                
-                {/* Year marker for new years */}
-                {t.newYear && (
-                  <div className='absolute -left-[47px] sm:-left-[55px] -top-8 px-3 py-1 rounded-full bg-kolping-400 text-site-950 text-xs font-bold'>
-                    {t.date.split(' ')[1]}
-                  </div>
-                )}
-                
-                {/* Content card */}
-                <div className='glass rounded-lg p-4 sm:p-6 space-y-3 hover:border-kolping-400/30 transition-colors'>
-                  <div className='flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4'>
-                    <time className='text-xs sm:text-sm font-bold text-kolping-400 whitespace-nowrap uppercase tracking-wider'>
-                      {t.date}
-                    </time>
-                    <h3 className='font-display text-lg sm:text-xl font-bold text-site-50'>
-                      {t.header}
-                    </h3>
-                  </div>
-                  
-                  {t.image && (
-                    <Link href={t.galleryHash ? `/gallery/${t.galleryHash}` : '#'} className={t.galleryHash ? 'block group/image' : ''}>
-                      <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame'>
-                        <Image
-                          src={`/img/${t.image}`}
-                          alt={t.header}
-                          fill
-                          className={`${t.galleryHash ? 'group-hover/image:scale-105' : ''} object-contain transition-transform duration-500`}
-                        />
+            .map((t, i, arr) => {
+              const currentYear = t.date.split(' ')[1]
+              const previousYear = i > 0 ? arr[i - 1].date.split(' ')[1] : null
+              const isNewYear = currentYear !== previousYear
+
+              return (
+                <div key={i}>
+                  {isNewYear && (
+                    <div className='flex items-center gap-4 mb-8 mt-4 -ml-6 sm:-ml-8'>
+                      <div className='h-px flex-1 bg-gradient-to-r from-transparent via-kolping-400/30 to-transparent' />
+                      <div className='text-center px-4'>
+                        <span className='inline-block text-2xl font-bold text-kolping-400 font-display tracking-tight'>
+                          {currentYear}
+                        </span>
                       </div>
-                    </Link>
+                      <div className='h-px flex-1 bg-gradient-to-r from-transparent via-kolping-400/30 to-transparent' />
+                    </div>
                   )}
                   
-                  <p className='text-sm sm:text-base text-site-100 leading-relaxed'>
-                    {t.text}
-                  </p>
-                  
-                  {t.galleryHash && (
-                    <Link
-                      href={`/gallery/${t.galleryHash}`}
-                      className='inline-flex items-center gap-2 text-sm font-semibold text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors group/link'
-                    >
-                      <span>Galerie ansehen</span>
-                      <svg 
-                        xmlns='http://www.w3.org/2000/svg' 
-                        viewBox='0 0 20 20' 
-                        fill='currentColor' 
-                        className='w-4 h-4 group-hover/link:translate-x-1 transition-transform'
-                      >
-                        <path fillRule='evenodd' d='M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z' clipRule='evenodd' />
-                      </svg>
-                    </Link>
-                  )}
+                  <li className='relative group'>
+                    {/* Timeline dot */}
+                    <div className='absolute -left-[27px] sm:-left-[35px] top-1 w-4 h-4 rounded-full bg-kolping-400 border-4 border-site-900 group-hover:scale-125 transition-transform' />
+                    
+                    {/* Content card */}
+                    <div className='glass rounded-lg p-4 sm:p-6 space-y-3 hover:border-kolping-400/30 transition-colors'>
+                      <div className='flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4'>
+                        <time className='text-xs sm:text-sm font-bold text-kolping-400 whitespace-nowrap uppercase tracking-wider'>
+                          {t.date}
+                        </time>
+                        <h3 className='font-display text-lg sm:text-xl font-bold text-site-50'>
+                          {t.header}
+                        </h3>
+                      </div>
+                      
+                      {t.image && (
+                        <Link href={t.galleryHash ? `/gallery/${t.galleryHash}` : '#'} className={t.galleryHash ? 'block group/image' : ''}>
+                          <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame'>
+                            <Image
+                              src={`/img/${t.image}`}
+                              alt={t.header}
+                              fill
+                              className={`${t.galleryHash ? 'group-hover/image:scale-105' : ''} object-contain transition-transform duration-500`}
+                            />
+                          </div>
+                        </Link>
+                      )}
+                      
+                      <p className='text-sm sm:text-base text-site-100 leading-relaxed'>
+                        {t.text}
+                      </p>
+                      
+                      {t.galleryHash && (
+                        <Link
+                          href={`/gallery/${t.galleryHash}`}
+                          className='inline-flex items-center gap-2 text-sm font-semibold text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors group/link'
+                        >
+                          <span>Galerie ansehen</span>
+                          <svg 
+                            xmlns='http://www.w3.org/2000/svg' 
+                            viewBox='0 0 20 20' 
+                            fill='currentColor' 
+                            className='w-4 h-4 group-hover/link:translate-x-1 transition-transform'
+                          >
+                            <path fillRule='evenodd' d='M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z' clipRule='evenodd' />
+                          </svg>
+                        </Link>
+                      )}
+                    </div>
+                  </li>
                 </div>
-              </li>
-            ))}
+              )
+            })}
         </ol>
       </section>
     </div>
