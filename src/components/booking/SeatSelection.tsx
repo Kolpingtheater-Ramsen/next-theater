@@ -27,6 +27,14 @@ export default function SeatSelection({
   }
 
   const isSeatBooked = (seatNumber: number): boolean => {
+    // Block first and last seat in row A (row 0)
+    const row = Math.floor(seatNumber / TOTAL_SEATS_PER_ROW)
+    const seatInRow = seatNumber % TOTAL_SEATS_PER_ROW
+    
+    if (row === 0 && (seatInRow === 0 || seatInRow === TOTAL_SEATS_PER_ROW - 1)) {
+      return true
+    }
+    
     return bookedSeats.includes(seatNumber)
   }
 
