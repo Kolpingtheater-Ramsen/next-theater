@@ -85,14 +85,16 @@ export default function AboutPage() {
                   </div>
                   
                   {t.image && (
-                    <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame'>
-                      <Image
-                        src={`/img/${t.image}`}
-                        alt={t.header}
-                        fill
-                        className='object-cover hover:scale-105 transition-transform duration-500'
-                      />
-                    </div>
+                    <Link href={t.galleryHash ? `/gallery/${t.galleryHash}` : '#'} className={t.galleryHash ? 'block group/image' : ''}>
+                      <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame'>
+                        <Image
+                          src={`/img/${t.image}`}
+                          alt={t.header}
+                          fill
+                          className={`${t.galleryHash ? 'group-hover/image:scale-105' : ''} object-contain transition-transform duration-500`}
+                        />
+                      </div>
+                    </Link>
                   )}
                   
                   <p className='text-sm sm:text-base text-site-100 leading-relaxed'>
