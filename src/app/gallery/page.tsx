@@ -30,7 +30,7 @@ export default function GalleryPage() {
                 src={`/img/${t.image}`}
                 alt={t.header}
                 fill
-                className='object-cover transition-transform duration-300 group-hover:scale-105'
+                className='object-contain transition-transform duration-300 group-hover:scale-105'
               />
             </div>
             <div className='p-3 bg-site-800 flex items-center justify-between'>

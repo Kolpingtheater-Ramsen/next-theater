@@ -41,7 +41,7 @@ export default function ClientGrid({
                 alt={m.alt}
                 width={m.tw ?? m.width}
                 height={m.th ?? m.height}
-                className='w-full h-auto object-cover'
+                className='w-full h-auto object-contain'
                 sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                 placeholder={m.blurDataURL ? 'blur' : undefined}
                 blurDataURL={m.blurDataURL}
