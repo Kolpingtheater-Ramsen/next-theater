@@ -8,6 +8,7 @@ type TimelineEntry = {
   text: string
   image?: string
   galleryHash?: string
+  dominantColor?: string
 }
 
 export default function GalleryPage() {
@@ -24,6 +25,7 @@ export default function GalleryPage() {
             href={`/gallery/${t.galleryHash}`}
             className='group rounded-lg overflow-hidden border border-site-700 hover:border-kolping-500 transition-colors'
             aria-label={`Galerie ansehen: ${t.header}`}
+            style={{ backgroundColor: t.dominantColor }}
           >
             <div className='relative aspect-[16/9] overflow-hidden'>
               <Image

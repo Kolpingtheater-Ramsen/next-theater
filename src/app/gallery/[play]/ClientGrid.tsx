@@ -12,7 +12,6 @@ type PhotoMeta = {
   tw?: number
   th?: number
   blurhash?: string
-  blurDataURL?: string
 }
 
 export default function ClientGrid({
@@ -43,8 +42,6 @@ export default function ClientGrid({
                 height={m.th ?? m.height}
                 className='w-full h-auto object-contain'
                 sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-                placeholder={m.blurDataURL ? 'blur' : undefined}
-                blurDataURL={m.blurDataURL}
               />
               <div className='p-3 bg-site-800 text-sm text-site-100'>
                 {captions[i] ?? m.alt}

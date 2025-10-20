@@ -10,6 +10,7 @@ type TimelineEntry = {
   image?: string
   galleryHash?: string
   newYear?: boolean
+  dominantColor?: string
 }
 
 export const dynamic = 'force-static'
@@ -97,7 +98,7 @@ export default function AboutPage() {
                       
                       {t.image && (
                         <Link href={t.galleryHash ? `/gallery/${t.galleryHash}` : '#'} className={t.galleryHash ? 'block group/image' : ''}>
-                          <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame'>
+                          <div className='relative aspect-[16/9] rounded-lg overflow-hidden border border-site-700 bg-black poster-frame' style={{ backgroundColor: t.dominantColor }}>
                             <Image
                               src={`/img/${t.image}`}
                               alt={t.header}

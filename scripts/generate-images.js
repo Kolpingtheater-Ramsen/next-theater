@@ -21,7 +21,7 @@ const OUT_JSON = path.join(ROOT, 'src', 'data', 'images.json')
  * @param {number} compX
  * @param {number} compY
  */
-async function computeBlurhashAndDataURL(file, compX = 4, compY = 3) {
+async function computeBlurhash(file, compX = 4, compY = 3) {
   const image = sharp(file)
   const { width, height } = await image.metadata()
   const w = Math.min(64, width || 64)
@@ -32,14 +32,8 @@ async function computeBlurhashAndDataURL(file, compX = 4, compY = 3) {
     .resize(w, h, { fit: 'inside' })
     .toBuffer({ resolveWithObject: true })
   const blurhash = encode(new Uint8ClampedArray(data), info.width, info.height, compX, compY)
-  // small preview PNG from the downscaled buffer
-  const previewPng = await sharp(data, {
-    raw: { width: info.width, height: info.height, channels: 4 },
-  })
-    .png({ quality: 50 })
-    .toBuffer()
-  const blurDataURL = `data:image/png;base64,${previewPng.toString('base64')}`
-  return { blurhash, blurDataURL }
+  
+  return { blurhash }
 }
 
 async function ensureDir(dir) {
@@ -145,10 +139,10 @@ async function generate() {
         .jpeg({ quality: 74, progressive: true, mozjpeg: true })
         .toFile(thumbPath)
 
-      const { blurhash, blurDataURL } = await computeBlurhashAndDataURL(fullPath)
+      const { blurhash } = await computeBlurhash(fullPath)
       const alt = captions[index] || ''
 
-      output[play].push({ width, height, tw, th, alt, index, blurhash, blurDataURL })
+      output[play].push({ width, height, tw, th, alt, index, blurhash })
     }
   }
 
