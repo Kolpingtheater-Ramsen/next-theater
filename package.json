@@ -19,8 +19,7 @@
     "qrcode.react": "^4.2.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "sharp": "^0.33.5",
-    "wrangler": "^4.44.0"
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
