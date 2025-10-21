@@ -10,6 +10,7 @@ name = "next-theater"
 command = "pnpm run pages:build"
 cwd = "./"
 root = "."
+deploy_on_upload = true
 
 [build.upload]
 dir = ".vercel/output/static"
