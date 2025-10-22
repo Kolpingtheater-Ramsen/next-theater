@@ -90,6 +90,9 @@ export default function Header() {
             <Link href='/gallery' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Galerie
             </Link>
+            <Link href='/contact' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
+              Kontakt
+            </Link>
             <Link href='/impressum' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Impressum
             </Link>
