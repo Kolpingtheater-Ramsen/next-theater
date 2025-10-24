@@ -55,6 +55,58 @@ body {
   overflow-x: hidden; /* Prevent horizontal scroll caused by wide transforms/effects */
 }
 
+/* View Transitions API support */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.5s;
+}
+
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Custom view transition for gallery items */
+::view-transition-old(gallery-image),
+::view-transition-new(gallery-image) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Slower, more dramatic transitions for theater feel */
+::view-transition-group(*) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(gallery-image),
+  ::view-transition-new(gallery-image),
+  ::view-transition-group(*) {
+    animation-duration: 0.01ms !important;
+  }
+}
+
 /* Ensure images are always responsive and never overflow */
 img {
   max-width: 100%;

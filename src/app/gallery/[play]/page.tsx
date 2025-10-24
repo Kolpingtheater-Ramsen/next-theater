@@ -27,8 +27,24 @@ export default async function PlayGalleryPage({
   const title = show?.header ?? play
 
   return (
-    <div className='space-y-12'>
-      <h1 className='font-display text-3xl md:text-4xl font-extrabold tracking-tight'>{title}</h1>
+    <div className='space-y-8 sm:space-y-12'>
+      <div className='relative'>
+        {/* Decorative theater curtain top accent */}
+        <div className='absolute -top-4 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-kolping-500 to-transparent opacity-50' />
+        
+        <div className='text-center space-y-3'>
+          <h1 
+            className='font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-kolping-400'
+            style={{ viewTransitionName: `gallery-title-${play}` }}
+          >
+            {title}
+          </h1>
+          <p className='text-site-100 text-sm'>
+            Entdecken Sie die Highlights dieser Produktion
+          </p>
+        </div>
+      </div>
+      
       <ClientGrid play={play} metas={metas} captions={captions} />
     </div>
   )

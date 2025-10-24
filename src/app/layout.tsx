@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Header from '@/components/Header'
+import { ViewTransitions } from '@/components/ViewTransitions'
 import { Geist, Geist_Mono, Cinzel } from 'next/font/google'
 import './globals.css'
 
@@ -60,6 +61,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased bg-site-900 text-site-50 min-h-screen overflow-x-hidden flex flex-col`}
       >
+        <ViewTransitions />
         <Header />
         <main className='mx-auto max-w-6xl px-4 py-8 flex-1'>{children}</main>
         <footer className='sticky bottom-0 border-t border-site-700 py-8 text-sm text-site-300 bg-site-900 backdrop-blur supports-[backdrop-filter]:bg-site-900/95'>
