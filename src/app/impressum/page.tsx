@@ -27,7 +27,7 @@ export default function ImpressumPage() {
               <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z' />
             </svg>
           </div>
-          <h2 className='text-xl font-bold text-site-50'>Betreiberin der Website</h2>
+          <h2 className='text-xl font-bold text-site-50'>Betreiber der Website</h2>
         </div>
         
         <div className='space-y-3 pl-13'>
@@ -113,7 +113,7 @@ export default function ImpressumPage() {
 
           <div className='space-y-4 text-site-100'>
             <p className='text-sm'>
-              Die durch die Seitenbetreiberin erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen 
+              Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen 
               Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der 
               Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des Autors oder Urhebers.
             </p>
