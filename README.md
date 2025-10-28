@@ -24,8 +24,8 @@ Modern, content-driven website for the Kolping-Open-Air-Theater Ramsen, built wi
 - Booking System
   - Online seat reservation with visual seat selection
   - QR code tickets for event check-in
-  - Apple Wallet & Google Wallet passes (optional, requires setup)
-  - Print-optimized ticket view
+  - Calendar integration (iOS, Android, Desktop)
+  - Print-optimized ticket view with dark theme support
   - Local storage-based booking management
 - Theme toggle (dark/light) with `[data-theme]` tokens and light‑mode overrides
 
@@ -70,26 +70,24 @@ Semantic tokens (`--color-site-*`, `--color-kolping-*`) are defined in `src/app/
 - Full size: `public/img/gallery_full/<hash>/Bild_n.jpg`
 - Metadata: `src/data/images.json` per show with `{ width, height, alt, index }`
 
-### Wallet Passes (Optional)
+### Calendar Integration
 
-The booking system supports generating digital wallet passes for both iOS (Apple Wallet) and Android (Google Wallet). 
+The booking system includes calendar integration for easy event management:
 
-**Setup required:** This feature requires certificates and API credentials. See the detailed setup guide at [`docs/WALLET_SETUP.md`](docs/WALLET_SETUP.md).
+**Features:**
+- **Platform Detection**: Automatically detects iOS, Android, or Desktop
+- **Calendar File Generation**: Creates ICS files compatible with all major calendar apps
+- **Universal Support**: Works with Apple Calendar, Google Calendar, Outlook, and others
+- **Event Details**: Includes date, time, location, seat assignments, and booking ID
+- **Reminders**: Automatically adds 2-hour reminder before event
+- **Offline Access**: Once added to calendar, works without internet
 
-**Quick overview:**
-- **Apple Wallet**: Requires Apple Developer account and certificates placed in `certificates/apple-wallet/`
-- **Google Wallet**: Requires Google Cloud project and service account credentials (configured via environment variables)
-
-Without setup, users can still:
-- View tickets online with QR codes
-- Print tickets
-- Access all booking features
-
-With wallet pass setup, users can additionally:
-- Add tickets to Apple Wallet on iOS devices
-- Add tickets to Google Wallet on Android devices
-- Access tickets from their phone's lock screen
-- Receive location-based reminders
+**User Experience:**
+- iOS users: Download opens directly in Apple Calendar
+- Android users: Download opens in Google Calendar or default calendar app  
+- Desktop users: Downloads ICS file for any calendar application
+- Events appear on lock screens and in notification centers
+- No setup or configuration required
 
 ### Deployment
 
