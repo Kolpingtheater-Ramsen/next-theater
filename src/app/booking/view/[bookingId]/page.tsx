@@ -202,7 +202,7 @@ export default function BookingViewPage() {
           eventDescription='Kolping Jugend Winterstück 2025 - Schicksalfäden'
           startDate={play.date}
           startTime={play.time}
-          location='Kolpinghaus, Kolpingstraße 1, 12345 Musterstadt'
+          location='Klosterhof 7, 67305 Ramsen'
           seats={booking.seats.map(getSeatLabel)}
           bookingId={booking.id}
           name={booking.name}
