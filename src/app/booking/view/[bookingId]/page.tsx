@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
 import type { Booking } from '@/app/booking/page'
+import AddToCalendar from '@/components/AddToCalendar'
 
 export const runtime = 'edge'
 
@@ -151,7 +152,7 @@ export default function BookingViewPage() {
                 {booking.seats.sort((a, b) => a - b).map((seatNumber) => (
                   <span
                     key={seatNumber}
-                    className='px-3 py-1 bg-site-800 rounded-lg font-semibold text-sm print:px-2 print:py-0.5 print:text-xs'
+                    className='px-3 py-1 bg-site-800 rounded-lg font-semibold text-sm print:px-2 print:py-0.5 print:text-xs seat-label-print'
                   >
                     {getSeatLabel(seatNumber)}
                   </span>
@@ -196,6 +197,18 @@ export default function BookingViewPage() {
 
       {/* Actions */}
       <div className='flex flex-wrap gap-3 justify-center print:hidden'>
+        <AddToCalendar
+          eventTitle='Winterstück 2025: Schicksalfäden'
+          eventDescription='Kolping Jugend Winterstück 2025 - Schicksalfäden'
+          startDate={play.date}
+          startTime={play.time}
+          location='Klosterhof 7, 67305 Ramsen'
+          seats={booking.seats.map(getSeatLabel)}
+          bookingId={booking.id}
+          name={booking.name}
+          email={booking.email}
+        />
+        
         <button
           onClick={handlePrint}
           className='px-6 py-3 rounded-lg border border-site-700 hover:border-kolping-400 bg-site-800 transition-colors font-medium'

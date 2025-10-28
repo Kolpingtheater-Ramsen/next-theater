@@ -498,4 +498,11 @@ img {
   .glass, h1, h2, h3 {
     page-break-inside: avoid;
   }
+  
+  /* Fix seat label colors in print mode */
+  .seat-label-print {
+    background-color: #f3f4f6 !important;
+    color: #000 !important;
+    border: 1px solid #d1d5db !important;
+  }
 }

@@ -21,6 +21,12 @@ Modern, content-driven website for the Kolping-Open-Air-Theater Ramsen, built wi
   - Show list sourced from `src/data/timeline.json`
   - Per‑show masonry layout (CSS columns) using image metadata
   - Lightbox with caption, next/prev, close, download, and a loading spinner
+- Booking System
+  - Online seat reservation with visual seat selection
+  - QR code tickets for event check-in
+  - Calendar integration (iOS, Android, Desktop)
+  - Print-optimized ticket view with dark theme support
+  - Local storage-based booking management
 - Theme toggle (dark/light) with `[data-theme]` tokens and light‑mode overrides
 
 ### Prerequisites
@@ -63,6 +69,25 @@ Semantic tokens (`--color-site-*`, `--color-kolping-*`) are defined in `src/app/
 - Thumbnails: `public/img/gallery_thumbs/<hash>/Bild_n.jpg`
 - Full size: `public/img/gallery_full/<hash>/Bild_n.jpg`
 - Metadata: `src/data/images.json` per show with `{ width, height, alt, index }`
+
+### Calendar Integration
+
+The booking system includes calendar integration for easy event management:
+
+**Features:**
+- **Platform Detection**: Automatically detects iOS, Android, or Desktop
+- **Calendar File Generation**: Creates ICS files compatible with all major calendar apps
+- **Universal Support**: Works with Apple Calendar, Google Calendar, Outlook, and others
+- **Event Details**: Includes date, time, location, seat assignments, and booking ID
+- **Reminders**: Automatically adds 2-hour reminder before event
+- **Offline Access**: Once added to calendar, works without internet
+
+**User Experience:**
+- iOS users: Download opens directly in Apple Calendar
+- Android users: Download opens in Google Calendar or default calendar app  
+- Desktop users: Downloads ICS file for any calendar application
+- Events appear on lock screens and in notification centers
+- No setup or configuration required
 
 ### Deployment
 
