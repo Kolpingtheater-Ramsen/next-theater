@@ -21,6 +21,12 @@ Modern, content-driven website for the Kolping-Open-Air-Theater Ramsen, built wi
   - Show list sourced from `src/data/timeline.json`
   - Per‑show masonry layout (CSS columns) using image metadata
   - Lightbox with caption, next/prev, close, download, and a loading spinner
+- Booking System
+  - Online seat reservation with visual seat selection
+  - QR code tickets for event check-in
+  - Apple Wallet & Google Wallet passes (optional, requires setup)
+  - Print-optimized ticket view
+  - Local storage-based booking management
 - Theme toggle (dark/light) with `[data-theme]` tokens and light‑mode overrides
 
 ### Prerequisites
@@ -63,6 +69,27 @@ Semantic tokens (`--color-site-*`, `--color-kolping-*`) are defined in `src/app/
 - Thumbnails: `public/img/gallery_thumbs/<hash>/Bild_n.jpg`
 - Full size: `public/img/gallery_full/<hash>/Bild_n.jpg`
 - Metadata: `src/data/images.json` per show with `{ width, height, alt, index }`
+
+### Wallet Passes (Optional)
+
+The booking system supports generating digital wallet passes for both iOS (Apple Wallet) and Android (Google Wallet). 
+
+**Setup required:** This feature requires certificates and API credentials. See the detailed setup guide at [`docs/WALLET_SETUP.md`](docs/WALLET_SETUP.md).
+
+**Quick overview:**
+- **Apple Wallet**: Requires Apple Developer account and certificates placed in `certificates/apple-wallet/`
+- **Google Wallet**: Requires Google Cloud project and service account credentials (configured via environment variables)
+
+Without setup, users can still:
+- View tickets online with QR codes
+- Print tickets
+- Access all booking features
+
+With wallet pass setup, users can additionally:
+- Add tickets to Apple Wallet on iOS devices
+- Add tickets to Google Wallet on Android devices
+- Access tickets from their phone's lock screen
+- Receive location-based reminders
 
 ### Deployment
 

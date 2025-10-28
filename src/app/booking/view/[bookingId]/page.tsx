@@ -206,6 +206,7 @@ export default function BookingViewPage() {
           seats={booking.seats.map(getSeatLabel)}
           bookingId={booking.id}
           name={booking.name}
+          email={booking.email}
         />
         
         <button
