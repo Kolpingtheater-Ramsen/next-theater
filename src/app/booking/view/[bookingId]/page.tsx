@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
 import type { Booking } from '@/app/booking/page'
-import AddToWallet from '@/components/AddToWallet'
+import AddToCalendar from '@/components/AddToCalendar'
 
 export const runtime = 'edge'
 
@@ -197,7 +197,7 @@ export default function BookingViewPage() {
 
       {/* Actions */}
       <div className='flex flex-wrap gap-3 justify-center print:hidden'>
-        <AddToWallet
+        <AddToCalendar
           eventTitle='Winterstück 2025: Schicksalfäden'
           eventDescription='Kolping Jugend Winterstück 2025 - Schicksalfäden'
           startDate={play.date}

@@ -26,9 +26,6 @@
 .DS_Store
 *.pem
 
-# wallet certificates (sensitive)
-/certificates/
-
 # debug
 npm-debug.log*
 yarn-debug.log*

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-type AddToWalletProps = {
+type AddToCalendarProps = {
   eventTitle: string
   eventDescription: string
   startDate: string // ISO date string (YYYY-MM-DD)
@@ -14,7 +14,7 @@ type AddToWalletProps = {
   email: string
 }
 
-export default function AddToWallet({
+export default function AddToCalendar({
   eventTitle,
   eventDescription,
   startDate,
@@ -23,7 +23,7 @@ export default function AddToWallet({
   seats,
   bookingId,
   name,
-}: AddToWalletProps) {
+}: AddToCalendarProps) {
   const [platform, setPlatform] = useState<'ios' | 'android' | 'other'>('other')
 
   useEffect(() => {
