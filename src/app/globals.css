@@ -23,6 +23,13 @@
   --color-site-50: #0f0f10; /* primary text */
 }
 
+/* Pink theme: keep neutrals dark, switch accent to pink */
+[data-theme='pink'] {
+  --color-kolping-400: #f472b6; /* pink-400 */
+  --color-kolping-500: #ec4899; /* pink-500 */
+  --color-kolping-600: #db2777; /* pink-600 */
+}
+
 /* Pragmatic overrides to Tailwind utility classes in light mode */
 [data-theme='light'] .bg-site-900 {
   background-color: #ffffff !important;
