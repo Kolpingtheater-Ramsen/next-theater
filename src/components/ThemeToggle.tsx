@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react'
 
+type Theme = 'dark' | 'light' | 'pink'
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [theme, setTheme] = useState<Theme>('dark')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -12,8 +14,8 @@ export default function ThemeToggle() {
   }, [theme])
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
-    if (saved) {
+    const saved = localStorage.getItem('theme') as Theme | null
+    if (saved === 'dark' || saved === 'light' || saved === 'pink') {
       setTheme(saved)
     } else {
       const prefersLight = window.matchMedia(
@@ -29,9 +31,15 @@ export default function ThemeToggle() {
       type='button'
       aria-label='Theme umschalten'
       className='px-3 py-1 rounded border border-site-700 hover:border-kolping-500 text-sm'
-      onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+      onClick={() =>
+        setTheme((t) => {
+          const order: Theme[] = ['dark', 'light', 'pink']
+          const i = order.indexOf(t)
+          return order[(i + 1) % order.length]
+        })
+      }
     >
-      {mounted ? (theme === 'dark' ? '☀️' : '🌙') : '🌓'}
+      {mounted ? (theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '🌸') : '🌓'}
     </button>
   )
 }
