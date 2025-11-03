@@ -103,7 +103,7 @@ async function generate() {
       // Resize and compress source images larger than 3MB
       const stats = await fs.promises.stat(thumbPath)
       const fileSizeMB = stats.size / (1024 * 1024)
-      const MAX_SIZE_MB = 3
+      const MAX_SIZE_MB = 1
       
       if (fileSizeMB > MAX_SIZE_MB) {
         console.log(`Compressing ${play}/${file} (${fileSizeMB.toFixed(2)}MB → target <${MAX_SIZE_MB}MB)`)
