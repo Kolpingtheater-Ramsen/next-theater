@@ -1,8 +1,10 @@
 /*
-  Thumbnail and blurhash generator
-  - Scans public/img/gallery_full/{play}/Bild_*.jpg
-  - Writes thumbnails to public/img/gallery_thumbs/{play}/Bild_*.jpg
-  - Emits src/data/images.json mapping { [play]: [{ width,height, tw, th, alt, index, blurhash, blurDataURL }] }
+  Thumbnail optimizer and blurhash generator
+  - Processes raw images in public/img/gallery_thumbs/{play}/Bild_*.jpg
+  - Rotates images based on EXIF orientation
+  - Compresses images larger than 3MB
+  - Generates thumbnails (max width 1200px)
+  - Emits src/data/images.json mapping { [play]: [{ width,height, tw, th, alt, index, blurhash }] }
 */
 
 const fs = require('fs')
@@ -11,7 +13,6 @@ const sharp = require('sharp')
 const { encode } = require('blurhash')
 
 const ROOT = process.cwd()
-const FULL_DIR = path.join(ROOT, 'public', 'img', 'gallery_full')
 const THUMBS_DIR = path.join(ROOT, 'public', 'img', 'gallery_thumbs')
 const PICS_JSON = path.join(ROOT, 'src', 'data', 'pics.json')
 const OUT_JSON = path.join(ROOT, 'src', 'data', 'images.json')
@@ -36,21 +37,17 @@ async function computeBlurhash(file, compX = 4, compY = 3) {
   return { blurhash }
 }
 
-async function ensureDir(dir) {
-  await fs.promises.mkdir(dir, { recursive: true })
-}
-
 async function generate() {
-  // Check if full images directory exists (won't exist in CI/CD)
+  // Check if thumbs directory exists (won't exist in CI/CD)
   try {
-    await fs.promises.access(FULL_DIR)
+    await fs.promises.access(THUMBS_DIR)
   } catch {
-    console.log(`${FULL_DIR} not found - skipping image generation (using existing images.json)`)
+    console.log(`${THUMBS_DIR} not found - skipping image generation (using existing images.json)`)
     return
   }
 
-  const plays = await fs.promises.readdir(FULL_DIR)
-  /** @type {Record<string, { width:number, height:number, alt:string, index:number, blurhash:string, blurDataURL:string, tw:number, th:number }[]>} */
+  const plays = await fs.promises.readdir(THUMBS_DIR)
+  /** @type {Record<string, { width:number, height:number, alt:string, index:number, blurhash:string, tw:number, th:number }[]>} */
   const output = {}
 
   /** @type {Record<string, string[]>} */
@@ -61,11 +58,11 @@ async function generate() {
   } catch {}
 
   for (const play of plays) {
-    const fullDir = path.join(FULL_DIR, play)
-    const stat = await fs.promises.stat(fullDir)
+    const thumbsPlayDir = path.join(THUMBS_DIR, play)
+    const stat = await fs.promises.stat(thumbsPlayDir)
     if (!stat.isDirectory()) continue
 
-    const files = (await fs.promises.readdir(fullDir))
+    const files = (await fs.promises.readdir(thumbsPlayDir))
       .filter((f) => /^Bild_\d+\.jpe?g$/i.test(f))
       .sort((a, b) => {
         const ai = parseInt(a.match(/(\d+)/)?.[1] || '0', 10)
@@ -76,17 +73,13 @@ async function generate() {
     if (!files.length) continue
     output[play] = []
 
-    const thumbsPlayDir = path.join(THUMBS_DIR, play)
-    await ensureDir(thumbsPlayDir)
-
     const captions = captionsByPlay[play] || []
 
     for (const file of files) {
       const index = parseInt(file.match(/(\d+)/)?.[1] || '0', 10) - 1
-      const fullPath = path.join(fullDir, file)
       const thumbPath = path.join(thumbsPlayDir, file)
 
-      const img = sharp(fullPath)
+      const img = sharp(thumbPath)
       const meta = await img.metadata()
       let width = meta.width || 0
       let height = meta.height || 0
@@ -96,35 +89,35 @@ async function generate() {
       if (hasExifOrientation) {
         console.log(`Rotating ${play}/${file} (EXIF orientation: ${meta.orientation})`)
         // Rotate based on EXIF and strip all metadata
-        await sharp(fullPath)
+        await sharp(thumbPath)
           .rotate() // Sharp automatically rotates based on EXIF orientation
-          .toFile(fullPath + '.tmp')
-        await fs.promises.rename(fullPath + '.tmp', fullPath)
+          .toFile(thumbPath + '.tmp')
+        await fs.promises.rename(thumbPath + '.tmp', thumbPath)
         
         // Re-read metadata after rotation
-        const rotatedMeta = await sharp(fullPath).metadata()
+        const rotatedMeta = await sharp(thumbPath).metadata()
         width = rotatedMeta.width || 0
         height = rotatedMeta.height || 0
       }
 
       // Resize and compress source images larger than 3MB
-      const stats = await fs.promises.stat(fullPath)
+      const stats = await fs.promises.stat(thumbPath)
       const fileSizeMB = stats.size / (1024 * 1024)
       const MAX_SIZE_MB = 3
       
       if (fileSizeMB > MAX_SIZE_MB) {
         console.log(`Compressing ${play}/${file} (${fileSizeMB.toFixed(2)}MB → target <${MAX_SIZE_MB}MB)`)
         const MAX_DIMENSION = 4000
-        await sharp(fullPath)
+        await sharp(thumbPath)
           .resize(MAX_DIMENSION, MAX_DIMENSION, { fit: 'inside', withoutEnlargement: true })
           .jpeg({ quality: 85, progressive: true, mozjpeg: true })
-          .toFile(fullPath + '.tmp')
+          .toFile(thumbPath + '.tmp')
         
         // Replace original with resized version
-        await fs.promises.rename(fullPath + '.tmp', fullPath)
+        await fs.promises.rename(thumbPath + '.tmp', thumbPath)
         
         // Update dimensions
-        const newMeta = await sharp(fullPath).metadata()
+        const newMeta = await sharp(thumbPath).metadata()
         width = newMeta.width || 0
         height = newMeta.height || 0
       }
@@ -134,12 +127,16 @@ async function generate() {
       const tw = Math.min(TARGET_W, width)
       const th = Math.round((tw / width) * height)
 
-      await sharp(fullPath)
+      // Generate optimized thumbnail
+      await sharp(thumbPath)
         .resize({ width: tw })
         .jpeg({ quality: 74, progressive: true, mozjpeg: true })
-        .toFile(thumbPath)
+        .toFile(thumbPath + '.thumb')
+      
+      // Replace original with thumbnail
+      await fs.promises.rename(thumbPath + '.thumb', thumbPath)
 
-      const { blurhash } = await computeBlurhash(fullPath)
+      const { blurhash } = await computeBlurhash(thumbPath)
       const alt = captions[index] || ''
 
       output[play].push({ width, height, tw, th, alt, index, blurhash })
