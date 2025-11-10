@@ -83,11 +83,13 @@ async function generate() {
       const meta = await img.metadata()
       let width = meta.width || 0
       let height = meta.height || 0
+      let needsProcessing = false
 
       // Check if image has EXIF orientation and needs rotation
       const hasExifOrientation = meta.orientation && meta.orientation > 1
       if (hasExifOrientation) {
         console.log(`Rotating ${play}/${file} (EXIF orientation: ${meta.orientation})`)
+        needsProcessing = true
         // Rotate based on EXIF and strip all metadata
         await sharp(thumbPath)
           .rotate() // Sharp automatically rotates based on EXIF orientation
@@ -100,13 +102,15 @@ async function generate() {
         height = rotatedMeta.height || 0
       }
 
-      // Resize and compress source images larger than 3MB
+      // Check file size
       const stats = await fs.promises.stat(thumbPath)
       const fileSizeMB = stats.size / (1024 * 1024)
       const MAX_SIZE_MB = 1
       
+      // Only process if image is above size threshold
       if (fileSizeMB > MAX_SIZE_MB) {
         console.log(`Compressing ${play}/${file} (${fileSizeMB.toFixed(2)}MB → target <${MAX_SIZE_MB}MB)`)
+        needsProcessing = true
         const MAX_DIMENSION = 4000
         await sharp(thumbPath)
           .resize(MAX_DIMENSION, MAX_DIMENSION, { fit: 'inside', withoutEnlargement: true })
@@ -127,14 +131,20 @@ async function generate() {
       const tw = Math.min(TARGET_W, width)
       const th = Math.round((tw / width) * height)
 
-      // Generate optimized thumbnail
-      await sharp(thumbPath)
-        .resize({ width: tw })
-        .jpeg({ quality: 74, progressive: true, mozjpeg: true })
-        .toFile(thumbPath + '.thumb')
-      
-      // Replace original with thumbnail
-      await fs.promises.rename(thumbPath + '.thumb', thumbPath)
+      // Only generate thumbnail if image needs processing (size above threshold or needed rotation)
+      // or if image is larger than target width
+      if (needsProcessing || width > TARGET_W) {
+        console.log(`Generating thumbnail for ${play}/${file}`)
+        await sharp(thumbPath)
+          .resize({ width: tw })
+          .jpeg({ quality: 74, progressive: true, mozjpeg: true })
+          .toFile(thumbPath + '.thumb')
+        
+        // Replace original with thumbnail
+        await fs.promises.rename(thumbPath + '.thumb', thumbPath)
+      } else {
+        console.log(`Skipping ${play}/${file} (already optimized: ${fileSizeMB.toFixed(2)}MB, ${width}x${height})`)
+      }
 
       const { blurhash } = await computeBlurhash(thumbPath)
       const alt = captions[index] || ''
