@@ -147,7 +147,7 @@ export default function BookingViewPage() {
           {isNewBooking ? (
             `Eine Bestätigung wurde an ${booking?.email} gesendet.`
           ) : (
-            `Winterstück 2025: Schicksalfäden`
+            `Winterstück 2025: Schicksalsfäden`
           )}
         </p>
       </div>
@@ -158,7 +158,7 @@ export default function BookingViewPage() {
           <h2 className='font-display text-xl md:text-2xl font-bold mb-1 print:text-lg'>
             Winterstück 2025
           </h2>
-          <p className='text-base md:text-lg print:text-sm'>Schicksalfäden</p>
+          <p className='text-base md:text-lg print:text-sm'>Schicksalsfäden</p>
         </div>
 
         <div className='p-4 md:p-6 space-y-4 print:p-3 print:space-y-2'>
@@ -227,8 +227,8 @@ export default function BookingViewPage() {
       {/* Actions */}
       <div className='flex flex-wrap gap-3 justify-center print:hidden'>
         <AddToCalendar
-          eventTitle='Winterstück 2025: Schicksalfäden'
-          eventDescription='Kolping Jugend Winterstück 2025 - Schicksalfäden'
+          eventTitle='Winterstück 2025: Schicksalsfäden'
+          eventDescription='Kolping Jugend Winterstück 2025 - Schicksalsfäden'
           startDate={play.date}
           startTime={play.time}
           location='Klosterhof 7, 67305 Ramsen'

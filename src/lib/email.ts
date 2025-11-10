@@ -78,7 +78,7 @@ Bitte gib anderen die Chance, die Plätze zu nutzen.
 Wir freuen uns auf dein Kommen!
 
 Die Kolping-Theatergruppe
-Winterstück 2025 - Schicksalfäden
+Winterstück 2025 - Schicksalsfäden
 
 ---
 Bei Fragen oder Problemen kannst du uns gerne kontaktieren.
@@ -109,7 +109,7 @@ Die Sitzplätze wurden freigegeben und stehen anderen Besuchern zur Verfügung.
 Wir hoffen, dass du zu einem anderen Termin kommen kannst!
 
 Die Kolping-Theatergruppe
-Winterstück 2025 - Schicksalfäden
+Winterstück 2025 - Schicksalsfäden
 
 ---
 Bei Fragen oder Problemen kannst du uns gerne kontaktieren.
@@ -141,7 +141,7 @@ export async function sendBookingConfirmation(
       from: `${config.theaterName} <${config.fromEmail}>`,
       to: booking.email,
       replyTo: config.replyToEmail,
-      subject: 'Deine Reservierung für das Winterstück 2025 - Schicksalfäden',
+      subject: 'Deine Reservierung für das Winterstück 2025 - Schicksalsfäden',
       text: getConfirmationEmailBody({
         name: booking.name,
         date: formattedDate,

@@ -181,34 +181,44 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Send confirmation email (don't block on email sending)
+    // Send confirmation email (await to catch errors during development)
     let emailStatus = 'not_configured'
+    let emailError = null
     if (env.RESEND_API_KEY) {
-      emailStatus = 'triggered'
+      emailStatus = 'sending'
       // Get the full URL for the booking link
       const baseUrl = new URL(request.url).origin
       
-      // Send email asynchronously (don't await)
-      sendBookingConfirmation(
-        {
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          id: bookingId,
-        },
-        play,
-        seats,
-        {
-          apiKey: env.RESEND_API_KEY,
-          fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
-          theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
-          replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
-        },
-        baseUrl
-      ).catch((error) => {
-        emailStatus = 'failed: ' + (error instanceof Error ? error.message : 'unknown')
+      try {
+        // Await email send to catch errors
+        const emailResult = await sendBookingConfirmation(
+          {
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            id: bookingId,
+          },
+          play,
+          seats,
+          {
+            apiKey: env.RESEND_API_KEY,
+            fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
+            theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
+            replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
+          },
+          baseUrl
+        )
+        
+        if (emailResult.success) {
+          emailStatus = 'sent'
+        } else {
+          emailStatus = 'failed'
+          emailError = emailResult.error || 'Unknown error'
+        }
+      } catch (error) {
+        emailStatus = 'failed'
+        emailError = error instanceof Error ? error.message : String(error)
         console.error('Failed to send confirmation email:', error)
-        // Continue anyway - booking was successful
-      })
+      }
     } else {
       console.warn('RESEND_API_KEY not configured - skipping email')
     }
@@ -219,7 +229,8 @@ export async function POST(request: NextRequest) {
         success: true,
         bookingId,
         message: 'Booking created successfully',
-        debug_email_status: emailStatus // Remove this after debugging
+        debug_email_status: emailStatus, // Remove this after debugging
+        debug_email_error: emailError // Remove this after debugging
       },
       { status: 201 }
     )
