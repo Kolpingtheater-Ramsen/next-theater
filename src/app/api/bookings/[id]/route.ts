@@ -129,28 +129,38 @@ export async function DELETE(
       )
     }
     
-    // Send cancellation confirmation email (don't block)
+    // Send cancellation confirmation email (await to catch errors)
     let emailStatus = 'not_configured'
+    let emailError = null
     if (env.RESEND_API_KEY && booking.play) {
-      emailStatus = 'triggered'
-      sendCancellationConfirmation(
-        {
-          name: booking.name,
-          email: booking.email,
-        },
-        booking.play,
-        booking.seats,
-        {
-          apiKey: env.RESEND_API_KEY,
-          fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
-          theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
-          replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
+      emailStatus = 'sending'
+      try {
+        const emailResult = await sendCancellationConfirmation(
+          {
+            name: booking.name,
+            email: booking.email,
+          },
+          booking.play,
+          booking.seats,
+          {
+            apiKey: env.RESEND_API_KEY,
+            fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
+            theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
+            replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
+          }
+        )
+        
+        if (emailResult.success) {
+          emailStatus = 'sent'
+        } else {
+          emailStatus = 'failed'
+          emailError = emailResult.error || 'Unknown error'
         }
-      ).catch((error) => {
-        emailStatus = 'failed: ' + (error instanceof Error ? error.message : 'unknown')
+      } catch (error) {
+        emailStatus = 'failed'
+        emailError = error instanceof Error ? error.message : String(error)
         console.error('Failed to send cancellation email:', error)
-        // Continue anyway - cancellation was successful
-      })
+      }
     } else {
       console.warn('RESEND_API_KEY not configured or booking has no play - skipping cancellation email')
     }
@@ -158,7 +168,8 @@ export async function DELETE(
     return NextResponse.json({
       success: true,
       message: 'Booking cancelled successfully',
-      debug_email_status: emailStatus // Remove this after debugging
+      debug_email_status: emailStatus, // Remove this after debugging
+      debug_email_error: emailError // Remove this after debugging
     })
   } catch (error) {
     console.error('Error canceling booking:', error)
