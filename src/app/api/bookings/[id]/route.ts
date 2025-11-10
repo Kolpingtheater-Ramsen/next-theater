@@ -130,8 +130,7 @@ export async function DELETE(
     }
     
     // Send cancellation confirmation email (don't block)
-    const emailEnv = env as { RESEND_API_KEY?: string; FROM_EMAIL?: string; THEATER_NAME?: string; REPLY_TO_EMAIL?: string }
-    if (emailEnv.RESEND_API_KEY && booking.play) {
+    if (env.RESEND_API_KEY && booking.play) {
       sendCancellationConfirmation(
         {
           name: booking.name,
@@ -140,15 +139,17 @@ export async function DELETE(
         booking.play,
         booking.seats,
         {
-          apiKey: emailEnv.RESEND_API_KEY,
-          fromEmail: emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
-          theaterName: emailEnv.THEATER_NAME || 'Kolpingtheater Ramsen',
-          replyToEmail: emailEnv.REPLY_TO_EMAIL || emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
+          apiKey: env.RESEND_API_KEY,
+          fromEmail: env.FROM_EMAIL || 'onboarding@resend.dev',
+          theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
+          replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'onboarding@resend.dev',
         }
       ).catch((error) => {
         console.error('Failed to send cancellation email:', error)
         // Continue anyway - cancellation was successful
       })
+    } else {
+      console.warn('RESEND_API_KEY not configured or booking has no play - skipping cancellation email')
     }
     
     return NextResponse.json({

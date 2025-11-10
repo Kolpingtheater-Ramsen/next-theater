@@ -182,8 +182,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Send confirmation email (don't block on email sending)
-    const emailEnv = env as { RESEND_API_KEY?: string; FROM_EMAIL?: string; THEATER_NAME?: string; REPLY_TO_EMAIL?: string }
-    if (emailEnv.RESEND_API_KEY) {
+    if (env.RESEND_API_KEY) {
       // Get the full URL for the booking link
       const baseUrl = new URL(request.url).origin
       
@@ -197,16 +196,18 @@ export async function POST(request: NextRequest) {
         play,
         seats,
         {
-          apiKey: emailEnv.RESEND_API_KEY,
-          fromEmail: emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
-          theaterName: emailEnv.THEATER_NAME || 'Kolpingtheater Ramsen',
-          replyToEmail: emailEnv.REPLY_TO_EMAIL || emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
+          apiKey: env.RESEND_API_KEY,
+          fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
+          theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
+          replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
         },
         baseUrl
       ).catch((error) => {
         console.error('Failed to send confirmation email:', error)
         // Continue anyway - booking was successful
       })
+    } else {
+      console.warn('RESEND_API_KEY not configured - skipping email')
     }
     
     // Return success with booking ID
