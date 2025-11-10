@@ -44,3 +44,4 @@ next-env.d.ts
 
 # Exclude full-size gallery images from deployment (too large for Cloudflare Pages)
 /public/img/gallery_full/
+.dev.vars

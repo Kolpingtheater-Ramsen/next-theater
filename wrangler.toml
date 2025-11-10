@@ -2,3 +2,13 @@ name = "next-theater"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
+
+# D1 Database Configuration
+[[d1_databases]]
+binding = "DB" # Available in your Worker as env.DB
+database_name = "theater-bookings"
+database_id = "034c0741-9715-41d0-8808-ed1925bc0266"
+
+# Environment Variables
+# For production, set via: wrangler pages secret put ADMIN_PASSWORD_HASH
+# For local dev, create a .dev.vars file (see .dev.vars.example)

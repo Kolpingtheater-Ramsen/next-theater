@@ -3,17 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
-import type { Booking } from '@/app/booking/page'
+import type { BookingWithSeats } from '@/types/database'
 import AddToCalendar from '@/components/AddToCalendar'
 
 export const runtime = 'edge'
-
-const PLAYS = [
-  { id: 'play-1', date: '2025-12-27', time: '14:00', displayDate: 'Sa, 27.12.2025 - 14:00 Uhr' },
-  { id: 'play-2', date: '2025-12-27', time: '19:00', displayDate: 'Sa, 27.12.2025 - 19:00 Uhr' },
-  { id: 'play-3', date: '2025-12-28', time: '14:00', displayDate: 'So, 28.12.2025 - 14:00 Uhr' },
-  { id: 'play-4', date: '2025-12-28', time: '19:00', displayDate: 'So, 28.12.2025 - 19:00 Uhr' },
-]
 
 export default function BookingViewPage() {
   const params = useParams()
@@ -22,30 +15,66 @@ export default function BookingViewPage() {
   const bookingId = params.bookingId as string
   const isNewBooking = searchParams.get('new') === 'true'
   
-  const [booking, setBooking] = useState<Booking | null>(null)
+  const [booking, setBooking] = useState<BookingWithSeats | null>(null)
   const [loading, setLoading] = useState(true)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
+  const [isCanceling, setIsCanceling] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('bookings')
-      const bookings: Booking[] = stored ? JSON.parse(stored) : []
-      const found = bookings.find((b) => b.id === bookingId)
-      setBooking(found || null)
-      setLoading(false)
-    }
+    fetchBooking()
   }, [bookingId])
 
-  const handleCancelBooking = () => {
+  const fetchBooking = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch(`/api/bookings/${bookingId}`)
+      const data = await response.json()
+      
+      if (data.success && data.booking) {
+        setBooking(data.booking)
+      } else {
+        setBooking(null)
+      }
+    } catch (err) {
+      console.error('Error fetching booking:', err)
+      setBooking(null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleCancelBooking = async () => {
     if (!booking) return
 
-    const stored = localStorage.getItem('bookings')
-    const bookings: Booking[] = stored ? JSON.parse(stored) : []
-    const updatedBookings = bookings.filter((b) => b.id !== booking.id)
-    localStorage.setItem('bookings', JSON.stringify(updatedBookings))
+    try {
+      setIsCanceling(true)
+      
+      const response = await fetch(`/api/bookings/${bookingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: booking.email,
+        }),
+      })
 
-    alert('Ihre Buchung wurde erfolgreich storniert.')
-    router.push('/booking')
+      const data = await response.json()
+
+      if (data.success) {
+        alert('Ihre Buchung wurde erfolgreich storniert.')
+        router.push('/booking')
+      } else {
+        alert(data.error || 'Fehler beim Stornieren der Buchung')
+        setShowCancelConfirm(false)
+      }
+    } catch (err) {
+      console.error('Error canceling booking:', err)
+      alert('Fehler beim Stornieren der Buchung')
+      setShowCancelConfirm(false)
+    } finally {
+      setIsCanceling(false)
+    }
   }
 
   const handlePrint = () => {
@@ -90,7 +119,7 @@ export default function BookingViewPage() {
     )
   }
 
-  const play = PLAYS.find((p) => p.id === booking.playId)
+  const play = booking.play
   if (!play) {
     return (
       <div className='max-w-2xl mx-auto text-center py-12'>
@@ -136,7 +165,7 @@ export default function BookingViewPage() {
           <div className='grid md:grid-cols-2 gap-4 print:gap-2'>
             <div>
               <h3 className='text-xs font-semibold text-site-300 mb-1'>Vorstellung</h3>
-              <p className='text-base font-medium print:text-sm'>{play.displayDate}</p>
+              <p className='text-base font-medium print:text-sm'>{play.display_date}</p>
             </div>
 
             <div>
@@ -189,7 +218,7 @@ export default function BookingViewPage() {
             <div className='text-xs text-site-300 space-y-1 print:text-[10px] print:space-y-0'>
               <p><strong>Buchungs-ID:</strong> {booking.id}</p>
               <p><strong>E-Mail:</strong> {booking.email}</p>
-              <p><strong>Buchungsdatum:</strong> {new Date(booking.timestamp).toLocaleString('de-DE')}</p>
+              <p><strong>Buchungsdatum:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}</p>
             </div>
           </div>
         </div>
@@ -268,15 +297,17 @@ export default function BookingViewPage() {
             <div className='flex gap-3'>
               <button
                 onClick={() => setShowCancelConfirm(false)}
-                className='flex-1 px-4 py-3 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors font-medium'
+                disabled={isCanceling}
+                className='flex-1 px-4 py-3 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors font-medium disabled:opacity-50'
               >
                 Abbrechen
               </button>
               <button
                 onClick={handleCancelBooking}
-                className='flex-1 px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-medium'
+                disabled={isCanceling}
+                className='flex-1 px-4 py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors font-medium disabled:opacity-50'
               >
-                Stornieren
+                {isCanceling ? 'Storniere...' : 'Stornieren'}
               </button>
             </div>
           </div>

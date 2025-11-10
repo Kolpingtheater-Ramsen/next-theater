@@ -1,0 +1,8 @@
+# Local Development Environment Variables
+# Copy this file to .dev.vars and set your values
+
+# Admin password hash (SHA-256)
+# Default password: "admin"
+# To generate a new hash, run: echo -n "your-password" | shasum -a 256
+ADMIN_PASSWORD_HASH=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+

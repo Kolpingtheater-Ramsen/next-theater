@@ -14,15 +14,19 @@
     "fix-exif": "node scripts/rotate-and-strip-exif.js"
   },
   "dependencies": {
+    "@zxing/browser": "^0.1.5",
+    "@zxing/library": "^0.21.3",
     "blurhash": "^2.0.5",
     "next": "15.4.6",
     "qrcode.react": "^4.2.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "resend": "^6.4.2",
     "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
+    "@cloudflare/workers-types": "^4.20251109.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

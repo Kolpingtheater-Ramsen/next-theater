@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
 import CountdownTimer from '@/components/CountdownTimer'
+import type { PlayWithAvailability } from '@/types/database'
 
 export type Play = {
   id: string
@@ -22,30 +23,64 @@ export type Booking = {
   timestamp: number
 }
 
-const PLAYS: Play[] = [
-  { id: 'play-1', date: '2025-12-27', time: '17:00', displayDate: 'Sa, 27.12.2025 - 17:00 Uhr' },
-  { id: 'play-2', date: '2025-12-27', time: '20:00', displayDate: 'Sa, 27.12.2025 - 20:00 Uhr' },
-  { id: 'play-3', date: '2025-12-28', time: '14:30', displayDate: 'So, 28.12.2025 - 14:30 Uhr' },
-  { id: 'play-4', date: '2025-12-28', time: '17:30', displayDate: 'So, 28.12.2025 - 17:30 Uhr' },
-]
-
 export default function BookingPage() {
-  const [selectedPlay, setSelectedPlay] = useState<Play | null>(null)
+  const [plays, setPlays] = useState<PlayWithAvailability[]>([])
+  const [selectedPlay, setSelectedPlay] = useState<PlayWithAvailability | null>(null)
   const [selectedSeats, setSelectedSeats] = useState<number[]>([])
+  const [bookedSeats, setBookedSeats] = useState<number[]>([])
   const [bookingStep, setBookingStep] = useState<'play-selection' | 'seat-selection' | 'form' | 'confirmation'>('play-selection')
   const [bookingData, setBookingData] = useState<{ name: string; email: string } | null>(null)
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null)
   const [isMounted, setIsMounted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
+  // Fetch plays on mount
   useEffect(() => {
     setIsMounted(true)
+    fetchPlays()
   }, [])
 
-  const handlePlaySelect = (play: Play) => {
+  const fetchPlays = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/plays')
+      const data = await response.json()
+      
+      if (data.success) {
+        setPlays(data.plays)
+      } else {
+        setError('Failed to load plays')
+      }
+    } catch (err) {
+      console.error('Error fetching plays:', err)
+      setError('Failed to load plays')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const fetchBookedSeats = async (playId: string) => {
+    try {
+      const response = await fetch(`/api/plays/${playId}/seats`)
+      const data = await response.json()
+      
+      if (data.success) {
+        setBookedSeats(data.bookedSeats)
+      } else {
+        console.error('Failed to load booked seats')
+      }
+    } catch (err) {
+      console.error('Error fetching booked seats:', err)
+    }
+  }
+
+  const handlePlaySelect = async (play: PlayWithAvailability) => {
     setSelectedPlay(play)
     setSelectedSeats([])
     setBookingStep('seat-selection')
+    await fetchBookedSeats(play.id)
   }
 
   const handleSeatSelection = (seats: number[]) => {
@@ -55,36 +90,52 @@ export default function BookingPage() {
     }
   }
 
-  const handleFormSubmit = (name: string, email: string) => {
-    // Check if user already has a booking for this play
-    const existingBookings = getBookings()
-    const hasExistingBooking = existingBookings.some(
-      (b) => b.playId === selectedPlay?.id && b.email.toLowerCase() === email.toLowerCase()
-    )
+  const handleFormSubmit = async (name: string, email: string) => {
+    if (!selectedPlay) return
 
-    if (hasExistingBooking) {
-      alert('Sie haben bereits eine Buchung für diese Vorstellung mit dieser E-Mail-Adresse.')
-      return
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playId: selectedPlay.id,
+          name,
+          email,
+          seats: selectedSeats,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok || !data.success) {
+        alert(data.error || 'Fehler beim Erstellen der Buchung')
+        return
+      }
+
+      // Create booking object for confirmation
+      const booking: Booking = {
+        id: data.bookingId,
+        playId: selectedPlay.id,
+        email,
+        name,
+        seats: selectedSeats,
+        timestamp: Date.now(),
+      }
+
+      setBookingData({ name, email })
+      setConfirmedBooking(booking)
+      setBookingStep('confirmation')
+    } catch (err) {
+      console.error('Error creating booking:', err)
+      alert('Fehler beim Erstellen der Buchung. Bitte versuchen Sie es erneut.')
+    } finally {
+      setIsLoading(false)
     }
-
-    // Create booking
-    const booking: Booking = {
-      id: `booking-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      playId: selectedPlay!.id,
-      email,
-      name,
-      seats: selectedSeats,
-      timestamp: Date.now(),
-    }
-
-    // Save to localStorage
-    const bookings = getBookings()
-    bookings.push(booking)
-    localStorage.setItem('bookings', JSON.stringify(bookings))
-
-    setBookingData({ name, email })
-    setConfirmedBooking(booking)
-    setBookingStep('confirmation')
   }
 
   const handleBackToPlaySelection = () => {
@@ -96,19 +147,6 @@ export default function BookingPage() {
   const handleBackToSeatSelection = () => {
     setSelectedSeats([])
     setBookingStep('seat-selection')
-  }
-
-  const getBookings = (): Booking[] => {
-    if (typeof window === 'undefined') return []
-    const stored = localStorage.getItem('bookings')
-    return stored ? JSON.parse(stored) : []
-  }
-
-  const getBookedSeatsForPlay = (playId: string): number[] => {
-    const bookings = getBookings()
-    return bookings
-      .filter((b) => b.playId === playId)
-      .flatMap((b) => b.seats)
   }
 
   useEffect(() => {
@@ -132,37 +170,48 @@ export default function BookingPage() {
       {bookingStep === 'play-selection' && (
         <div>
           <h2 className='text-2xl font-display font-bold mb-4'>Vorstellung wählen</h2>
-          <div className='grid gap-4 md:grid-cols-2'>
-            {PLAYS.map((play) => {
-              const bookedSeats = getBookedSeatsForPlay(play.id)
-              const availableSeats = 68 - bookedSeats.length
-              const isSoldOut = availableSeats === 0
+          
+          {error && (
+            <div className='glass rounded-xl p-4 mb-4 border border-red-700 bg-red-900/20'>
+              <p className='text-red-400'>{error}</p>
+            </div>
+          )}
+          
+          {isLoading ? (
+            <div className='text-center py-12'>
+              <p className='text-site-100'>Lade Vorstellungen...</p>
+            </div>
+          ) : (
+            <div className='grid gap-4 md:grid-cols-2'>
+              {plays.map((play) => {
+                const isSoldOut = play.is_sold_out
 
-              return (
-                <button
-                  key={play.id}
-                  onClick={() => !isSoldOut && handlePlaySelect(play)}
-                  disabled={isSoldOut}
-                  className={`glass rounded-xl p-6 text-left transition-all ${
-                    isSoldOut
-                      ? 'opacity-50 cursor-not-allowed'
-                      : 'hover:border-kolping-400 cursor-pointer'
-                  }`}
-                >
-                  <div className='text-lg font-semibold mb-2'>{play.displayDate}</div>
-                  <div className='text-site-100'>
-                    {isMounted && isSoldOut ? (
-                      <span className='text-red-400'>Ausverkauft</span>
-                    ) : (
-                      <span>
-                        {isMounted ? `${availableSeats} von 68 Plätzen verfügbar` : '68 von 68 Plätzen verfügbar'}
-                      </span>
-                    )}
-                  </div>
-                </button>
-              )
-            })}
-          </div>
+                return (
+                  <button
+                    key={play.id}
+                    onClick={() => !isSoldOut && handlePlaySelect(play)}
+                    disabled={isSoldOut}
+                    className={`glass rounded-xl p-6 text-left transition-all ${
+                      isSoldOut
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:border-kolping-400 cursor-pointer'
+                    }`}
+                  >
+                    <div className='text-lg font-semibold mb-2'>{play.display_date}</div>
+                    <div className='text-site-100'>
+                      {isMounted && isSoldOut ? (
+                        <span className='text-red-400'>Ausverkauft</span>
+                      ) : (
+                        <span>
+                          {isMounted ? `${play.available_seats} von ${play.total_seats} Plätzen verfügbar` : `${play.total_seats} von ${play.total_seats} Plätzen verfügbar`}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
       )}
 
@@ -177,12 +226,12 @@ export default function BookingPage() {
             </button>
             <div>
               <h2 className='text-xl font-display font-bold'>Sitzplätze wählen</h2>
-              <p className='text-site-100'>{selectedPlay.displayDate}</p>
+              <p className='text-site-100'>{selectedPlay.display_date}</p>
             </div>
           </div>
           <SeatSelection
             playId={selectedPlay.id}
-            bookedSeats={getBookedSeatsForPlay(selectedPlay.id)}
+            bookedSeats={bookedSeats}
             selectedSeats={selectedSeats}
             onSeatSelection={handleSeatSelection}
             maxSeats={5}
@@ -201,7 +250,7 @@ export default function BookingPage() {
             </button>
             <div>
               <h2 className='text-xl font-display font-bold'>Ihre Daten</h2>
-              <p className='text-site-100'>{selectedPlay.displayDate} • {selectedSeats.length} Plätze</p>
+              <p className='text-site-100'>{selectedPlay.display_date} • {selectedSeats.length} Plätze</p>
             </div>
           </div>
           <BookingForm onSubmit={handleFormSubmit} />
