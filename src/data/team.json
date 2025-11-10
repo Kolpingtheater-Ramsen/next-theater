@@ -124,7 +124,6 @@
     },
     {
       "id": "Jule",
-      "placeholderAvatar": true,
       "roles": [
         null,
         null,
@@ -139,7 +138,7 @@
         null,
         "Ensemble"
       ],
-      "images": 1
+      "images": 3
     },
     {
       "id": "Julian",
