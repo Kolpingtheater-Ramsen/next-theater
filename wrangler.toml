@@ -10,5 +10,12 @@ database_name = "theater-bookings"
 database_id = "034c0741-9715-41d0-8808-ed1925bc0266"
 
 # Environment Variables
-# For production, set via: wrangler pages secret put ADMIN_PASSWORD_HASH
+# For production, set via: wrangler pages secret put <VARIABLE_NAME>
 # For local dev, create a .dev.vars file (see .dev.vars.example)
+#
+# Required secrets:
+# - ADMIN_PASSWORD_HASH: SHA-256 hash of admin password
+# - RESEND_API_KEY: Resend API key for sending emails
+# - FROM_EMAIL: Verified sender email (e.g., noreply@yourdomain.com)
+# - THEATER_NAME: Name displayed in emails
+# - REPLY_TO_EMAIL: Reply-to email address (can be Gmail)

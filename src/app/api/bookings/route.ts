@@ -6,6 +6,7 @@ import {
   hasExistingBooking, 
   createBooking 
 } from '@/lib/db'
+import { sendBookingConfirmation } from '@/lib/email'
 
 /**
  * POST /api/bookings
@@ -178,6 +179,34 @@ export async function POST(request: NextRequest) {
         },
         { status: 500 }
       )
+    }
+    
+    // Send confirmation email (don't block on email sending)
+    const emailEnv = env as any
+    if (emailEnv.RESEND_API_KEY) {
+      // Get the full URL for the booking link
+      const baseUrl = new URL(request.url).origin
+      
+      // Send email asynchronously (don't await)
+      sendBookingConfirmation(
+        {
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          id: bookingId,
+        },
+        play,
+        seats,
+        {
+          apiKey: emailEnv.RESEND_API_KEY,
+          fromEmail: emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
+          theaterName: emailEnv.THEATER_NAME || 'Kolpingtheater Ramsen',
+          replyToEmail: emailEnv.REPLY_TO_EMAIL || emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
+        },
+        baseUrl
+      ).catch((error) => {
+        console.error('Failed to send confirmation email:', error)
+        // Continue anyway - booking was successful
+      })
     }
     
     // Return success with booking ID

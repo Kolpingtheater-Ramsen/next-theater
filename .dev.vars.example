@@ -6,3 +6,18 @@
 # To generate a new hash, run: echo -n "your-password" | shasum -a 256
 ADMIN_PASSWORD_HASH=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
 
+# Email Configuration (Resend)
+# Get your API key from: https://resend.com/api-keys
+# Free tier: 100 emails/day, 3,000/month
+RESEND_API_KEY=your-resend-api-key-here
+
+# Email Sender Configuration
+# FROM_EMAIL must be a verified domain in Resend
+# For testing, use: onboarding@resend.dev
+# For production, add your domain: noreply@yourdomain.com
+FROM_EMAIL=onboarding@resend.dev
+
+# Theater Information
+THEATER_NAME="Kolpingtheater Ramsen"
+REPLY_TO_EMAIL=your-theater-email@gmail.com
+

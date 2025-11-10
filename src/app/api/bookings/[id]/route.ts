@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
 import { getBookingById, cancelBooking } from '@/lib/db'
+import { sendCancellationConfirmation } from '@/lib/email'
 
 /**
  * GET /api/bookings/[id]
@@ -98,6 +99,23 @@ export async function DELETE(
       )
     }
     
+    // Get booking details before canceling (for email)
+    const booking = await getBookingById(db, bookingId)
+    if (!booking) {
+      return NextResponse.json(
+        { success: false, error: 'Booking not found' },
+        { status: 404 }
+      )
+    }
+    
+    // Verify email matches
+    if (booking.email.toLowerCase() !== email.toLowerCase()) {
+      return NextResponse.json(
+        { success: false, error: 'Email does not match booking' },
+        { status: 400 }
+      )
+    }
+    
     // Cancel booking
     const result = await cancelBooking(db, bookingId, email)
     
@@ -109,6 +127,28 @@ export async function DELETE(
         },
         { status: result.error?.includes('not found') ? 404 : 400 }
       )
+    }
+    
+    // Send cancellation confirmation email (don't block)
+    const emailEnv = env as any
+    if (emailEnv.RESEND_API_KEY && booking.play) {
+      sendCancellationConfirmation(
+        {
+          name: booking.name,
+          email: booking.email,
+        },
+        booking.play,
+        booking.seats,
+        {
+          apiKey: emailEnv.RESEND_API_KEY,
+          fromEmail: emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
+          theaterName: emailEnv.THEATER_NAME || 'Kolpingtheater Ramsen',
+          replyToEmail: emailEnv.REPLY_TO_EMAIL || emailEnv.FROM_EMAIL || 'onboarding@resend.dev',
+        }
+      ).catch((error) => {
+        console.error('Failed to send cancellation email:', error)
+        // Continue anyway - cancellation was successful
+      })
     }
     
     return NextResponse.json({
