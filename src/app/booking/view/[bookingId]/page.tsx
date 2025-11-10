@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
 import type { BookingWithSeats } from '@/types/database'
@@ -20,15 +20,11 @@ export default function BookingViewPage() {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [isCanceling, setIsCanceling] = useState(false)
 
-  useEffect(() => {
-    fetchBooking()
-  }, [bookingId])
-
-  const fetchBooking = async () => {
+  const fetchBooking = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/bookings/${bookingId}`)
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; booking?: BookingWithSeats }
       
       if (data.success && data.booking) {
         setBooking(data.booking)
@@ -41,7 +37,11 @@ export default function BookingViewPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [bookingId])
+
+  useEffect(() => {
+    fetchBooking()
+  }, [fetchBooking])
 
   const handleCancelBooking = async () => {
     if (!booking) return
@@ -59,7 +59,7 @@ export default function BookingViewPage() {
         }),
       })
 
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
         alert('Ihre Buchung wurde erfolgreich storniert.')

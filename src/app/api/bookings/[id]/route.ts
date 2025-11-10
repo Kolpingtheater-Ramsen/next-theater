@@ -130,7 +130,7 @@ export async function DELETE(
     }
     
     // Send cancellation confirmation email (don't block)
-    const emailEnv = env as any
+    const emailEnv = env as { RESEND_API_KEY?: string; FROM_EMAIL?: string; THEATER_NAME?: string; REPLY_TO_EMAIL?: string }
     if (emailEnv.RESEND_API_KEY && booking.play) {
       sendCancellationConfirmation(
         {

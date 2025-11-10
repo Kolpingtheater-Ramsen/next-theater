@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingWithSeats, PlayWithAvailability } from '@/types/database'
 
@@ -22,20 +22,14 @@ export default function AdminDashboardPage() {
     fetchPlays()
   }, [])
 
-  useEffect(() => {
-    if (plays.length > 0) {
-      fetchBookings()
-    }
-  }, [selectedPlayId, plays.length])
-
   const fetchPlays = async () => {
     try {
       const response = await fetch('/api/plays', {
         credentials: 'include'
       })
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; plays?: PlayWithAvailability[] }
       
-      if (data.success) {
+      if (data.success && data.plays) {
         setPlays(data.plays)
       } else {
         setError('Failed to load plays')
@@ -46,7 +40,7 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     try {
       setIsLoading(true)
       const url = selectedPlayId === 'all' 
@@ -62,9 +56,9 @@ export default function AdminDashboardPage() {
         return
       }
       
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; bookings?: BookingWithSeats[]; error?: string }
       
-      if (data.success) {
+      if (data.success && data.bookings) {
         setBookings(data.bookings)
       } else {
         setError(data.error || 'Failed to load bookings')
@@ -75,7 +69,13 @@ export default function AdminDashboardPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [selectedPlayId, router])
+
+  useEffect(() => {
+    if (plays.length > 0) {
+      fetchBookings()
+    }
+  }, [selectedPlayId, plays.length, fetchBookings])
 
   const handleLogout = async () => {
     await fetch('/api/admin/logout', { 
@@ -141,7 +141,7 @@ export default function AdminDashboardPage() {
           body: JSON.stringify({ bookingId }),
         })
 
-        const data = await response.json()
+        const data = await response.json() as { success: boolean; error?: string }
         
         if (data.success) {
           // Update local state
@@ -162,7 +162,7 @@ export default function AdminDashboardPage() {
           body: JSON.stringify({ bookingId }),
         })
 
-        const data = await response.json()
+        const data = await response.json() as { success: boolean; error?: string }
         
         if (data.success) {
           // Update local state

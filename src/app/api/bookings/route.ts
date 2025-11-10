@@ -182,7 +182,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Send confirmation email (don't block on email sending)
-    const emailEnv = env as any
+    const emailEnv = env as { RESEND_API_KEY?: string; FROM_EMAIL?: string; THEATER_NAME?: string; REPLY_TO_EMAIL?: string }
     if (emailEnv.RESEND_API_KEY) {
       // Get the full URL for the booking link
       const baseUrl = new URL(request.url).origin

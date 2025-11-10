@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
     }
     
     let query: string
-    let params: any[]
+    let params: string[]
     
     if (playId) {
       // Get bookings for specific play
@@ -73,18 +73,18 @@ export async function GET(request: NextRequest) {
     const result = await db.prepare(query).bind(...params).all()
     
     // Transform results
-    const bookings: BookingWithSeats[] = result.results?.map((row: any) => ({
-      id: row.id,
-      play_id: row.play_id,
-      name: row.name,
-      email: row.email,
-      status: row.status,
-      created_at: row.created_at,
-      seats: row.seat_numbers ? row.seat_numbers.split(',').map(Number) : [],
+    const bookings: BookingWithSeats[] = result.results?.map((row) => ({
+      id: String(row.id),
+      play_id: String(row.play_id),
+      name: String(row.name),
+      email: String(row.email),
+      status: String(row.status) as 'confirmed' | 'cancelled' | 'checked_in',
+      created_at: String(row.created_at),
+      seats: row.seat_numbers ? String(row.seat_numbers).split(',').map(Number) : [],
       play: {
-        id: row.play_id,
-        title: row.play_title,
-        display_date: row.play_display_date,
+        id: String(row.play_id),
+        title: String(row.play_title),
+        display_date: String(row.play_display_date),
         date: '',
         time: '',
         total_seats: 68,

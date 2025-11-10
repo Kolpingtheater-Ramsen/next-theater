@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminPassword, generateAdminToken } from '@/lib/admin-auth'
-// @ts-ignore - Cloudflare specific import
 import { getRequestContext } from '@cloudflare/next-on-pages'
 
 /**
@@ -11,7 +10,7 @@ export const runtime = 'edge'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const body = await request.json() as { password?: string }
     const { password } = body
     
     if (!password) {
@@ -23,7 +22,7 @@ export async function POST(request: NextRequest) {
     
     // Get admin password hash from environment
     const { env } = getRequestContext()
-    const adminPasswordHash = (env as any).ADMIN_PASSWORD_HASH
+    const adminPasswordHash = env.ADMIN_PASSWORD_HASH
     
     // Verify password
     const isValid = await verifyAdminPassword(password, adminPasswordHash)

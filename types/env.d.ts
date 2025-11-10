@@ -8,6 +8,13 @@ declare global {
   }
 }
 
+// Extend @cloudflare/next-on-pages CloudflareEnv
+declare module '@cloudflare/next-on-pages' {
+  interface CloudflareEnv {
+    DB: D1Database
+  }
+}
+
 // Cloudflare Pages environment
 export interface Env {
   DB: D1Database

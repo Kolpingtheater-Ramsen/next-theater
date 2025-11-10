@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
 import { getAllPlaysWithAvailability } from '@/lib/db'
 
@@ -8,7 +8,7 @@ import { getAllPlaysWithAvailability } from '@/lib/db'
  */
 export const runtime = 'edge'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Get D1 database from Cloudflare context
     const { env } = getRequestContext()

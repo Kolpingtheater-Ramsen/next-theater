@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
-import CountdownTimer from '@/components/CountdownTimer'
+// import CountdownTimer from '@/components/CountdownTimer'
 import type { PlayWithAvailability } from '@/types/database'
 
 export type Play = {
@@ -46,7 +46,7 @@ export default function BookingPage() {
     try {
       setIsLoading(true)
       const response = await fetch('/api/plays')
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; plays: PlayWithAvailability[] }
       
       if (data.success) {
         setPlays(data.plays)
@@ -64,7 +64,7 @@ export default function BookingPage() {
   const fetchBookedSeats = async (playId: string) => {
     try {
       const response = await fetch(`/api/plays/${playId}/seats`)
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; bookedSeats: number[] }
       
       if (data.success) {
         setBookedSeats(data.bookedSeats)
@@ -110,7 +110,7 @@ export default function BookingPage() {
         }),
       })
 
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; bookingId: string; error?: string }
 
       if (!response.ok || !data.success) {
         alert(data.error || 'Fehler beim Erstellen der Buchung')

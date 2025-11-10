@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const body = await request.json()
+    const body = await request.json() as { bookingId?: string }
     const { bookingId } = body
     
     if (!bookingId) {

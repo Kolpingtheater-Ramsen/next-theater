@@ -5,16 +5,19 @@ import { ViewTransitions } from '@/components/ViewTransitions'
 import { Geist, Geist_Mono, Cinzel } from 'next/font/google'
 import './globals.css'
 
+// @ts-expect-error - Font loader type issue
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
 })
 
+// @ts-expect-error - Font loader type issue
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 })
 
+// @ts-expect-error - Font loader type issue
 const display = Cinzel({
   variable: '--font-display',
   subsets: ['latin'],

@@ -1,6 +1,6 @@
 // Database utility functions for D1
 import type { D1Database } from '@/types/env'
-import type { Play, Booking, BookedSeat, BookingWithSeats, PlayWithAvailability } from '@/types/database'
+import type { Play, Booking, BookingWithSeats, PlayWithAvailability } from '@/types/database'
 
 /**
  * Get D1 database instance from request context

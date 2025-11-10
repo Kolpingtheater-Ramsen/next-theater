@@ -91,7 +91,7 @@ export default function AdminScanPage() {
         return
       }
 
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
         setSuccessMessage('✅ Ticket checked in successfully!')
@@ -149,7 +149,7 @@ export default function AdminScanPage() {
               setError('Invalid QR code format')
             }
           }
-          if (err && !(err as any).name?.includes('NotFoundException')) {
+          if (err && !(err as Error).name?.includes('NotFoundException')) {
             console.error('QR Scan error:', err)
           }
         }
@@ -191,7 +191,7 @@ export default function AdminScanPage() {
         return
       }
       
-      const data = await response.json()
+      const data = await response.json() as { success: boolean; booking?: BookingWithSeats; error?: string }
       
       if (data.success && data.booking) {
         setBooking(data.booking)
@@ -385,7 +385,7 @@ export default function AdminScanPage() {
         <ul className='space-y-2 text-sm text-site-100'>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>1.</span>
-            <span>Click "Start Camera" to activate the scanner</span>
+            <span>Click &quot;Start Camera&quot; to activate the scanner</span>
           </li>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>2.</span>
@@ -401,7 +401,7 @@ export default function AdminScanPage() {
           </li>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>5.</span>
-            <span>Click "Check In Ticket" to confirm</span>
+            <span>Click &quot;Check In Ticket&quot; to confirm</span>
           </li>
         </ul>
       </div>
