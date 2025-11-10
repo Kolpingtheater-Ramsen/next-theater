@@ -182,7 +182,9 @@ export async function POST(request: NextRequest) {
     }
     
     // Send confirmation email (don't block on email sending)
+    let emailStatus = 'not_configured'
     if (env.RESEND_API_KEY) {
+      emailStatus = 'triggered'
       // Get the full URL for the booking link
       const baseUrl = new URL(request.url).origin
       
@@ -203,6 +205,7 @@ export async function POST(request: NextRequest) {
         },
         baseUrl
       ).catch((error) => {
+        emailStatus = 'failed: ' + (error instanceof Error ? error.message : 'unknown')
         console.error('Failed to send confirmation email:', error)
         // Continue anyway - booking was successful
       })
@@ -215,7 +218,8 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         bookingId,
-        message: 'Booking created successfully'
+        message: 'Booking created successfully',
+        debug_email_status: emailStatus // Remove this after debugging
       },
       { status: 201 }
     )

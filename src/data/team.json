@@ -537,6 +537,19 @@
       "images": 3
     },
     {
+      "id": "Till",
+      "roles": [
+        null,
+        "Mattes",
+        "Hans",
+        "Python",
+        "Archibald",
+        "Barde Mattes",
+        "Eddie"
+      ],
+      "placeholderAvatar": true
+    },
+    {
       "id": "Tobias",
       "roles": [
         null,
@@ -786,19 +799,6 @@
         null,
         null,
         "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Till",
-      "roles": [
-        null,
-        "Mattes",
-        "Hans",
-        "Python",
-        "Archibald",
-        "Barde Mattes",
-        "Eddie"
       ],
       "images": 1
     },

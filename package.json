@@ -9,6 +9,7 @@
     "pages:build": "npx @cloudflare/next-on-pages",
     "preview": "pnpm run pages:build && wrangler pages dev",
     "deploy": "pnpm run pages:build && wrangler pages deploy",
+    "logs": "wrangler pages deployment tail",
     "start": "next start",
     "lint": "next lint",
     "fix-exif": "node scripts/rotate-and-strip-exif.js"

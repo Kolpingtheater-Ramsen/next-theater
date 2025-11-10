@@ -130,7 +130,9 @@ export async function DELETE(
     }
     
     // Send cancellation confirmation email (don't block)
+    let emailStatus = 'not_configured'
     if (env.RESEND_API_KEY && booking.play) {
+      emailStatus = 'triggered'
       sendCancellationConfirmation(
         {
           name: booking.name,
@@ -140,11 +142,12 @@ export async function DELETE(
         booking.seats,
         {
           apiKey: env.RESEND_API_KEY,
-          fromEmail: env.FROM_EMAIL || 'onboarding@resend.dev',
+          fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
           theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
-          replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'onboarding@resend.dev',
+          replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
         }
       ).catch((error) => {
+        emailStatus = 'failed: ' + (error instanceof Error ? error.message : 'unknown')
         console.error('Failed to send cancellation email:', error)
         // Continue anyway - cancellation was successful
       })
@@ -154,7 +157,8 @@ export async function DELETE(
     
     return NextResponse.json({
       success: true,
-      message: 'Booking cancelled successfully'
+      message: 'Booking cancelled successfully',
+      debug_email_status: emailStatus // Remove this after debugging
     })
   } catch (error) {
     console.error('Error canceling booking:', error)
