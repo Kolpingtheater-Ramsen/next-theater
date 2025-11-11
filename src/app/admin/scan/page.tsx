@@ -235,7 +235,19 @@ export default function AdminScanPage() {
   const stopCamera = () => {
     if (codeReaderRef.current) {
       try {
-        codeReaderRef.current.stopContinuousDecode()
+        const reader = codeReaderRef.current as unknown as {
+          reset?: () => void
+          stop?: () => void
+          stopContinuousDecode?: () => void
+        }
+
+        if (typeof reader.stopContinuousDecode === 'function') {
+          reader.stopContinuousDecode()
+        } else if (typeof reader.stop === 'function') {
+          reader.stop()
+        } else if (typeof reader.reset === 'function') {
+          reader.reset()
+        }
       } catch (err) {
         console.error('Error stopping QR code reader:', err)
       }
