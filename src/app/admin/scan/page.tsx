@@ -90,7 +90,9 @@ export default function AdminScanPage() {
       // Fallback for older browsers
       const originalHandler = mediaDevices.ondevicechange
       fallbackDeviceChangeHandler = event => {
-        originalHandler?.(event)
+        if (typeof originalHandler === 'function') {
+          originalHandler.call(mediaDevices, event as Event)
+        }
         handleDeviceChange()
       }
       mediaDevices.ondevicechange = fallbackDeviceChangeHandler
