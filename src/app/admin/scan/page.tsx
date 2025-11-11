@@ -235,9 +235,9 @@ export default function AdminScanPage() {
   const stopCamera = () => {
     if (codeReaderRef.current) {
       try {
-        codeReaderRef.current.reset()
+        codeReaderRef.current.stopContinuousDecode()
       } catch (err) {
-        console.error('Error resetting QR code reader:', err)
+        console.error('Error stopping QR code reader:', err)
       }
       if (videoRef.current?.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream
