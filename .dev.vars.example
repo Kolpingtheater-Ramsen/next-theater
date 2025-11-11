@@ -21,3 +21,4 @@ FROM_EMAIL=onboarding@resend.dev
 THEATER_NAME="Kolpingtheater Ramsen"
 REPLY_TO_EMAIL=your-theater-email@gmail.com
 
+DISCORD_WEBHOOK_URL=your-discord-webhook-url-here

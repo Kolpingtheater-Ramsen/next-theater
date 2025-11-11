@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     // Check for duplicate seats in request
     if (new Set(seats).size !== seats.length) {
       return NextResponse.json(
-        { success: false, error: 'Duplicate seats in selection' },
+        { success: false, error: 'Doppelte Plätze in der Auswahl' },
         { status: 400 }
       )
     }
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     const play = await getPlayById(db, playId)
     if (!play) {
       return NextResponse.json(
-        { success: false, error: 'Play not found' },
+        { success: false, error: 'Vorstellung nicht gefunden' },
         { status: 404 }
       )
     }
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'You already have a booking for this show' 
+          error: 'Sie haben bereits eine Buchung für diese Vorstellung' 
         },
         { status: 409 }
       )
@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { 
             success: false, 
-            error: 'Some selected seats are already booked',
+            error: 'Einige ausgewählte Plätze sind bereits gebucht',
             conflictingSeats 
           },
           { status: 409 }
@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           { 
             success: false, 
-            error: 'Not enough seats available',
+            error: 'Nicht genügend Plätze verfügbar',
             availableSeats: availableSeatsBefore
           },
           { status: 409 }
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           success: false, 
-          error: result.error || 'Failed to create booking'
+          error: result.error || 'Fehler beim Erstellen der Buchung'
         },
         { status: 500 }
       )

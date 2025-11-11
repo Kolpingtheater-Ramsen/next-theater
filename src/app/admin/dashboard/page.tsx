@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import LoadingSpinner from '@/components/LoadingSpinner'
 import type { BookingWithSeats, PlayWithAvailability } from '@/types/database'
 
 export default function AdminDashboardPage() {
@@ -32,11 +33,11 @@ export default function AdminDashboardPage() {
       if (data.success && data.plays) {
         setPlays(data.plays)
       } else {
-        setError('Failed to load plays')
+        setError('Fehler beim Laden der Vorstellungen')
       }
     } catch (err) {
       console.error('Error fetching plays:', err)
-      setError('Failed to load plays')
+      setError('Fehler beim Laden der Vorstellungen')
     }
   }
 
@@ -61,11 +62,11 @@ export default function AdminDashboardPage() {
       if (data.success && data.bookings) {
         setBookings(data.bookings)
       } else {
-        setError(data.error || 'Failed to load bookings')
+        setError(data.error || 'Fehler beim Laden der Buchungen')
       }
     } catch (err) {
       console.error('Error fetching bookings:', err)
-      setError('Failed to load bookings')
+      setError('Fehler beim Laden der Buchungen')
     } finally {
       setIsLoading(false)
     }
@@ -149,7 +150,7 @@ export default function AdminDashboardPage() {
             b.id === bookingId ? { ...b, status: 'checked_in' } : b
           ))
         } else {
-          alert(data.error || 'Failed to check in')
+          alert(data.error || 'Fehler beim Einchecken')
         }
       } else if (currentStatus === 'checked_in') {
         // Check out (revert to confirmed)
@@ -170,12 +171,12 @@ export default function AdminDashboardPage() {
             b.id === bookingId ? { ...b, status: 'confirmed' } : b
           ))
         } else {
-          alert(data.error || 'Failed to check out')
+          alert(data.error || 'Fehler beim Auschecken')
         }
       }
     } catch (err) {
       console.error('Error toggling check-in:', err)
-      alert('Failed to update status')
+      alert('Fehler beim Aktualisieren des Status')
     }
   }
 
@@ -188,7 +189,7 @@ export default function AdminDashboardPage() {
     
     return (
       <span className={`px-2 py-1 rounded text-xs font-semibold border ${styles[status as keyof typeof styles]}`}>
-        {status === 'confirmed' ? 'Confirmed' : status === 'checked_in' ? 'Checked In' : 'Cancelled'}
+        {status === 'confirmed' ? 'Bestätigt' : status === 'checked_in' ? 'Eingecheckt' : 'Storniert'}
       </span>
     )
   }
@@ -199,10 +200,10 @@ export default function AdminDashboardPage() {
       <div className='mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
         <div>
           <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>
-            Admin Dashboard
+            Admin-Dashboard
           </h1>
           <p className='text-site-100'>
-            Manage bookings and view statistics
+            Buchungen verwalten und Statistiken anzeigen
           </p>
         </div>
         <div className='flex gap-3'>
@@ -213,13 +214,13 @@ export default function AdminDashboardPage() {
             <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
               <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z' />
             </svg>
-            Scan Tickets
+            Tickets Scannen
           </a>
           <button
             onClick={handleLogout}
             className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
           >
-            Logout
+            Abmelden
           </button>
         </div>
       </div>
@@ -227,21 +228,21 @@ export default function AdminDashboardPage() {
       {/* Stats */}
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
         <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Total Bookings</p>
+          <p className='text-sm text-site-100 mb-1'>Buchungen Gesamt</p>
           <p className='text-3xl font-bold'>{bookings.length}</p>
         </div>
         <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Total Seats Booked</p>
+          <p className='text-sm text-site-100 mb-1'>Gebuchte Plätze</p>
           <p className='text-3xl font-bold'>{getTotalSeats()}</p>
         </div>
         <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Checked In</p>
+          <p className='text-sm text-site-100 mb-1'>Eingecheckt</p>
           <p className='text-3xl font-bold text-green-400'>
             {bookings.filter(b => b.status === 'checked_in').length}
           </p>
         </div>
         <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Pending Check-In</p>
+          <p className='text-sm text-site-100 mb-1'>Noch nicht eingecheckt</p>
           <p className='text-3xl font-bold text-blue-400'>
             {bookings.filter(b => b.status === 'confirmed').length}
           </p>
@@ -252,12 +253,12 @@ export default function AdminDashboardPage() {
       {selectedPlayId !== 'all' && (
         <div className='glass rounded-xl p-6 mb-6'>
           <div className='flex justify-between items-center mb-4'>
-            <h2 className='text-xl font-display font-bold'>Seat Overview</h2>
+            <h2 className='text-xl font-display font-bold'>Sitzplatz-Übersicht</h2>
             <button
               onClick={() => setShowSeatMap(!showSeatMap)}
               className='px-4 py-2 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors text-sm'
             >
-              {showSeatMap ? 'Hide Seat Map' : 'Show Seat Map'}
+              {showSeatMap ? 'Sitzplan verbergen' : 'Sitzplan anzeigen'}
             </button>
           </div>
 
@@ -267,19 +268,19 @@ export default function AdminDashboardPage() {
               <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-4'>
                 <div className='text-center p-4 rounded-lg bg-green-900/20 border border-green-700'>
                   <p className='text-2xl font-bold text-green-400'>{stats.open}</p>
-                  <p className='text-sm text-site-100'>Open Seats</p>
+                  <p className='text-sm text-site-100'>Freie Plätze</p>
                 </div>
                 <div className='text-center p-4 rounded-lg bg-blue-900/20 border border-blue-700'>
                   <p className='text-2xl font-bold text-blue-400'>{stats.pending}</p>
-                  <p className='text-sm text-site-100'>Pending Seats</p>
+                  <p className='text-sm text-site-100'>Gebucht</p>
                 </div>
                 <div className='text-center p-4 rounded-lg bg-purple-900/20 border border-purple-700'>
                   <p className='text-2xl font-bold text-purple-400'>{stats.checkedIn}</p>
-                  <p className='text-sm text-site-100'>Checked In</p>
+                  <p className='text-sm text-site-100'>Eingecheckt</p>
                 </div>
                 <div className='text-center p-4 rounded-lg bg-gray-900/20 border border-gray-700'>
                   <p className='text-2xl font-bold text-gray-400'>{stats.blocked}</p>
-                  <p className='text-sm text-site-100'>Blocked</p>
+                  <p className='text-sm text-site-100'>Blockiert</p>
                 </div>
               </div>
             )
@@ -377,19 +378,19 @@ export default function AdminDashboardPage() {
               <div className='flex flex-wrap justify-center gap-4 mt-6 pt-6 border-t border-site-700'>
                 <div className='flex items-center gap-2'>
                   <div className='w-6 h-6 rounded-md bg-green-600 border-2 border-green-500' />
-                  <span className='text-sm text-site-100'>Verfügbar / Open</span>
+                  <span className='text-sm text-site-100'>Verfügbar</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <div className='w-6 h-6 rounded-md bg-blue-600 border-2 border-blue-500' />
-                  <span className='text-sm text-site-100'>Gebucht / Pending</span>
+                  <span className='text-sm text-site-100'>Gebucht</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <div className='w-6 h-6 rounded-md bg-purple-600 border-2 border-purple-500' />
-                  <span className='text-sm text-site-100'>Eingecheckt / Checked In</span>
+                  <span className='text-sm text-site-100'>Eingecheckt</span>
                 </div>
                 <div className='flex items-center gap-2'>
                   <div className='w-6 h-6 rounded-md bg-site-800 border-2 border-site-700' />
-                  <span className='text-sm text-site-100'>Blockiert / Blocked</span>
+                  <span className='text-sm text-site-100'>Blockiert</span>
                 </div>
               </div>
             </div>
@@ -400,7 +401,7 @@ export default function AdminDashboardPage() {
       {/* Filter */}
       <div className='glass rounded-xl p-4 mb-6'>
         <label htmlFor='play-filter' className='block text-sm font-medium mb-2'>
-          Filter by Show
+          Nach Vorstellung filtern
         </label>
         <select
           id='play-filter'
@@ -408,10 +409,10 @@ export default function AdminDashboardPage() {
           onChange={(e) => setSelectedPlayId(e.target.value)}
           className='w-full md:w-auto px-4 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 focus:outline-none focus:ring-2 focus:ring-kolping-400'
         >
-          <option value='all'>All Shows</option>
+          <option value='all'>Alle Vorstellungen</option>
           {plays.map((play) => (
             <option key={play.id} value={play.id}>
-              {play.display_date} ({play.available_seats} seats available)
+              {play.display_date} ({play.available_seats} Plätze verfügbar)
             </option>
           ))}
         </select>
@@ -420,7 +421,7 @@ export default function AdminDashboardPage() {
       {/* Bookings List */}
       <div className='glass rounded-xl p-6'>
         <h2 className='text-xl font-display font-bold mb-4'>
-          Bookings {selectedPlayId !== 'all' && `for ${plays.find(p => p.id === selectedPlayId)?.display_date}`}
+          Buchungen {selectedPlayId !== 'all' && `für ${plays.find(p => p.id === selectedPlayId)?.display_date}`}
         </h2>
 
         {error && (
@@ -430,12 +431,10 @@ export default function AdminDashboardPage() {
         )}
 
         {isLoading ? (
-          <div className='text-center py-12'>
-            <p className='text-site-100'>Loading bookings...</p>
-          </div>
+          <LoadingSpinner text='Lade Buchungen...' size='lg' />
         ) : bookings.length === 0 ? (
           <div className='text-center py-12'>
-            <p className='text-site-100'>No bookings found</p>
+            <p className='text-site-100'>Keine Buchungen gefunden</p>
           </div>
         ) : (
           <div className='overflow-x-auto'>
@@ -443,13 +442,13 @@ export default function AdminDashboardPage() {
               <thead>
                 <tr className='border-b border-site-700'>
                   <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Name</th>
-                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Email</th>
-                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Show</th>
-                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Seats</th>
+                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>E-Mail</th>
+                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Vorstellung</th>
+                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Plätze</th>
                   <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Status</th>
-                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Booking Date</th>
-                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Check In/Out</th>
-                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Actions</th>
+                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Buchungsdatum</th>
+                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Ein-/Auschecken</th>
+                  <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Aktionen</th>
                 </tr>
               </thead>
               <tbody>
@@ -484,7 +483,7 @@ export default function AdminDashboardPage() {
                             : 'bg-yellow-600 hover:bg-yellow-700 text-white'
                         }`}
                       >
-                        {booking.status === 'confirmed' ? 'Check In' : 'Undo Check-In'}
+                        {booking.status === 'confirmed' ? 'Einchecken' : 'Check-In rückgängig'}
                       </button>
                     </td>
                     <td className='py-3 px-2 text-sm'>
@@ -494,7 +493,7 @@ export default function AdminDashboardPage() {
                         rel='noopener noreferrer'
                         className='text-kolping-400 hover:text-kolping-300 text-xs underline'
                       >
-                        View
+                        Anzeigen
                       </a>
                     </td>
                   </tr>

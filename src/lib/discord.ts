@@ -21,10 +21,10 @@ export async function sendDiscordSeatUpdate({
     return
   }
 
-  const seatLabel = action === 'booked' ? 'Booked seats' : 'Cancelled seats'
-  const content = `Show: ${showLabel}
+  const seatLabel = action === 'booked' ? 'Gebuchte Plätze' : 'Stornierte Plätze'
+  const content = `Vorstellung: ${showLabel}
 ${seatLabel}: ${seatCount}
-Available seats: ${availableSeatCount}`
+Verfügbare Plätze: ${availableSeatCount}`
 
   try {
     const response = await fetch(webhookUrl, {

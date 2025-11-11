@@ -26,7 +26,7 @@ export default function AdminScanPage() {
     const updateCameraList = async (requestPermission = false) => {
       if (!navigator.mediaDevices?.enumerateDevices) {
         if (isMounted) {
-          setError('Camera access is not supported on this device')
+          setError('Kamerazugriff wird auf diesem Gerät nicht unterstützt')
         }
         return
       }
@@ -46,7 +46,7 @@ export default function AdminScanPage() {
 
         if (videoDevices.length === 0) {
           setSelectedCamera('')
-          setError('No cameras found')
+          setError('Keine Kameras gefunden')
           return
         }
 
@@ -66,8 +66,8 @@ export default function AdminScanPage() {
         console.error('Error getting cameras:', err)
         if (isMounted) {
           const message = err instanceof DOMException && err.name === 'NotAllowedError'
-            ? 'Camera permission denied. Please allow camera access to scan tickets.'
-            : 'Unable to access cameras. Please check permissions.'
+            ? 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff zum Scannen von Tickets.'
+            : 'Kamerazugriff nicht möglich. Bitte überprüfen Sie die Berechtigungen.'
           setError(message)
         }
       } finally {
@@ -165,7 +165,7 @@ export default function AdminScanPage() {
       const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
-        setSuccessMessage('✅ Ticket checked in successfully!')
+        setSuccessMessage('✅ Ticket erfolgreich eingecheckt!')
         setIsCheckedIn(true)
         setBooking({ ...booking, status: 'checked_in' })
         
@@ -176,11 +176,11 @@ export default function AdminScanPage() {
           setIsCheckedIn(false)
         }, 2000)
       } else {
-        setError(data.error || 'Check-in failed')
+        setError(data.error || 'Check-In fehlgeschlagen')
       }
     } catch (err) {
       console.error('Error checking in:', err)
-      setError('Check-in failed')
+      setError('Check-In fehlgeschlagen')
     } finally {
       setIsLoading(false)
     }
@@ -194,7 +194,7 @@ export default function AdminScanPage() {
 
   const startCamera = async () => {
     if (!selectedCamera) {
-      setError('No camera selected')
+      setError('Keine Kamera ausgewählt')
       return
     }
 
@@ -217,7 +217,7 @@ export default function AdminScanPage() {
             if (extractedId) {
               handleScanWithId(extractedId)
             } else {
-              setError('Invalid QR code format')
+              setError('Ungültiges QR-Code-Format')
             }
           }
           if (err && !(err as Error).name?.includes('NotFoundException')) {
@@ -227,7 +227,7 @@ export default function AdminScanPage() {
       )
     } catch (err) {
       console.error('Error starting camera:', err)
-      setError('Failed to start camera. Please check permissions.')
+      setError('Kamera konnte nicht gestartet werden. Bitte überprüfen Sie die Berechtigungen.')
       setIsCameraActive(false)
     }
   }
@@ -285,11 +285,11 @@ export default function AdminScanPage() {
         setBooking(data.booking)
         setIsCheckedIn(data.booking.status === 'checked_in')
       } else {
-        setError(data.error || 'Booking not found')
+        setError(data.error || 'Buchung nicht gefunden')
       }
     } catch (err) {
       console.error('Error fetching booking:', err)
-      setError('Failed to fetch booking')
+      setError('Fehler beim Laden der Buchung')
     } finally {
       setIsLoading(false)
     }
@@ -301,10 +301,10 @@ export default function AdminScanPage() {
       <div className='mb-8 flex justify-between items-center'>
         <div>
           <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>
-            Ticket Scanner
+            Ticket-Scanner
           </h1>
           <p className='text-site-100'>
-            Scan QR codes to validate tickets
+            QR-Codes scannen um Tickets zu validieren
           </p>
         </div>
         <a
@@ -323,7 +323,7 @@ export default function AdminScanPage() {
             {cameras.length > 0 && (
               <div className='mb-4'>
                 <label htmlFor='camera-select' className='block text-sm font-medium mb-2'>
-                  Select Camera
+                  Kamera auswählen
                 </label>
                 <select
                   id='camera-select'
@@ -333,7 +333,7 @@ export default function AdminScanPage() {
                 >
                   {cameras.map((camera) => (
                     <option key={camera.deviceId} value={camera.deviceId}>
-                      {camera.label || `Camera ${camera.deviceId.substring(0, 8)}`}
+                      {camera.label || `Kamera ${camera.deviceId.substring(0, 8)}`}
                     </option>
                   ))}
                 </select>
@@ -349,7 +349,7 @@ export default function AdminScanPage() {
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z' />
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 13a3 3 0 11-6 0 3 3 0 016 0z' />
               </svg>
-              {cameras.length === 0 ? 'No cameras found' : 'Start Camera'}
+              {cameras.length === 0 ? 'Keine Kameras gefunden' : 'Kamera starten'}
             </button>
           </div>
         ) : (
@@ -369,7 +369,7 @@ export default function AdminScanPage() {
               onClick={stopCamera}
               className='w-full px-6 py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors'
             >
-              Stop Camera
+              Kamera stoppen
             </button>
           </div>
         )}
@@ -405,15 +405,15 @@ export default function AdminScanPage() {
           <div className={`p-6 ${isCheckedIn ? 'bg-green-900/30' : 'bg-blue-900/30'}`}>
             <div className='flex items-center justify-between mb-4'>
               <h2 className='text-2xl font-display font-bold'>
-                Booking Details
+                Buchungsdetails
               </h2>
               {isCheckedIn ? (
                 <span className='px-3 py-1 rounded-full bg-green-600 text-white text-sm font-semibold'>
-                  ✓ Checked In
+                  ✓ Eingecheckt
                 </span>
               ) : (
                 <span className='px-3 py-1 rounded-full bg-blue-600 text-white text-sm font-semibold'>
-                  Pending
+                  Ausstehend
                 </span>
               )}
             </div>
@@ -424,15 +424,15 @@ export default function AdminScanPage() {
                 <p className='text-lg font-semibold'>{booking.name}</p>
               </div>
               <div>
-                <p className='text-xs text-site-300 mb-1'>Email</p>
+                <p className='text-xs text-site-300 mb-1'>E-Mail</p>
                 <p className='text-sm text-site-100'>{booking.email}</p>
               </div>
               <div>
-                <p className='text-xs text-site-300 mb-1'>Show</p>
+                <p className='text-xs text-site-300 mb-1'>Vorstellung</p>
                 <p className='text-sm'>{booking.play?.display_date || 'N/A'}</p>
               </div>
               <div>
-                <p className='text-xs text-site-300 mb-1'>Seats ({booking.seats.length})</p>
+                <p className='text-xs text-site-300 mb-1'>Plätze ({booking.seats.length})</p>
                 <div className='flex flex-wrap gap-1'>
                   {booking.seats.sort((a, b) => a - b).map((seat) => (
                     <span key={seat} className='px-2 py-1 bg-site-700 rounded text-sm font-semibold'>
@@ -445,10 +445,10 @@ export default function AdminScanPage() {
 
             <div className='mt-4 pt-4 border-t border-site-700'>
               <p className='text-xs text-site-300'>
-                <strong>Booking ID:</strong> {booking.id}
+                <strong>Buchungs-ID:</strong> {booking.id}
               </p>
               <p className='text-xs text-site-300'>
-                <strong>Booked:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}
+                <strong>Gebucht:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}
               </p>
             </div>
           </div>
@@ -460,7 +460,7 @@ export default function AdminScanPage() {
                 disabled={isLoading}
                 className='w-full px-6 py-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-lg transition-colors disabled:opacity-50'
               >
-                {isLoading ? 'Checking in...' : 'Check In Ticket'}
+                {isLoading ? 'Checke ein...' : 'Ticket einchecken'}
               </button>
             </div>
           )}
@@ -469,27 +469,27 @@ export default function AdminScanPage() {
 
       {/* Instructions */}
       <div className='mt-6 glass rounded-xl p-6'>
-        <h3 className='font-semibold mb-3'>How to use:</h3>
+        <h3 className='font-semibold mb-3'>So funktioniert's:</h3>
         <ul className='space-y-2 text-sm text-site-100'>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>1.</span>
-            <span>Click &quot;Start Camera&quot; to activate the scanner</span>
+            <span>Klicken Sie auf &quot;Kamera starten&quot;, um den Scanner zu aktivieren</span>
           </li>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>2.</span>
-            <span>Have the guest show their QR code ticket</span>
+            <span>Lassen Sie den Gast sein QR-Code-Ticket zeigen</span>
           </li>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>3.</span>
-            <span>Point the camera at the QR code</span>
+            <span>Richten Sie die Kamera auf den QR-Code</span>
           </li>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>4.</span>
-            <span>Scanner will automatically detect and load the booking</span>
+            <span>Der Scanner erkennt automatisch den Code und lädt die Buchung</span>
           </li>
           <li className='flex gap-2'>
             <span className='text-kolping-400'>5.</span>
-            <span>Click &quot;Check In Ticket&quot; to confirm</span>
+            <span>Klicken Sie auf &quot;Ticket einchecken&quot; zum Bestätigen</span>
           </li>
         </ul>
       </div>
