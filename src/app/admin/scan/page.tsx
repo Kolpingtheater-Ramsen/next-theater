@@ -20,21 +20,90 @@ export default function AdminScanPage() {
 
   // Initialize camera list
   useEffect(() => {
-    const getCameras = async () => {
+    let isMounted = true
+    let fallbackDeviceChangeHandler: ((event: Event) => void) | null = null
+
+    const updateCameraList = async (requestPermission = false) => {
+      if (!navigator.mediaDevices?.enumerateDevices) {
+        if (isMounted) {
+          setError('Camera access is not supported on this device')
+        }
+        return
+      }
+
+      let stream: MediaStream | null = null
+
       try {
+        if (requestPermission) {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true })
+        }
+
         const devices = await navigator.mediaDevices.enumerateDevices()
+        if (!isMounted) return
+
         const videoDevices = devices.filter(device => device.kind === 'videoinput')
         setCameras(videoDevices)
-        if (videoDevices.length > 0) {
-          // Prefer back camera on mobile
-          const backCamera = videoDevices.find(d => d.label.toLowerCase().includes('back'))
-          setSelectedCamera(backCamera?.deviceId || videoDevices[0].deviceId)
+
+        if (videoDevices.length === 0) {
+          setSelectedCamera('')
+          setError('No cameras found')
+          return
         }
+
+        setError('')
+        setSelectedCamera(prevCamera => {
+          if (prevCamera && videoDevices.some(device => device.deviceId === prevCamera)) {
+            return prevCamera
+          }
+
+          const backCamera = videoDevices.find(device =>
+            device.label?.toLowerCase().includes('back') || device.label?.toLowerCase().includes('rear')
+          )
+
+          return backCamera?.deviceId || videoDevices[0]?.deviceId || ''
+        })
       } catch (err) {
         console.error('Error getting cameras:', err)
+        if (isMounted) {
+          const message = err instanceof DOMException && err.name === 'NotAllowedError'
+            ? 'Camera permission denied. Please allow camera access to scan tickets.'
+            : 'Unable to access cameras. Please check permissions.'
+          setError(message)
+        }
+      } finally {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop())
+        }
       }
     }
-    getCameras()
+
+    void updateCameraList(true)
+
+    const mediaDevices = navigator.mediaDevices
+    const handleDeviceChange = () => {
+      void updateCameraList()
+    }
+
+    if (mediaDevices?.addEventListener) {
+      mediaDevices.addEventListener('devicechange', handleDeviceChange)
+    } else if (mediaDevices) {
+      // Fallback for older browsers
+      const originalHandler = mediaDevices.ondevicechange
+      fallbackDeviceChangeHandler = event => {
+        originalHandler?.(event)
+        handleDeviceChange()
+      }
+      mediaDevices.ondevicechange = fallbackDeviceChangeHandler
+    }
+
+    return () => {
+      isMounted = false
+      if (mediaDevices?.removeEventListener) {
+        mediaDevices.removeEventListener('devicechange', handleDeviceChange)
+      } else if (mediaDevices && mediaDevices.ondevicechange === fallbackDeviceChangeHandler) {
+        mediaDevices.ondevicechange = null
+      }
+    }
   }, [])
 
   // Cleanup camera on unmount
@@ -163,10 +232,15 @@ export default function AdminScanPage() {
 
   const stopCamera = () => {
     if (codeReaderRef.current) {
-      // Stop all tracks from the video stream
+      try {
+        codeReaderRef.current.reset()
+      } catch (err) {
+        console.error('Error resetting QR code reader:', err)
+      }
       if (videoRef.current?.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream
         stream.getTracks().forEach(track => track.stop())
+        videoRef.current.srcObject = null
       }
       codeReaderRef.current = null
     }
