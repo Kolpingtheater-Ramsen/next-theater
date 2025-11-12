@@ -37,7 +37,68 @@ function getSeatLabels(seats: number[]): string {
 }
 
 /**
- * Booking confirmation email template
+ * Booking confirmation email template (HTML)
+ */
+function getConfirmationEmailHTML(data: {
+  name: string
+  date: string
+  time: string
+  seats: string
+  bookingUrl: string
+  bannerUrl: string
+}): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-bottom: 30px;" />
+  
+  <p>Hallo ${data.name},</p>
+  
+  <p>vielen Dank für deine Reservierung!</p>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">DEINE BUCHUNGSDETAILS:</h2>
+  <ul style="list-style: none; padding-left: 0;">
+    <li style="margin-bottom: 10px;">📅 <strong>Datum:</strong> ${data.date}</li>
+    <li style="margin-bottom: 10px;">🕐 <strong>Uhrzeit:</strong> ${data.time}</li>
+    <li style="margin-bottom: 10px;">💺 <strong>Sitzplätze:</strong> ${data.seats}</li>
+  </ul>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">WICHTIGE INFORMATIONEN:</h2>
+  <ul style="list-style: none; padding-left: 0;">
+    <li style="margin-bottom: 8px;">✓ Bitte erscheine 15 Minuten vor Vorstellungsbeginn</li>
+    <li style="margin-bottom: 8px;">✓ Zeige dein Ticket (QR-Code) am Einlass vor</li>
+    <li style="margin-bottom: 8px;">✓ Deine Platzreservierung ist verbindlich</li>
+    <li style="margin-bottom: 8px;">✓ Der Eintritt ist kostenfrei</li>
+  </ul>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">DEIN TICKET:</h2>
+  <p>🎟️ <a href="${data.bookingUrl}" style="color: #0066cc; text-decoration: none; font-weight: bold;">Online-Ticket ansehen</a></p>
+  
+  <p>Du kannst dein Ticket auch auf deinem Smartphone speichern und am Eingang vorzeigen.</p>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">STORNIERUNG:</h2>
+  <p>Falls du nicht kommen kannst, kannst du deine Buchung über den obigen Link stornieren.<br>
+  Bitte gib anderen die Chance, die Plätze zu nutzen.</p>
+  
+  <p>Wir freuen uns auf dein Kommen!</p>
+  
+  <p><strong>Die Kolping-Theatergruppe<br>
+  Winterstück 2025 - Schicksalsfäden</strong></p>
+  
+  <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+  <p style="font-size: 12px; color: #666;">Bei Fragen oder Problemen kannst du uns gerne kontaktieren.</p>
+  
+  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-top: 30px;" />
+</body>
+</html>`
+}
+
+/**
+ * Booking confirmation email template (plain text)
  */
 function getConfirmationEmailBody(data: {
   name: string
@@ -86,7 +147,52 @@ Bei Fragen oder Problemen kannst du uns gerne kontaktieren.
 }
 
 /**
- * Cancellation confirmation email template
+ * Cancellation confirmation email template (HTML)
+ */
+function getCancellationEmailHTML(data: {
+  name: string
+  date: string
+  time: string
+  seats: string
+  bannerUrl: string
+}): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-bottom: 30px;" />
+  
+  <p>Hallo ${data.name},</p>
+  
+  <p>hiermit bestätigen wir die Stornierung deiner Buchung.</p>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">STORNIERTE BUCHUNG:</h2>
+  <ul style="list-style: none; padding-left: 0;">
+    <li style="margin-bottom: 10px;">📅 <strong>Datum:</strong> ${data.date}</li>
+    <li style="margin-bottom: 10px;">🕐 <strong>Uhrzeit:</strong> ${data.time}</li>
+    <li style="margin-bottom: 10px;">💺 <strong>Sitzplätze:</strong> ${data.seats}</li>
+  </ul>
+  
+  <p>Die Sitzplätze wurden freigegeben und stehen anderen Besuchern zur Verfügung.</p>
+  
+  <p>Wir hoffen, dass du zu einem anderen Termin kommen kannst!</p>
+  
+  <p><strong>Die Kolping-Theatergruppe<br>
+  Winterstück 2025 - Schicksalsfäden</strong></p>
+  
+  <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+  <p style="font-size: 12px; color: #666;">Bei Fragen oder Problemen kannst du uns gerne kontaktieren.</p>
+  
+  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-top: 30px;" />
+</body>
+</html>`
+}
+
+/**
+ * Cancellation confirmation email template (plain text)
  */
 function getCancellationEmailBody(data: {
   name: string
@@ -137,11 +243,21 @@ export async function sendBookingConfirmation(
     const seatLabels = getSeatLabels(seats)
     const formattedDate = formatDate(play.date)
 
+    const bannerUrl = `${baseUrl}/img/banners/schicksal.jpg`
+    
     await resend.emails.send({
       from: `${config.theaterName} <${config.fromEmail}>`,
       to: booking.email,
       replyTo: config.replyToEmail,
       subject: 'Deine Reservierung für das Winterstück 2025 - Schicksalsfäden',
+      html: getConfirmationEmailHTML({
+        name: booking.name,
+        date: formattedDate,
+        time: play.time,
+        seats: seatLabels,
+        bookingUrl,
+        bannerUrl,
+      }),
       text: getConfirmationEmailBody({
         name: booking.name,
         date: formattedDate,
@@ -171,19 +287,28 @@ export async function sendCancellationConfirmation(
   },
   play: Play,
   seats: number[],
-  config: EmailConfig
+  config: EmailConfig,
+  baseUrl: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const resend = new Resend(config.apiKey)
     
     const seatLabels = getSeatLabels(seats)
     const formattedDate = formatDate(play.date)
+    const bannerUrl = `${baseUrl}/img/banners/schicksal.jpg`
 
     await resend.emails.send({
       from: `${config.theaterName} <${config.fromEmail}>`,
       to: booking.email,
       replyTo: config.replyToEmail,
       subject: 'Stornierungsbestätigung - Winterstück 2025',
+      html: getCancellationEmailHTML({
+        name: booking.name,
+        date: formattedDate,
+        time: play.time,
+        seats: seatLabels,
+        bannerUrl,
+      }),
       text: getCancellationEmailBody({
         name: booking.name,
         date: formattedDate,

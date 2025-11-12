@@ -135,6 +135,8 @@ export async function DELETE(
     let emailError = null
     if (env.RESEND_API_KEY && booking.play) {
       emailStatus = 'sending'
+      // Get the full URL for the banner image
+      const baseUrl = new URL(request.url).origin
       try {
         const emailResult = await sendCancellationConfirmation(
           {
@@ -148,7 +150,8 @@ export async function DELETE(
             fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
             theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
             replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
-          }
+          },
+          baseUrl
         )
         
         if (emailResult.success) {
