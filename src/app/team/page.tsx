@@ -51,7 +51,7 @@ export default function TeamPage() {
         <h2 className='font-display text-2xl sm:text-3xl font-bold tracking-tight mb-6 text-center'>
           Aktuelle Mitglieder
         </h2>
-        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4'>
           {current.map((p: Person) => (
             <Link
               key={p.id}
@@ -99,12 +99,12 @@ export default function TeamPage() {
         <h2 className='font-display text-2xl sm:text-3xl font-bold tracking-tight mb-6 text-center'>
           Technik & Crew
         </h2>
-        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4'>
           {tech.map((t) => (
             <Link
               key={t.id}
               href={`/team/${encodeURIComponent(t.id)}`}
-              className='min-w-84 group poster-frame border-epic bg-site-800 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1'
+              className='group poster-frame border-epic bg-site-800 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1'
               aria-label={`Profil von ${t.name ?? t.id} ansehen`}
               style={{ 
                 viewTransitionName: `person-${t.id}`,
