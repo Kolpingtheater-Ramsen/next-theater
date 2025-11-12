@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import MessageModal from '@/components/MessageModal'
 import type { BookingWithSeats } from '@/types/database'
 import AddToCalendar from '@/components/AddToCalendar'
 
@@ -20,6 +21,7 @@ export default function BookingViewPage() {
   const [loading, setLoading] = useState(true)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [isCanceling, setIsCanceling] = useState(false)
+  const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
 
   const fetchBooking = useCallback(async () => {
     try {
@@ -63,15 +65,15 @@ export default function BookingViewPage() {
       const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
-        alert('Ihre Buchung wurde erfolgreich storniert.')
-        router.push('/booking')
+        setMessageModal({ message: 'Ihre Buchung wurde erfolgreich storniert.', type: 'success' })
+        setShowCancelConfirm(false)
       } else {
-        alert(data.error || 'Fehler beim Stornieren der Buchung')
+        setMessageModal({ message: data.error || 'Fehler beim Stornieren der Buchung', type: 'error' })
         setShowCancelConfirm(false)
       }
     } catch (err) {
       console.error('Error canceling booking:', err)
-      alert('Fehler beim Stornieren der Buchung')
+      setMessageModal({ message: 'Fehler beim Stornieren der Buchung', type: 'error' })
       setShowCancelConfirm(false)
     } finally {
       setIsCanceling(false)
@@ -313,6 +315,20 @@ export default function BookingViewPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {messageModal && (
+        <MessageModal
+          message={messageModal.message}
+          type={messageModal.type}
+          onClose={() => {
+            const wasSuccess = messageModal.type === 'success'
+            setMessageModal(null)
+            if (wasSuccess) {
+              router.push('/booking')
+            }
+          }}
+        />
       )}
     </div>
   )

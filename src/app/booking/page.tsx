@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import MessageModal from '@/components/MessageModal'
 // import CountdownTimer from '@/components/CountdownTimer'
 import type { PlayWithAvailability } from '@/types/database'
 
@@ -36,6 +37,7 @@ export default function BookingPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingSeats, setIsLoadingSeats] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
   const router = useRouter()
 
   // Fetch plays on mount
@@ -118,7 +120,7 @@ export default function BookingPage() {
       const data = await response.json() as { success: boolean; bookingId: string; error?: string }
 
       if (!response.ok || !data.success) {
-        alert(data.error || 'Fehler beim Erstellen der Buchung')
+        setMessageModal({ message: data.error || 'Fehler beim Erstellen der Buchung', type: 'error' })
         return
       }
 
@@ -137,7 +139,7 @@ export default function BookingPage() {
       setBookingStep('confirmation')
     } catch (err) {
       console.error('Error creating booking:', err)
-      alert('Fehler beim Erstellen der Buchung. Bitte versuchen Sie es erneut.')
+      setMessageModal({ message: 'Fehler beim Erstellen der Buchung. Bitte versuchen Sie es erneut.', type: 'error' })
     } finally {
       setIsLoading(false)
     }
@@ -243,6 +245,7 @@ export default function BookingPage() {
               selectedSeats={selectedSeats}
               onSeatSelection={handleSeatSelection}
               maxSeats={5}
+              onShowMessage={(message, type) => setMessageModal({ message, type })}
             />
           )}
         </div>
@@ -271,6 +274,14 @@ export default function BookingPage() {
             <BookingForm onSubmit={handleFormSubmit} />
           )}
         </div>
+      )}
+
+      {messageModal && (
+        <MessageModal
+          message={messageModal.message}
+          type={messageModal.type}
+          onClose={() => setMessageModal(null)}
+        />
       )}
     </div>
   )

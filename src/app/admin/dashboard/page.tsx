@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import MessageModal from '@/components/MessageModal'
 import type { BookingWithSeats, PlayWithAvailability } from '@/types/database'
 
 export default function AdminDashboardPage() {
@@ -12,6 +13,7 @@ export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [showSeatMap, setShowSeatMap] = useState(false)
+  const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
   const router = useRouter()
 
   const ROWS = 7
@@ -150,7 +152,7 @@ export default function AdminDashboardPage() {
             b.id === bookingId ? { ...b, status: 'checked_in' } : b
           ))
         } else {
-          alert(data.error || 'Fehler beim Einchecken')
+          setMessageModal({ message: data.error || 'Fehler beim Einchecken', type: 'error' })
         }
       } else if (currentStatus === 'checked_in') {
         // Check out (revert to confirmed)
@@ -171,12 +173,12 @@ export default function AdminDashboardPage() {
             b.id === bookingId ? { ...b, status: 'confirmed' } : b
           ))
         } else {
-          alert(data.error || 'Fehler beim Auschecken')
+          setMessageModal({ message: data.error || 'Fehler beim Auschecken', type: 'error' })
         }
       }
     } catch (err) {
       console.error('Error toggling check-in:', err)
-      alert('Fehler beim Aktualisieren des Status')
+      setMessageModal({ message: 'Fehler beim Aktualisieren des Status', type: 'error' })
     }
   }
 
@@ -503,6 +505,14 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </div>
+
+      {messageModal && (
+        <MessageModal
+          message={messageModal.message}
+          type={messageModal.type}
+          onClose={() => setMessageModal(null)}
+        />
+      )}
     </div>
   )
 }
