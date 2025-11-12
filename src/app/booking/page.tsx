@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
+import LoadingSpinner from '@/components/LoadingSpinner'
 // import CountdownTimer from '@/components/CountdownTimer'
 import type { PlayWithAvailability } from '@/types/database'
 
@@ -33,6 +34,7 @@ export default function BookingPage() {
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null)
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingSeats, setIsLoadingSeats] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
@@ -63,6 +65,7 @@ export default function BookingPage() {
 
   const fetchBookedSeats = async (playId: string) => {
     try {
+      setIsLoadingSeats(true)
       const response = await fetch(`/api/plays/${playId}/seats`)
       const data = await response.json() as { success: boolean; bookedSeats: number[] }
       
@@ -73,6 +76,8 @@ export default function BookingPage() {
       }
     } catch (err) {
       console.error('Error fetching booked seats:', err)
+    } finally {
+      setIsLoadingSeats(false)
     }
   }
 
@@ -178,9 +183,7 @@ export default function BookingPage() {
           )}
           
           {isLoading ? (
-            <div className='text-center py-12'>
-              <p className='text-site-100'>Lade Vorstellungen...</p>
-            </div>
+            <LoadingSpinner text='Lade Vorstellungen...' size='lg' />
           ) : (
             <div className='grid gap-4 md:grid-cols-2'>
               {plays.map((play) => {
@@ -229,13 +232,19 @@ export default function BookingPage() {
               <p className='text-site-100'>{selectedPlay.display_date}</p>
             </div>
           </div>
-          <SeatSelection
-            playId={selectedPlay.id}
-            bookedSeats={bookedSeats}
-            selectedSeats={selectedSeats}
-            onSeatSelection={handleSeatSelection}
-            maxSeats={5}
-          />
+          {isLoadingSeats ? (
+            <div className='glass rounded-xl p-8'>
+              <LoadingSpinner text='Lade Sitzplätze...' size='lg' />
+            </div>
+          ) : (
+            <SeatSelection
+              playId={selectedPlay.id}
+              bookedSeats={bookedSeats}
+              selectedSeats={selectedSeats}
+              onSeatSelection={handleSeatSelection}
+              maxSeats={5}
+            />
+          )}
         </div>
       )}
 
@@ -245,6 +254,7 @@ export default function BookingPage() {
             <button
               onClick={handleBackToSeatSelection}
               className='text-site-100 hover:text-kolping-400 transition-colors'
+              disabled={isLoading}
             >
               ← Zurück
             </button>
@@ -253,7 +263,13 @@ export default function BookingPage() {
               <p className='text-site-100'>{selectedPlay.display_date} • {selectedSeats.length} Plätze</p>
             </div>
           </div>
-          <BookingForm onSubmit={handleFormSubmit} />
+          {isLoading ? (
+            <div className='glass rounded-xl p-8'>
+              <LoadingSpinner text='Erstelle Buchung...' size='lg' />
+            </div>
+          ) : (
+            <BookingForm onSubmit={handleFormSubmit} />
+          )}
         </div>
       )}
     </div>

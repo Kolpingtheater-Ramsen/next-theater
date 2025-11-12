@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
-import { getBookingById, cancelBooking } from '@/lib/db'
+import { getBookingById, cancelBooking, getBookedSeatsForPlay } from '@/lib/db'
 import { sendCancellationConfirmation } from '@/lib/email'
+import { sendDiscordSeatUpdate } from '@/lib/discord'
 
 /**
  * GET /api/bookings/[id]
@@ -164,6 +165,19 @@ export async function DELETE(
     } else {
       console.warn('RESEND_API_KEY not configured or booking has no play - skipping cancellation email')
     }
+
+      if (env.DISCORD_WEBHOOK_URL && booking.play) {
+        const remainingBookedSeats = await getBookedSeatsForPlay(db, booking.play_id)
+        const availableSeatsAfterCancellation = booking.play.total_seats - remainingBookedSeats.length
+        const showLabel = booking.play.display_date || `${booking.play.date} ${booking.play.time}`
+        await sendDiscordSeatUpdate({
+          webhookUrl: env.DISCORD_WEBHOOK_URL,
+          showLabel,
+          seatCount: booking.seats.length,
+          availableSeatCount: availableSeatsAfterCancellation,
+          action: 'cancelled',
+        })
+      }
     
     return NextResponse.json({
       success: true,

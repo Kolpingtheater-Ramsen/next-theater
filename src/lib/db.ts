@@ -69,8 +69,8 @@ export async function hasExistingBooking(
   email: string
 ): Promise<boolean> {
   const result = await db
-    .prepare('SELECT COUNT(*) as count FROM bookings WHERE play_id = ? AND LOWER(email) = LOWER(?) AND status = ?')
-    .bind(playId, email, 'confirmed')
+      .prepare('SELECT COUNT(*) as count FROM bookings WHERE play_id = ? AND LOWER(email) = LOWER(?) AND status IN (?, ?)')
+      .bind(playId, email, 'confirmed', 'checked_in')
     .first<{ count: number }>()
   
   return (result?.count || 0) > 0

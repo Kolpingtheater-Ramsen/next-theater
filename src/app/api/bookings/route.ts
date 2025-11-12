@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
-import { 
-  getPlayById, 
-  getBookedSeatsForPlay, 
-  hasExistingBooking, 
-  createBooking 
+import {
+  getPlayById,
+  getBookedSeatsForPlay,
+  hasExistingBooking,
+  createBooking
 } from '@/lib/db'
 import { sendBookingConfirmation } from '@/lib/email'
+import { sendDiscordSeatUpdate } from '@/lib/discord'
 
 /**
  * POST /api/bookings
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const { playId, name, email, seats } = body
+      const { playId, name, email, seats } = body
     
     // Validation: Required fields
     if (!playId || !name || !email || !seats) {
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
     // Check for duplicate seats in request
     if (new Set(seats).size !== seats.length) {
       return NextResponse.json(
-        { success: false, error: 'Duplicate seats in selection' },
+        { success: false, error: 'Doppelte Plätze in der Auswahl' },
         { status: 400 }
       )
     }
@@ -116,66 +117,66 @@ export async function POST(request: NextRequest) {
     const play = await getPlayById(db, playId)
     if (!play) {
       return NextResponse.json(
-        { success: false, error: 'Play not found' },
+        { success: false, error: 'Vorstellung nicht gefunden' },
         { status: 404 }
       )
     }
     
     // Check if user already has a booking for this play
-    const alreadyBooked = await hasExistingBooking(db, playId, email)
+      const normalizedEmail = email.trim().toLowerCase()
+      const alreadyBooked = await hasExistingBooking(db, playId, normalizedEmail)
     if (alreadyBooked) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'You already have a booking for this show' 
+          error: 'Sie haben bereits eine Buchung für diese Vorstellung' 
         },
         { status: 409 }
       )
     }
     
-    // Check if seats are already booked
-    const bookedSeats = await getBookedSeatsForPlay(db, playId)
-    const conflictingSeats = seats.filter(s => bookedSeats.includes(s))
-    
-    if (conflictingSeats.length > 0) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Some selected seats are already booked',
-          conflictingSeats 
-        },
-        { status: 409 }
-      )
-    }
-    
-    // Check if enough seats available
-    const availableSeats = play.total_seats - bookedSeats.length
-    if (seats.length > availableSeats) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Not enough seats available',
-          availableSeats
-        },
-        { status: 409 }
-      )
-    }
+      // Check if seats are already booked
+      const bookedSeats = await getBookedSeatsForPlay(db, playId)
+      const conflictingSeats = seats.filter(s => bookedSeats.includes(s))
+      
+      if (conflictingSeats.length > 0) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Einige ausgewählte Plätze sind bereits gebucht',
+            conflictingSeats 
+          },
+          { status: 409 }
+        )
+      }
+      // Check if enough seats available
+      const availableSeatsBefore = play.total_seats - bookedSeats.length
+      if (seats.length > availableSeatsBefore) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Nicht genügend Plätze verfügbar',
+            availableSeats: availableSeatsBefore
+          },
+          { status: 409 }
+        )
+      }
     
     // Create booking
-    const bookingId = generateBookingId()
-    const result = await createBooking(db, {
-      id: bookingId,
-      playId,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      seats
-    })
+      const bookingId = generateBookingId()
+      const result = await createBooking(db, {
+        id: bookingId,
+        playId,
+        name: name.trim(),
+        email: normalizedEmail,
+        seats
+      })
     
     if (!result.success) {
       return NextResponse.json(
         { 
           success: false, 
-          error: result.error || 'Failed to create booking'
+          error: result.error || 'Fehler beim Erstellen der Buchung'
         },
         { status: 500 }
       )
@@ -192,11 +193,11 @@ export async function POST(request: NextRequest) {
       try {
         // Await email send to catch errors
         const emailResult = await sendBookingConfirmation(
-          {
+            {
             name: name.trim(),
-            email: email.trim().toLowerCase(),
+            email: normalizedEmail,
             id: bookingId,
-          },
+            },
           play,
           seats,
           {
@@ -222,6 +223,17 @@ export async function POST(request: NextRequest) {
     } else {
       console.warn('RESEND_API_KEY not configured - skipping email')
     }
+
+      // Notify Discord webhook if configured
+      const availableSeatsAfterBooking = Math.max(availableSeatsBefore - seats.length, 0)
+      const showLabel = play.display_date || `${play.date} ${play.time}`
+      await sendDiscordSeatUpdate({
+        webhookUrl: env.DISCORD_WEBHOOK_URL,
+        showLabel,
+        seatCount: seats.length,
+        availableSeatCount: availableSeatsAfterBooking,
+        action: 'booked',
+      })
     
     // Return success with booking ID
     return NextResponse.json(

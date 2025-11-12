@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { QRCodeSVG } from 'qrcode.react'
+import LoadingSpinner from '@/components/LoadingSpinner'
 import type { BookingWithSeats } from '@/types/database'
 import AddToCalendar from '@/components/AddToCalendar'
 
@@ -89,8 +90,8 @@ export default function BookingViewPage() {
 
   if (loading) {
     return (
-      <div className='max-w-2xl mx-auto text-center py-12'>
-        <p className='text-site-100'>Lade Buchung...</p>
+      <div className='max-w-2xl mx-auto'>
+        <LoadingSpinner text='Lade Buchung...' size='lg' />
       </div>
     )
   }

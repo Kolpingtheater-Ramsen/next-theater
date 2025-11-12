@@ -9,6 +9,7 @@ declare global {
     FROM_EMAIL?: string
     REPLY_TO_EMAIL?: string
     THEATER_NAME?: string
+    DISCORD_WEBHOOK_URL?: string
   }
 }
 

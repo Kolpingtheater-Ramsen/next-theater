@@ -12,12 +12,14 @@ declare global {
 declare module '@cloudflare/next-on-pages' {
   interface CloudflareEnv {
     DB: D1Database
+    DISCORD_WEBHOOK_URL?: string
   }
 }
 
 // Cloudflare Pages environment
 export interface Env {
   DB: D1Database
+  DISCORD_WEBHOOK_URL?: string
 }
 
 // D1 Database types (from @cloudflare/workers-types)

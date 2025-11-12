@@ -29,11 +29,11 @@ export default function AdminLoginPage() {
       if (data.success) {
         router.push('/admin/dashboard')
       } else {
-        setError(data.error || 'Login failed')
+        setError(data.error || 'Anmeldung fehlgeschlagen')
       }
     } catch (err) {
       console.error('Login error:', err)
-      setError('Login failed. Please try again.')
+      setError('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.')
     } finally {
       setIsLoading(false)
     }
@@ -50,17 +50,17 @@ export default function AdminLoginPage() {
               </svg>
             </div>
             <h1 className='font-display text-3xl font-bold mb-2'>
-              Admin Login
+              Admin-Anmeldung
             </h1>
             <p className='text-site-100'>
-              Theater Booking System
+              Theater-Buchungssystem
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className='space-y-6'>
             <div>
               <label htmlFor='password' className='block text-sm font-medium mb-2'>
-                Admin Password
+                Admin-Passwort
               </label>
               <input
                 type='password'
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className='w-full px-4 py-3 rounded-lg bg-site-800 border border-site-700 text-site-50 placeholder-site-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 transition-colors'
-                placeholder='Enter admin password'
+                placeholder='Admin-Passwort eingeben'
                 required
                 autoFocus
               />
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
               disabled={isLoading}
               className='w-full px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Anmelden...' : 'Anmelden'}
             </button>
           </form>
 
@@ -94,7 +94,7 @@ export default function AdminLoginPage() {
               href='/booking'
               className='text-sm text-site-100 hover:text-kolping-400 transition-colors'
             >
-              ← Back to Booking
+              ← Zurück zur Buchung
             </a>
           </div>
         </div>
