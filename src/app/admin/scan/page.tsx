@@ -400,99 +400,99 @@ export default function AdminScanPage() {
       )}
 
       {/* Booking Details */}
-      {booking && (
-        <div className='glass rounded-xl overflow-hidden'>
-          <div className={`p-6 ${isCheckedIn ? 'bg-green-900/30' : 'bg-blue-900/30'}`}>
-            <div className='flex items-center justify-between mb-4'>
-              <h2 className='text-2xl font-display font-bold'>
-                Buchungsdetails
-              </h2>
-              {isCheckedIn ? (
-                <span className='px-3 py-1 rounded-full bg-green-600 text-white text-sm font-semibold'>
-                  ✓ Eingecheckt
-                </span>
-              ) : (
-                <span className='px-3 py-1 rounded-full bg-blue-600 text-white text-sm font-semibold'>
-                  Ausstehend
-                </span>
-              )}
-            </div>
+        {booking && (
+          <div className='glass rounded-xl overflow-hidden'>
+            <div className={`p-6 ${isCheckedIn ? 'bg-green-900/30' : 'bg-blue-900/30'}`}>
+              <div className='flex items-center justify-between mb-4'>
+                <h2 className='text-2xl font-display font-bold'>
+                  Buchungsdetails
+                </h2>
+                {isCheckedIn ? (
+                  <span className='px-3 py-1 rounded-full bg-green-600 text-white text-sm font-semibold'>
+                    ✓ Eingecheckt
+                  </span>
+                ) : (
+                  <span className='px-3 py-1 rounded-full bg-blue-600 text-white text-sm font-semibold'>
+                    Ausstehend
+                  </span>
+                )}
+              </div>
 
-            <div className='grid md:grid-cols-2 gap-4'>
-              <div>
-                <p className='text-xs text-site-300 mb-1'>Name</p>
-                <p className='text-lg font-semibold'>{booking.name}</p>
-              </div>
-              <div>
-                <p className='text-xs text-site-300 mb-1'>E-Mail</p>
-                <p className='text-sm text-site-100'>{booking.email}</p>
-              </div>
-              <div>
-                <p className='text-xs text-site-300 mb-1'>Vorstellung</p>
-                <p className='text-sm'>{booking.play?.display_date || 'N/A'}</p>
-              </div>
-              <div>
-                <p className='text-xs text-site-300 mb-1'>Plätze ({booking.seats.length})</p>
-                <div className='flex flex-wrap gap-1'>
-                  {booking.seats.sort((a, b) => a - b).map((seat) => (
-                    <span key={seat} className='px-2 py-1 bg-site-700 rounded text-sm font-semibold'>
-                      {getSeatLabel(seat)}
-                    </span>
-                  ))}
+              <div className='grid md:grid-cols-2 gap-4'>
+                <div>
+                  <p className='text-xs text-site-300 mb-1'>Name</p>
+                  <p className='text-lg font-semibold'>{booking.name}</p>
+                </div>
+                <div>
+                  <p className='text-xs text-site-300 mb-1'>E-Mail</p>
+                  <p className='text-sm text-site-100'>{booking.email}</p>
+                </div>
+                <div>
+                  <p className='text-xs text-site-300 mb-1'>Vorstellung</p>
+                  <p className='text-sm'>{booking.play?.display_date || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className='text-xs text-site-300 mb-1'>Plätze ({booking.seats.length})</p>
+                  <div className='flex flex-wrap gap-1'>
+                    {booking.seats.sort((a, b) => a - b).map((seat) => (
+                      <span key={seat} className='px-2 py-1 bg-site-700 rounded text-sm font-semibold'>
+                        {getSeatLabel(seat)}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
+
+              <div className='mt-4 pt-4 border-t border-site-700'>
+                <p className='text-xs text-site-300'>
+                  <strong>Buchungs-ID:</strong> {booking.id}
+                </p>
+                <p className='text-xs text-site-300'>
+                  <strong>Gebucht:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}
+                </p>
+              </div>
             </div>
 
-            <div className='mt-4 pt-4 border-t border-site-700'>
-              <p className='text-xs text-site-300'>
-                <strong>Buchungs-ID:</strong> {booking.id}
-              </p>
-              <p className='text-xs text-site-300'>
-                <strong>Gebucht:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}
-              </p>
-            </div>
+            {!isCheckedIn && (
+              <div className='p-6'>
+                <button
+                  onClick={handleCheckIn}
+                  disabled={isLoading}
+                  className='w-full px-6 py-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-lg transition-colors disabled:opacity-50'
+                >
+                  {isLoading ? 'Checke ein...' : 'Ticket einchecken'}
+                </button>
+              </div>
+            )}
           </div>
+        )}
 
-          {!isCheckedIn && (
-            <div className='p-6'>
-              <button
-                onClick={handleCheckIn}
-                disabled={isLoading}
-                className='w-full px-6 py-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-lg transition-colors disabled:opacity-50'
-              >
-                {isLoading ? 'Checke ein...' : 'Ticket einchecken'}
-              </button>
-            </div>
-          )}
+        {/* Instructions */}
+        <div className='mt-6 glass rounded-xl p-6'>
+          <h3 className='font-semibold mb-3'>So funktioniert&apos;s:</h3>
+          <ul className='space-y-2 text-sm text-site-100'>
+            <li className='flex gap-2'>
+              <span className='text-kolping-400'>1.</span>
+              <span>Klicken Sie auf &quot;Kamera starten&quot;, um den Scanner zu aktivieren</span>
+            </li>
+            <li className='flex gap-2'>
+              <span className='text-kolping-400'>2.</span>
+              <span>Lassen Sie den Gast sein QR-Code-Ticket zeigen</span>
+            </li>
+            <li className='flex gap-2'>
+              <span className='text-kolping-400'>3.</span>
+              <span>Richten Sie die Kamera auf den QR-Code</span>
+            </li>
+            <li className='flex gap-2'>
+              <span className='text-kolping-400'>4.</span>
+              <span>Der Scanner erkennt automatisch den Code und lädt die Buchung</span>
+            </li>
+            <li className='flex gap-2'>
+              <span className='text-kolping-400'>5.</span>
+              <span>Klicken Sie auf &quot;Ticket einchecken&quot; zum Bestätigen</span>
+            </li>
+          </ul>
         </div>
-      )}
-
-      {/* Instructions */}
-      <div className='mt-6 glass rounded-xl p-6'>
-        <h3 className='font-semibold mb-3'>So funktioniert's:</h3>
-        <ul className='space-y-2 text-sm text-site-100'>
-          <li className='flex gap-2'>
-            <span className='text-kolping-400'>1.</span>
-            <span>Klicken Sie auf &quot;Kamera starten&quot;, um den Scanner zu aktivieren</span>
-          </li>
-          <li className='flex gap-2'>
-            <span className='text-kolping-400'>2.</span>
-            <span>Lassen Sie den Gast sein QR-Code-Ticket zeigen</span>
-          </li>
-          <li className='flex gap-2'>
-            <span className='text-kolping-400'>3.</span>
-            <span>Richten Sie die Kamera auf den QR-Code</span>
-          </li>
-          <li className='flex gap-2'>
-            <span className='text-kolping-400'>4.</span>
-            <span>Der Scanner erkennt automatisch den Code und lädt die Buchung</span>
-          </li>
-          <li className='flex gap-2'>
-            <span className='text-kolping-400'>5.</span>
-            <span>Klicken Sie auf &quot;Ticket einchecken&quot; zum Bestätigen</span>
-          </li>
-        </ul>
-      </div>
     </div>
   )
 }
