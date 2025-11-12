@@ -217,6 +217,59 @@ export default function BookingPage() {
               })}
             </div>
           )}
+
+          {/* Additional Information Section */}
+          <div className='mt-12 space-y-6'>
+            <div className='glass rounded-xl p-6'>
+              <h3 className='text-xl font-display font-bold mb-4'>Über die Vorstellung</h3>
+              <p className='text-site-100 mb-4'>
+                Erleben Sie "Schicksalsfäden" - ein selbst geschriebenes Stück der Kolping Kreativbühne, inspiriert von den griechischen 
+                Schicksalsgöttinnen, den Moiren. Das Stück erzählt von den Fäden des Schicksals, die unser Leben durchweben, und stellt die 
+                Frage: Wer bestimmt unseren Weg? Können wir unser Schicksal selbst in die Hand nehmen?
+              </p>
+            </div>
+
+            <div className='glass rounded-xl p-6'>
+              <h3 className='text-xl font-display font-bold mb-4'>Wichtige Informationen</h3>
+              <ul className='space-y-3 text-site-100'>
+                <li className='flex items-start gap-3'>
+                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                  </svg>
+                  <span>Die Buchung ist kostenfrei und unverbindlich. Falls Sie nicht kommen können, bitten wir um Stornierung, damit andere den Platz nutzen können.</span>
+                </li>
+                <li className='flex items-start gap-3'>
+                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                  </svg>
+                  <span>Sie können maximal 5 Sitzplätze pro Buchung reservieren</span>
+                </li>
+                <li className='flex items-start gap-3'>
+                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
+                  </svg>
+                  <span>Sie erhalten eine Bestätigungs-E-Mail mit allen Details</span>
+                </li>
+                <li className='flex items-start gap-3'>
+                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
+                  </svg>
+                  <span>Bitte erscheinen Sie 15 Minuten vor Vorstellungsbeginn</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className='glass rounded-xl p-6'>
+              <h3 className='text-xl font-display font-bold mb-4'>Kontakt & Fragen</h3>
+              <p className='text-site-100 mb-4'>
+                Haben Sie Fragen zur Buchung oder zur Vorstellung? Wir helfen Ihnen gerne weiter.
+              </p>
+              <p className='text-site-100'>
+                Besuchen Sie unsere <a href='/contact' className='text-kolping-400 hover:text-kolping-300 underline transition-colors'>Kontaktseite</a> oder 
+                wenden Sie sich direkt an uns. Wir freuen uns auf Ihren Besuch!
+              </p>
+            </div>
+          </div>
         </div>
       )}
 
