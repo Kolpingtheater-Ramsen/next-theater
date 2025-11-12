@@ -66,7 +66,7 @@ export default function RootLayout({
       >
         <ViewTransitions />
         <Header />
-        <main className='mx-auto max-w-6xl px-4 py-8 flex-1'>{children}</main>
+        <main className='mx-auto max-w-7xl px-4 py-8 flex-1'>{children}</main>
         <footer className='sticky bottom-0 border-t border-site-700 py-8 text-sm text-site-300 bg-site-900 backdrop-blur supports-[backdrop-filter]:bg-site-900/95'>
           <div className='mx-auto max-w-6xl px-4 flex flex-wrap items-center justify-between gap-4'>
             <span>

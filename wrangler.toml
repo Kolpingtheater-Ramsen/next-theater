@@ -19,3 +19,4 @@ database_id = "034c0741-9715-41d0-8808-ed1925bc0266"
 # - FROM_EMAIL: Verified sender email (e.g., noreply@yourdomain.com)
 # - THEATER_NAME: Name displayed in emails
 # - REPLY_TO_EMAIL: Reply-to email address (can be Gmail)
+# - DISCORD_WEBHOOK_URL: Discord webhook URL for seat update notifications

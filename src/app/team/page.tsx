@@ -51,7 +51,7 @@ export default function TeamPage() {
         <h2 className='font-display text-2xl sm:text-3xl font-bold tracking-tight mb-6 text-center'>
           Aktuelle Mitglieder
         </h2>
-        <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6'>
           {current.map((p: Person) => (
             <Link
               key={p.id}
@@ -99,12 +99,12 @@ export default function TeamPage() {
         <h2 className='font-display text-2xl sm:text-3xl font-bold tracking-tight mb-6 text-center'>
           Technik & Crew
         </h2>
-        <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6'>
           {tech.map((t) => (
             <Link
               key={t.id}
               href={`/team/${encodeURIComponent(t.id)}`}
-              className='group poster-frame border-epic bg-site-800 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1'
+              className='min-w-84 group poster-frame border-epic bg-site-800 transition-all duration-500 hover:scale-[1.03] hover:-translate-y-1'
               aria-label={`Profil von ${t.name ?? t.id} ansehen`}
               style={{ 
                 viewTransitionName: `person-${t.id}`,
@@ -136,33 +136,7 @@ export default function TeamPage() {
                 <h3 className='font-display font-bold text-lg text-site-50 group-hover:text-kolping-400 transition-colors duration-300'>
                   {t.name ?? t.id}
                 </h3>
-                {t.jobs && t.jobs.length ? (
-                  <ul className='mt-2 flex flex-wrap gap-1.5 text-xs'>
-                    {t.jobs.map((j, i) => (
-                      <li
-                        key={i}
-                        className='inline-flex items-center gap-1 rounded-full border border-kolping-500/30 bg-kolping-500/10 px-2.5 py-1 text-kolping-400 transition-all duration-300 group-hover:border-kolping-500/50 group-hover:bg-kolping-500/20'
-                      >
-                        <span aria-hidden='true' className='text-[10px]'>
-                          {j.icon === 'settings'
-                            ? '⚙️'
-                            : j.icon === 'camera'
-                            ? '📷'
-                            : j.icon === 'lightbulb'
-                            ? '💡'
-                            : j.icon === 'headphones'
-                            ? '🎧'
-                            : j.icon === 'explore'
-                            ? '🧭'
-                            : '•'}
-                        </span>
-                        <span className='font-medium'>{j.job}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className='text-xs text-site-100 mt-1'>Crew-Mitglied</p>
-                )}
+                <p className='text-xs text-site-100 mt-1'>Crew-Mitglied</p>
               </div>
             </Link>
           ))}
@@ -176,7 +150,7 @@ export default function TeamPage() {
         <p className='text-center text-site-100 text-sm mb-6'>
           Mit Dankbarkeit erinnern wir uns an ihre Beiträge zu unseren Produktionen
         </p>
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4'>
           {former.map((p: Person) => (
             <Link
               key={p.id}
