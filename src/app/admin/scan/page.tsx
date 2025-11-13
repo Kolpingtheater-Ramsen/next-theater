@@ -17,6 +17,8 @@ export default function AdminScanPage() {
   const [selectedCamera, setSelectedCamera] = useState<string>('')
   const videoRef = useRef<HTMLVideoElement>(null)
   const codeReaderRef = useRef<BrowserQRCodeReader | null>(null)
+  const isProcessingScanRef = useRef(false)
+  const lastScannedIdRef = useRef<string | null>(null)
   const router = useRouter()
 
   // Initialize camera list
@@ -209,6 +211,10 @@ export default function AdminScanPage() {
     // Stop any existing camera stream first
     stopCamera()
 
+    // Reset scan processing flags when starting fresh
+    isProcessingScanRef.current = false
+    lastScannedIdRef.current = null
+
     // Set flag to start camera - useEffect will handle actual start when video element is ready
     setIsCameraActive(true)
     setShouldStartCamera(true)
@@ -232,14 +238,35 @@ export default function AdminScanPage() {
         videoRef.current,
         (result, err) => {
           if (result) {
+            // Prevent processing the same QR code multiple times
+            if (isProcessingScanRef.current) {
+              return
+            }
+
             const text = result.getText()
-            stopCamera()
-            // Auto-scan after QR code detected
             const extractedId = extractBookingIdFromUrl(text)
+            
+            // Prevent scanning the same ID multiple times
+            if (extractedId && extractedId === lastScannedIdRef.current) {
+              return
+            }
+
+            // Mark as processing and stop camera immediately
+            isProcessingScanRef.current = true
+            lastScannedIdRef.current = extractedId || null
+            stopCamera()
+            
+            // Auto-scan after QR code detected
             if (extractedId) {
-              handleScanWithId(extractedId)
+              handleScanWithId(extractedId).finally(() => {
+                // Reset processing flag after a delay to allow re-scanning if needed
+                setTimeout(() => {
+                  isProcessingScanRef.current = false
+                }, 2000)
+              })
             } else {
               setError('Ungültiges QR-Code-Format')
+              isProcessingScanRef.current = false
             }
             return
           }
