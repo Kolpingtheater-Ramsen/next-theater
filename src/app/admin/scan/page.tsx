@@ -198,16 +198,24 @@ export default function AdminScanPage() {
       return
     }
 
+    // Stop any existing camera stream first
+    stopCamera()
+
     try {
       setIsCameraActive(true)
       setError('')
       
+      // Ensure video element is ready
+      if (!videoRef.current) {
+        throw new Error('Video element not available')
+      }
+
       const codeReader = new BrowserQRCodeReader()
       codeReaderRef.current = codeReader
 
       await codeReader.decodeFromVideoDevice(
         selectedCamera,
-        videoRef.current!,
+        videoRef.current,
         (result, err) => {
           if (result) {
             const text = result.getText()
@@ -219,44 +227,53 @@ export default function AdminScanPage() {
             } else {
               setError('Ungültiges QR-Code-Format')
             }
+            return
           }
+          
           // Silently ignore expected errors - ZXing throws errors when no QR code is found,
           // which is normal behavior during continuous scanning
           if (err) {
-            try {
-              const errorStr = String(err)
-              const errorName = (err as Error)?.name || ''
-              const errorMessage = (err as Error)?.message || ''
-              
-              // These are expected errors when scanning and no QR code is visible
-              const isExpectedError = 
-                errorName.includes('NotFound') ||
-                errorMessage.includes('NotFound') ||
-                errorStr.includes('NotFound') ||
-                errorName.includes('No QR') ||
-                errorMessage.includes('No QR') ||
-                errorStr.includes('No QR') ||
-                errorName === 'NotFoundException' ||
-                errorStr.includes('selectBestPatterns') // Internal ZXing error when no pattern found
-              
-              // Only log truly unexpected errors
-              if (!isExpectedError) {
-                console.error('QR Scan error:', err)
-              }
-            } catch {
-              // If error object is malformed, ignore it
-            }
+            // Don't log or handle expected scanning errors
+            // These occur continuously when no QR code is visible
+            return
           }
         }
       )
     } catch (err) {
       console.error('Error starting camera:', err)
-      setError('Kamera konnte nicht gestartet werden. Bitte überprüfen Sie die Berechtigungen.')
+      
+      // Handle specific error types
+      let errorMessage = 'Kamera konnte nicht gestartet werden.'
+      
+      if (err instanceof DOMException) {
+        switch (err.name) {
+          case 'NotReadableError':
+            errorMessage = 'Kamera wird bereits verwendet oder ist nicht verfügbar. Bitte schließen Sie andere Anwendungen, die die Kamera verwenden.'
+            break
+          case 'NotAllowedError':
+            errorMessage = 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff in den Browsereinstellungen.'
+            break
+          case 'NotFoundError':
+            errorMessage = 'Keine Kamera gefunden. Bitte überprüfen Sie, ob eine Kamera angeschlossen ist.'
+            break
+          case 'OverconstrainedError':
+            errorMessage = 'Die ausgewählte Kamera unterstützt die erforderlichen Einstellungen nicht.'
+            break
+          default:
+            errorMessage = `Kamera-Fehler: ${err.message || err.name}`
+        }
+      } else if (err instanceof Error) {
+        errorMessage = `Kamera-Fehler: ${err.message}`
+      }
+      
+      setError(errorMessage)
       setIsCameraActive(false)
+      codeReaderRef.current = null
     }
   }
 
   const stopCamera = () => {
+    // Stop QR code reader
     if (codeReaderRef.current) {
       try {
         const reader = codeReaderRef.current as unknown as {
@@ -273,15 +290,25 @@ export default function AdminScanPage() {
           reader.reset()
         }
       } catch (err) {
-        console.error('Error stopping QR code reader:', err)
-      }
-      if (videoRef.current?.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream
-        stream.getTracks().forEach(track => track.stop())
-        videoRef.current.srcObject = null
+        // Silently ignore errors when stopping reader
+        // This can happen if reader is already stopped
       }
       codeReaderRef.current = null
     }
+    
+    // Stop video stream
+    if (videoRef.current?.srcObject) {
+      try {
+        const stream = videoRef.current.srcObject as MediaStream
+        stream.getTracks().forEach(track => {
+          track.stop()
+        })
+        videoRef.current.srcObject = null
+      } catch (err) {
+        // Silently ignore errors when stopping stream
+      }
+    }
+    
     setIsCameraActive(false)
   }
 
