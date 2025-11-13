@@ -12,6 +12,7 @@ export default function AdminScanPage() {
   const [successMessage, setSuccessMessage] = useState('')
   const [isCheckedIn, setIsCheckedIn] = useState(false)
   const [isCameraActive, setIsCameraActive] = useState(false)
+  const [shouldStartCamera, setShouldStartCamera] = useState(false)
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([])
   const [selectedCamera, setSelectedCamera] = useState<string>('')
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -108,6 +109,13 @@ export default function AdminScanPage() {
     }
   }, [])
 
+  // Start camera when video element is ready
+  useEffect(() => {
+    if (shouldStartCamera && videoRef.current && selectedCamera && !codeReaderRef.current) {
+      void startCameraInternal()
+    }
+  }, [shouldStartCamera, selectedCamera])
+
   // Cleanup camera on unmount
   useEffect(() => {
     return () => {
@@ -192,7 +200,7 @@ export default function AdminScanPage() {
     return `${String.fromCharCode(65 + row)}${seatInRow + 1}`
   }
 
-  const startCamera = async () => {
+  const startCamera = () => {
     if (!selectedCamera) {
       setError('Keine Kamera ausgewählt')
       return
@@ -201,15 +209,21 @@ export default function AdminScanPage() {
     // Stop any existing camera stream first
     stopCamera()
 
-    try {
-      setIsCameraActive(true)
-      setError('')
-      
-      // Ensure video element is ready
-      if (!videoRef.current) {
-        throw new Error('Video element not available')
-      }
+    // Set flag to start camera - useEffect will handle actual start when video element is ready
+    setIsCameraActive(true)
+    setShouldStartCamera(true)
+    setError('')
+  }
 
+  const startCameraInternal = async () => {
+    if (!selectedCamera || !videoRef.current) {
+      setError('Kamera oder Video-Element nicht verfügbar')
+      setShouldStartCamera(false)
+      setIsCameraActive(false)
+      return
+    }
+
+    try {
       const codeReader = new BrowserQRCodeReader()
       codeReaderRef.current = codeReader
 
@@ -239,6 +253,9 @@ export default function AdminScanPage() {
           }
         }
       )
+      
+      // Successfully started - reset the flag
+      setShouldStartCamera(false)
     } catch (err) {
       console.error('Error starting camera:', err)
       
@@ -268,6 +285,7 @@ export default function AdminScanPage() {
       
       setError(errorMessage)
       setIsCameraActive(false)
+      setShouldStartCamera(false)
       codeReaderRef.current = null
     }
   }
@@ -310,6 +328,7 @@ export default function AdminScanPage() {
     }
     
     setIsCameraActive(false)
+    setShouldStartCamera(false)
   }
 
   const handleScanWithId = async (extractedId: string) => {
