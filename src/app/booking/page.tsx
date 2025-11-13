@@ -223,7 +223,7 @@ export default function BookingPage() {
             <div className='glass rounded-xl p-6'>
               <h3 className='text-xl font-display font-bold mb-4'>Über die Vorstellung</h3>
               <p className='text-site-100 mb-4'>
-                Erleben Sie "Schicksalsfäden" - ein selbst geschriebenes Stück der Kolping Kreativbühne, inspiriert von den griechischen 
+                Erleben Sie &quot;Schicksalsfäden&quot; - ein selbst geschriebenes Stück der Kolping Kreativbühne, inspiriert von den griechischen 
                 Schicksalsgöttinnen, den Moiren. Das Stück erzählt von den Fäden des Schicksals, die unser Leben durchweben, und stellt die 
                 Frage: Wer bestimmt unseren Weg? Können wir unser Schicksal selbst in die Hand nehmen?
               </p>
