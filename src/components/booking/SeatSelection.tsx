@@ -80,13 +80,6 @@ export default function SeatSelection({
 
   return (
     <div className='glass rounded-xl p-4 md:p-8 max-w-[calc(100vw-2rem)]'>
-      {/* Stage */}
-      <div className='mb-8'>
-        <div className='bg-gradient-to-b from-kolping-500 to-kolping-600 text-white text-center py-3 rounded-lg font-semibold shadow-lg'>
-          BÜHNE
-        </div>
-      </div>
-
       {/* Mobile scroll hint */}
       <div className='md:hidden text-center mb-3 text-sm text-site-300 flex items-center justify-center gap-2'>
         <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -98,6 +91,17 @@ export default function SeatSelection({
       {/* Seating area */}
       <div className='mb-6 overflow-x-auto overflow-y-visible scrollbar-thin scrollbar-thumb-site-700 scrollbar-track-site-900 -mx-4 px-4 md:mx-0 md:px-0'>
         <div className='min-w-[420px] max-w-2xl mx-auto'>
+          {/* Stage */}
+          <div className='mb-8'>
+            <div className='flex items-center justify-center gap-2'>
+              {/* Spacer matching row label width */}
+              <div className='w-8' />
+              {/* Stage matching seat row width */}
+              <div className='flex-1 bg-gradient-to-b from-kolping-500 to-kolping-600 text-white text-center py-3 rounded-lg font-semibold shadow-lg'>
+                BÜHNE
+              </div>
+            </div>
+          </div>
           {Array.from({ length: ROWS }).map((_, rowIndex) => (
             <div key={rowIndex} className='flex items-center justify-center gap-2 mb-3'>
               {/* Row label */}
