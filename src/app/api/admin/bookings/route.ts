@@ -21,6 +21,13 @@ export async function GET(request: NextRequest) {
     
     const { searchParams } = new URL(request.url)
     const playId = searchParams.get('playId')
+    const rawSearchQuery = searchParams.get('query')
+    const normalizedSearchQuery = rawSearchQuery ? rawSearchQuery.trim().toLowerCase() : ''
+    const hasSearchQuery = normalizedSearchQuery.length > 0
+    const searchCondition = hasSearchQuery
+      ? ' AND (LOWER(b.name) LIKE ? OR LOWER(b.email) LIKE ?)'
+      : ''
+    const searchPattern = `%${normalizedSearchQuery}%`
     
     // Get D1 database
     const { env } = getRequestContext()
@@ -47,7 +54,7 @@ export async function GET(request: NextRequest) {
         FROM bookings b
         LEFT JOIN booked_seats bs ON b.id = bs.booking_id
         LEFT JOIN plays p ON b.play_id = p.id
-        WHERE b.play_id = ? AND b.status != 'cancelled'
+        WHERE b.play_id = ? AND b.status != 'cancelled'${searchCondition}
         GROUP BY b.id
         ORDER BY b.created_at DESC
       `
@@ -63,11 +70,15 @@ export async function GET(request: NextRequest) {
         FROM bookings b
         LEFT JOIN booked_seats bs ON b.id = bs.booking_id
         LEFT JOIN plays p ON b.play_id = p.id
-        WHERE b.status != 'cancelled'
+        WHERE b.status != 'cancelled'${searchCondition}
         GROUP BY b.id
         ORDER BY b.created_at DESC
       `
       params = []
+    }
+
+    if (hasSearchQuery) {
+      params.push(searchPattern, searchPattern)
     }
     
     const result = await db.prepare(query).bind(...params).all()

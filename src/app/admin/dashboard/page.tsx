@@ -14,6 +14,8 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState('')
   const [showSeatMap, setShowSeatMap] = useState(false)
   const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const router = useRouter()
 
   const ROWS = 7
@@ -24,6 +26,13 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     fetchPlays()
   }, [])
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm.trim())
+    }, 300)
+    return () => clearTimeout(handler)
+  }, [searchTerm])
 
   const fetchPlays = async () => {
     try {
@@ -46,9 +55,16 @@ export default function AdminDashboardPage() {
   const fetchBookings = useCallback(async () => {
     try {
       setIsLoading(true)
-      const url = selectedPlayId === 'all' 
-        ? '/api/admin/bookings'
-        : `/api/admin/bookings?playId=${selectedPlayId}`
+      setError('')
+      const params = new URLSearchParams()
+      if (selectedPlayId !== 'all') {
+        params.append('playId', selectedPlayId)
+      }
+      if (debouncedSearchTerm) {
+        params.append('query', debouncedSearchTerm)
+      }
+      const queryString = params.toString()
+      const url = queryString ? `/api/admin/bookings?${queryString}` : '/api/admin/bookings'
       
       const response = await fetch(url, {
         credentials: 'include'
@@ -72,7 +88,7 @@ export default function AdminDashboardPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [selectedPlayId, router])
+  }, [selectedPlayId, router, debouncedSearchTerm])
 
   useEffect(() => {
     if (plays.length > 0) {
@@ -402,22 +418,56 @@ export default function AdminDashboardPage() {
 
       {/* Filter */}
       <div className='glass rounded-xl p-4 mb-6'>
-        <label htmlFor='play-filter' className='block text-sm font-medium mb-2'>
-          Nach Vorstellung filtern
-        </label>
-        <select
-          id='play-filter'
-          value={selectedPlayId}
-          onChange={(e) => setSelectedPlayId(e.target.value)}
-          className='w-full md:w-auto px-4 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 focus:outline-none focus:ring-2 focus:ring-kolping-400'
-        >
-          <option value='all'>Alle Vorstellungen</option>
-          {plays.map((play) => (
-            <option key={play.id} value={play.id}>
-              {play.display_date} ({play.available_seats} Plätze verfügbar)
-            </option>
-          ))}
-        </select>
+        <div className='flex flex-col lg:flex-row gap-4'>
+          <div className='w-full lg:w-1/2'>
+            <label htmlFor='play-filter' className='block text-sm font-medium mb-2'>
+              Nach Vorstellung filtern
+            </label>
+            <select
+              id='play-filter'
+              value={selectedPlayId}
+              onChange={(e) => setSelectedPlayId(e.target.value)}
+              className='w-full px-4 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 focus:outline-none focus:ring-2 focus:ring-kolping-400'
+            >
+              <option value='all'>Alle Vorstellungen</option>
+              {plays.map((play) => (
+                <option key={play.id} value={play.id}>
+                  {play.display_date} ({play.available_seats} Plätze verfügbar)
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className='w-full lg:w-1/2'>
+            <label htmlFor='booking-search' className='block text-sm font-medium mb-2'>
+              Nach Buchung suchen
+            </label>
+            <div className='relative'>
+              <span className='pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-400'>
+                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z' />
+                </svg>
+              </span>
+              <input
+                type='search'
+                id='booking-search'
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder='Name oder E-Mail'
+                className='w-full pl-10 pr-10 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 focus:outline-none focus:ring-2 focus:ring-kolping-400'
+              />
+              {searchTerm && (
+                <button
+                  type='button'
+                  onClick={() => setSearchTerm('')}
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-site-400 hover:text-site-200'
+                  aria-label='Suche zurücksetzen'
+                >
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Bookings List */}
