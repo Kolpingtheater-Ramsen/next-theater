@@ -223,9 +223,8 @@ export default function BookingPage() {
             <div className='glass rounded-xl p-6'>
               <h3 className='text-xl font-display font-bold mb-4'>Über die Vorstellung</h3>
               <p className='text-site-100 mb-4'>
-                Erleben Sie &quot;Schicksalsfäden&quot; - ein selbst geschriebenes Stück der Kolping Kreativbühne, inspiriert von den griechischen 
-                Schicksalsgöttinnen, den Moiren. Das Stück erzählt von den Fäden des Schicksals, die unser Leben durchweben, und stellt die 
-                Frage: Wer bestimmt unseren Weg? Können wir unser Schicksal selbst in die Hand nehmen?
+                Erleben Sie &quot;Schicksalsfäden&quot; - ein selbst geschriebenes Stück der Kolping Kreativbühne: Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Diese mischen sich, vom Gott der Unterwelt beeinflusst, in das Schicksal der Nymphe Eurydike ein, was sie jedoch relativ schnell wieder bereuen.
+                &quot;Schicksalsfäden&quot; verknüpft verschiedene Figuren und Geschichten der griechischen Sagen und bringt so die faszinierende Welt der antiken Mythologie auf die Bühne.
               </p>
             </div>
 
