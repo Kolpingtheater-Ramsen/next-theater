@@ -152,6 +152,7 @@ function getCancellationEmailHTML(data: {
   date: string
   time: string
   seats: string
+  bookingUrl: string
   bannerUrl: string
 }): string {
   return `<!DOCTYPE html>
@@ -174,7 +175,7 @@ function getCancellationEmailHTML(data: {
   
   <p>Die Sitzplätze wurden freigegeben und stehen anderen Besuchern zur Verfügung.</p>
   
-  <p>Wir hoffen, dass du zu einem anderen Termin kommen kannst!</p>
+  <p>Wir hoffen, dass du zu einem anderen Termin kommen kannst! <a href="${data.bookingUrl}" style="color: #0066cc; text-decoration: none; font-weight: bold;">Neue Buchung vornehmen</a></p>
   
   <p><strong>Die Kolping-Theatergruppe<br>
   Winterstück 2025 - Schicksalsfäden</strong></p>
@@ -195,6 +196,7 @@ function getCancellationEmailBody(data: {
   date: string
   time: string
   seats: string
+  bookingUrl: string
 }): string {
   return `Hallo ${data.name},
 
@@ -209,6 +211,7 @@ STORNIERTE BUCHUNG:
 Die Sitzplätze wurden freigegeben und stehen anderen Besuchern zur Verfügung.
 
 Wir hoffen, dass du zu einem anderen Termin kommen kannst!
+Neue Buchung vornehmen: ${data.bookingUrl}
 
 Die Kolping-Theatergruppe
 Winterstück 2025 - Schicksalsfäden
@@ -292,6 +295,7 @@ export async function sendCancellationConfirmation(
     const seatLabels = getSeatLabels(seats)
     const formattedDate = formatDate(play.date)
     const bannerUrl = `${baseUrl}/img/banners/schicksal.jpg`
+    const bookingUrl = `${baseUrl}/booking`
 
     await resend.emails.send({
       from: `${config.theaterName} <${config.fromEmail}>`,
@@ -303,6 +307,7 @@ export async function sendCancellationConfirmation(
         date: formattedDate,
         time: play.time,
         seats: seatLabels,
+        bookingUrl,
         bannerUrl,
       }),
       text: getCancellationEmailBody({
@@ -310,6 +315,7 @@ export async function sendCancellationConfirmation(
         date: formattedDate,
         time: play.time,
         seats: seatLabels,
+        bookingUrl,
       }),
     })
     
