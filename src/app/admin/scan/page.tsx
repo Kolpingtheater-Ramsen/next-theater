@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingWithSeats } from '@/types/database'
-import { BrowserQRCodeReader } from '@zxing/browser'
+import { Html5Qrcode } from 'html5-qrcode'
 
 export default function AdminScanPage() {
   const [booking, setBooking] = useState<BookingWithSeats | null>(null)
@@ -11,154 +11,63 @@ export default function AdminScanPage() {
   const [error, setError] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
   const [isCheckedIn, setIsCheckedIn] = useState(false)
-  const [isCameraActive, setIsCameraActive] = useState(false)
-  const [cameraState, setCameraState] = useState<'idle' | 'starting' | 'running'>('idle')
-  const [hasCompletedScan, setHasCompletedScan] = useState(false)
-  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([])
+  const [isScannerActive, setIsScannerActive] = useState(false)
+  const [cameras, setCameras] = useState<Array<{ id: string; label: string }>>([])
   const [selectedCamera, setSelectedCamera] = useState<string>('')
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const codeReaderRef = useRef<BrowserQRCodeReader | null>(null)
-  const isProcessingScanRef = useRef(false)
-  const lastScannedIdRef = useRef<string | null>(null)
+  const scannerRef = useRef<Html5Qrcode | null>(null)
   const router = useRouter()
 
-  const stopCamera = useCallback(() => {
-    // Stop QR code reader
-    if (codeReaderRef.current) {
-      try {
-        const reader = codeReaderRef.current as unknown as {
-          reset?: () => void
-          stop?: () => void
-          stopContinuousDecode?: () => void
-        }
-
-        if (typeof reader.stopContinuousDecode === 'function') {
-          reader.stopContinuousDecode()
-        } else if (typeof reader.stop === 'function') {
-          reader.stop()
-        } else if (typeof reader.reset === 'function') {
-          reader.reset()
-        }
-      } catch (err) {
-        // Silently ignore errors when stopping reader
-        // This can happen if reader is already stopped
-      }
-      codeReaderRef.current = null
-    }
-    
-    // Stop video stream
-    if (videoRef.current?.srcObject) {
-      try {
-        const stream = videoRef.current.srcObject as MediaStream
-        stream.getTracks().forEach(track => {
-          track.stop()
-        })
-        videoRef.current.srcObject = null
-      } catch (err) {
-        // Silently ignore errors when stopping stream
-      }
-    }
-    
-    setIsCameraActive(false)
-    setCameraState('idle')
-  }, [])
-
-  // Initialize camera list
+  // Get available cameras on mount
   useEffect(() => {
-    let isMounted = true
-    let fallbackDeviceChangeHandler: ((event: Event) => void) | null = null
-
-    const updateCameraList = async (requestPermission = false) => {
-      if (!navigator.mediaDevices?.enumerateDevices) {
-        if (isMounted) {
-          setError('Kamerazugriff wird auf diesem Gerät nicht unterstützt')
-        }
-        return
-      }
-
-      let stream: MediaStream | null = null
-
-      try {
-        if (requestPermission) {
-          stream = await navigator.mediaDevices.getUserMedia({ video: true })
-        }
-
-        const devices = await navigator.mediaDevices.enumerateDevices()
-        if (!isMounted) return
-
-        const videoDevices = devices.filter(device => device.kind === 'videoinput')
-        setCameras(videoDevices)
-
-        if (videoDevices.length === 0) {
-          setSelectedCamera('')
-          setError('Keine Kameras gefunden')
-          return
-        }
-
-        setError('')
-        setSelectedCamera(prevCamera => {
-          if (prevCamera && videoDevices.some(device => device.deviceId === prevCamera)) {
-            return prevCamera
-          }
-
-          const backCamera = videoDevices.find(device =>
-            device.label?.toLowerCase().includes('back') || device.label?.toLowerCase().includes('rear')
+    Html5Qrcode.getCameras()
+      .then((devices) => {
+        console.log('=== Detected Cameras ===')
+        console.log(`Total cameras found: ${devices.length}`)
+        devices.forEach((device, index) => {
+          console.log(`Camera ${index + 1}:`)
+          console.log(`  ID: ${device.id}`)
+          console.log(`  Label: ${device.label}`)
+          console.log(`  Full device:`, device)
+        })
+        console.log('=======================')
+        
+        if (devices && devices.length > 0) {
+          const cameraList = devices.map((device, index) => ({
+            id: device.id,
+            label: device.label || `Kamera ${index + 1} (${device.id.substring(0, 12)}...)`
+          }))
+          setCameras(cameraList)
+          
+          // Select back camera by default if available
+          const backCamera = devices.find((device) =>
+            device.label?.toLowerCase().includes('back') ||
+            device.label?.toLowerCase().includes('rear') ||
+            device.label?.toLowerCase().includes('rück')
           )
-
-          return backCamera?.deviceId || videoDevices[0]?.deviceId || ''
-        })
-      } catch (err) {
+          
+          const selectedId = backCamera?.id || devices[0].id
+          setSelectedCamera(selectedId)
+          console.log(`Selected camera by default: ${backCamera?.label || devices[0].label} (ID: ${selectedId})`)
+        } else {
+          setError('Keine Kameras gefunden')
+        }
+      })
+      .catch((err) => {
         console.error('Error getting cameras:', err)
-        if (isMounted) {
-          const message = err instanceof DOMException && err.name === 'NotAllowedError'
-            ? 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff zum Scannen von Tickets.'
-            : 'Kamerazugriff nicht möglich. Bitte überprüfen Sie die Berechtigungen.'
-          setError(message)
-        }
-      } finally {
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop())
-        }
-      }
-    }
+        setError('Fehler beim Laden der Kameras')
+      })
+  }, [])
 
-    void updateCameraList(true)
-
-    const mediaDevices = navigator.mediaDevices
-    const handleDeviceChange = () => {
-      void updateCameraList()
-    }
-
-    if (mediaDevices?.addEventListener) {
-      mediaDevices.addEventListener('devicechange', handleDeviceChange)
-    } else if (mediaDevices) {
-      // Fallback for older browsers
-      const originalHandler = mediaDevices.ondevicechange
-      fallbackDeviceChangeHandler = event => {
-        if (typeof originalHandler === 'function') {
-          originalHandler.call(mediaDevices, event as Event)
-        }
-        handleDeviceChange()
-      }
-      mediaDevices.ondevicechange = fallbackDeviceChangeHandler
-    }
-
+  // Cleanup on unmount
+  useEffect(() => {
     return () => {
-      isMounted = false
-      if (mediaDevices?.removeEventListener) {
-        mediaDevices.removeEventListener('devicechange', handleDeviceChange)
-      } else if (mediaDevices && mediaDevices.ondevicechange === fallbackDeviceChangeHandler) {
-        mediaDevices.ondevicechange = null
+      if (scannerRef.current?.isScanning) {
+        scannerRef.current.stop().catch(() => {
+          // Ignore errors during cleanup
+        })
       }
     }
   }, [])
-
-  // Cleanup camera on unmount
-  useEffect(() => {
-    return () => {
-      stopCamera()
-    }
-  }, [stopCamera])
 
   const extractBookingIdFromUrl = (url: string): string | null => {
     try {
@@ -237,7 +146,7 @@ export default function AdminScanPage() {
     return `${String.fromCharCode(65 + row)}${seatInRow + 1}`
   }
 
-  const handleScanWithId = useCallback(async (extractedId: string) => {
+  const fetchBooking = useCallback(async (bookingId: string) => {
     setIsLoading(true)
     setError('')
     setSuccessMessage('')
@@ -245,8 +154,7 @@ export default function AdminScanPage() {
     setIsCheckedIn(false)
 
     try {
-      // Fetch booking details
-      const response = await fetch(`/api/bookings/${extractedId}`, {
+      const response = await fetch(`/api/bookings/${bookingId}`, {
         credentials: 'include'
       })
       
@@ -268,132 +176,94 @@ export default function AdminScanPage() {
       setError('Fehler beim Laden der Buchung')
     } finally {
       setIsLoading(false)
-      setHasCompletedScan(true)
     }
   }, [router])
 
-  const handleCameraStartError = useCallback((err: unknown) => {
-    console.error('Error starting camera:', err)
-    let errorMessage = 'Kamera konnte nicht gestartet werden.'
-
-    if (err instanceof DOMException) {
-      switch (err.name) {
-        case 'NotReadableError':
-          errorMessage = 'Kamera wird bereits verwendet oder ist nicht verfügbar. Bitte schließen Sie andere Anwendungen, die die Kamera verwenden.'
-          break
-        case 'NotAllowedError':
-          errorMessage = 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff in den Browsereinstellungen.'
-          break
-        case 'NotFoundError':
-          errorMessage = 'Keine Kamera gefunden. Bitte überprüfen Sie, ob eine Kamera angeschlossen ist.'
-          break
-        case 'OverconstrainedError':
-          errorMessage = 'Die ausgewählte Kamera unterstützt die erforderlichen Einstellungen nicht.'
-          break
-        default:
-          errorMessage = `Kamera-Fehler: ${err.message || err.name}`
+  const stopScanner = useCallback(async () => {
+    if (scannerRef.current?.isScanning) {
+      try {
+        await scannerRef.current.stop()
+      } catch (err) {
+        console.error('Error stopping scanner:', err)
       }
-    } else if (err instanceof Error) {
-      errorMessage = `Kamera-Fehler: ${err.message}`
     }
-
-    setError(errorMessage)
-    setIsCameraActive(false)
-    setCameraState('idle')
-    codeReaderRef.current = null
+    scannerRef.current = null
+    setIsScannerActive(false)
   }, [])
 
-  const startCameraInternal = useCallback(() => {
-    if (!selectedCamera || !videoRef.current) {
-      setError('Kamera oder Video-Element nicht verfügbar')
-      setCameraState('idle')
-      setIsCameraActive(false)
-      return
-    }
-
-    try {
-      const codeReader = new BrowserQRCodeReader()
-      codeReaderRef.current = codeReader
-
-      codeReader.decodeFromVideoDevice(
-        selectedCamera,
-        videoRef.current,
-        (result, err) => {
-          if (result) {
-            // Prevent processing the same QR code multiple times
-            if (isProcessingScanRef.current) {
-              return
-            }
-
-            const text = result.getText()
-            const extractedId = extractBookingIdFromUrl(text)
-            
-            // Prevent scanning the same ID multiple times
-            if (extractedId && extractedId === lastScannedIdRef.current) {
-              return
-            }
-
-            // Mark as processing and stop camera immediately
-            isProcessingScanRef.current = true
-            lastScannedIdRef.current = extractedId || null
-            stopCamera()
-            
-            // Auto-scan after QR code detected
-            if (extractedId) {
-              handleScanWithId(extractedId).finally(() => {
-                // Reset processing flag after a delay to allow re-scanning if needed
-                setTimeout(() => {
-                  isProcessingScanRef.current = false
-                }, 2000)
-              })
-            } else {
-              setError('Ungültiges QR-Code-Format')
-              setHasCompletedScan(true)
-              isProcessingScanRef.current = false
-            }
-            return
-          }
-          
-          // Silently ignore expected errors - ZXing throws errors when no QR code is found,
-          // which is normal behavior during continuous scanning
-          if (err) {
-            // Don't log or handle expected scanning errors
-            // These occur continuously when no QR code is visible
-            return
-          }
-        }
-      ).catch((err) => {
-        handleCameraStartError(err)
-      })
-      
-      setIsCameraActive(true)
-      setCameraState('running')
-    } catch (err) {
-      handleCameraStartError(err)
-    }
-  }, [selectedCamera, stopCamera, handleScanWithId, handleCameraStartError])
-
-  const startCamera = useCallback(() => {
+  const startScanner = useCallback(async () => {
     if (!selectedCamera) {
       setError('Keine Kamera ausgewählt')
       return
     }
 
-    // Stop any existing camera stream first
-    stopCamera()
-
-    // Reset scan processing flags when starting fresh
-    isProcessingScanRef.current = false
-    lastScannedIdRef.current = null
-    setBooking(null)
+    // Clear all state before starting
     setError('')
     setSuccessMessage('')
+    setBooking(null)
     setIsCheckedIn(false)
-    setHasCompletedScan(false)
-    setCameraState('starting')
+    setIsScannerActive(true)
 
-    startCameraInternal()
-  }, [selectedCamera, stopCamera, startCameraInternal])
+    // Wait for DOM to update and element to be available
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    try {
+      const element = document.getElementById('qr-reader')
+      if (!element) {
+        throw new Error('Scanner element not found in DOM')
+      }
+
+      const scanner = new Html5Qrcode('qr-reader')
+      scannerRef.current = scanner
+
+      await scanner.start(
+        selectedCamera,
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 }
+        },
+        (decodedText) => {
+          // Success callback - QR code detected
+          const bookingId = extractBookingIdFromUrl(decodedText)
+
+          if (!bookingId) {
+            // Invalid QR code format - stop scanner and show error
+            void stopScanner()
+            setError('Ungültiges QR-Code-Format')
+            return
+          }
+
+          // Stop scanner and fetch booking
+          void stopScanner()
+          void fetchBooking(bookingId)
+        },
+        () => {
+          // Error callback - no QR code found (this is normal, ignore)
+        }
+      )
+    } catch (err) {
+      console.error('Error starting scanner:', err)
+      
+      let errorMessage = 'Kamera konnte nicht gestartet werden.'
+      
+      if (err instanceof Error) {
+        if (err.message.includes('NotAllowedError') || err.message.includes('Permission')) {
+          errorMessage = 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff in den Browsereinstellungen.'
+        } else if (err.message.includes('NotFoundError')) {
+          errorMessage = 'Keine Kamera gefunden. Bitte überprüfen Sie, ob eine Kamera angeschlossen ist.'
+        } else if (err.message.includes('NotReadableError')) {
+          errorMessage = 'Kamera wird bereits verwendet oder ist nicht verfügbar.'
+        } else if (err.message.includes('not found')) {
+          errorMessage = 'Scanner-Element konnte nicht geladen werden. Bitte laden Sie die Seite neu.'
+        }
+      }
+      
+      setError(errorMessage)
+      setIsScannerActive(false)
+      scannerRef.current = null
+    }
+  }, [selectedCamera, fetchBooking, stopScanner])
+
 
   return (
     <div className='max-w-2xl mx-auto'>
@@ -417,8 +287,7 @@ export default function AdminScanPage() {
 
       {/* Camera Scanner */}
       <div className='glass rounded-xl p-6 mb-6'>
-        
-        {!isCameraActive ? (
+        {!isScannerActive ? (
           <div>
             {cameras.length > 0 && (
               <div className='mb-4'>
@@ -432,8 +301,8 @@ export default function AdminScanPage() {
                   className='w-full px-4 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 focus:outline-none focus:ring-2 focus:ring-kolping-400'
                 >
                   {cameras.map((camera) => (
-                    <option key={camera.deviceId} value={camera.deviceId}>
-                      {camera.label || `Kamera ${camera.deviceId.substring(0, 8)}`}
+                    <option key={camera.id} value={camera.id}>
+                      {camera.label}
                     </option>
                   ))}
                 </select>
@@ -441,36 +310,22 @@ export default function AdminScanPage() {
             )}
             
             <button
-              onClick={startCamera}
-              disabled={cameras.length === 0 || cameraState === 'starting'}
-              className='w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 disabled:hover:bg-blue-600'
+              onClick={() => void startScanner()}
+              disabled={cameras.length === 0}
+              className='w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2'
             >
               <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z' />
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 13a3 3 0 11-6 0 3 3 0 016 0z' />
               </svg>
-              {cameras.length === 0
-                ? 'Keine Kameras gefunden'
-                : cameraState === 'starting'
-                  ? 'Kamera wird gestartet...'
-                  : 'Kamera starten'}
+              {cameras.length === 0 ? 'Keine Kameras gefunden' : 'Kamera starten'}
             </button>
           </div>
         ) : (
           <div className='space-y-4'>
-            <div className='relative bg-black rounded-lg overflow-hidden'>
-              <video
-                ref={videoRef}
-                className='w-full h-auto max-h-96 object-contain'
-                autoPlay
-                playsInline
-              />
-              <div className='absolute inset-0 pointer-events-none'>
-                <div className='absolute inset-0 border-2 border-kolping-400 m-12 rounded-lg' />
-              </div>
-            </div>
+            <div id='qr-reader' className='rounded-lg overflow-hidden' />
             <button
-              onClick={stopCamera}
+              onClick={() => void stopScanner()}
               className='w-full px-6 py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors'
             >
               Kamera stoppen
@@ -503,115 +358,112 @@ export default function AdminScanPage() {
         </div>
       )}
 
-      {/* Quick restart */}
-      {hasCompletedScan && !isCameraActive && (
+      {/* Restart scanner button after scan */}
+      {!isScannerActive && (booking || error) && (
         <div className='mb-6'>
           <button
-            type='button'
-            onClick={startCamera}
-            disabled={cameraState === 'starting'}
-            className='w-full px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors disabled:opacity-60 disabled:hover:bg-kolping-500'
+            onClick={() => void startScanner()}
+            className='w-full px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors'
           >
-            {cameraState === 'starting' ? 'Kamera wird vorbereitet...' : 'Kamera für nächsten Scan starten'}
+            Kamera für nächsten Scan starten
           </button>
         </div>
       )}
 
       {/* Booking Details */}
-        {booking && (
-          <div className='glass rounded-xl overflow-hidden'>
-            <div className={`p-6 ${isCheckedIn ? 'bg-green-900/30' : 'bg-blue-900/30'}`}>
-              <div className='flex items-center justify-between mb-4'>
-                <h2 className='text-2xl font-display font-bold'>
-                  Buchungsdetails
-                </h2>
-                {isCheckedIn ? (
-                  <span className='px-3 py-1 rounded-full bg-green-600 text-white text-sm font-semibold'>
-                    ✓ Eingecheckt
-                  </span>
-                ) : (
-                  <span className='px-3 py-1 rounded-full bg-blue-600 text-white text-sm font-semibold'>
-                    Ausstehend
-                  </span>
-                )}
-              </div>
+      {booking && (
+        <div className='glass rounded-xl overflow-hidden'>
+          <div className={`p-6 ${isCheckedIn ? 'bg-green-900/30' : 'bg-blue-900/30'}`}>
+            <div className='flex items-center justify-between mb-4'>
+              <h2 className='text-2xl font-display font-bold'>
+                Buchungsdetails
+              </h2>
+              {isCheckedIn ? (
+                <span className='px-3 py-1 rounded-full bg-green-600 text-white text-sm font-semibold'>
+                  ✓ Eingecheckt
+                </span>
+              ) : (
+                <span className='px-3 py-1 rounded-full bg-blue-600 text-white text-sm font-semibold'>
+                  Ausstehend
+                </span>
+              )}
+            </div>
 
-              <div className='grid md:grid-cols-2 gap-4'>
-                <div>
-                  <p className='text-xs text-site-300 mb-1'>Name</p>
-                  <p className='text-lg font-semibold'>{booking.name}</p>
-                </div>
-                <div>
-                  <p className='text-xs text-site-300 mb-1'>E-Mail</p>
-                  <p className='text-sm text-site-100'>{booking.email}</p>
-                </div>
-                <div>
-                  <p className='text-xs text-site-300 mb-1'>Vorstellung</p>
-                  <p className='text-sm'>{booking.play?.display_date || 'N/A'}</p>
-                </div>
-                <div>
-                  <p className='text-xs text-site-300 mb-1'>Plätze ({booking.seats.length})</p>
-                  <div className='flex flex-wrap gap-1'>
-                    {booking.seats.sort((a, b) => a - b).map((seat) => (
-                      <span key={seat} className='px-2 py-1 bg-site-700 rounded text-sm font-semibold'>
-                        {getSeatLabel(seat)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+            <div className='grid md:grid-cols-2 gap-4'>
+              <div>
+                <p className='text-xs text-site-300 mb-1'>Name</p>
+                <p className='text-lg font-semibold'>{booking.name}</p>
               </div>
-
-              <div className='mt-4 pt-4 border-t border-site-700'>
-                <p className='text-xs text-site-300'>
-                  <strong>Buchungs-ID:</strong> {booking.id}
-                </p>
-                <p className='text-xs text-site-300'>
-                  <strong>Gebucht:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}
-                </p>
+              <div>
+                <p className='text-xs text-site-300 mb-1'>E-Mail</p>
+                <p className='text-sm text-site-100'>{booking.email}</p>
+              </div>
+              <div>
+                <p className='text-xs text-site-300 mb-1'>Vorstellung</p>
+                <p className='text-sm'>{booking.play?.display_date || 'N/A'}</p>
+              </div>
+              <div>
+                <p className='text-xs text-site-300 mb-1'>Plätze ({booking.seats.length})</p>
+                <div className='flex flex-wrap gap-1'>
+                  {booking.seats.sort((a, b) => a - b).map((seat) => (
+                    <span key={seat} className='px-2 py-1 bg-site-700 rounded text-sm font-semibold'>
+                      {getSeatLabel(seat)}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {!isCheckedIn && (
-              <div className='p-6'>
-                <button
-                  onClick={handleCheckIn}
-                  disabled={isLoading}
-                  className='w-full px-6 py-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-lg transition-colors disabled:opacity-50'
-                >
-                  {isLoading ? 'Checke ein...' : 'Ticket einchecken'}
-                </button>
-              </div>
-            )}
+            <div className='mt-4 pt-4 border-t border-site-700'>
+              <p className='text-xs text-site-300'>
+                <strong>Buchungs-ID:</strong> {booking.id}
+              </p>
+              <p className='text-xs text-site-300'>
+                <strong>Gebucht:</strong> {new Date(booking.created_at).toLocaleString('de-DE')}
+              </p>
+            </div>
           </div>
-        )}
 
-        {/* Instructions */}
-        <div className='mt-6 glass rounded-xl p-6'>
-          <h3 className='font-semibold mb-3'>So funktioniert&apos;s:</h3>
-          <ul className='space-y-2 text-sm text-site-100'>
-            <li className='flex gap-2'>
-              <span className='text-kolping-400'>1.</span>
-              <span>Klicken Sie auf &quot;Kamera starten&quot;, um den Scanner zu aktivieren</span>
-            </li>
-            <li className='flex gap-2'>
-              <span className='text-kolping-400'>2.</span>
-              <span>Lassen Sie den Gast sein QR-Code-Ticket zeigen</span>
-            </li>
-            <li className='flex gap-2'>
-              <span className='text-kolping-400'>3.</span>
-              <span>Richten Sie die Kamera auf den QR-Code</span>
-            </li>
-            <li className='flex gap-2'>
-              <span className='text-kolping-400'>4.</span>
-              <span>Der Scanner erkennt automatisch den Code und lädt die Buchung</span>
-            </li>
-            <li className='flex gap-2'>
-              <span className='text-kolping-400'>5.</span>
-              <span>Klicken Sie auf &quot;Ticket einchecken&quot; zum Bestätigen</span>
-            </li>
-          </ul>
+          {!isCheckedIn && (
+            <div className='p-6'>
+              <button
+                onClick={handleCheckIn}
+                disabled={isLoading}
+                className='w-full px-6 py-4 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-lg transition-colors disabled:opacity-50'
+              >
+                {isLoading ? 'Checke ein...' : 'Ticket einchecken'}
+              </button>
+            </div>
+          )}
         </div>
+      )}
+
+      {/* Instructions */}
+      <div className='mt-6 glass rounded-xl p-6'>
+        <h3 className='font-semibold mb-3'>So funktioniert&apos;s:</h3>
+        <ul className='space-y-2 text-sm text-site-100'>
+          <li className='flex gap-2'>
+            <span className='text-kolping-400'>1.</span>
+            <span>Klicken Sie auf &quot;Kamera starten&quot;, um den Scanner zu aktivieren</span>
+          </li>
+          <li className='flex gap-2'>
+            <span className='text-kolping-400'>2.</span>
+            <span>Lassen Sie den Gast sein QR-Code-Ticket zeigen</span>
+          </li>
+          <li className='flex gap-2'>
+            <span className='text-kolping-400'>3.</span>
+            <span>Richten Sie die Kamera auf den QR-Code</span>
+          </li>
+          <li className='flex gap-2'>
+            <span className='text-kolping-400'>4.</span>
+            <span>Der Scanner erkennt automatisch den Code und lädt die Buchung</span>
+          </li>
+          <li className='flex gap-2'>
+            <span className='text-kolping-400'>5.</span>
+            <span>Klicken Sie auf &quot;Ticket einchecken&quot; zum Bestätigen</span>
+          </li>
+        </ul>
+      </div>
     </div>
   )
 }
-
