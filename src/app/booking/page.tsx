@@ -236,7 +236,7 @@ export default function BookingPage() {
                   <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
                   </svg>
-                  <span>Die Buchung ist kostenfrei und unverbindlich. Falls Sie nicht kommen können, bitten wir um Stornierung, damit andere den Platz nutzen können.</span>
+                  <span>Die Buchung ist kostenfrei. Falls Sie nicht kommen können, bitten wir um Stornierung, damit andere den Platz nutzen können.</span>
                 </li>
                 <li className='flex items-start gap-3'>
                   <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
