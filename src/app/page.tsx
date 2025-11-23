@@ -1,18 +1,71 @@
 import CountdownTimer from '@/components/CountdownTimer'
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
-import PrivacyVideo from '@/components/PrivacyVideo'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Home() {
   return (
     <div className='space-y-8 sm:space-y-10 md:space-y-12'>
-      <PrivacyVideo
-        videoId='7Xzys_0LkpE'
-        posterSrc='/img/banners/anno.jpg'
-        title='Anno 1146'
-        tagline='2025 - Unsere aktuelle Produktion'
-        subtitle='Erlebe die faszinierenden Momente unserer Theaterproduktion. Ein Blick hinter die Kulissen und die Höhepunkte von Anno 1146 – live auf der Bühne des Kolpingtheaters Ramsen.'
-      />
+      {/* Hero Section - Schicksalsfäden */}
+      <section className='mx-auto w-full max-w-6xl space-y-6'>
+        <div className='relative overflow-hidden rounded-xl border border-site-700 bg-site-900'>
+          <div className='relative w-full flex items-center justify-center bg-site-900'>
+            {/* Blurred background cover */}
+            <Image
+              src='/img/banners/schicksal.jpg'
+              alt=''
+              width={1200}
+              height={675}
+              priority
+              sizes='(max-width: 768px) 100vw, 1152px'
+              className='absolute inset-0 w-full h-full object-cover blur-xl opacity-50'
+              aria-hidden='true'
+            />
+            {/* Sharp foreground contain */}
+            <Image
+              src='/img/banners/schicksal.jpg'
+              alt='Schicksalsfäden - Winterstück 2025'
+              width={1200}
+              height={675}
+              priority
+              sizes='(max-width: 768px) 100vw, 1152px'
+              className='relative w-full h-auto md:max-h-[600px] lg:max-h-[750px] object-contain z-10'
+            />
+          </div>
+        </div>
+        
+        {/* Text content container */}
+        <div className='glass rounded-xl p-6 md:p-8'>
+          <div className='mb-1 sm:mb-2 text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.15em] sm:tracking-[0.2em] text-kolping-400 uppercase'>
+            2025 - Unsere aktuelle Produktion
+          </div>
+          <h1 className='font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight'>
+            Schicksalsfäden
+          </h1>
+          <p className='mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-site-100 max-w-2xl'>
+            Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Erlebe die faszinierende Welt der antiken Mythologie auf der Bühne des Kolpingtheaters Ramsen.
+          </p>
+          <div className='mt-4 sm:mt-5 text-sm sm:text-base text-site-200'>
+            <div className='font-semibold mb-2'>Aufführungen:</div>
+            <div className='space-y-1'>
+              <div>27.12. 17:00 Uhr & 20:00 Uhr</div>
+              <div>28.12. 14:30 Uhr & 17:00 Uhr</div>
+            </div>
+          </div>
+          <div className='mt-6 sm:mt-8'>
+            <Link
+              href='/booking'
+              className='inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors shadow-lg hover:shadow-xl'
+            >
+              Jetzt buchen
+              <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className='mx-auto max-w-6xl'>
         <div className='flex flex-col gap-3 sm:gap-4'>
@@ -34,6 +87,7 @@ export default function Home() {
                 { date: '2024', title: 'Nexus' },
                 { date: '2024', title: 'Eine höllische Herausforderung' },
                 { date: '2025', title: 'Anno 1146' },
+                { date: '2025', title: 'Schicksalsfäden' },
               ]}
             />
           </div>
