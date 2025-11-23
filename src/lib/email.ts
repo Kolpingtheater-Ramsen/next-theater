@@ -53,9 +53,7 @@ function getConfirmationEmailHTML(data: {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-bottom: 30px;" />
-  
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;"> 
   <p>Hallo ${data.name},</p>
   
   <p>vielen Dank für deine Reservierung!</p>
@@ -81,7 +79,7 @@ function getConfirmationEmailHTML(data: {
   <p>Du kannst dein Ticket auch auf deinem Smartphone speichern und am Eingang vorzeigen.</p>
   
   <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">STORNIERUNG:</h2>
-  <p>Falls du nicht kommen kannst, kannst du deine Buchung über den obigen Link stornieren.<br>
+  <p>Falls du nicht kommen kannst, kannst du deine Buchung hier stornieren: <a href="${data.bookingUrl}" style="color: #0066cc; text-decoration: none; font-weight: bold;">Stornierung</a>
   Bitte gib anderen die Chance, die Plätze zu nutzen.</p>
   
   <p>Wir freuen uns auf dein Kommen!</p>
@@ -163,8 +161,6 @@ function getCancellationEmailHTML(data: {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-bottom: 30px;" />
-  
   <p>Hallo ${data.name},</p>
   
   <p>hiermit bestätigen wir die Stornierung deiner Buchung.</p>
