@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { BookingWithSeats } from '@/types/database'
 import { BrowserQRCodeReader } from '@zxing/browser'
@@ -12,7 +12,8 @@ export default function AdminScanPage() {
   const [successMessage, setSuccessMessage] = useState('')
   const [isCheckedIn, setIsCheckedIn] = useState(false)
   const [isCameraActive, setIsCameraActive] = useState(false)
-  const [shouldStartCamera, setShouldStartCamera] = useState(false)
+  const [cameraState, setCameraState] = useState<'idle' | 'starting' | 'running'>('idle')
+  const [hasCompletedScan, setHasCompletedScan] = useState(false)
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([])
   const [selectedCamera, setSelectedCamera] = useState<string>('')
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -20,6 +21,47 @@ export default function AdminScanPage() {
   const isProcessingScanRef = useRef(false)
   const lastScannedIdRef = useRef<string | null>(null)
   const router = useRouter()
+
+  const stopCamera = useCallback(() => {
+    // Stop QR code reader
+    if (codeReaderRef.current) {
+      try {
+        const reader = codeReaderRef.current as unknown as {
+          reset?: () => void
+          stop?: () => void
+          stopContinuousDecode?: () => void
+        }
+
+        if (typeof reader.stopContinuousDecode === 'function') {
+          reader.stopContinuousDecode()
+        } else if (typeof reader.stop === 'function') {
+          reader.stop()
+        } else if (typeof reader.reset === 'function') {
+          reader.reset()
+        }
+      } catch (err) {
+        // Silently ignore errors when stopping reader
+        // This can happen if reader is already stopped
+      }
+      codeReaderRef.current = null
+    }
+    
+    // Stop video stream
+    if (videoRef.current?.srcObject) {
+      try {
+        const stream = videoRef.current.srcObject as MediaStream
+        stream.getTracks().forEach(track => {
+          track.stop()
+        })
+        videoRef.current.srcObject = null
+      } catch (err) {
+        // Silently ignore errors when stopping stream
+      }
+    }
+    
+    setIsCameraActive(false)
+    setCameraState('idle')
+  }, [])
 
   // Initialize camera list
   useEffect(() => {
@@ -111,19 +153,12 @@ export default function AdminScanPage() {
     }
   }, [])
 
-  // Start camera when video element is ready
-  useEffect(() => {
-    if (shouldStartCamera && videoRef.current && selectedCamera && !codeReaderRef.current) {
-      void startCameraInternal()
-    }
-  }, [shouldStartCamera, selectedCamera])
-
   // Cleanup camera on unmount
   useEffect(() => {
     return () => {
       stopCamera()
     }
-  }, [])
+  }, [stopCamera])
 
   const extractBookingIdFromUrl = (url: string): string | null => {
     try {
@@ -202,29 +237,76 @@ export default function AdminScanPage() {
     return `${String.fromCharCode(65 + row)}${seatInRow + 1}`
   }
 
-  const startCamera = () => {
-    if (!selectedCamera) {
-      setError('Keine Kamera ausgewählt')
-      return
+  const handleScanWithId = useCallback(async (extractedId: string) => {
+    setIsLoading(true)
+    setError('')
+    setSuccessMessage('')
+    setBooking(null)
+    setIsCheckedIn(false)
+
+    try {
+      // Fetch booking details
+      const response = await fetch(`/api/bookings/${extractedId}`, {
+        credentials: 'include'
+      })
+      
+      if (response.status === 401) {
+        router.push('/admin')
+        return
+      }
+      
+      const data = await response.json() as { success: boolean; booking?: BookingWithSeats; error?: string }
+      
+      if (data.success && data.booking) {
+        setBooking(data.booking)
+        setIsCheckedIn(data.booking.status === 'checked_in')
+      } else {
+        setError(data.error || 'Buchung nicht gefunden')
+      }
+    } catch (err) {
+      console.error('Error fetching booking:', err)
+      setError('Fehler beim Laden der Buchung')
+    } finally {
+      setIsLoading(false)
+      setHasCompletedScan(true)
+    }
+  }, [router])
+
+  const handleCameraStartError = useCallback((err: unknown) => {
+    console.error('Error starting camera:', err)
+    let errorMessage = 'Kamera konnte nicht gestartet werden.'
+
+    if (err instanceof DOMException) {
+      switch (err.name) {
+        case 'NotReadableError':
+          errorMessage = 'Kamera wird bereits verwendet oder ist nicht verfügbar. Bitte schließen Sie andere Anwendungen, die die Kamera verwenden.'
+          break
+        case 'NotAllowedError':
+          errorMessage = 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff in den Browsereinstellungen.'
+          break
+        case 'NotFoundError':
+          errorMessage = 'Keine Kamera gefunden. Bitte überprüfen Sie, ob eine Kamera angeschlossen ist.'
+          break
+        case 'OverconstrainedError':
+          errorMessage = 'Die ausgewählte Kamera unterstützt die erforderlichen Einstellungen nicht.'
+          break
+        default:
+          errorMessage = `Kamera-Fehler: ${err.message || err.name}`
+      }
+    } else if (err instanceof Error) {
+      errorMessage = `Kamera-Fehler: ${err.message}`
     }
 
-    // Stop any existing camera stream first
-    stopCamera()
+    setError(errorMessage)
+    setIsCameraActive(false)
+    setCameraState('idle')
+    codeReaderRef.current = null
+  }, [])
 
-    // Reset scan processing flags when starting fresh
-    isProcessingScanRef.current = false
-    lastScannedIdRef.current = null
-
-    // Set flag to start camera - useEffect will handle actual start when video element is ready
-    setIsCameraActive(true)
-    setShouldStartCamera(true)
-    setError('')
-  }
-
-  const startCameraInternal = async () => {
+  const startCameraInternal = useCallback(() => {
     if (!selectedCamera || !videoRef.current) {
       setError('Kamera oder Video-Element nicht verfügbar')
-      setShouldStartCamera(false)
+      setCameraState('idle')
       setIsCameraActive(false)
       return
     }
@@ -233,7 +315,7 @@ export default function AdminScanPage() {
       const codeReader = new BrowserQRCodeReader()
       codeReaderRef.current = codeReader
 
-      await codeReader.decodeFromVideoDevice(
+      codeReader.decodeFromVideoDevice(
         selectedCamera,
         videoRef.current,
         (result, err) => {
@@ -266,6 +348,7 @@ export default function AdminScanPage() {
               })
             } else {
               setError('Ungültiges QR-Code-Format')
+              setHasCompletedScan(true)
               isProcessingScanRef.current = false
             }
             return
@@ -279,118 +362,38 @@ export default function AdminScanPage() {
             return
           }
         }
-      )
-      
-      // Successfully started - reset the flag
-      setShouldStartCamera(false)
-    } catch (err) {
-      console.error('Error starting camera:', err)
-      
-      // Handle specific error types
-      let errorMessage = 'Kamera konnte nicht gestartet werden.'
-      
-      if (err instanceof DOMException) {
-        switch (err.name) {
-          case 'NotReadableError':
-            errorMessage = 'Kamera wird bereits verwendet oder ist nicht verfügbar. Bitte schließen Sie andere Anwendungen, die die Kamera verwenden.'
-            break
-          case 'NotAllowedError':
-            errorMessage = 'Kamerazugriff verweigert. Bitte erlauben Sie den Kamerazugriff in den Browsereinstellungen.'
-            break
-          case 'NotFoundError':
-            errorMessage = 'Keine Kamera gefunden. Bitte überprüfen Sie, ob eine Kamera angeschlossen ist.'
-            break
-          case 'OverconstrainedError':
-            errorMessage = 'Die ausgewählte Kamera unterstützt die erforderlichen Einstellungen nicht.'
-            break
-          default:
-            errorMessage = `Kamera-Fehler: ${err.message || err.name}`
-        }
-      } else if (err instanceof Error) {
-        errorMessage = `Kamera-Fehler: ${err.message}`
-      }
-      
-      setError(errorMessage)
-      setIsCameraActive(false)
-      setShouldStartCamera(false)
-      codeReaderRef.current = null
-    }
-  }
-
-  const stopCamera = () => {
-    // Stop QR code reader
-    if (codeReaderRef.current) {
-      try {
-        const reader = codeReaderRef.current as unknown as {
-          reset?: () => void
-          stop?: () => void
-          stopContinuousDecode?: () => void
-        }
-
-        if (typeof reader.stopContinuousDecode === 'function') {
-          reader.stopContinuousDecode()
-        } else if (typeof reader.stop === 'function') {
-          reader.stop()
-        } else if (typeof reader.reset === 'function') {
-          reader.reset()
-        }
-      } catch (err) {
-        // Silently ignore errors when stopping reader
-        // This can happen if reader is already stopped
-      }
-      codeReaderRef.current = null
-    }
-    
-    // Stop video stream
-    if (videoRef.current?.srcObject) {
-      try {
-        const stream = videoRef.current.srcObject as MediaStream
-        stream.getTracks().forEach(track => {
-          track.stop()
-        })
-        videoRef.current.srcObject = null
-      } catch (err) {
-        // Silently ignore errors when stopping stream
-      }
-    }
-    
-    setIsCameraActive(false)
-    setShouldStartCamera(false)
-  }
-
-  const handleScanWithId = async (extractedId: string) => {
-    setIsLoading(true)
-    setError('')
-    setSuccessMessage('')
-    setBooking(null)
-    setIsCheckedIn(false)
-
-    try {
-      // Fetch booking details
-      const response = await fetch(`/api/bookings/${extractedId}`, {
-        credentials: 'include'
+      ).catch((err) => {
+        handleCameraStartError(err)
       })
       
-      if (response.status === 401) {
-        router.push('/admin')
-        return
-      }
-      
-      const data = await response.json() as { success: boolean; booking?: BookingWithSeats; error?: string }
-      
-      if (data.success && data.booking) {
-        setBooking(data.booking)
-        setIsCheckedIn(data.booking.status === 'checked_in')
-      } else {
-        setError(data.error || 'Buchung nicht gefunden')
-      }
+      setIsCameraActive(true)
+      setCameraState('running')
     } catch (err) {
-      console.error('Error fetching booking:', err)
-      setError('Fehler beim Laden der Buchung')
-    } finally {
-      setIsLoading(false)
+      handleCameraStartError(err)
     }
-  }
+  }, [selectedCamera, stopCamera, handleScanWithId, handleCameraStartError])
+
+  const startCamera = useCallback(() => {
+    if (!selectedCamera) {
+      setError('Keine Kamera ausgewählt')
+      return
+    }
+
+    // Stop any existing camera stream first
+    stopCamera()
+
+    // Reset scan processing flags when starting fresh
+    isProcessingScanRef.current = false
+    lastScannedIdRef.current = null
+    setBooking(null)
+    setError('')
+    setSuccessMessage('')
+    setIsCheckedIn(false)
+    setHasCompletedScan(false)
+    setCameraState('starting')
+
+    startCameraInternal()
+  }, [selectedCamera, stopCamera, startCameraInternal])
 
   return (
     <div className='max-w-2xl mx-auto'>
@@ -439,14 +442,18 @@ export default function AdminScanPage() {
             
             <button
               onClick={startCamera}
-              disabled={cameras.length === 0}
-              className='w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2'
+              disabled={cameras.length === 0 || cameraState === 'starting'}
+              className='w-full px-6 py-4 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 disabled:hover:bg-blue-600'
             >
               <svg className='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z' />
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 13a3 3 0 11-6 0 3 3 0 016 0z' />
               </svg>
-              {cameras.length === 0 ? 'Keine Kameras gefunden' : 'Kamera starten'}
+              {cameras.length === 0
+                ? 'Keine Kameras gefunden'
+                : cameraState === 'starting'
+                  ? 'Kamera wird gestartet...'
+                  : 'Kamera starten'}
             </button>
           </div>
         ) : (
@@ -493,6 +500,20 @@ export default function AdminScanPage() {
             </svg>
             <p className='text-green-400 font-semibold'>{successMessage}</p>
           </div>
+        </div>
+      )}
+
+      {/* Quick restart */}
+      {hasCompletedScan && !isCameraActive && (
+        <div className='mb-6'>
+          <button
+            type='button'
+            onClick={startCamera}
+            disabled={cameraState === 'starting'}
+            className='w-full px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors disabled:opacity-60 disabled:hover:bg-kolping-500'
+          >
+            {cameraState === 'starting' ? 'Kamera wird vorbereitet...' : 'Kamera für nächsten Scan starten'}
+          </button>
         </div>
       )}
 
