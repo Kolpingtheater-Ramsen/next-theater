@@ -3,6 +3,76 @@ import { getRequestContext } from '@cloudflare/next-on-pages'
 import { requireAdminAuth } from '@/lib/admin-auth'
 import type { BookingWithSeats } from '@/types/database'
 
+const TOTAL_SEATS_PER_ROW = 10
+const CSV_HEADERS = [
+  'Buchung ID',
+  'Name',
+  'E-Mail',
+  'Vorstellungstitel',
+  'Vorstellungsdatum',
+  'Status',
+  'Plätze',
+  'Angelegt am'
+]
+
+const getSeatLabel = (seatNumber: number): string => {
+  const row = Math.floor(seatNumber / TOTAL_SEATS_PER_ROW)
+  const seatInRow = seatNumber % TOTAL_SEATS_PER_ROW
+  return `${String.fromCharCode(65 + row)}${seatInRow + 1}`
+}
+
+const formatSeatsForCsv = (seats: number[]) => {
+  if (!seats || seats.length === 0) return ''
+  return seats
+    .slice()
+    .sort((a, b) => a - b)
+    .map(getSeatLabel)
+    .join(' ')
+}
+
+const normalizeForFilename = (value: string) => {
+  return value
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'alle'
+}
+
+const escapeCsvValue = (value: string) => {
+  const needsEscaping = /[",\n]/.test(value)
+  const sanitized = value.replace(/"/g, '""')
+  return needsEscaping ? `"${sanitized}"` : sanitized
+}
+
+const createCsvResponse = (bookings: BookingWithSeats[], filenameSuffix: string) => {
+  const rows = bookings.map((booking) => [
+    booking.id,
+    booking.name,
+    booking.email,
+    booking.play?.title || '',
+    booking.play?.display_date || '',
+    booking.status,
+    formatSeatsForCsv(booking.seats),
+    new Date(booking.created_at).toISOString()
+  ])
+  
+  const csv = [CSV_HEADERS, ...rows]
+    .map((row) => row.map((value) => escapeCsvValue(String(value ?? ''))).join(','))
+    .join('\n')
+
+  const dateStamp = new Date().toISOString().split('T')[0]
+  const filename = `buchungen-${normalizeForFilename(filenameSuffix || 'alle')}-${dateStamp}.csv`
+
+  return new NextResponse(csv, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': `attachment; filename="${filename}"`
+    }
+  })
+}
+
 /**
  * GET /api/admin/bookings?playId=xxx
  * Returns all bookings for a specific play (admin only)
@@ -21,6 +91,7 @@ export async function GET(request: NextRequest) {
     
     const { searchParams } = new URL(request.url)
     const playId = searchParams.get('playId')
+    const formatParam = searchParams.get('format')
     const rawSearchQuery = searchParams.get('query')
     const normalizedSearchQuery = rawSearchQuery ? rawSearchQuery.trim().toLowerCase() : ''
     const hasSearchQuery = normalizedSearchQuery.length > 0
@@ -28,6 +99,7 @@ export async function GET(request: NextRequest) {
       ? ' AND (LOWER(b.name) LIKE ? OR LOWER(b.email) LIKE ?)'
       : ''
     const searchPattern = `%${normalizedSearchQuery}%`
+    const wantsCsv = formatParam?.toLowerCase() === 'csv'
     
     // Get D1 database
     const { env } = getRequestContext()
@@ -103,6 +175,13 @@ export async function GET(request: NextRequest) {
       }
     })) || []
     
+    if (wantsCsv) {
+      const suffix = playId
+        ? bookings[0]?.play?.display_date || playId
+        : 'alle'
+      return createCsvResponse(bookings, suffix)
+    }
+
     return NextResponse.json({
       success: true,
       bookings,

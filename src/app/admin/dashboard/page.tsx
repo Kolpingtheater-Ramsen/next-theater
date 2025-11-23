@@ -90,6 +90,57 @@ export default function AdminDashboardPage() {
     }
   }, [selectedPlayId, router, debouncedSearchTerm])
 
+  const handleExportCsv = useCallback(async () => {
+    try {
+      const params = new URLSearchParams()
+      if (selectedPlayId !== 'all') {
+        params.append('playId', selectedPlayId)
+      }
+      if (debouncedSearchTerm) {
+        params.append('query', debouncedSearchTerm)
+      }
+      params.append('format', 'csv')
+      const url = `/api/admin/bookings?${params.toString()}`
+
+      const response = await fetch(url, {
+        credentials: 'include'
+      })
+
+      if (response.status === 401) {
+        router.push('/admin')
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error('Export failed')
+      }
+
+      const blob = await response.blob()
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      const dateSuffix = new Date().toISOString().split('T')[0]
+      const playDisplayDate = selectedPlayId === 'all'
+        ? 'alle'
+        : (plays.find((play) => play.id === selectedPlayId)?.display_date || 'vorstellung')
+      const safePlayLabel = playDisplayDate
+        .normalize('NFKD')
+        .toLowerCase()
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'vorstellung'
+
+      link.href = downloadUrl
+      link.download = `buchungen-${safePlayLabel}-${dateSuffix}.csv`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(downloadUrl)
+    } catch (err) {
+      console.error('Error exporting bookings:', err)
+      setMessageModal({ message: 'Export fehlgeschlagen. Bitte erneut versuchen.', type: 'error' })
+    }
+  }, [selectedPlayId, debouncedSearchTerm, router, plays])
+
   useEffect(() => {
     if (plays.length > 0) {
       fetchBookings()
@@ -472,9 +523,23 @@ export default function AdminDashboardPage() {
 
       {/* Bookings List */}
       <div className='glass rounded-xl p-6'>
-        <h2 className='text-xl font-display font-bold mb-4'>
-          Buchungen {selectedPlayId !== 'all' && `für ${plays.find(p => p.id === selectedPlayId)?.display_date}`}
-        </h2>
+        <div className='flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-4'>
+          <h2 className='text-xl font-display font-bold'>
+            Buchungen {selectedPlayId !== 'all' && `für ${plays.find(p => p.id === selectedPlayId)?.display_date}`}
+          </h2>
+          <button
+            type='button'
+            onClick={handleExportCsv}
+            disabled={isLoading}
+            className='inline-flex items-center justify-center gap-2 rounded-lg border border-kolping-400 px-4 py-2 text-sm font-semibold text-kolping-100 hover:bg-kolping-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+          >
+            <svg className='w-4 h-4' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth={2} strokeLinecap='round' strokeLinejoin='round'>
+              <path d='M12 5v11m0 0l-4-4m4 4l4-4' />
+              <rect x='4' y='18' width='16' height='2' rx='1' />
+            </svg>
+            <span>Als CSV exportieren</span>
+          </button>
+        </div>
 
         {error && (
           <div className='p-4 mb-4 rounded-lg bg-red-900/20 border border-red-700'>
