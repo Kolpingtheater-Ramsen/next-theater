@@ -302,7 +302,6 @@ export default function BookingViewPage() {
         <h3 className='font-semibold mb-2 print:mb-1 print:text-xs'>Wichtige Informationen:</h3>
         <ul className='space-y-1 list-disc list-inside print:space-y-0'>
           <li>Bitte erscheinen Sie 15 Minuten vor Vorstellungsbeginn</li>
-          <li>Der Einlass erfolgt nur mit gültigem QR-Code</li>
           <li>Die Platzreservierung ist verbindlich</li>
         </ul>
       </div>
