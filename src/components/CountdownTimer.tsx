@@ -1,15 +1,17 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 interface CountdownTimerProps {
   targetDate: string // ISO date string
   title: string
+  containerClassName?: string
 }
 
 export default function CountdownTimer({
   targetDate,
   title,
+  containerClassName,
 }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState<{
     days: number
@@ -43,71 +45,21 @@ export default function CountdownTimer({
     return () => clearInterval(timer)
   }, [targetDate])
 
-  const progress = useMemo(() => {
-    if (!timeLeft) return { hour: 0, minute: 0, second: 0 }
-    return {
-      hour: (timeLeft.minutes * 60 + timeLeft.seconds) / 3600,
-      minute: timeLeft.seconds / 60,
-      second: 1 - (timeLeft.seconds % 1),
-    }
-  }, [timeLeft])
-
   if (isExpired || timeLeft === null) return null
 
   return (
-    <div className='relative mx-auto max-w-3xl px-4'>
-      <div className='relative overflow-hidden rounded-xl p-[2px] epic-card'>
-        <div className='relative rounded-[10px] border border-white/10 bg-site-900/70 px-5 py-6 backdrop-blur'>
-          <div className='mb-4 text-center text-sm font-semibold tracking-wide text-kolping-400'>
-            🎭 {title}
-          </div>
-          <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
-            <TimeUnit label='Tage' value={timeLeft.days} />
-            <TimeUnit
-              label='Std'
-              value={timeLeft.hours}
-              progress={progress.hour}
-            />
-            <TimeUnit
-              label='Min'
-              value={timeLeft.minutes}
-              progress={progress.minute}
-            />
-            <TimeUnit
-              label='Sek'
-              value={timeLeft.seconds}
-              progress={progress.minute}
-              pulse
-            />
-          </div>
+    <div className={containerClassName || 'relative mx-auto max-w-3xl px-4'}>
+      <div className='relative overflow-hidden rounded-xl border border-white/10 bg-site-900/70 px-5 py-6 backdrop-blur'>
+        <div className='mb-4 text-center text-sm font-semibold tracking-wide text-kolping-400'>
+          🎭 {title}
+        </div>
+        <div className='grid grid-cols-2 gap-3 sm:grid-cols-4'>
+          <TimeUnit label='Tage' value={timeLeft.days} />
+          <TimeUnit label='Std' value={timeLeft.hours} />
+          <TimeUnit label='Min' value={timeLeft.minutes} />
+          <TimeUnit label='Sek' value={timeLeft.seconds} pulse />
         </div>
       </div>
-
-      <style jsx>{`
-        .epic-card::before {
-          content: '';
-          position: absolute;
-          inset: -200%;
-          background: conic-gradient(
-            from 0deg,
-            rgba(255, 122, 0, 0.6),
-            rgba(255, 176, 73, 0.4),
-            rgba(255, 122, 0, 0.6)
-          );
-          animation: spin 8s linear infinite;
-          filter: blur(20px);
-        }
-        @keyframes spin {
-          to {
-            transform: rotate(1turn);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .epic-card::before {
-            animation: none;
-          }
-        }
-      `}</style>
     </div>
   )
 }
@@ -115,16 +67,13 @@ export default function CountdownTimer({
 function TimeUnit({
   label,
   value,
-  progress,
   pulse,
 }: {
   label: string
   value: number
-  progress?: number
   pulse?: boolean
 }) {
   const display = value.toString().padStart(2, '0')
-  const barWidth = Math.max(0, Math.min(1, progress ?? 0)) * 100
 
   return (
     <div className='relative overflow-hidden rounded-lg border border-site-700 bg-site-800/80 p-3'>
@@ -144,14 +93,6 @@ function TimeUnit({
           {label}
         </div>
       </div>
-      {progress !== undefined ? (
-        <div className='absolute inset-x-2 bottom-2 h-1 overflow-hidden rounded bg-black/30'>
-          <div
-            className='h-full rounded bg-gradient-to-r from-kolping-500 via-orange-400 to-orange-300 transition-[width] duration-300'
-            style={{ width: `${barWidth}%` }}
-          />
-        </div>
-      ) : null}
 
       <style jsx>{`
         .animate-pop {

@@ -46,6 +46,13 @@ export default function Home() {
           <p className='mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-site-100 max-w-2xl'>
             Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Erlebe die faszinierende Welt der antiken Mythologie auf der Bühne des Kolpingtheaters Ramsen.
           </p>
+          <div className='mt-5 sm:mt-6'>
+            <CountdownTimer 
+              targetDate='2025-12-27T17:00:00+02:00' 
+              title='Nächste Premiere startet in'
+              containerClassName='relative w-full'
+            />
+          </div>
           <div className='mt-4 sm:mt-5 text-sm sm:text-base text-site-200'>
             <div className='font-semibold mb-2'>Aufführungen:</div>
             <div className='space-y-1'>
@@ -68,30 +75,21 @@ export default function Home() {
       </section>
 
       <section className='mx-auto max-w-6xl'>
-        <div className='flex flex-col gap-3 sm:gap-4'>
-          <div className='order-1 md:order-2'>
-            <div className='grid gap-3 sm:gap-4'>
-              <CountdownTimer targetDate='2025-08-23T20:00:00+02:00' title='Nächste Premiere startet in' />
-            </div>
-          </div>
-          <div className='order-2 md:order-1'>
-            <Marquee
-              items={[
-                { date: '2017', title: 'Verrat im Kloster' },
-                { date: '2018', title: 'Bluttribut' },
-                { date: '2019', title: 'Dystopia' },
-                { date: '2020', title: 'Der Kristall der Träume' },
-                { date: '2021', title: 'Malleus Maleficarum' },
-                { date: '2022', title: 'Goldfieber' },
-                { date: '2023', title: 'Traum von Freiheit' },
-                { date: '2024', title: 'Nexus' },
-                { date: '2024', title: 'Eine höllische Herausforderung' },
-                { date: '2025', title: 'Anno 1146' },
-                { date: '2025', title: 'Schicksalsfäden' },
-              ]}
-            />
-          </div>
-        </div>
+        <Marquee
+          items={[
+            { date: '2017', title: 'Verrat im Kloster' },
+            { date: '2018', title: 'Bluttribut' },
+            { date: '2019', title: 'Dystopia' },
+            { date: '2020', title: 'Der Kristall der Träume' },
+            { date: '2021', title: 'Malleus Maleficarum' },
+            { date: '2022', title: 'Goldfieber' },
+            { date: '2023', title: 'Traum von Freiheit' },
+            { date: '2024', title: 'Nexus' },
+            { date: '2024', title: 'Eine höllische Herausforderung' },
+            { date: '2025', title: 'Anno 1146' },
+            { date: '2025', title: 'Schicksalsfäden' },
+          ]}
+        />
       </section>
 
       <section className='mx-auto max-w-6xl space-y-4' aria-labelledby='productions-heading'>
