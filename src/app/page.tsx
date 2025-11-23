@@ -44,7 +44,7 @@ export default function Home() {
             Schicksalsfäden
           </h1>
           <p className='mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-site-100 max-w-2xl'>
-            Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Erlebe die faszinierende Welt der antiken Mythologie auf der Bühne des Kolpingtheaters Ramsen.
+            Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Erlebe die faszinierende Welt der antiken Mythologie auf der Kreativbühne des Kolpingtheaters Ramsen.
           </p>
           <div className='mt-5 sm:mt-6'>
             <CountdownTimer 
