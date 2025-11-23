@@ -11,7 +11,7 @@ export default function Home() {
         posterSrc='/img/banners/anno.jpg'
         title='Anno 1146'
         tagline='2025 - Unsere aktuelle Produktion'
-        subtitle='Erlebe die faszinierenden Momente unserer Theaterproduktion. Ein Blick hinter die Kulissen und die Höhepunkte von Anno 1146 – live auf der Kreativbühne des Kolpingtheaters Ramsen.'
+        subtitle='Erlebe die faszinierenden Momente unserer Theaterproduktion. Ein Blick hinter die Kulissen und die Höhepunkte von Anno 1146 – live auf der Open-Air-Bühne des Kolpingtheaters Ramsen.'
       />
 
       <section className='mx-auto max-w-6xl'>
