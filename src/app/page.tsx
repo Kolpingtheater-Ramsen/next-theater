@@ -31,6 +31,7 @@ export default function Home() {
                 { date: '2021', title: 'Malleus Maleficarum' },
                 { date: '2022', title: 'Goldfieber' },
                 { date: '2023', title: 'Traum von Freiheit' },
+                { date: '2023', title: 'Sagenhafft' },
                 { date: '2024', title: 'Nexus' },
                 { date: '2024', title: 'Eine höllische Herausforderung' },
                 { date: '2025', title: 'Anno 1146' },
