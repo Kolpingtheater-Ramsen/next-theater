@@ -32,7 +32,7 @@ export default function Slideshow({
   const [index, setIndex] = useState(0)
   if (!images.length) return null
   
-  // Hero layout (full-screen background)
+  // Hero layout (fixed aspect ratio container)
   if (aspect === 'hero') {
     return (
       <>
@@ -41,9 +41,9 @@ export default function Slideshow({
             src={images[index]}
             alt={`${name} ${index + 1}`}
             fill
-            className='object-cover object-center'
+            className='object-cover object-top'
             priority
-            sizes='100vw'
+            sizes='(max-width: 768px) 100vw, 512px'
           />
         </div>
         
