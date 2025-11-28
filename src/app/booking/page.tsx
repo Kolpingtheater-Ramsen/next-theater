@@ -190,6 +190,8 @@ export default function BookingPage() {
             <div className='grid gap-4 md:grid-cols-2'>
               {plays.map((play) => {
                 const isSoldOut = play.is_sold_out
+                const availablePercent = isMounted ? (play.available_seats / play.total_seats) * 100 : 100
+                const bookedPercent = 100 - availablePercent
 
                 return (
                   <button
@@ -203,7 +205,7 @@ export default function BookingPage() {
                     }`}
                   >
                     <div className='text-lg font-semibold mb-2'>{play.display_date}</div>
-                    <div className='text-site-100'>
+                    <div className='text-site-100 text-sm mb-3'>
                       {isMounted && isSoldOut ? (
                         <span className='text-red-400'>Ausverkauft</span>
                       ) : (
@@ -211,6 +213,17 @@ export default function BookingPage() {
                           {isMounted ? `${play.available_seats} von ${play.total_seats} Plätzen verfügbar` : `${play.total_seats} von ${play.total_seats} Plätzen verfügbar`}
                         </span>
                       )}
+                    </div>
+                    {/* Availability bar */}
+                    <div className='relative h-2 bg-site-700 rounded-full overflow-hidden'>
+                      <div
+                        className='absolute inset-y-0 left-0 bg-kolping-500 rounded-full transition-all duration-500'
+                        style={{ width: `${bookedPercent}%` }}
+                      />
+                      <div
+                        className='absolute inset-y-0 right-0 bg-green-500 rounded-full transition-all duration-500'
+                        style={{ width: `${availablePercent}%` }}
+                      />
                     </div>
                   </button>
                 )
