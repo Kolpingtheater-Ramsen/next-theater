@@ -318,6 +318,66 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
+      {/* Seats Available per Show Chart */}
+      {plays.length > 0 && (
+        <div className='glass rounded-xl p-6 mb-8'>
+          <h2 className='text-xl font-display font-bold mb-6'>Verfügbare Plätze pro Vorstellung</h2>
+          <div className='space-y-4'>
+            {plays.map((play) => {
+              const availablePercent = (play.available_seats / play.total_seats) * 100
+              const bookedPercent = 100 - availablePercent
+              
+              return (
+                <div key={play.id} className='group'>
+                  <div className='flex justify-between items-center mb-2'>
+                    <span className='text-sm font-medium truncate mr-4'>{play.display_date}</span>
+                    <span className='text-sm text-site-100 whitespace-nowrap'>
+                      {play.available_seats} / {play.total_seats} verfügbar
+                    </span>
+                  </div>
+                  <div className='relative h-8 bg-site-800 rounded-lg overflow-hidden border border-site-700'>
+                    {/* Booked seats (background) */}
+                    <div
+                      className='absolute inset-y-0 left-0 bg-gradient-to-r from-kolping-600 to-kolping-500 transition-all duration-500 ease-out'
+                      style={{ width: `${bookedPercent}%` }}
+                    />
+                    {/* Available seats indicator */}
+                    <div
+                      className='absolute inset-y-0 right-0 bg-gradient-to-r from-green-600/80 to-green-500/80 transition-all duration-500 ease-out'
+                      style={{ width: `${availablePercent}%` }}
+                    />
+                    {/* Labels inside bar */}
+                    <div className='absolute inset-0 flex items-center justify-between px-3 text-xs font-semibold'>
+                      <span className={`${bookedPercent > 15 ? 'text-white' : 'text-transparent'}`}>
+                        {play.booked_seats} gebucht
+                      </span>
+                      <span className={`${availablePercent > 15 ? 'text-white' : 'text-transparent'}`}>
+                        {play.available_seats} frei
+                      </span>
+                    </div>
+                  </div>
+                  {/* Sold out indicator */}
+                  {play.is_sold_out && (
+                    <p className='text-xs text-red-400 mt-1 font-semibold'>⚠️ Ausverkauft</p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+          {/* Legend */}
+          <div className='flex flex-wrap justify-center gap-6 mt-6 pt-4 border-t border-site-700'>
+            <div className='flex items-center gap-2'>
+              <div className='w-4 h-4 rounded bg-gradient-to-r from-kolping-600 to-kolping-500' />
+              <span className='text-sm text-site-100'>Gebucht</span>
+            </div>
+            <div className='flex items-center gap-2'>
+              <div className='w-4 h-4 rounded bg-gradient-to-r from-green-600/80 to-green-500/80' />
+              <span className='text-sm text-site-100'>Verfügbar</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Seat Map Stats */}
       {selectedPlayId !== 'all' && (
         <div className='glass rounded-xl p-6 mb-6'>
