@@ -52,11 +52,11 @@ export default function GalleryPage() {
               />
               
               {/* Gradient overlay for text readability */}
-              <div className='absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent z-10' />
+              <div className='absolute inset-0 z-10' />
               
               {/* Text overlay positioned at bottom with backdrop */}
               <div className='absolute inset-x-0 bottom-0 z-20'>
-                <div className='p-4 sm:p-5 bg-black/60 backdrop-blur-sm'>
+                <div className='p-4 pt-10 sm:p-5 sm:pt-10 bg-gradient-to-t from-black/95 via-black/90 to-transparent'>
                   <div className='space-y-2'>
                     <h2 className='font-display text-lg sm:text-xl font-bold text-white transition-all duration-300 group-hover:text-kolping-400 group-hover:translate-x-1' style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
                       {t.header}

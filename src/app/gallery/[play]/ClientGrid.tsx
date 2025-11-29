@@ -38,7 +38,7 @@ export default function ClientGrid({
                 viewTransitionName: `photo-${play}-${i}`,
               }}
             >
-              <div className='relative overflow-hidden bg-site-900'>
+              <div className='relative overflow-hidden bg-site-900 cursor-pointer'>
                 {/* Subtle spotlight effect */}
                 <div className='absolute inset-0 bg-gradient-to-br from-kolping-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10' />
                 
@@ -50,21 +50,13 @@ export default function ClientGrid({
                   className='w-full h-auto object-cover transition-all duration-700 group-hover:scale-105 group-hover:brightness-110'
                   sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                 />
-                
-                {/* Gradient overlay for caption */}
-                <div className='absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10' />
-                
-                {/* Caption overlay with backdrop for guaranteed readability */}
+                                
+                {/* Caption overlay */}
                 <div className='absolute inset-x-0 bottom-0 z-20'>
-                  <div className='p-3 sm:p-4 bg-black/60 backdrop-blur-sm'>
+                  <div className='p-3 sm:p-4 sm:pt-10 pt-10 bg-gradient-to-t from-black/95 via-black/90 to-transparent'>
                     <p className='text-xs sm:text-sm text-white font-medium line-clamp-2 transition-all duration-300' style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
                       {captions[i] ?? m.alt}
                     </p>
-                    
-                    {/* Hover hint */}
-                    <span className='block mt-1.5 text-[10px] text-kolping-400 font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0'>
-                      Klicken zum Vergrößern
-                    </span>
                   </div>
                 </div>
               </div>
