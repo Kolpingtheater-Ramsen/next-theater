@@ -91,7 +91,7 @@ export default function RolesList({ roles }: RolesListProps) {
                 <Link href={`/gallery/${slug}`} className='block'>
                   <div className={`
                     relative overflow-hidden rounded-xl border 
-                    bg-gradient-to-br from-site-800 to-site-900 
+                    bg-site-800 
                     transition-all duration-500 ease-out cursor-pointer
                     ${isHovered 
                       ? 'border-kolping-500/60 shadow-[0_8px_30px_rgba(255,122,0,0.15)] -translate-y-1' 
@@ -190,7 +190,7 @@ export default function RolesList({ roles }: RolesListProps) {
               ) : (
                 <div className={`
                   relative overflow-hidden rounded-xl border 
-                  bg-gradient-to-br from-site-800 to-site-900 
+                  bg-site-800 
                   transition-all duration-500 ease-out
                   ${isHovered 
                     ? 'border-kolping-500/60 shadow-[0_8px_30px_rgba(255,122,0,0.15)] -translate-y-1' 

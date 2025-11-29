@@ -326,7 +326,7 @@ img {
 }
 
 [data-theme='light'] .seat-booked {
-  @apply bg-site-800 hover:bg-site-700 text-site-100 ;
+  @apply bg-gray-400 text-white hover:scale-105 cursor-not-allowed;
 }
 
 /* Available seat styling */
@@ -335,7 +335,7 @@ img {
 }
 
 [data-theme='light'] .seat-available {
-  @apply bg-gray-400 text-white hover:scale-105 cursor-pointer;
+  @apply bg-site-800 hover:bg-site-700 text-site-100 cursor-pointer;
 }
 
 /* Selected seat styling */

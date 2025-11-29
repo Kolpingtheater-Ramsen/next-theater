@@ -89,7 +89,7 @@ function PersonCard({
         <div className='absolute -inset-4 bg-gradient-to-b from-kolping-500/20 via-kolping-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none' />
         
         {/* Image container */}
-        <div className='relative aspect-[3/4] overflow-hidden bg-gradient-to-b from-site-700 to-site-900'>
+        <div className='relative aspect-[3/4] overflow-hidden bg-site-800'>
           {/* Animated spotlight beam */}
           <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10'>
             <div className='absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-kolping-500/20 via-transparent to-transparent' />

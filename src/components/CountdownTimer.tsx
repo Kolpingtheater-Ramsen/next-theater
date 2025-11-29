@@ -49,7 +49,7 @@ export default function CountdownTimer({
 
   return (
     <div className={containerClassName || 'relative mx-auto max-w-3xl px-4'}>
-      <div className='relative overflow-hidden rounded-xl border border-white/10 bg-site-900/70 px-5 py-6 backdrop-blur'>
+      <div className='countdown-container relative overflow-hidden rounded-xl border border-site-700 bg-site-800 px-5 py-6 backdrop-blur'>
         <div className='mb-4 text-center text-sm font-semibold tracking-wide text-kolping-400'>
           🎭 {title}
         </div>
@@ -76,7 +76,7 @@ function TimeUnit({
   const display = value.toString().padStart(2, '0')
 
   return (
-    <div className='relative overflow-hidden rounded-lg border border-site-700 bg-site-800/80 p-3'>
+    <div className='countdown-unit relative overflow-hidden rounded-lg border border-site-700 bg-site-900 p-3'>
       <div className='relative z-10'>
         <div
           className={`
@@ -89,7 +89,7 @@ function TimeUnit({
         >
           <span className='text-4xl sm:text-5xl tabular-nums'>{display}</span>
         </div>
-        <div className='text-center text-[11px] font-medium uppercase tracking-wide text-white'>
+        <div className='text-center text-[11px] font-medium uppercase tracking-wide text-site-50'>
           {label}
         </div>
       </div>

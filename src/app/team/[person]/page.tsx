@@ -158,7 +158,7 @@ export default async function PersonPage({
               </div>
               
               {/* Info section below image */}
-              <div className='relative z-20 p-6 sm:p-8 bg-gradient-to-b from-site-900 via-site-900 to-site-950 border-t border-site-700/50'>
+              <div className='relative z-20 p-6 sm:p-8 bg-site-800 border-t border-site-700'>
                 {/* Decorative top accent */}
                 <div className='absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2'>
                   <div className='w-24 h-1 bg-gradient-to-r from-transparent via-kolping-500 to-transparent rounded-full' />
@@ -171,7 +171,7 @@ export default async function PersonPage({
                       <div className='w-12 h-1 bg-gradient-to-r from-kolping-500 via-kolping-400 to-transparent rounded-full' />
                     </div>
                     <h1 
-                      className='font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white uppercase break-words'
+                      className='font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-site-50 uppercase break-words'
                       style={{ viewTransitionName: `person-title-${person.id}` }}
                     >
                       {person.name ?? person.id}
@@ -276,7 +276,7 @@ export default async function PersonPage({
                   {/* Card glow */}
                   <div className='absolute -inset-2 bg-gradient-to-b from-blue-500/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl' />
                   
-                  <div className='relative poster-frame border-epic bg-gradient-to-br from-site-800 to-site-900 p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:-translate-y-2'>
+                  <div className='relative poster-frame border-epic bg-site-800 p-6 sm:p-8 transition-all duration-500 hover:scale-105 hover:-translate-y-2'>
                     {/* Inner spotlight */}
                     <div className='absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl' />
                     
@@ -305,7 +305,7 @@ export default async function PersonPage({
         {/* Empty state for new members */}
         {rolesData.length === 0 && (!person.jobs || person.jobs.length === 0) && (
           <section className='text-center py-12'>
-            <div className='inline-flex items-center justify-center w-20 h-20 rounded-full bg-site-800 border border-site-700 mb-6'>
+            <div className='inline-flex items-center justify-center w-20 h-20 rounded-full bg-site-900 border border-site-700 mb-6'>
               <svg className='w-10 h-10 text-kolping-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
               </svg>
