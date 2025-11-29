@@ -32,7 +32,7 @@ export default function ClientGrid({
           return (
             <button
               key={i}
-              className='group inline-block w-full mb-5 md:mb-6 break-inside-avoid text-left poster-frame border-epic transition-all duration-500 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-kolping-500 focus:ring-offset-2 focus:ring-offset-site-900'
+              className='group inline-block w-full mb-5 md:mb-6 break-inside-avoid text-left poster-frame border-epic overflow-hidden transition-all duration-500 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-kolping-500 focus:ring-offset-2 focus:ring-offset-site-900'
               onClick={() => setOpenIndex(i)}
               style={{ 
                 viewTransitionName: `photo-${play}-${i}`,
@@ -51,19 +51,22 @@ export default function ClientGrid({
                   sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                 />
                 
-                {/* Overlay gradient for caption readability */}
-                <div className='absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10' />
+                {/* Gradient overlay for caption */}
+                <div className='absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10' />
                 
-                {/* Hover caption overlay */}
-                <div className='absolute inset-x-0 bottom-0 p-3 text-xs text-white font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-20'>
-                  Klicken zum Vergrößern
+                {/* Caption overlay with backdrop for guaranteed readability */}
+                <div className='absolute inset-x-0 bottom-0 z-20'>
+                  <div className='p-3 sm:p-4 bg-black/60 backdrop-blur-sm'>
+                    <p className='text-xs sm:text-sm text-white font-medium line-clamp-2 transition-all duration-300' style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                      {captions[i] ?? m.alt}
+                    </p>
+                    
+                    {/* Hover hint */}
+                    <span className='block mt-1.5 text-[10px] text-kolping-400 font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0'>
+                      Klicken zum Vergrößern
+                    </span>
+                  </div>
                 </div>
-              </div>
-              
-              <div className='relative p-3 sm:p-4 bg-gradient-to-b from-site-800 to-site-900 border-t border-site-700 group-hover:border-kolping-500/50 transition-colors duration-300'>
-                <p className='text-xs sm:text-sm text-site-100 line-clamp-2 group-hover:text-site-50 transition-colors duration-300'>
-                  {captions[i] ?? m.alt}
-                </p>
               </div>
             </button>
           )

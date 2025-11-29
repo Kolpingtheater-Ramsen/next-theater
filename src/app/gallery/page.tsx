@@ -31,7 +31,7 @@ export default function GalleryPage() {
           <Link
             key={t.galleryHash}
             href={`/gallery/${t.galleryHash}`}
-            className='group poster-frame tilt border-epic bg-site-800 transition-all duration-500 hover:scale-[1.02]'
+            className='group relative poster-frame tilt border-epic overflow-hidden transition-all duration-500 hover:scale-[1.02]'
             aria-label={`Galerie ansehen: ${t.header}`}
             style={{ 
               viewTransitionName: `gallery-${t.galleryHash}`,
@@ -39,7 +39,6 @@ export default function GalleryPage() {
           >
             <div className='relative aspect-[3/4] overflow-hidden bg-gradient-to-b from-site-700 to-site-900'>
               {/* Spotlight effect overlay */}
-              <div className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/60 z-10 pointer-events-none' />
               <div className='spotlight' />
               
               <Image
@@ -53,24 +52,28 @@ export default function GalleryPage() {
               />
               
               {/* Gradient overlay for text readability */}
-              <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10' />
-            </div>
-            
-            <div className='relative p-4 sm:p-5 bg-gradient-to-b from-site-800 to-site-900 border-t border-site-700'>
-              <div className='space-y-2'>
-                <h2 className='font-display text-lg sm:text-xl font-bold text-kolping-400 transition-all duration-300 group-hover:text-kolping-500 group-hover:translate-x-1'>
-                  {t.header}
-                </h2>
-                <div className='flex items-center justify-between'>
-                  <span className='text-xs sm:text-sm text-site-100 font-mono'>{t.date}</span>
-                  <svg 
-                    className='w-5 h-5 text-kolping-500 transition-transform duration-300 group-hover:translate-x-2' 
-                    fill='none' 
-                    viewBox='0 0 24 24' 
-                    stroke='currentColor'
-                  >
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
-                  </svg>
+              <div className='absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent z-10' />
+              
+              {/* Text overlay positioned at bottom with backdrop */}
+              <div className='absolute inset-x-0 bottom-0 z-20'>
+                <div className='p-4 sm:p-5 bg-black/60 backdrop-blur-sm'>
+                  <div className='space-y-2'>
+                    <h2 className='font-display text-lg sm:text-xl font-bold text-white transition-all duration-300 group-hover:text-kolping-400 group-hover:translate-x-1' style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>
+                      {t.header}
+                    </h2>
+                    <div className='flex items-center justify-between'>
+                      <span className='text-xs sm:text-sm text-white/90 font-mono' style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>{t.date}</span>
+                      <svg 
+                        className='w-5 h-5 text-kolping-400 transition-transform duration-300 group-hover:translate-x-2' 
+                        fill='none' 
+                        viewBox='0 0 24 24' 
+                        stroke='currentColor'
+                        style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}
+                      >
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
