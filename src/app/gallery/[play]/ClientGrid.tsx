@@ -51,19 +51,21 @@ export default function ClientGrid({
                   sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
                 />
                 
-                {/* Gradient overlay for caption - always visible but subtle, stronger on hover */}
-                <div className='absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500 z-10' />
+                {/* Gradient overlay for caption */}
+                <div className='absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10' />
                 
-                {/* Caption overlay - always visible at bottom */}
-                <div className='absolute inset-x-0 bottom-0 p-3 sm:p-4 z-20'>
-                  <p className='text-xs sm:text-sm text-white/90 font-medium line-clamp-2 drop-shadow-lg transition-all duration-300 group-hover:text-white'>
-                    {captions[i] ?? m.alt}
-                  </p>
-                  
-                  {/* Hover hint */}
-                  <span className='block mt-1.5 text-[10px] text-kolping-400/80 font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0'>
-                    Klicken zum Vergrößern
-                  </span>
+                {/* Caption overlay with backdrop for guaranteed readability */}
+                <div className='absolute inset-x-0 bottom-0 z-20'>
+                  <div className='p-3 sm:p-4 bg-black/60 backdrop-blur-sm'>
+                    <p className='text-xs sm:text-sm text-white font-medium line-clamp-2 transition-all duration-300' style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                      {captions[i] ?? m.alt}
+                    </p>
+                    
+                    {/* Hover hint */}
+                    <span className='block mt-1.5 text-[10px] text-kolping-400 font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0'>
+                      Klicken zum Vergrößern
+                    </span>
+                  </div>
                 </div>
               </div>
             </button>
