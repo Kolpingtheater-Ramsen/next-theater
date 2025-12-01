@@ -21,7 +21,8 @@ export default function AdminDashboardPage() {
   const ROWS = 7
   const SEATS_PER_SIDE = 5
   const TOTAL_SEATS_PER_ROW = SEATS_PER_SIDE * 2
-  const TOTAL_SEATS = 68
+  const BLOCKED_SEATS = [0, 9] // A1 and A10 don't exist
+  const TOTAL_SEATS = 68 + BLOCKED_SEATS.length // 68 bookable + 2 blocked = 70 physical seats
 
   useEffect(() => {
     fetchPlays()

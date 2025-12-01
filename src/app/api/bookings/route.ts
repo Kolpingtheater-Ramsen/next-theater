@@ -96,15 +96,6 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Validate seat numbers are valid
-    const invalidSeats = seats.filter(s => !Number.isInteger(s) || s < 1 || s > 68)
-    if (invalidSeats.length > 0) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid seat numbers' },
-        { status: 400 }
-      )
-    }
-    
     // Check for duplicate seats in request
     if (new Set(seats).size !== seats.length) {
       return NextResponse.json(
@@ -119,6 +110,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Vorstellung nicht gefunden' },
         { status: 404 }
+      )
+    }
+    
+    // Validate seat numbers are valid (0-based indexing, seats 0 and 9 are blocked)
+    const BLOCKED_SEATS = [0, 9] // A1 and A10 don't exist
+    const maxSeatIndex = play.total_seats + BLOCKED_SEATS.length // total_seats is bookable seats, add blocked to get max index
+    const invalidSeats = seats.filter(s => !Number.isInteger(s) || s < 0 || s >= maxSeatIndex || BLOCKED_SEATS.includes(s))
+    if (invalidSeats.length > 0) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid seat numbers' },
+        { status: 400 }
       )
     }
     
