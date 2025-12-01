@@ -122,7 +122,8 @@ export async function GET(request: NextRequest) {
           b.*,
           GROUP_CONCAT(bs.seat_number) as seat_numbers,
           p.title as play_title,
-          p.display_date as play_display_date
+          p.display_date as play_display_date,
+          p.total_seats as play_total_seats
         FROM bookings b
         LEFT JOIN booked_seats bs ON b.id = bs.booking_id
         LEFT JOIN plays p ON b.play_id = p.id
@@ -138,7 +139,8 @@ export async function GET(request: NextRequest) {
           b.*,
           GROUP_CONCAT(bs.seat_number) as seat_numbers,
           p.title as play_title,
-          p.display_date as play_display_date
+          p.display_date as play_display_date,
+          p.total_seats as play_total_seats
         FROM bookings b
         LEFT JOIN booked_seats bs ON b.id = bs.booking_id
         LEFT JOIN plays p ON b.play_id = p.id
@@ -170,7 +172,7 @@ export async function GET(request: NextRequest) {
         display_date: String(row.play_display_date),
         date: '',
         time: '',
-        total_seats: 68,
+        total_seats: Number(row.play_total_seats) || 69,
         created_at: ''
       }
     })) || []
