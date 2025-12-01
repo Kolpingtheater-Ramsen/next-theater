@@ -172,7 +172,7 @@ export async function GET(request: NextRequest) {
         display_date: String(row.play_display_date),
         date: '',
         time: '',
-        total_seats: Number(row.play_total_seats) || 69,
+        total_seats: Number(row.play_total_seats) || 70,
         created_at: ''
       }
     })) || []

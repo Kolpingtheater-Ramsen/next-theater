@@ -21,7 +21,7 @@ export default function AdminDashboardPage() {
   const ROWS = 7
   const SEATS_PER_SIDE = 5
   const TOTAL_SEATS_PER_ROW = SEATS_PER_SIDE * 2
-  const TOTAL_SEATS = 68
+  const TOTAL_SEATS = 70
 
   useEffect(() => {
     fetchPlays()
