@@ -359,7 +359,7 @@ export default function AdminDashboardPage() {
                   </div>
                   {/* Sold out indicator */}
                   {play.is_sold_out && (
-                    <p className='text-xs text-red-400 mt-1 font-semibold'>⚠️ Ausverkauft</p>
+                    <p className='text-xs text-red-400 mt-1 font-semibold'>⚠️ Ausgebucht</p>
                   )}
                 </div>
               )

@@ -207,7 +207,7 @@ export default function BookingPage() {
                     <div className='text-lg font-semibold mb-2'>{play.display_date}</div>
                     <div className='text-site-100 text-sm mb-3'>
                       {isMounted && isSoldOut ? (
-                        <span className='text-red-400'>Ausverkauft</span>
+                        <span className='text-red-400'>Ausgebucht</span>
                       ) : (
                         <span>
                           {isMounted ? `${play.available_seats} von ${play.total_seats} Plätzen verfügbar` : `${play.total_seats} von ${play.total_seats} Plätzen verfügbar`}
