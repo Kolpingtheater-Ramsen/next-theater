@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS plays (
   date TEXT NOT NULL,
   time TEXT NOT NULL,
   display_date TEXT NOT NULL,
-  total_seats INTEGER DEFAULT 70,
+  total_seats INTEGER DEFAULT 68,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
