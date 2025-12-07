@@ -16,6 +16,7 @@ export default function AdminDashboardPage() {
   const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const [showEmails, setShowEmails] = useState(false)
   const router = useRouter()
 
   const ROWS = 7
@@ -160,6 +161,18 @@ export default function AdminDashboardPage() {
     const row = Math.floor(seatNumber / 10)
     const seatInRow = seatNumber % 10
     return `${String.fromCharCode(65 + row)}${seatInRow + 1}`
+  }
+
+  const maskEmail = (email: string): string => {
+    const [localPart, domain] = email.split('@')
+    if (!domain) return '***'
+    
+    // Show first character, mask the rest until @
+    const maskedLocal = localPart.length > 0 
+      ? `${localPart[0]}${'*'.repeat(Math.min(localPart.length - 1, 5))}`
+      : '***'
+    
+    return `${maskedLocal}@${domain}`
   }
 
   const getSeatStatus = (seatNumber: number): 'open' | 'pending' | 'checked_in' | 'blocked' => {
@@ -588,18 +601,42 @@ export default function AdminDashboardPage() {
           <h2 className='text-xl font-display font-bold'>
             Buchungen {selectedPlayId !== 'all' && `für ${plays.find(p => p.id === selectedPlayId)?.display_date}`}
           </h2>
-          <button
-            type='button'
-            onClick={handleExportCsv}
-            disabled={isLoading}
-            className='inline-flex items-center justify-center gap-2 rounded-lg border border-kolping-400 px-4 py-2 text-sm font-semibold text-kolping-100 hover:bg-kolping-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
-          >
-            <svg className='w-4 h-4' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth={2} strokeLinecap='round' strokeLinejoin='round'>
-              <path d='M12 5v11m0 0l-4-4m4 4l4-4' />
-              <rect x='4' y='18' width='16' height='2' rx='1' />
-            </svg>
-            <span>Als CSV exportieren</span>
-          </button>
+          <div className='flex gap-3 flex-wrap'>
+            <button
+              type='button'
+              onClick={() => setShowEmails(!showEmails)}
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-site-700 px-4 py-2 text-sm font-semibold hover:bg-site-700/30 transition-colors'
+            >
+              {showEmails ? (
+                <>
+                  <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.29 3.29m0 0A9.97 9.97 0 015 12c0 1.657.405 3.214 1.122 4.588M6.29 6.29L3 3m3.29 3.29l3.29 3.29m7.532 7.532l3.29 3.29M21 21l-3.29-3.29m0 0A9.97 9.97 0 0019 12a9.97 9.97 0 00-1.122-4.588M17.71 17.71L21 21m-3.29-3.29l-3.29-3.29' />
+                  </svg>
+                  <span>E-Mails verbergen</span>
+                </>
+              ) : (
+                <>
+                  <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 12a3 3 0 11-6 0 3 3 0 016 0z' />
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z' />
+                  </svg>
+                  <span>E-Mails anzeigen</span>
+                </>
+              )}
+            </button>
+            <button
+              type='button'
+              onClick={handleExportCsv}
+              disabled={isLoading}
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-kolping-400 px-4 py-2 text-sm font-semibold text-kolping-100 hover:bg-kolping-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            >
+              <svg className='w-4 h-4' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth={2} strokeLinecap='round' strokeLinejoin='round'>
+                <path d='M12 5v11m0 0l-4-4m4 4l4-4' />
+                <rect x='4' y='18' width='16' height='2' rx='1' />
+              </svg>
+              <span>Als CSV exportieren</span>
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -633,7 +670,9 @@ export default function AdminDashboardPage() {
                 {bookings.map((booking) => (
                   <tr key={booking.id} className='border-b border-site-800 hover:bg-site-800/30'>
                     <td className='py-3 px-2 text-sm'>{booking.name}</td>
-                    <td className='py-3 px-2 text-sm text-site-100'>{booking.email}</td>
+                    <td className='py-3 px-2 text-sm text-site-100'>
+                      {showEmails ? booking.email : maskEmail(booking.email)}
+                    </td>
                     <td className='py-3 px-2 text-sm text-site-100'>
                       {booking.play?.display_date || 'N/A'}
                     </td>
