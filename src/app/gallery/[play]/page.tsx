@@ -3,6 +3,7 @@ import ClientGrid from './ClientGrid'
 import pics from '@/data/pics.json'
 import imagesMeta from '@/data/images.json'
 import timeline from '@/data/timeline.json'
+import team from '@/data/team.json'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
@@ -21,74 +22,131 @@ export default async function PlayGalleryPage({
   const metas = (imagesMeta as unknown as Record<string, PhotoMeta[]>)[key] as
     | PhotoMeta[]
     | undefined
-  if (!captions || !metas) return notFound()
-  const show = (
+  
+  const hasImages = !!(captions && metas && metas.length > 0)
+
+  // Try to find in timeline (for title/date)
+  const timelineEntry = (
     timeline as unknown as { galleryHash?: string; header?: string; date?: string }[]
   ).find((t) => t.galleryHash === play)
-  const title = show?.header ?? play
-  const date = show?.date
+  
+  // Try to find in team.json (for validation and fallback title)
+  const slugIndex = team.slugs.indexOf(play)
+  const isValidPlay = slugIndex !== -1 || !!timelineEntry
+  
+  if (!isValidPlay) return notFound()
+    
+  let title = timelineEntry?.header || play
+  let date = timelineEntry?.date
+  
+  if (!timelineEntry && slugIndex !== -1) {
+    // Parse title from team.plays
+    const playString = team.plays[slugIndex] // e.g. "2025 “Schicksalsfäden”"
+    const match = playString.match(/“([^”]+)”/)
+    if (match) {
+      title = match[1]
+    }
+    // Parse year as date?
+    const yearMatch = playString.match(/^(\d{4})/)
+    if (yearMatch) {
+      date = yearMatch[1]
+    }
+  }
+
+  // Common Hero Section
+  const renderHero = (subtitle: React.ReactNode) => (
+    <section className='relative -mt-8 pt-8 pb-12 sm:pb-16 overflow-hidden'>
+      {/* Background theatrical elements */}
+      <div className='absolute inset-0 pointer-events-none'>
+        {/* Stage spotlights */}
+        <div className='absolute top-0 left-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/10 to-transparent blur-3xl' />
+        <div className='absolute top-0 right-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/10 to-transparent blur-3xl' />
+      </div>
+      
+      <div className='relative text-center space-y-6'>
+        {/* Back link */}
+        <Link 
+          href='/gallery' 
+          className='inline-flex items-center gap-2 text-site-300 hover:text-kolping-400 transition-colors duration-300 group'
+        >
+          <svg 
+            className='w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1' 
+            fill='none' 
+            viewBox='0 0 24 24' 
+            stroke='currentColor'
+          >
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 17l-5-5m0 0l5-5m-5 5h12' />
+          </svg>
+          <span className='text-sm font-medium'>Zurück zur Galerie</span>
+        </Link>
+        
+        {/* Decorative top element */}
+        <div className='flex justify-center'>
+          <div className='relative'>
+            <div className='absolute -inset-4 bg-kolping-500/20 blur-2xl rounded-full' />
+            <svg className='relative w-12 h-12 text-kolping-500' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
+            </svg>
+          </div>
+        </div>
+        
+        <div className='space-y-2'>
+          <h1 
+            className='font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-kolping-400 drop-shadow-[0_0_30px_rgba(255,122,0,0.4)]'
+            style={{ viewTransitionName: `gallery-title-${play}` }}
+          >
+            {title}
+          </h1>
+          
+          {date && (
+            <div className='flex justify-center'>
+              <div className='px-3 py-1 rounded-full bg-site-800/50 border border-kolping-500/30'>
+                <span className='text-sm font-mono text-kolping-400'>{date}</span>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <p className='text-site-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed'>
+          {subtitle}
+        </p>
+      </div>
+    </section>
+  )
+
+  if (!hasImages) {
+    return (
+      <div className='space-y-8 sm:space-y-12 md:space-y-16'>
+        {renderHero(
+          <>
+            Hier entsteht die Galerie für <span className='text-kolping-400'>{title}</span>.
+          </>
+        )}
+        
+        <div className='flex flex-col items-center justify-center py-20 px-4 text-center space-y-6'>
+          <div className='w-24 h-24 rounded-full bg-kolping-500/10 flex items-center justify-center mb-4'>
+            <svg className='w-12 h-12 text-kolping-500/50' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
+            </svg>
+          </div>
+          <h2 className='text-2xl font-bold text-site-200'>Noch keine Bilder vorhanden</h2>
+          <p className='text-site-400 max-w-md'>
+            Für diese Aufführung sind momentan noch keine Bilder in der Galerie verfügbar. 
+            Bitte schauen Sie später noch einmal vorbei.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='space-y-8 sm:space-y-12 md:space-y-16'>
-      {/* Epic Hero Section */}
-      <section className='relative -mt-8 pt-8 pb-12 sm:pb-16 overflow-hidden'>
-        {/* Background theatrical elements */}
-        <div className='absolute inset-0 pointer-events-none'>
-          {/* Stage spotlights */}
-          <div className='absolute top-0 left-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/10 to-transparent blur-3xl' />
-          <div className='absolute top-0 right-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/10 to-transparent blur-3xl' />
-        </div>
-        
-        <div className='relative text-center space-y-6'>
-          {/* Back link */}
-          <Link 
-            href='/gallery' 
-            className='inline-flex items-center gap-2 text-site-300 hover:text-kolping-400 transition-colors duration-300 group'
-          >
-            <svg 
-              className='w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1' 
-              fill='none' 
-              viewBox='0 0 24 24' 
-              stroke='currentColor'
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 17l-5-5m0 0l5-5m-5 5h12' />
-            </svg>
-            <span className='text-sm font-medium'>Zurück zur Galerie</span>
-          </Link>
-          
-          {/* Decorative top element */}
-          <div className='flex justify-center'>
-            <div className='relative'>
-              <div className='absolute -inset-4 bg-kolping-500/20 blur-2xl rounded-full' />
-              <svg className='relative w-12 h-12 text-kolping-500' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
-              </svg>
-            </div>
-          </div>
-          
-          <div className='space-y-2'>
-            <h1 
-              className='font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-kolping-400 drop-shadow-[0_0_30px_rgba(255,122,0,0.4)]'
-              style={{ viewTransitionName: `gallery-title-${play}` }}
-            >
-              {title}
-            </h1>
-            
-            {date && (
-              <div className='flex justify-center'>
-                <div className='px-3 py-1 rounded-full bg-site-800/50 border border-kolping-500/30'>
-                  <span className='text-sm font-mono text-kolping-400'>{date}</span>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          <p className='text-site-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed'>
-            Entdecken Sie die <span className='text-kolping-400'>Highlights</span> dieser Produktion – 
-            {metas.length} unvergessliche Momente.
-          </p>
-        </div>
-      </section>
+      {renderHero(
+        <>
+          Entdecken Sie die <span className='text-kolping-400'>Highlights</span> dieser Produktion – 
+          {metas!.length} unvergessliche Momente.
+        </>
+      )}
 
       {/* Gallery Grid Section */}
       <section>
@@ -121,7 +179,7 @@ export default async function PlayGalleryPage({
           </div>
         </div>
         
-        <ClientGrid play={play} metas={metas} captions={captions} />
+        <ClientGrid play={play} metas={metas!} captions={captions!} />
       </section>
     </div>
   )
