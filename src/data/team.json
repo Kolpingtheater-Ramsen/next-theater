@@ -11,7 +11,8 @@
     "2023 “Sagenhaft” (Kreativbühne)",
     "2024 “Nexus”",
     "2024 “Eine höllische Herausforderung” (Kreativbühne)",
-    "2025 “Anno 1146”"
+    "2025 “Anno 1146”",
+    "2025 “Schicksalsfäden”"
   ],
   "slugs": [
     null,
@@ -25,7 +26,8 @@
     "sagenhaft",
     "nexus",
     "hell",
-    "anno"
+    "anno",
+    "schicksalsfaeden"
   ],
   "current": [
     {
@@ -42,7 +44,8 @@
         null,
         "Hunter",
         null,
-        "Graf Gottfried"
+        "Graf Gottfried",
+        null
       ],
       "images": 3
     },
@@ -60,7 +63,8 @@
         null,
         "Alesa",
         null,
-        "Maribel / Mathilde"
+        "Maribel / Mathilde",
+        null
       ],
       "images": 3
     },
@@ -78,7 +82,8 @@
         "Johanna",
         "Aria",
         "Lucy",
-        "Johanna"
+        "Johanna",
+        "Eurydike"
       ],
       "images": 3
     },
@@ -96,7 +101,8 @@
         "Magd",
         "Ensemble",
         "Mammonia",
-        "Gräfin Hedwig"
+        "Gräfin Hedwig",
+        null
       ],
       "images": 3
     },
@@ -114,9 +120,30 @@
         null,
         "Ensemble",
         null,
-        "Pater Rabanus"
+        "Pater Rabanus",
+        null
       ],
       "images": 3
+    },
+    {
+      "id": "Jakob",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Hermes"
+      ],
+      "placeholderAvatar": true,
+      "images": 1
     },
     {
       "id": "Jonas",
@@ -132,7 +159,8 @@
         "Berthold von Winzingen",
         "Ripper",
         "Teufel",
-        "Berthold von Winzingen"
+        "Berthold von Winzingen",
+        null
       ],
       "images": 3
     },
@@ -150,7 +178,8 @@
         null,
         null,
         null,
-        "Ensemble"
+        "Ensemble",
+        "Melinoe"
       ],
       "images": 3
     },
@@ -168,7 +197,8 @@
         "Bühnentechnik",
         "Richter / Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -186,7 +216,8 @@
         null,
         "Raven",
         null,
-        "Ysabel"
+        "Ysabel",
+        null
       ],
       "images": 3
     },
@@ -204,7 +235,8 @@
         null,
         null,
         null,
-        "Ensemble"
+        "Ensemble",
+        "Nyx"
       ],
       "images": 3
     },
@@ -222,43 +254,8 @@
         null,
         "Collin Charleston / Ensemble",
         null,
-        "Dorfvogt Roderich"
-      ],
-      "images": 3
-    },
-    {
-      "id": "Logge",
-      "roles": [
-        null,
-        "Ensemble",
-        "Ensemble",
-        "Ensemble",
-        "Ensemble",
-        "Ensemble",
-        "Bestatter",
-        "Ensemble",
-        "Vater/Bote",
-        "KI",
-        null,
-        "Ensemble"
-      ],
-      "images": 3
-    },
-    {
-      "id": "Louis",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        "Arno",
-        "Pater Heinrich",
-        "Frank McConnel",
-        "Edward Teach “Blackbeard”",
-        null,
-        "Blade",
-        null,
-        "Barde Mattes"
+        "Dorfvogt Roderich",
+        null
       ],
       "images": 3
     },
@@ -276,7 +273,8 @@
         "Junge Johanna/ Ensemble",
         "Daria",
         "Teufelchen",
-        "Emma (jung)"
+        "Emma (jung)",
+        "Lachesis"
       ],
       "images": 3
     },
@@ -295,7 +293,46 @@
         null,
         null,
         null,
-        "Ensemble"
+        "Ensemble",
+        "Athene"
+      ],
+      "images": 3
+    },
+    {
+      "id": "Logge",
+      "roles": [
+        null,
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Ensemble",
+        "Bestatter",
+        "Ensemble",
+        "Vater/Bote",
+        "KI",
+        null,
+        "Ensemble",
+        null
+      ],
+      "images": 3
+    },
+    {
+      "id": "Louis",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        "Arno",
+        "Pater Heinrich",
+        "Frank McConnel",
+        "Edward Teach “Blackbeard”",
+        null,
+        "Blade",
+        null,
+        "Barde Mattes",
+        null
       ],
       "images": 3
     },
@@ -313,9 +350,30 @@
         null,
         "Serentiy Chrome",
         null,
-        "Fiora"
+        "Fiora",
+        null
       ],
       "images": 3
+    },
+    {
+      "id": "Marcella",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble"
+      ],
+      "placeholderAvatar": true,
+      "images": 1
     },
     {
       "id": "Maria",
@@ -331,7 +389,8 @@
         null,
         "Seraphina Chrome",
         null,
-        "Talina"
+        "Talina",
+        null
       ],
       "images": 3
     },
@@ -349,7 +408,8 @@
         "Bühnentechnik",
         "Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -367,7 +427,8 @@
         null,
         "Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -385,7 +446,8 @@
         "Junge Marie/ Ensemble",
         "Freya",
         "Teufelchen",
-        "Marie (jung)"
+        "Marie (jung)",
+        "Atropos"
       ],
       "images": 3
     },
@@ -403,7 +465,8 @@
         "Marie",
         "Vega",
         "Seele 2/Gabriel",
-        "Marie"
+        "Marie",
+        null
       ],
       "images": 3
     },
@@ -421,7 +484,8 @@
         "Knappe/ Ensemble",
         "Jakko",
         "Beelzebub",
-        "Knappe Fridolin"
+        "Knappe Fridolin",
+        "Pan"
       ],
       "images": 3
     },
@@ -439,7 +503,8 @@
         "Chronistin",
         "Sybella Chrome",
         "Seele 1/Prof. Dr. Dr. Glutheiß",
-        "Agnes"
+        "Agnes",
+        null
       ],
       "images": 3
     },
@@ -455,7 +520,8 @@
         null,
         null,
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 2
     },
@@ -473,7 +539,8 @@
         "Liebhaber/ Ensemble",
         null,
         null,
-        "Ensemble"
+        "Ensemble",
+        "Hades"
       ],
       "images": 3
     },
@@ -491,7 +558,8 @@
         "Regie",
         "Dante / Regie",
         "Regie",
-        "Konrad / Regie"
+        "Konrad / Regie",
+        null
       ],
       "images": 3
     },
@@ -509,7 +577,8 @@
         null,
         null,
         null,
-        "Johanna (jung)"
+        "Johanna (jung)",
+        "Klotho"
       ],
       "placeholderAvatar": false,
       "images": 3
@@ -528,7 +597,8 @@
         null,
         "Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        "Orpheus"
       ],
       "images": 3
     },
@@ -546,7 +616,8 @@
         "Emma",
         "Nyra",
         "Lillith",
-        "Emma"
+        "Emma",
+        null
       ],
       "images": 3
     },
@@ -559,7 +630,8 @@
         "Python",
         "Archibald",
         "Barde Mattes",
-        "Eddie"
+        "Eddie",
+        null
       ],
       "placeholderAvatar": true
     },
@@ -577,7 +649,8 @@
         "Bär/ Ensemble",
         "Barkeeper",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -595,7 +668,8 @@
         "Monster",
         "Delya Delloraine",
         "Engel",
-        "Ensemble"
+        "Ensemble",
+        "Persephone"
       ],
       "images": 3
     },
@@ -613,7 +687,8 @@
         null,
         "Xion Venom",
         null,
-        "Lothar von Greifenfels"
+        "Lothar von Greifenfels",
+        null
       ],
       "images": 3
     }
