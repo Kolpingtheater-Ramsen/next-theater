@@ -1,33 +1,96 @@
 {
   "plays": [
-    "2016 “Die Geschichte der Black Swan”",
-    "2017 “Verrat im Kloster”",
-    "2018 “Bluttribut”",
-    "2019 “Dystopia”",
-    "2020 “Der Kristall der Träume”",
-    "2021 “Malleus Maleficarum”",
-    "2022 “Goldfieber”",
-    "2023 “Traum von Freiheit”",
-    "2023 “Sagenhaft” (Kreativbühne)",
-    "2024 “Nexus”",
-    "2024 “Eine höllische Herausforderung” (Kreativbühne)",
-    "2025 “Anno 1146”",
-    "2025 “Schicksalsfäden” (Kreativbühne)"
-  ],
-  "slugs": [
-    null,
-    "kloster",
-    "bluttribut",
-    "dystopia",
-    "kristall",
-    "malleus",
-    "goldfieber",
-    "freiheit",
-    "sagenhaft",
-    "nexus",
-    "hell",
-    "anno",
-    "schicksalsfaeden"
+    {
+      "play": "Die Geschichte der Black Swan",
+      "slug": "black-swan",
+      "year": 2016,
+      "location": "Kreativbühne",
+      "gallery": false
+    },
+    {
+      "play": "Verrat im Kloster",
+      "slug": "kloster",
+      "year": 2017,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Bluttribut",
+      "slug": "bluttribut",
+      "year": 2018,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Dystopia",
+      "slug": "dystopia",
+      "year": 2019,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Der Kristall der Träume",
+      "slug": "kristall",
+      "year": 2020,
+      "location": null,
+      "gallery": true
+    },
+    {
+      "play": "Malleus Maleficarum",
+      "slug": "malleus",
+      "year": 2021,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Goldfieber",
+      "slug": "goldfieber",
+      "year": 2022,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Traum von Freiheit",
+      "slug": "freiheit",
+      "year": 2023,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Sagenhaft",
+      "slug": "sagenhaft",
+      "year": 2023,
+      "location": "Kreativbühne",
+      "gallery": true
+    },
+    {
+      "play": "Nexus",
+      "slug": "nexus",
+      "year": 2024,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Eine höllische Herausforderung",
+      "slug": "hell",
+      "year": 2024,
+      "location": "Kreativbühne",
+      "gallery": true
+    },
+    {
+      "play": "Anno 1146",
+      "slug": "anno",
+      "year": 2025,
+      "location": "Open-Air-Bühne",
+      "gallery": true
+    },
+    {
+      "play": "Schicksalsfäden",
+      "slug": "schicksalsfaeden",
+      "year": 2025,
+      "location": "Kreativbühne",
+      "gallery": false
+    }
   ],
   "current": [
     {

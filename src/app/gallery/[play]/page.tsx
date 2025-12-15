@@ -9,6 +9,16 @@ import Link from 'next/link'
 
 type PhotoMeta = { width: number; height: number; alt: string; index: number }
 
+type Play = {
+  play: string
+  slug: string | null
+  year: number
+  location: string | null
+  gallery: boolean
+}
+
+const plays: Play[] = (team as unknown as { plays: Play[] }).plays
+
 export default async function PlayGalleryPage({
   params,
 }: {
@@ -31,27 +41,13 @@ export default async function PlayGalleryPage({
   ).find((t) => t.galleryHash === play)
   
   // Try to find in team.json (for validation and fallback title)
-  const slugIndex = team.slugs.indexOf(play)
-  const isValidPlay = slugIndex !== -1 || !!timelineEntry
+  const playData = plays.find(p => p.slug === play)
+  const isValidPlay = !!playData || !!timelineEntry
   
   if (!isValidPlay) return notFound()
     
-  let title = timelineEntry?.header || play
-  let date = timelineEntry?.date
-  
-  if (!timelineEntry && slugIndex !== -1) {
-    // Parse title from team.plays
-    const playString = team.plays[slugIndex] // e.g. "2025 “Schicksalsfäden”"
-    const match = playString.match(/“([^”]+)”/)
-    if (match) {
-      title = match[1]
-    }
-    // Parse year as date?
-    const yearMatch = playString.match(/^(\d{4})/)
-    if (yearMatch) {
-      date = yearMatch[1]
-    }
-  }
+  const title = timelineEntry?.header || playData?.play || play
+  const date = timelineEntry?.date || playData?.year.toString()
 
   // Common Hero Section
   const renderHero = (subtitle: React.ReactNode) => (

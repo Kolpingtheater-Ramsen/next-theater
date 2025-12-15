@@ -14,7 +14,15 @@ type Entry = {
   jobs?: { job: string; icon?: string }[]
 }
 
-const plays: string[] = (data as unknown as { plays: string[] }).plays
+type Play = {
+  play: string
+  slug: string | null
+  year: number
+  location: string | null
+  gallery: boolean
+}
+
+const plays: Play[] = (data as unknown as { plays: Play[] }).plays
 
 function findPerson(id: string): Entry | undefined {
   const lower = id.toLowerCase()
@@ -96,9 +104,11 @@ export default async function PersonPage({
 
   const rolesData = person.roles
     ? person.roles
-        .map((role, index) => ({ role, play: plays[index] }))
+        .map((role, index) => ({
+          role: role!,
+          playData: plays[index]
+        }))
         .filter((x) => x.role && x.role.trim().length > 0)
-        .map((x) => ({ role: x.role!, play: x.play }))
     : []
 
   const totalRoles = rolesData.length

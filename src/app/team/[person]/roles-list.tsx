@@ -2,29 +2,22 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import teamData from '@/data/team.json'
 
-type Role = {
-  role: string
+type Play = {
   play: string
+  slug: string | null
+  year: number
+  location: string | null
+  gallery: boolean
+}
+
+type RoleWithPlay = {
+  role: string
+  playData: Play
 }
 
 type RolesListProps = {
-  roles: Role[]
-}
-
-function extractYear(play: string): string {
-  const match = play.match(/^(\d{4})/)
-  return match ? match[1] : ''
-}
-
-function extractTitle(play: string): string {
-  // Remove year prefix and clean up
-  return play.replace(/^\d{4}\s*/, '').replace(/[""]/g, '"').trim()
-}
-
-function isKreativbuehne(play: string): boolean {
-  return play.toLowerCase().includes('kreativbühne')
+  roles: RoleWithPlay[]
 }
 
 export default function RolesList({ roles }: RolesListProps) {
@@ -39,16 +32,14 @@ export default function RolesList({ roles }: RolesListProps) {
       <div className='absolute left-6 sm:left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-kolping-500 via-kolping-500/50 to-transparent' />
       
       <ul className='space-y-4 sm:space-y-6'>
-        {sortedRoles.map((role, i) => {
-          const year = extractYear(role.play)
-          const title = extractTitle(role.play)
-          const isKB = isKreativbuehne(role.play)
-          const slug = teamData.slugs[teamData.plays.indexOf(role.play)]
+        {sortedRoles.map(({ role, playData }, i) => {
+          const { play: title, year, location, slug, gallery } = playData
+          const hasGallery = gallery && slug
           const isHovered = hoveredIndex === i
           
           return (
             <li
-              key={`${role.play}-${i}`}
+              key={`${title}-${year}-${i}`}
               className='group relative pl-14 sm:pl-20'
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -87,7 +78,7 @@ export default function RolesList({ roles }: RolesListProps) {
               )}
               
               {/* Content card */}
-              {slug ? (
+              {hasGallery ? (
                 <Link href={`/gallery/${slug}`} className='block'>
                   <div className={`
                     relative overflow-hidden rounded-xl border 
@@ -117,19 +108,13 @@ export default function RolesList({ roles }: RolesListProps) {
                                 transition-colors duration-300
                                 ${isHovered ? 'text-kolping-400' : 'text-site-100'}
                               `}>
-                                {title.replace('(Kreativbühne)', '').trim()}
+                                {title}
                               </span>
-                              {isKB ? (
+                              {location && (
                                 <span className='px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-kolping-500/20 text-kolping-400 rounded'>
-                                  Kreativbühne
+                                  {location}
                                 </span>
-                              ): 
-                              (
-                                <span className='px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-kolping-500/20 text-kolping-400 rounded'>
-                                  Open-Air-Bühne
-                                </span>
-                              )
-                              } 
+                              )} 
                             </div>
                           </div>
                         </div>
@@ -144,7 +129,7 @@ export default function RolesList({ roles }: RolesListProps) {
                               transition-colors duration-300
                               ${isHovered ? 'text-kolping-400' : 'text-site-50'}
                             `}>
-                              {role.role}
+                              {role}
                             </span>
                           </div>
                         </div>
@@ -215,19 +200,13 @@ export default function RolesList({ roles }: RolesListProps) {
                             transition-colors duration-300
                             ${isHovered ? 'text-kolping-400' : 'text-site-100'}
                           `}>
-                            {title.replace('(Kreativbühne)', '').trim()}
+                            {title}
                           </span>
-                          {isKB ? (
+                          {location && (
                             <span className='px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-kolping-500/20 text-kolping-400 rounded'>
-                              Kreativbühne
+                              {location}
                             </span>
-                          ): 
-                          (
-                            <span className='px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-kolping-500/20 text-kolping-400 rounded'>
-                              Open-Air-Bühne
-                            </span>
-                          )
-                          } 
+                          )} 
                         </div>
                       </div>
                     </div>
@@ -242,7 +221,7 @@ export default function RolesList({ roles }: RolesListProps) {
                           transition-colors duration-300
                           ${isHovered ? 'text-kolping-400' : 'text-site-50'}
                         `}>
-                          {role.role}
+                          {role}
                         </span>
                       </div>
                     </div>

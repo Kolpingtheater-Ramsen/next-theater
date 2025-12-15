@@ -179,5 +179,17 @@
     "image": "banners/anno.jpg",
     "galleryHash": "anno",
     "dominantColor": "#bea582"
+  },
+  {
+    "date": "Oktober 2025",
+    "header": "Probenstart Winterstück",
+    "text": "Probenstart für das Winterstück “Schicksalsfäden” der Kreativbühne."
+  },
+  {
+    "date": "Dezember 2025",
+    "header": "“Schicksalsfäden”",
+    "text": "Zum Jahresende feiert das Stück “Schicksalsfäden” seine Premiere. Eine spannende Geschichte aus dem Hause der Kreativbühne.",
+    "image": "banners/schicksal.jpg",
+    "dominantColor": "#4a4a4a"
   }
 ]
