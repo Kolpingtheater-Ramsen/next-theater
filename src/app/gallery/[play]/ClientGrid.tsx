@@ -79,7 +79,7 @@ function PhotoCard({
               <div className='flex items-center gap-2 mt-1.5'>
                 <div className='w-4 h-0.5 bg-kolping-500 rounded-full transition-all duration-500 group-hover:w-8' />
                 <span className='text-[10px] text-white/60 font-medium uppercase tracking-wider'>
-                  Anzeigen
+                  
                 </span>
               </div>
             </div>

@@ -3,8 +3,27 @@ import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
 import Image from 'next/image'
 import Link from 'next/link'
+import teamData from '@/data/team.json'
 
 export default function Home() {
+  const marqueeItems = teamData.plays.map((p) => ({
+    date: String(p.year),
+    title: p.play,
+    marjor: p.location === 'Open-Air-Bühne',
+  }))
+
+  const featuredItems = teamData.plays
+    .filter((p) => p.gallery)
+    .sort((a, b) => b.year - a.year)
+    .slice(0, 6)
+    .map((p, idx) => ({
+      title: p.play,
+      image: `/img/banners/${p.slug}.jpg`,
+      href: `/gallery/${p.slug}`,
+      tag: idx === 0 ? 'Neu' : undefined,
+      year: p.year,
+      location: p.location,
+    }))
   return (
     <div className='space-y-8 sm:space-y-10 md:space-y-12'>
       {/* Hero Section - Schicksalsfäden */}
@@ -75,37 +94,25 @@ export default function Home() {
       </section>
 
       <section className='mx-auto max-w-6xl'>
-        <Marquee
-          items={[
-            { date: '2017', title: 'Verrat im Kloster' },
-            { date: '2018', title: 'Bluttribut' },
-            { date: '2019', title: 'Dystopia' },
-            { date: '2020', title: 'Der Kristall der Träume' },
-            { date: '2021', title: 'Malleus Maleficarum' },
-            { date: '2022', title: 'Goldfieber' },
-            { date: '2023', title: 'Traum von Freiheit' },
-            { date: '2024', title: 'Nexus' },
-            { date: '2024', title: 'Eine höllische Herausforderung' },
-            { date: '2025', title: 'Anno 1146' },
-            { date: '2025', title: 'Schicksalsfäden' },
-          ]}
-        />
+        <Marquee items={marqueeItems} />
       </section>
 
       <section className='mx-auto max-w-6xl space-y-4' aria-labelledby='productions-heading'>
-        <h2 id='productions-heading' className='font-display text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight'>
-          Produktionen
-        </h2>
-        <FeaturedProductions
-          items={[
-            { title: 'Anno 1146', image: '/img/banners/anno.jpg', href: '/gallery/anno', tag: 'Neu' },
-            { title: 'Nexus', image: '/img/banners/nexus.jpg', href: '/gallery/nexus' },
-            { title: 'Traum von Freiheit', image: '/img/banners/freiheit.jpg', href: '/gallery/freiheit' },
-            { title: 'Dystopia', image: '/img/banners/dystopia.jpg', href: '/gallery/dystopia' },
-            { title: 'Der Kristall der Träume', image: '/img/banners/kristall.jpg', href: '/gallery/kristall' },
-            { title: 'Goldfieber', image: '/img/banners/goldfieber.jpg', href: '/gallery/goldfieber' },
-          ]}
-        />
+        <div className='flex items-center justify-between'>
+          <h2 id='productions-heading' className='font-display text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight'>
+            Produktionen
+          </h2>
+          <Link
+            href='/gallery'
+            className='text-sm text-site-200 hover:text-kolping-400 transition-colors flex items-center gap-1'
+          >
+            Weitere
+            <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+            </svg>
+          </Link>
+        </div>
+        <FeaturedProductions items={featuredItems} />
       </section>
 
       <section className='mx-auto max-w-6xl' aria-labelledby='join-heading'>
