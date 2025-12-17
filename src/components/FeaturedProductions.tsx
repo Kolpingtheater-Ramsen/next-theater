@@ -25,7 +25,7 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
               />
               <div className='absolute left-2 top-2 z-10 flex items-center gap-1.5'>
                 {item.tag ? (
-                  <span className='rounded bg-kolping-400 px-2 py-[2px] text-[11px] font-bold uppercase text-black'>
+                  <span className='rounded bg-kolping-400 px-2 py-[2px] text-[11px] font-bold uppercase text-white'>
                     {item.tag}
                   </span>
                 ) : null}
