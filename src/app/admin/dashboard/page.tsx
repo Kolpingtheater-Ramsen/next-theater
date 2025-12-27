@@ -16,6 +16,7 @@ export default function AdminDashboardPage() {
   const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+  const [showOnlyNotCheckedIn, setShowOnlyNotCheckedIn] = useState(false)
   const [showEmails, setShowEmails] = useState(false)
   const router = useRouter()
 
@@ -276,6 +277,10 @@ export default function AdminDashboardPage() {
       </span>
     )
   }
+
+  const filteredBookings = showOnlyNotCheckedIn 
+    ? bookings.filter(b => b.status === 'confirmed')
+    : bookings
 
   return (
     <div className='max-w-7xl mx-auto'>
@@ -566,7 +571,7 @@ export default function AdminDashboardPage() {
             <label htmlFor='booking-search' className='block text-sm font-medium mb-2'>
               Nach Buchung suchen
             </label>
-            <div className='relative'>
+            <div className='relative mb-4'>
               <span className='pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-400'>
                 <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z' />
@@ -591,6 +596,19 @@ export default function AdminDashboardPage() {
                 </button>
               )}
             </div>
+
+            <div className='flex items-center'>
+              <input
+                type='checkbox'
+                id='not-checked-in'
+                checked={showOnlyNotCheckedIn}
+                onChange={(e) => setShowOnlyNotCheckedIn(e.target.checked)}
+                className='w-4 h-4 rounded border-site-600 bg-site-700 text-kolping-500 focus:ring-kolping-500 focus:ring-offset-site-900'
+              />
+              <label htmlFor='not-checked-in' className='ml-2 text-sm text-site-100 select-none cursor-pointer'>
+                Nur nicht eingecheckte Buchungen anzeigen
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -602,6 +620,17 @@ export default function AdminDashboardPage() {
             Buchungen {selectedPlayId !== 'all' && `für ${plays.find(p => p.id === selectedPlayId)?.display_date}`}
           </h2>
           <div className='flex gap-3 flex-wrap'>
+            <button
+              type='button'
+              onClick={() => fetchBookings()}
+              disabled={isLoading}
+              className='inline-flex items-center justify-center gap-2 rounded-lg border border-site-700 px-4 py-2 text-sm font-semibold hover:bg-site-700/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+            >
+              <svg className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
+              </svg>
+              <span>Aktualisieren</span>
+            </button>
             <button
               type='button'
               onClick={() => setShowEmails(!showEmails)}
@@ -647,7 +676,7 @@ export default function AdminDashboardPage() {
 
         {isLoading ? (
           <LoadingSpinner text='Lade Buchungen...' size='lg' />
-        ) : bookings.length === 0 ? (
+        ) : filteredBookings.length === 0 ? (
           <div className='text-center py-12'>
             <p className='text-site-100'>Keine Buchungen gefunden</p>
           </div>
@@ -667,7 +696,7 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((booking) => (
+                {filteredBookings.map((booking) => (
                   <tr key={booking.id} className='border-b border-site-800 hover:bg-site-800/30'>
                     <td className='py-3 px-2 text-sm'>{booking.name}</td>
                     <td className='py-3 px-2 text-sm text-site-100'>
