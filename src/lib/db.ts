@@ -159,6 +159,54 @@ export async function getBookingById(db: D1Database, bookingId: string): Promise
 }
 
 /**
+ * Update seats for an existing booking
+ * Uses a transaction to ensure atomicity
+ */
+export async function updateBookingSeats(
+  db: D1Database,
+  bookingId: string,
+  playId: string,
+  newSeats: number[]
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    // Delete existing seats and insert new ones in a transaction
+    const statements = [
+      // Delete all existing seats for this booking
+      db.prepare('DELETE FROM booked_seats WHERE booking_id = ?')
+        .bind(bookingId),
+      
+      // Insert each new seat
+      ...newSeats.map(seatNumber =>
+        db.prepare('INSERT INTO booked_seats (booking_id, play_id, seat_number) VALUES (?, ?, ?)')
+          .bind(bookingId, playId, seatNumber)
+      )
+    ]
+    
+    // Execute as batch (transaction)
+    const results = await db.batch(statements)
+    
+    // Check if all succeeded
+    const allSucceeded = results.every(r => r.success)
+    
+    if (!allSucceeded) {
+      const failedResult = results.find(r => !r.success)
+      return {
+        success: false,
+        error: failedResult?.error || 'Failed to update seats'
+      }
+    }
+    
+    return { success: true }
+  } catch (error) {
+    console.error('Error updating booking seats:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }
+  }
+}
+
+/**
  * Cancel a booking (soft delete by changing status)
  */
 export async function cancelBooking(

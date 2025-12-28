@@ -329,3 +329,138 @@ export async function sendCancellationConfirmation(
   }
 }
 
+/**
+ * Booking modification email template (HTML)
+ */
+function getModificationEmailHTML(data: {
+  name: string
+  date: string
+  time: string
+  seats: string
+  bookingUrl: string
+  bannerUrl: string
+}): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;"> 
+  <p>Hallo ${data.name},</p>
+  
+  <p>deine Buchung wurde erfolgreich aktualisiert.</p>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">DEINE AKTUALISIERTEN BUCHUNGSDETAILS:</h2>
+  <ul style="list-style: none; padding-left: 0;">
+    <li style="margin-bottom: 10px;">📅 <strong>Datum:</strong> ${data.date}</li>
+    <li style="margin-bottom: 10px;">🕐 <strong>Uhrzeit:</strong> ${data.time}</li>
+    <li style="margin-bottom: 10px;">💺 <strong>Sitzplätze:</strong> ${data.seats}</li>
+  </ul>
+  
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">DEIN TICKET:</h2>
+  <p>🎟️ <a href="${data.bookingUrl}" style="color: #0066cc; text-decoration: none; font-weight: bold;">Aktualisiertes Ticket ansehen</a></p>
+  
+  <p>Bitte zeige dein aktualisiertes Ticket (QR-Code) am Einlass vor.</p>
+  
+  <p><strong>Die Kolping-Theatergruppe<br>
+  Winterstück 2025 - Schicksalsfäden</strong></p>
+  
+  <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+  <p style="font-size: 12px; color: #666;">Bei Fragen oder Problemen kannst du uns gerne kontaktieren.</p>
+  
+  <img src="${data.bannerUrl}" alt="Schicksalsfäden" style="width: 100%; max-width: 600px; height: auto; display: block; margin-top: 30px;" />
+</body>
+</html>`
+}
+
+/**
+ * Booking modification email template (plain text)
+ */
+function getModificationEmailBody(data: {
+  name: string
+  date: string
+  time: string
+  seats: string
+  bookingUrl: string
+}): string {
+  return `Hallo ${data.name},
+
+deine Buchung wurde erfolgreich aktualisiert.
+
+DEINE AKTUALISIERTEN BUCHUNGSDETAILS:
+━━━━━━━━━━━━━━━━━━━━━━━
+📅 Datum: ${data.date}
+🕐 Uhrzeit: ${data.time}
+💺 Sitzplätze: ${data.seats}
+
+DEIN TICKET:
+━━━━━━━━━━━━━━━━━━━━━━━
+🎟️ Aktualisiertes Ticket ansehen:
+${data.bookingUrl}
+
+Bitte zeige dein aktualisiertes Ticket (QR-Code) am Einlass vor.
+
+Die Kolping-Theatergruppe
+Winterstück 2025 - Schicksalsfäden
+
+---
+Bei Fragen oder Problemen kannst du uns gerne kontaktieren.
+`
+}
+
+/**
+ * Send booking modification email
+ */
+export async function sendBookingModification(
+  booking: {
+    name: string
+    email: string
+    id: string
+  },
+  play: Play,
+  newSeats: number[],
+  oldSeats: number[],
+  config: EmailConfig,
+  baseUrl: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = new Resend(config.apiKey)
+    
+    const bookingUrl = `${baseUrl}/booking/view/${booking.id}`
+    const seatLabels = getSeatLabels(newSeats)
+    const formattedDate = formatDate(play.date)
+    const bannerUrl = `${baseUrl}/img/banners/schicksal.jpg`
+
+    await resend.emails.send({
+      from: `${config.theaterName} <${config.fromEmail}>`,
+      to: booking.email,
+      replyTo: config.replyToEmail,
+      subject: 'Deine Buchung wurde aktualisiert - Winterstück 2025',
+      html: getModificationEmailHTML({
+        name: booking.name,
+        date: formattedDate,
+        time: play.time,
+        seats: seatLabels,
+        bookingUrl,
+        bannerUrl,
+      }),
+      text: getModificationEmailBody({
+        name: booking.name,
+        date: formattedDate,
+        time: play.time,
+        seats: seatLabels,
+        bookingUrl,
+      }),
+    })
+    
+    return { success: true }
+  } catch (error) {
+    console.error('Error sending modification email:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    }
+  }
+}
+
