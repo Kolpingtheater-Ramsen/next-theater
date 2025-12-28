@@ -235,9 +235,9 @@ export async function cancelBooking(
       .bind(bookingId)
       .run()
     
-    // Update booking status
+    // Update booking status and set cancelled_at timestamp
     const result = await db
-      .prepare('UPDATE bookings SET status = ? WHERE id = ?')
+      .prepare('UPDATE bookings SET status = ?, cancelled_at = datetime(\'now\') WHERE id = ?')
       .bind('cancelled', bookingId)
       .run()
     

@@ -17,6 +17,8 @@ export interface Booking {
   email: string
   created_at: string
   status: 'confirmed' | 'cancelled' | 'checked_in'
+  cancelled_at: string | null
+  checked_in_at: string | null
 }
 
 export interface BookedSeat {

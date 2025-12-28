@@ -55,9 +55,9 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Update booking status to checked_in
+    // Update booking status to checked_in and set timestamp
     const result = await db
-      .prepare('UPDATE bookings SET status = ? WHERE id = ?')
+      .prepare('UPDATE bookings SET status = ?, checked_in_at = datetime(\'now\') WHERE id = ?')
       .bind('checked_in', bookingId)
       .run()
     

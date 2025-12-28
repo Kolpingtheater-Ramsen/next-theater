@@ -55,9 +55,9 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Update booking status back to confirmed
+    // Update booking status back to confirmed and clear checked_in_at
     const result = await db
-      .prepare('UPDATE bookings SET status = ? WHERE id = ?')
+      .prepare('UPDATE bookings SET status = ?, checked_in_at = NULL WHERE id = ?')
       .bind('confirmed', bookingId)
       .run()
     

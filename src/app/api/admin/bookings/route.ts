@@ -165,6 +165,8 @@ export async function GET(request: NextRequest) {
       email: String(row.email),
       status: String(row.status) as 'confirmed' | 'cancelled' | 'checked_in',
       created_at: String(row.created_at),
+      cancelled_at: row.cancelled_at ? String(row.cancelled_at) : null,
+      checked_in_at: row.checked_in_at ? String(row.checked_in_at) : null,
       seats: row.seat_numbers ? String(row.seat_numbers).split(',').map(Number) : [],
       play: {
         id: String(row.play_id),
