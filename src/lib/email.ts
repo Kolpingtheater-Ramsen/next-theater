@@ -78,8 +78,9 @@ function getConfirmationEmailHTML(data: {
   
   <p>Du kannst dein Ticket auch auf deinem Smartphone speichern und am Eingang vorzeigen.</p>
   
-  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">STORNIERUNG:</h2>
-  <p>Falls du nicht kommen kannst, kannst du deine Buchung hier stornieren: <a href="${data.bookingUrl}" style="color: #0066cc; text-decoration: none; font-weight: bold;">Stornierung</a>
+  <h2 style="color: #333; border-bottom: 2px solid #333; padding-bottom: 5px;">BUCHUNG ÄNDERN:</h2>
+  <p>Du kannst jederzeit über deinen Ticket-Link Sitzplätze hinzufügen oder entfernen (maximal 5 Plätze pro Buchung).
+  Falls du nicht kommen kannst, kannst du deine Buchung dort auch stornieren.
   Bitte gib anderen die Chance, die Plätze zu nutzen.</p>
   
   <p>Wir freuen uns auf dein Kommen!</p>
@@ -129,9 +130,10 @@ ${data.bookingUrl}
 
 Du kannst dein Ticket auch auf deinem Smartphone speichern und am Eingang vorzeigen.
 
-STORNIERUNG:
+BUCHUNG ÄNDERN:
 ━━━━━━━━━━━━━━━━━━━━━━━
-Falls du nicht kommen kannst, kannst du deine Buchung über den obigen Link stornieren.
+Du kannst jederzeit über deinen Ticket-Link Sitzplätze hinzufügen oder entfernen (maximal 5 Plätze pro Buchung).
+Falls du nicht kommen kannst, kannst du deine Buchung dort auch stornieren.
 Bitte gib anderen die Chance, die Plätze zu nutzen.
 
 Wir freuen uns auf dein Kommen!
