@@ -33,7 +33,7 @@ async function computeBlurhash(file, compX = 4, compY = 3) {
     .resize(w, h, { fit: 'inside' })
     .toBuffer({ resolveWithObject: true })
   const blurhash = encode(new Uint8ClampedArray(data), info.width, info.height, compX, compY)
-  
+
   return { blurhash }
 }
 
@@ -55,7 +55,7 @@ async function generate() {
   try {
     const raw = await fs.promises.readFile(PICS_JSON, 'utf-8')
     captionsByPlay = JSON.parse(raw)
-  } catch {}
+  } catch { }
 
   for (const play of plays) {
     const thumbsPlayDir = path.join(THUMBS_DIR, play)
@@ -95,7 +95,7 @@ async function generate() {
           .rotate() // Sharp automatically rotates based on EXIF orientation
           .toFile(thumbPath + '.tmp')
         await fs.promises.rename(thumbPath + '.tmp', thumbPath)
-        
+
         // Re-read metadata after rotation
         const rotatedMeta = await sharp(thumbPath).metadata()
         width = rotatedMeta.width || 0
@@ -106,7 +106,7 @@ async function generate() {
       const stats = await fs.promises.stat(thumbPath)
       const fileSizeMB = stats.size / (1024 * 1024)
       const MAX_SIZE_MB = 1
-      
+
       // Only process if image is above size threshold
       if (fileSizeMB > MAX_SIZE_MB) {
         console.log(`Compressing ${play}/${file} (${fileSizeMB.toFixed(2)}MB → target <${MAX_SIZE_MB}MB)`)
@@ -116,10 +116,10 @@ async function generate() {
           .resize(MAX_DIMENSION, MAX_DIMENSION, { fit: 'inside', withoutEnlargement: true })
           .jpeg({ quality: 85, progressive: true, mozjpeg: true })
           .toFile(thumbPath + '.tmp')
-        
+
         // Replace original with resized version
         await fs.promises.rename(thumbPath + '.tmp', thumbPath)
-        
+
         // Update dimensions
         const newMeta = await sharp(thumbPath).metadata()
         width = newMeta.width || 0
@@ -127,7 +127,7 @@ async function generate() {
       }
 
       // thumbnail target width per column layout (~3 columns desktop)
-      const TARGET_W = 1200
+      const TARGET_W = 2500
       const tw = Math.min(TARGET_W, width)
       const th = Math.round((tw / width) * height)
 
@@ -137,9 +137,9 @@ async function generate() {
         console.log(`Generating thumbnail for ${play}/${file}`)
         await sharp(thumbPath)
           .resize({ width: tw })
-          .jpeg({ quality: 74, progressive: true, mozjpeg: true })
+          .jpeg({ quality: 85, progressive: true, mozjpeg: true })
           .toFile(thumbPath + '.thumb')
-        
+
         // Replace original with thumbnail
         await fs.promises.rename(thumbPath + '.thumb', thumbPath)
       } else {
