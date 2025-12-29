@@ -1,4 +1,3 @@
-import CountdownTimer from '@/components/CountdownTimer'
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
 import Image from 'next/image'
@@ -57,38 +56,19 @@ export default function Home() {
         {/* Text content container */}
         <div className='glass rounded-xl p-6 md:p-8'>
           <div className='mb-1 sm:mb-2 text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.15em] sm:tracking-[0.2em] text-kolping-400 uppercase'>
-            2025 - Unsere aktuelle Produktion
+            2025 - Aufführungen beendet
           </div>
           <h1 className='font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight'>
             Schicksalsfäden
           </h1>
           <p className='mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-site-100 max-w-2xl'>
-            Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Erlebe die faszinierende Welt der antiken Mythologie auf der Kreativbühne des Kolpingtheaters Ramsen.
+            Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren.
           </p>
-          <div className='mt-5 sm:mt-6'>
-            <CountdownTimer 
-              targetDate='2025-12-27T17:00:00+02:00' 
-              title='Nächste Premiere startet in'
-              containerClassName='relative w-full'
-            />
-          </div>
-          <div className='mt-4 sm:mt-5 text-sm sm:text-base text-site-200'>
-            <div className='font-semibold mb-2'>Aufführungen:</div>
-            <div className='space-y-1'>
-              <div>27.12. 17:00 Uhr & 20:00 Uhr</div>
-              <div>28.12. 14:30 Uhr & 17:00 Uhr</div>
-            </div>
-          </div>
-          <div className='mt-6 sm:mt-8'>
-            <Link
-              href='/booking'
-              className='inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors shadow-lg hover:shadow-xl'
-            >
-              Jetzt buchen
-              <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
-              </svg>
-            </Link>
+          <div className='mt-8 p-6 glass rounded-lg border-l-4 border-kolping-500 bg-site-800/50'>
+            <h3 className='text-xl font-bold text-white mb-2'>Vielen Dank!</h3>
+            <p className='text-site-100'>
+              Die Aufführungen sind vorüber. Wir bedanken uns herzlich bei allen Besuchern für den großen Zuspruch und die tolle Stimmung! Bis zum nächsten Mal.
+            </p>
           </div>
         </div>
       </section>
