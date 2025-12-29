@@ -31,7 +31,7 @@ export default function Home() {
           <div className='relative w-full flex items-center justify-center bg-site-900'>
             {/* Blurred background cover */}
             <Image
-              src='/img/banners/schicksal.jpg'
+              src='/img/home_team.jpg'
               alt=''
               width={1200}
               height={675}
@@ -42,7 +42,7 @@ export default function Home() {
             />
             {/* Sharp foreground contain */}
             <Image
-              src='/img/banners/schicksal.jpg'
+              src='/img/home_team.jpg'
               alt='Schicksalsfäden - Winterstück 2025'
               width={1200}
               height={675}
@@ -52,7 +52,7 @@ export default function Home() {
             />
           </div>
         </div>
-        
+
         {/* Text content container */}
         <div className='glass rounded-xl p-6 md:p-8'>
           <div className='mb-1 sm:mb-2 text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.15em] sm:tracking-[0.2em] text-kolping-400 uppercase'>
@@ -115,12 +115,12 @@ export default function Home() {
             >
               Instagram
             </a>
-            <a
+            <Link
               href='/about'
               className='inline-flex items-center gap-2 px-4 py-2 rounded border border-site-700 hover:border-kolping-500 bg-site-800 transition-colors'
             >
               Über uns
-            </a>
+            </Link>
           </div>
         </div>
       </section>
