@@ -86,10 +86,10 @@
     },
     {
       "play": "Schicksalsfäden",
-      "slug": "schicksalsfaeden",
+      "slug": "schicksal",
       "year": 2025,
       "location": "Kreativbühne",
-      "gallery": false
+      "gallery": true
     }
   ],
   "current": [

@@ -13,7 +13,7 @@ export default function Home() {
 
   const featuredItems = teamData.plays
     .filter((p) => p.gallery)
-    .sort((a, b) => b.year - a.year)
+    .reverse()
     .slice(0, 6)
     .map((p, idx) => ({
       title: p.play,
