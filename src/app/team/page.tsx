@@ -22,7 +22,7 @@ function SectionDivider({ title, subtitle }: { title: string; subtitle?: string 
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-0 left-1/2 -translate-x-1/2 w-[200%] h-16' />
       </div>
-      
+
       <div className='relative text-center space-y-3'>
         <div className='flex items-center justify-center gap-4'>
           {/* Left decorative flourish */}
@@ -31,11 +31,11 @@ function SectionDivider({ title, subtitle }: { title: string; subtitle?: string 
             <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
             <div className='w-16 h-px bg-gradient-to-l from-kolping-500/80 to-transparent' />
           </div>
-          
+
           <h2 className='font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-kolping-400 drop-shadow-[0_0_20px_rgba(255,122,0,0.3)]'>
             {title}
           </h2>
-          
+
           {/* Right decorative flourish */}
           <div className='hidden sm:flex items-center gap-2'>
             <div className='w-16 h-px bg-gradient-to-r from-kolping-500/80 to-transparent' />
@@ -43,7 +43,7 @@ function SectionDivider({ title, subtitle }: { title: string; subtitle?: string 
             <div className='w-8 h-px bg-gradient-to-r from-kolping-500 to-transparent' />
           </div>
         </div>
-        
+
         {subtitle && (
           <p className='text-site-100 text-sm sm:text-base max-w-lg mx-auto'>
             {subtitle}
@@ -55,24 +55,24 @@ function SectionDivider({ title, subtitle }: { title: string; subtitle?: string 
 }
 
 // Theatrical person card
-function PersonCard({ 
-  person, 
-  type, 
-  index 
-}: { 
+function PersonCard({
+  person,
+  type,
+  index
+}: {
   person: Person
   type: 'current' | 'former' | 'tech'
-  index: number 
+  index: number
 }) {
   const isFormer = type === 'former'
   const isTech = type === 'tech'
-  
+
   return (
     <Link
       href={`/team/${encodeURIComponent(person.id)}`}
       className='group relative block'
       aria-label={`Profil von ${person.name ?? person.id} ansehen${isFormer ? ' (ehemalig)' : ''}`}
-      style={{ 
+      style={{
         viewTransitionName: `person-${person.id}`,
         animationDelay: `${index * 50}ms`,
       }}
@@ -87,14 +87,14 @@ function PersonCard({
       `}>
         {/* Theatrical spotlight glow on hover */}
         <div className='absolute -inset-4 bg-gradient-to-b from-kolping-500/20 via-kolping-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none' />
-        
+
         {/* Image container */}
         <div className='relative aspect-[3/4] overflow-hidden bg-site-800'>
           {/* Animated spotlight beam */}
           <div className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10'>
             <div className='absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-kolping-500/20 via-transparent to-transparent' />
           </div>
-          
+
           <Image
             src={
               person.placeholderAvatar
@@ -108,15 +108,15 @@ function PersonCard({
               group-hover:scale-110 group-hover:brightness-110
               ${isFormer ? 'filter sepia-[0.3] grayscale-[0.2] group-hover:sepia-[0.1] group-hover:grayscale-[0]' : ''}
             `}
-            style={{ 
+            style={{
               viewTransitionName: `person-image-${person.id}`,
             }}
           />
-          
+
           {/* Dramatic gradient overlays */}
           <div className='absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black via-black/60 to-transparent z-10' />
           <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-10' />
-          
+
           {/* Type badge */}
           {isTech && (
             <div className='absolute top-3 right-3 z-20'>
@@ -125,7 +125,7 @@ function PersonCard({
               </div>
             </div>
           )}
-          
+
           {/* Name overlay on image */}
           <div className='absolute bottom-0 inset-x-0 p-4 z-20'>
             <h3 className='font-display font-bold text-lg sm:text-xl text-white group-hover:text-kolping-400 transition-colors duration-300 drop-shadow-lg'>
@@ -139,7 +139,7 @@ function PersonCard({
             </div>
           </div>
         </div>
-        
+
         {/* Bottom accent bar */}
         <div className='h-1 bg-gradient-to-r from-transparent via-kolping-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
       </div>
@@ -178,9 +178,9 @@ export default function TeamPage() {
           {/* Stage spotlights */}
           <div className='absolute top-0 left-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/10 to-transparent blur-3xl' />
           <div className='absolute top-0 right-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/10 to-transparent blur-3xl' />
-          
+
         </div>
-        
+
         <div className='relative text-center space-y-6'>
           {/* Decorative top element */}
           <div className='flex justify-center'>
@@ -192,15 +192,15 @@ export default function TeamPage() {
               </svg>
             </div>
           </div>
-          
+
           <h1 className='font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight'>
             <span className='text-kolping-400 drop-shadow-[0_0_30px_rgba(255,122,0,0.4)]'>Unser</span>{' '}
             <span className='text-site-50'>Team</span>
           </h1>
-          
+
           <p className='text-site-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed'>
-            Die talentierten Köpfe hinter unseren unvergesslichen Aufführungen. 
-            <span className='text-kolping-400'> Schauspieler, Techniker und Kreative</span> – 
+            Die talentierten Köpfe hinter unseren unvergesslichen Aufführungen.
+            <span className='text-kolping-400'> Schauspieler, Techniker und Kreative</span> –
             vereint durch die Leidenschaft für das Theater.
           </p>
         </div>
@@ -208,17 +208,17 @@ export default function TeamPage() {
 
       {/* Current Members */}
       <section>
-        <SectionDivider 
-          title="Aktuelle Mitglieder" 
+        <SectionDivider
+          title="Aktuelle Mitglieder"
           subtitle="Das Herzstück unserer Bühne"
         />
         <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6'>
           {current.map((person, index) => (
-            <PersonCard 
-              key={person.id} 
-              person={person} 
-              type="current" 
-              index={index} 
+            <PersonCard
+              key={person.id}
+              person={person}
+              type="current"
+              index={index}
             />
           ))}
         </div>
@@ -226,17 +226,17 @@ export default function TeamPage() {
 
       {/* Tech & Crew */}
       <section>
-        <SectionDivider 
-          title="Technik & Crew" 
+        <SectionDivider
+          title="Technik & Crew"
           subtitle="Die Magie hinter der Bühne"
         />
         <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6'>
           {tech.map((person, index) => (
-            <PersonCard 
-              key={person.id} 
-              person={person} 
-              type="tech" 
-              index={index} 
+            <PersonCard
+              key={person.id}
+              person={person}
+              type="tech"
+              index={index}
             />
           ))}
         </div>
@@ -248,19 +248,19 @@ export default function TeamPage() {
         <div className='absolute inset-0 pointer-events-none'>
           <div className='absolute inset-0 bg-gradient-to-t from-site-950/50 via-transparent to-site-950/50' />
         </div>
-        
+
         <div className='relative'>
-          <SectionDivider 
-            title="Ehemalige Mitglieder" 
+          <SectionDivider
+            title="Ehemalige Mitglieder"
             subtitle="Mit Dankbarkeit erinnern wir uns an ihre Beiträge"
           />
           <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6'>
             {former.map((person, index) => (
-              <PersonCard 
-                key={person.id} 
-                person={person} 
-                type="former" 
-                index={index} 
+              <PersonCard
+                key={person.id}
+                person={person}
+                type="former"
+                index={index}
               />
             ))}
           </div>
