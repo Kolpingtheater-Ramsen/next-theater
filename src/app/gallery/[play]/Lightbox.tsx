@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useState, useCallback } from 'react'
+import { decodeHtmlEntities } from '@/lib/html'
 
 type SlideDirection = 'left' | 'right' | null
 
@@ -29,6 +30,8 @@ export function Lightbox({
   const [isClosing, setIsClosing] = useState(false)
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(null)
   const [imageKey, setImageKey] = useState(src)
+  const decodedAlt = decodeHtmlEntities(alt)
+  const decodedCaption = caption ? decodeHtmlEntities(caption) : undefined
 
   // Trigger entrance animation
   useEffect(() => {
@@ -130,7 +133,7 @@ export function Lightbox({
           {loading && thumbSrc ? (
             <Image
               src={thumbSrc}
-              alt={alt}
+              alt={decodedAlt}
               fill
               className='object-contain blur-md opacity-50'
               sizes='100vw'
@@ -156,7 +159,7 @@ export function Lightbox({
           >
             <Image
               src={imageKey}
-              alt={alt}
+              alt={decodedAlt}
               fill
               className={`
                 object-contain transition-all duration-500
@@ -244,7 +247,7 @@ export function Lightbox({
         </div>
         
         {/* Caption - slide up */}
-        {caption ? (
+        {decodedCaption ? (
           <div className={`
             absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-center
             transition-all duration-300
@@ -255,7 +258,7 @@ export function Lightbox({
             <div className='inline-block max-w-2xl'>
               <div className='px-5 py-3 rounded-xl bg-site-800/80 backdrop-blur-sm border border-kolping-500/20 shadow-lg shadow-black/20'>
                 <p className='text-sm sm:text-base text-white font-medium leading-relaxed'>
-                  {caption}
+                  {decodedCaption}
                 </p>
               </div>
             </div>

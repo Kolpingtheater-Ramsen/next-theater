@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { Lightbox } from './Lightbox'
+import { decodeHtmlEntities } from '@/lib/html'
 
 type PhotoMeta = {
   width: number
@@ -29,6 +30,8 @@ function PhotoCard({
   onClick: () => void
 }) {
   const thumb = `/img/gallery_thumbs/${play}/Bild_${meta.index + 1}.jpg`
+  const decodedAlt = decodeHtmlEntities(meta.alt)
+  const decodedCaption = decodeHtmlEntities(caption ?? meta.alt)
 
   return (
     <button
@@ -59,7 +62,7 @@ function PhotoCard({
           
           <Image
             src={thumb}
-            alt={meta.alt}
+            alt={decodedAlt}
             width={meta.tw ?? meta.width}
             height={meta.th ?? meta.height}
             className='w-full h-auto object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110'
@@ -74,7 +77,7 @@ function PhotoCard({
           <div className='absolute inset-x-0 bottom-0 z-20'>
             <div className='p-3 sm:p-4'>
               <p className='text-xs sm:text-sm text-white font-medium line-clamp-2 group-hover:text-kolping-400 transition-colors duration-300 drop-shadow-lg'>
-                {caption ?? meta.alt}
+                {decodedCaption}
               </p>
               <div className='flex items-center gap-2 mt-1.5'>
                 <div className='w-4 h-0.5 bg-kolping-500 rounded-full transition-all duration-500 group-hover:w-8' />
