@@ -966,6 +966,17 @@
   ],
   "tech": [
     {
+      "id": "Cathrin",
+      "placeholderAvatar": true,
+      "jobs": [
+        {
+          "job": "Kostüme",
+          "icon": "scissors"
+        }
+      ],
+      "images": 1
+    },
+    {
       "id": "Christian",
       "jobs": [
         {
@@ -1013,6 +1024,16 @@
       "images": 3
     },
     {
+      "id": "Julian",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        }
+      ],
+      "images": 3
+    },
+    {
       "id": "Leo",
       "icon": "settings",
       "jobs": [
@@ -1023,6 +1044,16 @@
         {
           "job": "Fotografie",
           "icon": "camera"
+        }
+      ],
+      "images": 2
+    },
+    {
+      "id": "Logge",
+      "jobs": [
+        {
+          "job": "Website",
+          "icon": "explore"
         }
       ],
       "images": 2
@@ -1059,37 +1090,6 @@
         {
           "job": "Tontechnik",
           "icon": "headphones"
-        }
-      ],
-      "images": 1
-    },
-    {
-      "id": "Julian",
-      "jobs": [
-        {
-          "job": "Bühnentechnik",
-          "icon": "settings"
-        }
-      ],
-      "images": 3
-    },
-    {
-      "id": "Logge",
-      "jobs": [
-        {
-          "job": "Website",
-          "icon": "explore"
-        }
-      ],
-      "images": 2
-    },
-    {
-      "id": "Cathrin",
-      "placeholderAvatar": true,
-      "jobs": [
-        {
-          "job": "Kostüme",
-          "icon": "scissors"
         }
       ],
       "images": 1
