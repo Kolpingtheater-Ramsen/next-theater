@@ -1082,6 +1082,17 @@
         }
       ],
       "images": 2
+    },
+    {
+      "id": "Cathrin",
+      "placeholderAvatar": true,
+      "jobs": [
+        {
+          "job": "Kostüme",
+          "icon": "scissors"
+        }
+      ],
+      "images": 1
     }
   ]
 }

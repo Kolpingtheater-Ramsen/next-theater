@@ -86,6 +86,7 @@ function JobIcon({ icon }: { icon?: string }) {
     lightbulb: '💡',
     headphones: '🎧',
     explore: '🧭',
+    scissors: '✂️',
   }
   return <span className='text-4xl'>{iconMap[icon || ''] || '🎭'}</span>
 }
