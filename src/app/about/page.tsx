@@ -84,15 +84,6 @@ function ProductionCard({
     >
       <div className='relative poster-frame border-epic bg-site-800 transition-all duration-500 ease-out hover:scale-[1.02] hover:-translate-y-1 animate-fade-in-up'>
         <div className='absolute -inset-4 bg-gradient-to-b from-kolping-500/15 via-kolping-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none' />
-        <div className='absolute top-3 left-3 z-30 hidden sm:flex items-center gap-2 rounded-full border border-site-700 bg-site-900/80 backdrop-blur-sm px-3 py-1'>
-          <span className='text-[10px] font-bold tracking-[0.18em] text-kolping-400 uppercase'>
-            #{entry.order}
-          </span>
-          <span className='text-[10px] tracking-[0.12em] text-site-100 uppercase'>
-            Produktion
-          </span>
-        </div>
-
         <div className='relative flex flex-col sm:flex-row overflow-hidden'>
           <div
             className='relative w-full sm:w-44 md:w-52 lg:w-60 aspect-[2/3] sm:aspect-auto sm:self-stretch overflow-hidden bg-site-900 shrink-0'
