@@ -12,6 +12,17 @@ type TimelineEntry = {
   dominantColor?: string
 }
 
+type TimelineItem = TimelineEntry & {
+  year: string
+  month: string
+  order: number
+}
+
+type TimelineYearGroup = {
+  year: string
+  entries: TimelineItem[]
+}
+
 type Play = {
   location: string | null
 }
@@ -22,6 +33,13 @@ type TeamData = {
 }
 
 export const dynamic = 'force-static'
+
+function parseDateParts(date: string) {
+  const parts = date.trim().split(' ').filter(Boolean)
+  const year = parts[parts.length - 1] ?? date
+  const month = parts.slice(0, -1).join(' ') || date
+  return { month, year }
+}
 
 function SectionDivider({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
@@ -80,7 +98,7 @@ function ProductionCard({
   entry,
   index,
 }: {
-  entry: TimelineEntry
+  entry: TimelineItem
   index: number
 }) {
   const hasGallery = !!entry.galleryHash
@@ -92,6 +110,14 @@ function ProductionCard({
     >
       <div className='relative poster-frame border-epic bg-site-800 transition-all duration-500 ease-out hover:scale-[1.02] hover:-translate-y-1 animate-fade-in-up'>
         <div className='absolute -inset-4 bg-gradient-to-b from-kolping-500/15 via-kolping-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none' />
+        <div className='absolute top-3 left-3 z-30 hidden sm:flex items-center gap-2 rounded-full border border-site-700 bg-site-900/80 backdrop-blur-sm px-3 py-1'>
+          <span className='text-[10px] font-bold tracking-[0.18em] text-kolping-400 uppercase'>
+            #{entry.order}
+          </span>
+          <span className='text-[10px] tracking-[0.12em] text-site-100 uppercase'>
+            Produktion
+          </span>
+        </div>
 
         <div className='relative flex flex-col sm:flex-row overflow-hidden'>
           <div
@@ -115,7 +141,7 @@ function ProductionCard({
             <div className='absolute top-3 right-3 z-20 sm:hidden'>
               <div className='px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-sm border border-kolping-500/40'>
                 <span className='text-[10px] font-bold uppercase tracking-wider text-kolping-400 font-mono'>
-                  {entry.date}
+                  {entry.month} {entry.year}
                 </span>
               </div>
             </div>
@@ -125,7 +151,7 @@ function ProductionCard({
             <div className='hidden sm:flex items-center gap-3'>
               <div className='px-3 py-1 rounded-full bg-kolping-500/20 border border-kolping-500/30'>
                 <span className='text-xs font-bold uppercase tracking-wider text-kolping-400 font-mono'>
-                  {entry.date}
+                  {entry.month} {entry.year}
                 </span>
               </div>
               {hasGallery && (
@@ -191,7 +217,7 @@ function EventCard({
   entry,
   index,
 }: {
-  entry: TimelineEntry
+  entry: TimelineItem
   index: number
 }) {
   return (
@@ -199,10 +225,12 @@ function EventCard({
       className='group relative animate-fade-in-up'
       style={{ animationDelay: `${index * 30}ms` }}
     >
-      <div className='absolute -left-[39px] sm:-left-[47px] top-6 z-10'>
-        <div className='relative'>
-          <div className='absolute -inset-1 bg-kolping-500/40 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity' />
-          <div className='relative w-4 h-4 rounded-full bg-kolping-500 border-4 border-site-900 group-hover:scale-125 transition-transform' />
+      <div className='absolute -left-[46px] sm:-left-[56px] top-5 z-10'>
+        <div className='relative w-8 h-8 rounded-full border border-kolping-500/35 bg-site-900 flex items-center justify-center'>
+          <div className='absolute -inset-1 bg-kolping-500/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity' />
+          <span className='relative text-[10px] font-bold text-kolping-400'>
+            {entry.order}
+          </span>
         </div>
       </div>
 
@@ -210,9 +238,12 @@ function EventCard({
         <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4'>
           <div className='px-3 py-1 rounded-full bg-kolping-500/15 border border-kolping-500/25 w-fit'>
             <time className='text-xs font-bold text-kolping-400 uppercase tracking-wider font-mono'>
-              {entry.date}
+              {entry.month} {entry.year}
             </time>
           </div>
+          <span className='text-[10px] font-semibold uppercase tracking-[0.16em] text-site-100'>
+            Ereignis
+          </span>
           <h3 className='font-display text-lg sm:text-xl font-bold text-site-50 group-hover:text-kolping-400 transition-colors'>
             {entry.header}
           </h3>
@@ -227,7 +258,27 @@ function EventCard({
 }
 
 export default function AboutPage() {
-  const entries = (timeline as TimelineEntry[]).slice().reverse()
+  const rawEntries = (timeline as TimelineEntry[]).slice().reverse()
+  const entries: TimelineItem[] = rawEntries.map((entry, index) => {
+    const { month, year } = parseDateParts(entry.date)
+    return {
+      ...entry,
+      month,
+      year,
+      order: index + 1,
+    }
+  })
+  const timelineGroups = entries.reduce<TimelineYearGroup[]>((groups, entry) => {
+    const lastGroup = groups[groups.length - 1]
+    if (!lastGroup || lastGroup.year !== entry.year) {
+      groups.push({ year: entry.year, entries: [entry] })
+      return groups
+    }
+    lastGroup.entries.push(entry)
+    return groups
+  }, [])
+  const productionsInTimeline = entries.filter((entry) => !!entry.image).length
+  const eventsInTimeline = entries.length - productionsInTimeline
   const theaterData = teamData as TeamData
   const yearsActive = new Date().getFullYear() - 2014
   const productionCount = theaterData.plays.length
@@ -403,35 +454,110 @@ export default function AboutPage() {
       <section className='mx-auto max-w-6xl px-4 pb-8 sm:pb-12 space-y-4' aria-labelledby='timeline-heading'>
         <SectionDivider
           title='Chronik'
-          subtitle='Eine Reise durch unsere Theatergeschichte'
+          subtitle='Vom ersten Impuls bis zu den neuesten Produktionen'
         />
 
         <h2 id='timeline-heading' className='sr-only'>
           Chronik
         </h2>
 
-        <div className='relative pl-8 sm:pl-10'>
-          <div className='absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-kolping-500/80 via-site-700 to-site-700' />
-
-          <div className='space-y-6 sm:space-y-8'>
-            {entries.map((entry, index) => {
-              const currentYear = entry.date.split(' ')[1]
-              const previousYear = index > 0 ? entries[index - 1].date.split(' ')[1] : null
-              const isNewYear = currentYear !== previousYear
-              const isProduction = !!entry.image
-
-              return (
-                <div key={`${entry.date}-${entry.header}`}>
-                  {isNewYear && <YearSeparator year={currentYear} />}
-                  {isProduction ? (
-                    <ProductionCard entry={entry} index={index} />
-                  ) : (
-                    <EventCard entry={entry} index={index} />
-                  )}
-                </div>
-              )
-            })}
+        <div className='grid gap-3 sm:gap-4 sm:grid-cols-3'>
+          <div className='glass rounded-xl border border-site-700 p-4 sm:p-5'>
+            <p className='text-[11px] tracking-[0.18em] uppercase text-kolping-400 font-semibold'>
+              Gesamt
+            </p>
+            <p className='mt-2 font-display text-3xl font-black text-site-50'>
+              {entries.length}
+            </p>
+            <p className='text-sm text-site-100'>Meilensteine seit 2014</p>
           </div>
+          <div className='glass rounded-xl border border-site-700 p-4 sm:p-5'>
+            <p className='text-[11px] tracking-[0.18em] uppercase text-kolping-400 font-semibold'>
+              Produktionen
+            </p>
+            <p className='mt-2 font-display text-3xl font-black text-site-50'>
+              {productionsInTimeline}
+            </p>
+            <p className='text-sm text-site-100'>Einträge mit Bühnenbild/Galerie</p>
+          </div>
+          <div className='glass rounded-xl border border-site-700 p-4 sm:p-5'>
+            <p className='text-[11px] tracking-[0.18em] uppercase text-kolping-400 font-semibold'>
+              Ereignisse
+            </p>
+            <p className='mt-2 font-display text-3xl font-black text-site-50'>
+              {eventsInTimeline}
+            </p>
+            <p className='text-sm text-site-100'>Probenstarts, Preise und Wendepunkte</p>
+          </div>
+        </div>
+
+        <div className='sticky top-[72px] z-20 -mx-1 px-1 py-3 backdrop-blur supports-[backdrop-filter]:bg-site-900/55 bg-site-900/75 rounded-xl border border-site-700/60'>
+          <div className='flex items-center gap-2 overflow-x-auto scrollbar-thin pb-1'>
+            {timelineGroups.map((group) => (
+              <a
+                key={group.year}
+                href={`#timeline-year-${group.year}`}
+                className='shrink-0 inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/80 px-3 py-1.5 text-xs text-site-100 hover:border-kolping-400/60 hover:text-kolping-400 transition-colors'
+              >
+                <span className='font-semibold'>{group.year}</span>
+                <span className='inline-flex min-w-5 h-5 items-center justify-center rounded-full bg-site-700 text-[10px] text-site-100'>
+                  {group.entries.length}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className='space-y-10 sm:space-y-14 pt-2'>
+          {timelineGroups.map((group, groupIndex) => {
+            const productionCountForYear = group.entries.filter((entry) => !!entry.image).length
+            const eventCountForYear = group.entries.length - productionCountForYear
+
+            return (
+              <section
+                key={group.year}
+                id={`timeline-year-${group.year}`}
+                className='scroll-mt-32 space-y-4'
+                aria-label={`Einträge aus dem Jahr ${group.year}`}
+              >
+                <YearSeparator year={group.year} />
+                <div className='-mt-3 sm:-mt-2 flex flex-wrap gap-2 sm:gap-3'>
+                  <span className='inline-flex items-center rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
+                    {group.entries.length} Einträge
+                  </span>
+                  <span className='inline-flex items-center rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
+                    {productionCountForYear} Produktionen
+                  </span>
+                  <span className='inline-flex items-center rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
+                    {eventCountForYear} Ereignisse
+                  </span>
+                </div>
+
+                <div className='relative pl-8 sm:pl-10'>
+                  <div className='absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-kolping-500/80 via-site-700 to-site-700' />
+                  <div className='grid gap-5 sm:gap-6 md:grid-cols-2'>
+                    {group.entries.map((entry, index) => {
+                      const isProduction = !!entry.image
+                      const animationIndex = groupIndex * 6 + index
+
+                      return (
+                        <div
+                          key={`${entry.date}-${entry.header}`}
+                          className={isProduction ? 'md:col-span-2' : ''}
+                        >
+                          {isProduction ? (
+                            <ProductionCard entry={entry} index={animationIndex} />
+                          ) : (
+                            <EventCard entry={entry} index={animationIndex} />
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </section>
+            )
+          })}
         </div>
       </section>
 
