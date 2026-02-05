@@ -61,6 +61,7 @@ function TeamCard({
   index: number
 }) {
   const isFormer = type === 'former'
+  const isPlaceholder = !!person.placeholderAvatar
   const label = type === 'tech' ? 'Crew' : type === 'former' ? 'Ehemalig' : 'Ensemble'
   const roleText =
     type === 'tech'
@@ -86,14 +87,19 @@ function TeamCard({
           {label}
         </div>
 
-        <div className='relative aspect-[3/4] overflow-hidden bg-site-800'>
+        <div className='relative aspect-[3/4] overflow-hidden bg-gradient-to-br from-site-800 to-site-900'>
           <Image
             src={person.placeholderAvatar ? '/img/team/avatar/placeholder.svg' : avatarPath(person.id)}
             alt={person.name ?? person.id}
             fill
-            className={`object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:brightness-110 ${isFormer ? 'filter sepia-[0.25] grayscale-[0.25] group-hover:sepia-[0.1] group-hover:grayscale-[0]' : ''}`}
+            className={`${isPlaceholder ? 'object-contain p-8 opacity-90 group-hover:scale-105' : 'object-cover group-hover:scale-110 group-hover:brightness-110'} transition-all duration-700 ease-out ${isFormer ? 'filter sepia-[0.25] grayscale-[0.25] group-hover:sepia-[0.1] group-hover:grayscale-[0]' : ''}`}
             style={{ viewTransitionName: `person-image-${person.id}` }}
           />
+          {isPlaceholder && (
+            <div className='absolute top-3 right-3 z-20 rounded-full border border-site-700 bg-site-900/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-site-100'>
+              Kein Foto
+            </div>
+          )}
           <div className='absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black via-black/65 to-transparent z-10' />
           <div className='absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/20 z-10' />
 

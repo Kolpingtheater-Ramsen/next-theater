@@ -92,7 +92,7 @@ function GalleryCard({
         <div className='absolute -inset-4 bg-gradient-to-b from-kolping-500/20 via-kolping-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none' />
 
         <div
-          className={`relative overflow-hidden bg-site-800 ${isHero ? 'aspect-[21/9] sm:aspect-[16/8] md:aspect-[16/6]' : 'aspect-[3/4]'}`}
+          className={`relative overflow-hidden bg-site-800 ${isHero ? 'aspect-[21/9] sm:aspect-[16/8] md:aspect-[16/6]' : 'aspect-[16/10]'}`}
           style={{ backgroundColor: show.dominantColor }}
         >
           <Image
@@ -117,7 +117,7 @@ function GalleryCard({
           </div>
 
           <div className='absolute bottom-0 inset-x-0 p-4 sm:p-5 z-20'>
-            <h3 className={`font-display font-black text-white drop-shadow-lg group-hover:text-kolping-400 transition-colors duration-300 ${isHero ? 'text-2xl sm:text-3xl md:text-4xl' : 'text-lg sm:text-xl'}`}>
+            <h3 className={`font-display font-black text-white drop-shadow-lg group-hover:text-kolping-400 transition-colors duration-300 ${isHero ? 'text-2xl sm:text-3xl md:text-4xl' : 'text-base sm:text-lg md:text-xl'}`}>
               {show.header}
             </h3>
             <div className='mt-2 flex items-center gap-2 text-sm text-white/80 group-hover:text-kolping-400 transition-colors'>
@@ -171,7 +171,7 @@ export default function GalleryPage() {
       <section className='relative -mx-4 -mt-8 overflow-hidden'>
         <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
           <Image
-            src={latestShow ? `/img/${latestShow.image}` : '/img/home_team.jpg'}
+            src='/img/home_team.jpg'
             alt={latestShow ? `Aktuelle Produktion: ${latestShow.header}` : 'Galerie des Kolpingtheaters Ramsen'}
             fill
             priority
@@ -274,6 +274,8 @@ export default function GalleryPage() {
           {years.map((year, yearIndex) => {
             const group = yearGroups[year]
             const [hero, ...rest] = group
+            const hasFeatured = yearIndex === 0 && !!hero
+            const gridItems = hasFeatured ? rest : group
 
             return (
               <section
@@ -291,11 +293,11 @@ export default function GalleryPage() {
                   </span>
                 </div>
 
-                {hero && <GalleryCard show={hero} index={yearIndex} isHero />}
+                {hasFeatured && hero && <GalleryCard show={hero} index={yearIndex} isHero />}
 
-                {rest.length > 0 && (
+                {gridItems.length > 0 && (
                   <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
-                    {rest.map((show, index) => (
+                    {gridItems.map((show, index) => (
                       <GalleryCard
                         key={show.galleryHash}
                         show={show}
