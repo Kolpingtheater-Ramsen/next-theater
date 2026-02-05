@@ -205,10 +205,12 @@ export default function GalleryPage() {
         <div className='mx-auto max-w-6xl px-4 py-5 sm:py-6'>
           <div className='grid sm:grid-cols-3 gap-3 sm:gap-4'>
             <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Archiv: Alle verfügbaren Produktionen nach Jahr geordnet.
+              Archiv: Alle verfügbaren Produktionen in einer durchgehenden
+              Übersicht.
             </div>
             <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Schnellzugriff: Über die Jahresleiste direkt zur gewünschten Saison springen.
+              Schnellzugriff: Neueste Stücke zuerst, ältere Produktionen direkt
+              darunter.
             </div>
             <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
               Detailansicht: In jeder Produktion stehen Fotos im Lightbox-Modus bereit.
