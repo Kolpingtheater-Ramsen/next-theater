@@ -346,7 +346,7 @@ export default function AboutPage() {
         />
 
         <div className='grid lg:grid-cols-[1.2fr_1fr] gap-6 sm:gap-8'>
-          <div className='glass border-epic rounded-xl p-6 sm:p-8 space-y-5'>
+          <div className='glass border-epic relative isolate rounded-xl p-6 sm:p-8 space-y-5'>
             <p className='text-site-50 text-base sm:text-lg leading-relaxed'>
               Das Kolping-Open-Air-Theater Ramsen entwickelt seit 2014 eigene
               Stücke und bringt sie jährlich zur Premiere. Unser großes
@@ -358,16 +358,16 @@ export default function AboutPage() {
               Organisation: Wir arbeiten als Gemeinschaft und schaffen Theater,
               das für alle offen ist.
             </p>
-            <div className='pt-2 flex flex-wrap gap-3'>
+            <div className='relative z-20 pt-2 flex flex-wrap gap-3'>
               <Link
                 href='/team'
-                className='inline-flex items-center gap-2 rounded-full bg-kolping-400 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-kolping-500 hover:shadow-[0_0_24px_rgba(255,122,0,0.25)]'
+                className='relative z-20 inline-flex items-center gap-2 rounded-full bg-kolping-400 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-kolping-500 hover:shadow-[0_0_24px_rgba(255,122,0,0.25)]'
               >
                 Unser Team
               </Link>
               <Link
                 href='/contact'
-                className='inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/70 px-5 py-2.5 text-sm font-medium transition-all hover:border-kolping-400/60 hover:bg-site-800'
+                className='relative z-20 inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/70 px-5 py-2.5 text-sm font-medium transition-all hover:border-kolping-400/60 hover:bg-site-800'
               >
                 Kontakt aufnehmen
               </Link>
