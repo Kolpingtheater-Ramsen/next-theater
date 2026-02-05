@@ -18,11 +18,6 @@ type TimelineItem = TimelineEntry & {
   order: number
 }
 
-type TimelineYearGroup = {
-  year: string
-  entries: TimelineItem[]
-}
-
 type Play = {
   location: string | null
 }
@@ -68,27 +63,6 @@ function SectionDivider({ title, subtitle }: { title: string; subtitle?: string 
             {subtitle}
           </p>
         )}
-      </div>
-    </div>
-  )
-}
-
-function YearSeparator({ year }: { year: string }) {
-  return (
-    <div className='relative py-6 sm:py-8 -ml-8 sm:-ml-10'>
-      <div className='flex items-center gap-4'>
-        <div className='flex-1 h-px bg-gradient-to-r from-transparent via-kolping-500/50 to-kolping-500/80' />
-
-        <div className='relative'>
-          <div className='absolute -inset-3 bg-kolping-500/20 blur-xl rounded-full' />
-          <div className='relative px-6 py-2 rounded-full bg-site-800 border border-kolping-500/40 backdrop-blur-sm'>
-            <span className='font-display text-2xl sm:text-3xl font-black text-kolping-400 tracking-tight drop-shadow-[0_0_10px_rgba(255,122,0,0.4)]'>
-              {year}
-            </span>
-          </div>
-        </div>
-
-        <div className='flex-1 h-px bg-gradient-to-l from-transparent via-kolping-500/50 to-kolping-500/80' />
       </div>
     </div>
   )
@@ -268,15 +242,6 @@ export default function AboutPage() {
       order: index + 1,
     }
   })
-  const timelineGroups = entries.reduce<TimelineYearGroup[]>((groups, entry) => {
-    const lastGroup = groups[groups.length - 1]
-    if (!lastGroup || lastGroup.year !== entry.year) {
-      groups.push({ year: entry.year, entries: [entry] })
-      return groups
-    }
-    lastGroup.entries.push(entry)
-    return groups
-  }, [])
   const productionsInTimeline = entries.filter((entry) => !!entry.image).length
   const eventsInTimeline = entries.length - productionsInTimeline
   const theaterData = teamData as TeamData
@@ -491,73 +456,25 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className='sticky top-[72px] z-20 -mx-1 px-1 py-3 backdrop-blur supports-[backdrop-filter]:bg-site-900/55 bg-site-900/75 rounded-xl border border-site-700/60'>
-          <div className='flex items-center gap-2 overflow-x-auto scrollbar-thin pb-1'>
-            {timelineGroups.map((group) => (
-              <a
-                key={group.year}
-                href={`#timeline-year-${group.year}`}
-                className='shrink-0 inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/80 px-3 py-1.5 text-xs text-site-100 hover:border-kolping-400/60 hover:text-kolping-400 transition-colors'
-              >
-                <span className='font-semibold'>{group.year}</span>
-                <span className='inline-flex min-w-5 h-5 items-center justify-center rounded-full bg-site-700 text-[10px] text-site-100'>
-                  {group.entries.length}
-                </span>
-              </a>
-            ))}
+        <div className='relative pl-8 sm:pl-10'>
+          <div className='absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-kolping-500/80 via-site-700 to-site-700' />
+          <div className='grid gap-5 sm:gap-6 md:grid-cols-2'>
+            {entries.map((entry, index) => {
+              const isProduction = !!entry.image
+              return (
+                <div
+                  key={`${entry.date}-${entry.header}`}
+                  className={isProduction ? 'md:col-span-2' : ''}
+                >
+                  {isProduction ? (
+                    <ProductionCard entry={entry} index={index} />
+                  ) : (
+                    <EventCard entry={entry} index={index} />
+                  )}
+                </div>
+              )
+            })}
           </div>
-        </div>
-
-        <div className='space-y-10 sm:space-y-14 pt-2'>
-          {timelineGroups.map((group, groupIndex) => {
-            const productionCountForYear = group.entries.filter((entry) => !!entry.image).length
-            const eventCountForYear = group.entries.length - productionCountForYear
-
-            return (
-              <section
-                key={group.year}
-                id={`timeline-year-${group.year}`}
-                className='scroll-mt-32 space-y-4'
-                aria-label={`Einträge aus dem Jahr ${group.year}`}
-              >
-                <YearSeparator year={group.year} />
-                <div className='-mt-3 sm:-mt-2 flex flex-wrap gap-2 sm:gap-3'>
-                  <span className='inline-flex items-center rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
-                    {group.entries.length} Einträge
-                  </span>
-                  <span className='inline-flex items-center rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
-                    {productionCountForYear} Produktionen
-                  </span>
-                  <span className='inline-flex items-center rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
-                    {eventCountForYear} Ereignisse
-                  </span>
-                </div>
-
-                <div className='relative pl-8 sm:pl-10'>
-                  <div className='absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-kolping-500/80 via-site-700 to-site-700' />
-                  <div className='grid gap-5 sm:gap-6 md:grid-cols-2'>
-                    {group.entries.map((entry, index) => {
-                      const isProduction = !!entry.image
-                      const animationIndex = groupIndex * 6 + index
-
-                      return (
-                        <div
-                          key={`${entry.date}-${entry.header}`}
-                          className={isProduction ? 'md:col-span-2' : ''}
-                        >
-                          {isProduction ? (
-                            <ProductionCard entry={entry} index={animationIndex} />
-                          ) : (
-                            <EventCard entry={entry} index={animationIndex} />
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              </section>
-            )
-          })}
         </div>
       </section>
 

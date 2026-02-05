@@ -156,13 +156,8 @@ export default function GalleryPage() {
       }
     })
 
-  const yearGroups = shows.reduce<Record<string, TimelineShow[]>>((acc, show) => {
-    if (!acc[show.year]) acc[show.year] = []
-    acc[show.year].push(show)
-    return acc
-  }, {})
-  const years = Object.keys(yearGroups)
   const latestShow = shows[0]
+  const [featuredShow, ...restShows] = shows
 
   return (
     <div className='space-y-0'>
@@ -224,66 +219,24 @@ export default function GalleryPage() {
 
       <section className='mx-auto max-w-6xl px-4 py-8 sm:py-10'>
         <SectionDivider
-          title='Produktionen nach Jahr'
-          subtitle='Schneller Zugriff auf jede Spielzeit'
+          title='Produktionen'
+          subtitle='Alle verfügbaren Galerien in chronologischer Reihenfolge'
         />
 
-        <div className='sticky top-[72px] z-20 backdrop-blur supports-[backdrop-filter]:bg-site-900/55 bg-site-900/75 rounded-xl border border-site-700/60 p-3'>
-          <div className='flex items-center gap-2 overflow-x-auto scrollbar-thin'>
-            {years.map((year) => (
-              <a
-                key={year}
-                href={`#gallery-year-${year}`}
-                className='shrink-0 inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/80 px-3 py-1.5 text-xs text-site-100 hover:border-kolping-400/60 hover:text-kolping-400 transition-colors'
-              >
-                <span className='font-semibold'>{year}</span>
-                <span className='inline-flex min-w-5 h-5 items-center justify-center rounded-full bg-site-700 text-[10px] text-site-100'>
-                  {yearGroups[year].length}
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
+        <div className='space-y-6 sm:space-y-8'>
+          {featuredShow && <GalleryCard show={featuredShow} index={0} isHero />}
 
-        <div className='pt-8 sm:pt-10 space-y-12 sm:space-y-14'>
-          {years.map((year, yearIndex) => {
-            const group = yearGroups[year]
-            const [hero, ...rest] = group
-            const hasFeatured = yearIndex === 0 && !!hero
-            const gridItems = hasFeatured ? rest : group
-
-            return (
-              <section
-                key={year}
-                id={`gallery-year-${year}`}
-                className='scroll-mt-32 space-y-4'
-              >
-                <div className='flex items-center gap-3'>
-                  <h2 className='font-display text-3xl sm:text-4xl font-black text-kolping-400 tracking-tight'>
-                    {year}
-                  </h2>
-                  <div className='h-px flex-1 bg-gradient-to-r from-kolping-500/50 to-transparent' />
-                  <span className='rounded-full border border-site-700 bg-site-800/70 px-3 py-1 text-xs text-site-100'>
-                    {group.length} Produktionen
-                  </span>
-                </div>
-
-                {hasFeatured && hero && <GalleryCard show={hero} index={yearIndex} isHero />}
-
-                {gridItems.length > 0 && (
-                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
-                    {gridItems.map((show, index) => (
-                      <GalleryCard
-                        key={show.galleryHash}
-                        show={show}
-                        index={yearIndex * 10 + index}
-                      />
-                    ))}
-                  </div>
-                )}
-              </section>
-            )
-          })}
+          {restShows.length > 0 && (
+            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
+              {restShows.map((show, index) => (
+                <GalleryCard
+                  key={show.galleryHash}
+                  show={show}
+                  index={index + 1}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
