@@ -140,7 +140,7 @@ function ProductionCard({
 
             <div className='absolute top-3 right-3 z-20 sm:hidden'>
               <div className='px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-sm border border-kolping-500/40'>
-                <span className='text-[10px] font-bold uppercase tracking-wider text-kolping-400 font-mono'>
+                <span className='text-[10px] font-bold uppercase tracking-wider text-kolping-400 font-mono whitespace-nowrap'>
                   {entry.month} {entry.year}
                 </span>
               </div>
@@ -150,7 +150,7 @@ function ProductionCard({
           <div className='relative flex-1 p-5 sm:p-6 md:p-8 flex flex-col justify-center space-y-4'>
             <div className='hidden sm:flex items-center gap-3'>
               <div className='px-3 py-1 rounded-full bg-kolping-500/20 border border-kolping-500/30'>
-                <span className='text-xs font-bold uppercase tracking-wider text-kolping-400 font-mono'>
+                <span className='text-xs font-bold uppercase tracking-wider text-kolping-400 font-mono whitespace-nowrap'>
                   {entry.month} {entry.year}
                 </span>
               </div>
@@ -237,7 +237,7 @@ function EventCard({
       <div className='glass rounded-xl p-5 sm:p-6 space-y-3 transition-all duration-300 hover:border-kolping-500/30 hover:bg-site-800/80'>
         <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4'>
           <div className='px-3 py-1 rounded-full bg-kolping-500/15 border border-kolping-500/25 w-fit'>
-            <time className='text-xs font-bold text-kolping-400 uppercase tracking-wider font-mono'>
+            <time className='text-xs font-bold text-kolping-400 uppercase tracking-wider font-mono whitespace-nowrap'>
               {entry.month} {entry.year}
             </time>
           </div>
