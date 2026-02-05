@@ -156,8 +156,6 @@ export default function TeamPage() {
   const tech = data.tech
   const former = data.former
 
-  const totalPeople = current.length + tech.length + former.length
-
   return (
     <div className='space-y-0'>
       <section className='relative -mx-4 -mt-8 overflow-hidden'>
@@ -202,39 +200,16 @@ export default function TeamPage() {
       </section>
 
       <section className='relative -mx-4 border-y border-site-700 bg-site-900'>
-        <div className='mx-auto max-w-6xl px-4 py-6 sm:py-8'>
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center'>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {current.length}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Aktuell
-              </div>
+        <div className='mx-auto max-w-6xl px-4 py-5 sm:py-6'>
+          <div className='grid sm:grid-cols-3 gap-3 sm:gap-4'>
+            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
+              Bühne: Aktuelle Rollen und Darsteller im Ensemble.
             </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {tech.length}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Crew
-              </div>
+            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
+              Crew: Technik, Licht, Ton und Ablauf hinter den Kulissen.
             </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {former.length}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Ehemalig
-              </div>
-            </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {totalPeople}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Gesamt
-              </div>
+            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
+              Geschichte: Ehemalige Mitglieder als Teil unserer Theaterreise.
             </div>
           </div>
         </div>
@@ -244,9 +219,9 @@ export default function TeamPage() {
         <div className='sticky top-[72px] z-20 backdrop-blur supports-[backdrop-filter]:bg-site-900/55 bg-site-900/75 rounded-xl border border-site-700/60 p-3'>
           <div className='flex items-center gap-2 overflow-x-auto scrollbar-thin'>
             {[
-              { id: 'team-current', label: 'Aktuelle Mitglieder', count: current.length },
-              { id: 'team-tech', label: 'Technik & Crew', count: tech.length },
-              { id: 'team-former', label: 'Ehemalige Mitglieder', count: former.length },
+              { id: 'team-current', label: 'Aktuelle Mitglieder' },
+              { id: 'team-tech', label: 'Technik & Crew' },
+              { id: 'team-former', label: 'Ehemalige Mitglieder' },
             ].map((section) => (
               <a
                 key={section.id}
@@ -254,9 +229,6 @@ export default function TeamPage() {
                 className='shrink-0 inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/80 px-3 py-1.5 text-xs text-site-100 hover:border-kolping-400/60 hover:text-kolping-400 transition-colors'
               >
                 <span className='font-semibold'>{section.label}</span>
-                <span className='inline-flex min-w-5 h-5 items-center justify-center rounded-full bg-site-700 text-[10px] text-site-100'>
-                  {section.count}
-                </span>
               </a>
             ))}
           </div>

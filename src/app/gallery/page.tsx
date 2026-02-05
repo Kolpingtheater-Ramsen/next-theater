@@ -162,8 +162,6 @@ export default function GalleryPage() {
     return acc
   }, {})
   const years = Object.keys(yearGroups)
-  const openAirCount = shows.filter((show) => show.location === 'Open-Air-Bühne').length
-  const kreativCount = shows.filter((show) => show.location === 'Kreativbühne').length
   const latestShow = shows[0]
 
   return (
@@ -209,39 +207,16 @@ export default function GalleryPage() {
       </section>
 
       <section className='relative -mx-4 border-y border-site-700 bg-site-900'>
-        <div className='mx-auto max-w-6xl px-4 py-6 sm:py-8'>
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center'>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {shows.length}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Produktionen
-              </div>
+        <div className='mx-auto max-w-6xl px-4 py-5 sm:py-6'>
+          <div className='grid sm:grid-cols-3 gap-3 sm:gap-4'>
+            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
+              Archiv: Alle verfügbaren Produktionen nach Jahr geordnet.
             </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {years.length}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Jahrgänge
-              </div>
+            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
+              Schnellzugriff: Über die Jahresleiste direkt zur gewünschten Saison springen.
             </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {openAirCount}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Open-Air
-              </div>
-            </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {kreativCount}
-              </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
-                Kreativbühne
-              </div>
+            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
+              Detailansicht: In jeder Produktion stehen Fotos im Lightbox-Modus bereit.
             </div>
           </div>
         </div>
