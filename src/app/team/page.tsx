@@ -95,11 +95,6 @@ function TeamCard({
             className={`${isPlaceholder ? 'object-contain p-8 opacity-90 group-hover:scale-105' : 'object-cover group-hover:scale-110 group-hover:brightness-110'} transition-all duration-700 ease-out ${isFormer ? 'filter sepia-[0.25] grayscale-[0.25] group-hover:sepia-[0.1] group-hover:grayscale-[0]' : ''}`}
             style={{ viewTransitionName: `person-image-${person.id}` }}
           />
-          {isPlaceholder && (
-            <div className='absolute top-3 right-3 z-20 rounded-full border border-site-700 bg-site-900/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-site-100'>
-              Kein Foto
-            </div>
-          )}
           <div className='absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black via-black/65 to-transparent z-10' />
           <div className='absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/20 z-10' />
 
@@ -194,22 +189,6 @@ export default function TeamPage() {
                 Technik und Organisation arbeiten bei uns als eingespieltes
                 Ensemble.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className='relative -mx-4 border-y border-site-700 bg-site-900'>
-        <div className='mx-auto max-w-6xl px-4 py-5 sm:py-6'>
-          <div className='grid sm:grid-cols-3 gap-3 sm:gap-4'>
-            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Bühne: Aktuelle Rollen und Darsteller im Ensemble.
-            </div>
-            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Crew: Technik, Licht, Ton und Ablauf hinter den Kulissen.
-            </div>
-            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Geschichte: Ehemalige Mitglieder als Teil unserer Theaterreise.
             </div>
           </div>
         </div>

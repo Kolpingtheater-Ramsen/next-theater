@@ -7,18 +7,14 @@ export default function Slideshow({
   name,
   count,
   aspect = 'hero',
-  placeholder = false,
 }: {
   name: string
   count: number
   aspect?: 'portrait' | 'landscape' | 'hero'
-  placeholder?: boolean
 }) {
   const images = useMemo(() => {
     const list: string[] = []
-    if (placeholder) {
-      list.push(`/img/team/avatar/placeholder.svg`)
-    } else if (count && count > 0) {
+    if (count && count > 0) {
       for (let i = 1; i <= count; i++) {
         const suffix = i === 1 ? '' : String(i)
         list.push(`/img/team/avatar/${name}${suffix}.jpg`)
@@ -27,7 +23,7 @@ export default function Slideshow({
       list.push(`/img/team/avatar/${name}.jpg`)
     }
     return list
-  }, [name, count, placeholder])
+  }, [name, count])
 
   const [index, setIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)

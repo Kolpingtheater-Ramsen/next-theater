@@ -176,7 +176,9 @@ export default async function PersonPage({
             <span className='text-sm font-medium'>Zurück zum Team</span>
           </Link>
 
-          <div className='mt-6 grid lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-10 items-end'>
+          <div
+            className={`mt-6 grid gap-6 lg:gap-10 items-end ${hasPlaceholder ? '' : 'lg:grid-cols-[1.1fr_0.9fr]'}`}
+          >
             <div>
               <div className='flex flex-wrap items-center gap-2 mb-4'>
                 <span className='inline-flex items-center rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-kolping-400 uppercase'>
@@ -203,19 +205,20 @@ export default async function PersonPage({
               </p>
             </div>
 
-            <div style={{ viewTransitionName: `person-${person.id}` }}>
-              <div className='relative poster-frame border-epic overflow-hidden'>
-                <div className='relative aspect-[3/4] w-full'>
-                  <Slideshow
-                    name={person.id}
-                    count={imageCount}
-                    aspect='hero'
-                    placeholder={hasPlaceholder}
-                  />
-                  <div className='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none' />
+            {!hasPlaceholder && (
+              <div style={{ viewTransitionName: `person-${person.id}` }}>
+                <div className='relative poster-frame border-epic overflow-hidden'>
+                  <div className='relative aspect-[3/4] w-full'>
+                    <Slideshow
+                      name={person.id}
+                      count={imageCount}
+                      aspect='hero'
+                    />
+                    <div className='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none' />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
