@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { decodeHtmlEntities } from '@/lib/html'
 
 type SlideDirection = 'left' | 'right' | null
@@ -30,11 +31,13 @@ export function Lightbox({
   const [isClosing, setIsClosing] = useState(false)
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(null)
   const [imageKey, setImageKey] = useState(src)
+  const [mounted, setMounted] = useState(false)
   const decodedAlt = decodeHtmlEntities(alt)
   const decodedCaption = caption ? decodeHtmlEntities(caption) : undefined
 
   // Trigger entrance animation
   useEffect(() => {
+    setMounted(true)
     requestAnimationFrame(() => {
       setIsVisible(true)
     })
@@ -98,7 +101,9 @@ export function Lightbox({
     return 'animate-scale-fade-in'
   }
 
-  return (
+  if (!mounted) return null
+
+  const content = (
     <div
       className={`
         fixed inset-0 z-50 flex items-center justify-center p-4
@@ -359,4 +364,6 @@ export function Lightbox({
       `}</style>
     </div>
   )
+
+  return createPortal(content, document.body)
 }

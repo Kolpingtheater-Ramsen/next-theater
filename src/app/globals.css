@@ -199,6 +199,7 @@ img {
   content: '';
   position: absolute;
   inset: 0;
+  pointer-events: none;
   border-radius: inherit;
   padding: 1px;
   background: linear-gradient(120deg, rgba(255, 122, 0, 0.4), rgba(255, 200, 140, 0.2), rgba(255, 122, 0, 0.4));
