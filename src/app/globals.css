@@ -9,6 +9,7 @@
   --color-site-900: #0f0f10;
   --color-site-800: #18181a;
   --color-site-700: #232326;
+  --color-site-300: #8a8a8e;
   --color-site-100: #e6e6e6;
   --color-site-50: #f3f3f3;
 }
@@ -47,6 +48,9 @@
 }
 [data-theme='light'] .border-site-700 {
   border-color: #e4e4e7 !important;
+}
+[data-theme='light'] .text-site-300 {
+  color: #6b7280 !important;
 }
 
 html,

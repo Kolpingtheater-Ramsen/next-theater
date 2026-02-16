@@ -98,7 +98,7 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
                   className='absolute inset-0 opacity-15 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-5'
                   style={{ backgroundColor: item.dominantColor }}
                 />
-                <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent transition-opacity duration-300' />
+                <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-300' />
 
                 {/* Tags */}
                 <div className='absolute left-2 top-2 z-10 flex flex-wrap items-center gap-1'>
@@ -116,7 +116,7 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
 
                 {/* Title */}
                 <div className='absolute bottom-0 left-0 right-0 p-2.5 sm:p-3'>
-                  <h3 className='font-display text-sm sm:text-base lg:text-lg font-extrabold tracking-tight text-white transition-colors group-hover:text-kolping-400 leading-tight'>
+                  <h3 className='font-display text-sm sm:text-base lg:text-lg font-extrabold tracking-tight text-white transition-colors group-hover:text-kolping-400 leading-tight text-shadow'>
                     {item.title}
                   </h3>
                   {item.location && (
