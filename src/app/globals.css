@@ -34,6 +34,18 @@
 [data-theme='light'] .bg-site-800\/50 {
   background-color: rgba(243, 244, 246, 0.7) !important;
 }
+[data-theme='light'] .bg-site-800\/60 {
+  background-color: rgba(243, 244, 246, 0.8) !important;
+}
+[data-theme='light'] .bg-site-800\/70 {
+  background-color: rgba(240, 240, 242, 0.85) !important;
+}
+[data-theme='light'] .bg-site-800\/80 {
+  background-color: rgba(240, 240, 242, 0.9) !important;
+}
+[data-theme='light'] .bg-site-800\/90 {
+  background-color: rgba(240, 240, 242, 0.95) !important;
+}
 [data-theme='light'] .bg-site-900\/95 {
   background-color: rgba(255, 255, 255, 0.95) !important;
 }
@@ -42,6 +54,19 @@
 }
 [data-theme='light'] .bg-site-700\/80 {
   background-color: rgba(229, 231, 235, 0.9) !important;
+}
+[data-theme='light'] .bg-site-700\/50 {
+  background-color: rgba(229, 231, 235, 0.7) !important;
+}
+/* Gradient overlays — flip from dark to light in light mode */
+[data-theme='light'] .from-site-800 {
+  --tw-gradient-from: #f7f7f8 !important;
+}
+[data-theme='light'] .via-site-800\/60 {
+  --tw-gradient-via: rgba(247, 247, 248, 0.6) !important;
+}
+[data-theme='light'] .to-site-800\/90 {
+  --tw-gradient-to: rgba(247, 247, 248, 0.9) !important;
 }
 [data-theme='light'] .text-site-50 {
   color: #0f0f10 !important;
