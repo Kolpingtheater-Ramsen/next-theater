@@ -115,7 +115,7 @@ export default function Home() {
               <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
                 {yearsActive}
               </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
+              <div className='mt-1 text-xs sm:text-sm tracking-[0.15em] uppercase text-site-100'>
                 Jahre Bühne
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function Home() {
               <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
                 {productionCount}
               </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
+              <div className='mt-1 text-xs sm:text-sm tracking-[0.15em] uppercase text-site-100'>
                 Produktionen
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function Home() {
               <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
                 {teamData.current.length}
               </div>
-              <div className='mt-1 text-[11px] sm:text-xs tracking-[0.15em] uppercase text-site-100'>
+              <div className='mt-1 text-xs sm:text-sm tracking-[0.15em] uppercase text-site-100'>
                 Ensemble
               </div>
             </div>
