@@ -31,26 +31,75 @@
 [data-theme='light'] .bg-site-800 {
   background-color: #f7f7f8 !important;
 }
+[data-theme='light'] .bg-site-800\/50 {
+  background-color: rgba(243, 244, 246, 0.7) !important;
+}
 [data-theme='light'] .bg-site-900\/95 {
   background-color: rgba(255, 255, 255, 0.95) !important;
 }
 [data-theme='light'] .bg-site-900\/80 {
   background-color: rgba(255, 255, 255, 0.8) !important;
 }
+[data-theme='light'] .bg-site-700\/80 {
+  background-color: rgba(229, 231, 235, 0.9) !important;
+}
 [data-theme='light'] .text-site-50 {
   color: #0f0f10 !important;
 }
 [data-theme='light'] .text-site-100 {
-  color: #374151 !important;
+  color: #1f2937 !important;
+}
+/* site-100 with opacity modifiers — darken them in light mode */
+[data-theme='light'] .text-site-100\/90 {
+  color: rgba(31, 41, 55, 0.95) !important;
+}
+[data-theme='light'] .text-site-100\/80 {
+  color: rgba(31, 41, 55, 0.85) !important;
+}
+[data-theme='light'] .text-site-100\/50 {
+  color: rgba(31, 41, 55, 0.7) !important;
+}
+[data-theme='light'] .text-site-100\/40 {
+  color: rgba(31, 41, 55, 0.6) !important;
 }
 [data-theme='light'] .text-site-300 {
-  color: #6b7280 !important;
+  color: #4b5563 !important;
+}
+[data-theme='light'] .text-site-200 {
+  color: #374151 !important;
 }
 [data-theme='light'] .border-site-700 {
   border-color: #e4e4e7 !important;
 }
-[data-theme='light'] .text-site-300 {
-  color: #6b7280 !important;
+/* white text with opacity — flip to dark text in light mode */
+[data-theme='light'] .text-white\/90 {
+  color: rgba(15, 15, 16, 0.9) !important;
+}
+[data-theme='light'] .text-white\/80 {
+  color: rgba(15, 15, 16, 0.8) !important;
+}
+[data-theme='light'] .text-white\/70 {
+  color: rgba(15, 15, 16, 0.7) !important;
+}
+[data-theme='light'] .text-white\/60 {
+  color: rgba(31, 41, 55, 0.7) !important;
+}
+/* white borders/bg with opacity — flip to dark in light mode */
+[data-theme='light'] .border-white\/20 {
+  border-color: rgba(15, 15, 16, 0.15) !important;
+}
+[data-theme='light'] .border-white\/30 {
+  border-color: rgba(15, 15, 16, 0.2) !important;
+}
+[data-theme='light'] .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+[data-theme='light'] .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.07) !important;
+}
+/* black overlays on cards — lighten in light mode */
+[data-theme='light'] .bg-black\/50 {
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 html,
