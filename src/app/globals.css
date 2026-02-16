@@ -127,6 +127,88 @@
   background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
+/* ── "Force dark" sections: keep dark even in light mode ── */
+/* Used for cinematic hero banners and CTA bars that must stay dark. */
+[data-theme='light'] .force-dark {
+  --color-site-950: #0a0a0a !important;
+  --color-site-900: #0f0f10 !important;
+  --color-site-800: #18181a !important;
+  --color-site-700: #232326 !important;
+  --color-site-100: #e6e6e6 !important;
+  --color-site-50: #f3f3f3 !important;
+  --color-site-300: #8a8a8e !important;
+}
+[data-theme='light'] .force-dark .bg-site-950 {
+  background-color: #0a0a0a !important;
+}
+[data-theme='light'] .force-dark .bg-site-900 {
+  background-color: #0f0f10 !important;
+}
+[data-theme='light'] .force-dark .bg-site-950\/60 {
+  background-color: rgba(10, 10, 10, 0.6) !important;
+}
+[data-theme='light'] .force-dark .bg-site-950\/55 {
+  background-color: rgba(10, 10, 10, 0.55) !important;
+}
+[data-theme='light'] .force-dark .bg-site-800\/60 {
+  background-color: rgba(24, 24, 26, 0.6) !important;
+}
+[data-theme='light'] .force-dark .text-site-50 {
+  color: #f3f3f3 !important;
+}
+[data-theme='light'] .force-dark .text-site-100 {
+  color: #e6e6e6 !important;
+}
+[data-theme='light'] .force-dark .text-site-100\/90 {
+  color: rgba(230, 230, 230, 0.9) !important;
+}
+[data-theme='light'] .force-dark .text-white\/90 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+[data-theme='light'] .force-dark .text-white\/80 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+[data-theme='light'] .force-dark .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+[data-theme='light'] .force-dark .border-site-700 {
+  border-color: #232326 !important;
+}
+[data-theme='light'] .force-dark .glass {
+  background-color: rgba(15, 15, 16, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+/* bg-site-950 opacity variants: always dark (used for backdrop-blur badges on hero images) */
+[data-theme='light'] .bg-site-950\/60 {
+  background-color: rgba(10, 10, 10, 0.6) !important;
+}
+[data-theme='light'] .bg-site-950\/55 {
+  background-color: rgba(10, 10, 10, 0.55) !important;
+}
+
+/* Gradients inside force-dark */
+[data-theme='light'] .force-dark .from-site-950\/30 {
+  --tw-gradient-from: rgba(10, 10, 10, 0.3) !important;
+}
+[data-theme='light'] .force-dark .via-site-950\/75 {
+  --tw-gradient-via: rgba(10, 10, 10, 0.75) !important;
+}
+[data-theme='light'] .force-dark .to-site-950 {
+  --tw-gradient-to: #0a0a0a !important;
+}
+[data-theme='light'] .force-dark .from-site-950\/70 {
+  --tw-gradient-from: rgba(10, 10, 10, 0.7) !important;
+}
+[data-theme='light'] .force-dark .to-site-950\/60 {
+  --tw-gradient-to: rgba(10, 10, 10, 0.6) !important;
+}
+[data-theme='light'] .force-dark .via-site-900 {
+  --tw-gradient-via: #0f0f10 !important;
+}
+[data-theme='light'] .force-dark .to-site-900 {
+  --tw-gradient-to: #0f0f10 !important;
+}
+
 html,
 body {
   min-height: 100%;

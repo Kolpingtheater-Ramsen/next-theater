@@ -149,7 +149,7 @@ export default async function PersonPage({
 
   return (
     <div className='space-y-0'>
-      <section className='relative -mx-4 -mt-8 overflow-hidden'>
+      <section className='relative -mx-4 -mt-8 overflow-hidden force-dark'>
         <div className='absolute inset-0 bg-site-950'>
           {heroImage && (
             <Image
@@ -279,7 +279,7 @@ export default async function PersonPage({
       </section>
 
       <section className='mx-auto max-w-6xl px-4 pb-12 sm:pb-16'>
-        <div className='relative overflow-hidden rounded-2xl border border-site-700'>
+        <div className='relative overflow-hidden rounded-2xl border border-site-700 force-dark'>
           <div className='absolute inset-0 bg-gradient-to-br from-kolping-400/10 via-site-900 to-site-900' />
           <div className='relative p-6 sm:p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-4'>
             <p className='text-sm sm:text-base text-site-100 text-center sm:text-left'>

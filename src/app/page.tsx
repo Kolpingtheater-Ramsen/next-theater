@@ -208,7 +208,7 @@ export default function Home() {
 
       {/* === JOIN CTA === */}
       <section className='mx-auto max-w-6xl px-4 py-16 sm:py-20' aria-labelledby='join-heading'>
-        <div className='relative overflow-hidden rounded-2xl border border-site-700'>
+        <div className='relative overflow-hidden rounded-2xl border border-site-700 force-dark'>
           {/* Background atmospheric effect */}
           <div className='absolute inset-0 bg-gradient-to-br from-kolping-400/5 via-site-900 to-site-900' />
           <div className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-400/[0.03] to-transparent' />
