@@ -138,6 +138,10 @@
   --color-site-50: #f3f3f3 !important;
   --color-site-300: #8a8a8e !important;
 }
+/* Default text color inside force-dark */
+[data-theme='light'] .force-dark {
+  color: #f3f3f3 !important;
+}
 [data-theme='light'] .force-dark .bg-site-950 {
   background-color: #0a0a0a !important;
 }
