@@ -52,29 +52,11 @@
 [data-theme='light'] .bg-site-900\/80 {
   background-color: rgba(255, 255, 255, 0.8) !important;
 }
-[data-theme='light'] .bg-site-900\/50 {
-  background-color: rgba(255, 255, 255, 0.5) !important;
-}
 [data-theme='light'] .bg-site-700\/80 {
   background-color: rgba(229, 231, 235, 0.9) !important;
 }
 [data-theme='light'] .bg-site-700\/50 {
   background-color: rgba(229, 231, 235, 0.7) !important;
-}
-[data-theme='light'] .hover\:bg-site-800:hover {
-  background-color: #f0f0f2 !important;
-}
-[data-theme='light'] .hover\:bg-site-700:hover {
-  background-color: #e4e4e7 !important;
-}
-[data-theme='light'] .hover\:bg-site-800\/80:hover {
-  background-color: rgba(240, 240, 242, 0.9) !important;
-}
-[data-theme='light'] .hover\:bg-site-800\/30:hover {
-  background-color: rgba(240, 240, 242, 0.4) !important;
-}
-[data-theme='light'] .hover\:bg-site-700\/30:hover {
-  background-color: rgba(228, 228, 231, 0.4) !important;
 }
 /* Gradient overlays — flip from dark to light in light mode */
 [data-theme='light'] .from-site-800 {
@@ -143,56 +125,6 @@
 /* black overlays on cards — lighten in light mode */
 [data-theme='light'] .bg-black\/50 {
   background-color: rgba(0, 0, 0, 0.6) !important;
-}
-
-/* ── Hero image overlay gradients: always dark (over photos) ── */
-[data-theme='light'] .from-site-950\/30 {
-  --tw-gradient-from: rgba(10, 10, 10, 0.3) !important;
-}
-[data-theme='light'] .from-site-950\/35 {
-  --tw-gradient-from: rgba(10, 10, 10, 0.35) !important;
-}
-[data-theme='light'] .from-site-950\/40 {
-  --tw-gradient-from: rgba(10, 10, 10, 0.4) !important;
-}
-[data-theme='light'] .from-site-950\/55 {
-  --tw-gradient-from: rgba(10, 10, 10, 0.55) !important;
-}
-[data-theme='light'] .from-site-950\/60 {
-  --tw-gradient-from: rgba(10, 10, 10, 0.6) !important;
-}
-[data-theme='light'] .from-site-950\/70 {
-  --tw-gradient-from: rgba(10, 10, 10, 0.7) !important;
-}
-[data-theme='light'] .via-site-950\/25 {
-  --tw-gradient-via: rgba(10, 10, 10, 0.25) !important;
-}
-[data-theme='light'] .via-site-950\/30 {
-  --tw-gradient-via: rgba(10, 10, 10, 0.3) !important;
-}
-[data-theme='light'] .via-site-950\/35 {
-  --tw-gradient-via: rgba(10, 10, 10, 0.35) !important;
-}
-[data-theme='light'] .via-site-950\/75 {
-  --tw-gradient-via: rgba(10, 10, 10, 0.75) !important;
-}
-[data-theme='light'] .to-site-950 {
-  --tw-gradient-to: #0a0a0a !important;
-}
-[data-theme='light'] .to-site-950\/30 {
-  --tw-gradient-to: rgba(10, 10, 10, 0.3) !important;
-}
-[data-theme='light'] .to-site-950\/35 {
-  --tw-gradient-to: rgba(10, 10, 10, 0.35) !important;
-}
-[data-theme='light'] .to-site-950\/40 {
-  --tw-gradient-to: rgba(10, 10, 10, 0.4) !important;
-}
-[data-theme='light'] .to-site-950\/60 {
-  --tw-gradient-to: rgba(10, 10, 10, 0.6) !important;
-}
-[data-theme='light'] .bg-site-950 {
-  background-color: #0a0a0a !important;
 }
 
 /* ── "Force dark" sections: keep dark even in light mode ── */
@@ -279,83 +211,6 @@
 }
 [data-theme='light'] .force-dark .to-site-900 {
   --tw-gradient-to: #0f0f10 !important;
-}
-
-/* ── Light mode: focus ring offsets ── */
-[data-theme='light'] .focus\:ring-offset-site-900:focus {
-  --tw-ring-offset-color: #ffffff !important;
-}
-
-/* ── Light mode: gradient endpoints (non-force-dark contexts) ── */
-[data-theme='light'] .from-site-900 {
-  --tw-gradient-from: #ffffff !important;
-}
-[data-theme='light'] .to-site-900 {
-  --tw-gradient-to: #ffffff !important;
-}
-[data-theme='light'] .via-site-900 {
-  --tw-gradient-via: #ffffff !important;
-}
-[data-theme='light'] .to-site-900\/80 {
-  --tw-gradient-to: rgba(255, 255, 255, 0.8) !important;
-}
-[data-theme='light'] .from-site-800 {
-  --tw-gradient-from: #f7f7f8 !important;
-}
-[data-theme='light'] .to-site-800 {
-  --tw-gradient-to: #f7f7f8 !important;
-}
-[data-theme='light'] .from-site-700 {
-  --tw-gradient-from: #e4e4e7 !important;
-}
-
-/* ── Light mode: slideshow/controls bg ── */
-[data-theme='light'] .bg-site-700 {
-  background-color: #e4e4e7 !important;
-}
-
-/* ── Light mode: site-300 text (muted) ── */
-[data-theme='light'] .text-site-300 {
-  color: #4b5563 !important;
-}
-
-/* ── Light mode: border-site-600 ── */
-[data-theme='light'] .border-site-600 {
-  border-color: #d1d5db !important;
-}
-
-/* ── Light mode: bg-site-700 with opacity ── */
-[data-theme='light'] .bg-site-700 {
-  background-color: #e4e4e7 !important;
-}
-
-/* ── Force-dark overrides for gradients to/from site-900 ── */
-[data-theme='light'] .force-dark .from-site-900 {
-  --tw-gradient-from: #0f0f10 !important;
-}
-[data-theme='light'] .force-dark .to-site-900 {
-  --tw-gradient-to: #0f0f10 !important;
-}
-[data-theme='light'] .force-dark .via-site-900 {
-  --tw-gradient-via: #0f0f10 !important;
-}
-[data-theme='light'] .force-dark .from-site-800 {
-  --tw-gradient-from: #18181a !important;
-}
-[data-theme='light'] .force-dark .to-site-800 {
-  --tw-gradient-to: #18181a !important;
-}
-[data-theme='light'] .force-dark .from-site-700 {
-  --tw-gradient-from: #232326 !important;
-}
-[data-theme='light'] .force-dark .bg-site-800 {
-  background-color: #18181a !important;
-}
-[data-theme='light'] .force-dark .bg-site-700 {
-  background-color: #232326 !important;
-}
-[data-theme='light'] .force-dark .text-site-300 {
-  color: #8a8a8e !important;
 }
 
 html,
