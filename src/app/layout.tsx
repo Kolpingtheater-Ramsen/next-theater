@@ -60,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='de' data-theme='dark' suppressHydrationWarning>
+    <html lang='de' data-theme='light' suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased bg-site-900 text-site-50 min-h-screen overflow-x-hidden flex flex-col`}
       >

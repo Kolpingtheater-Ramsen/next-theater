@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [theme, setTheme] = useState<'dark' | 'light'>('light')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -16,10 +16,10 @@ export default function ThemeToggle() {
     if (saved) {
       setTheme(saved)
     } else {
-      const prefersLight = window.matchMedia(
-        '(prefers-color-scheme: light)'
+      const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
       ).matches
-      setTheme(prefersLight ? 'light' : 'dark')
+      setTheme(prefersDark ? 'dark' : 'light')
     }
     setMounted(true)
   }, [])
