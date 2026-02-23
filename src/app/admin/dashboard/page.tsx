@@ -18,6 +18,8 @@ export default function AdminDashboardPage() {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
   const [showOnlyNotCheckedIn, setShowOnlyNotCheckedIn] = useState(false)
   const [showEmails, setShowEmails] = useState(false)
+  const [purgeConfirm, setPurgeConfirm] = useState(false)
+  const [isPurging, setIsPurging] = useState(false)
   const router = useRouter()
 
   const ROWS = 7
@@ -143,6 +145,51 @@ export default function AdminDashboardPage() {
       setMessageModal({ message: 'Export fehlgeschlagen. Bitte erneut versuchen.', type: 'error' })
     }
   }, [selectedPlayId, debouncedSearchTerm, router, plays])
+
+  const handlePurgeOldBookings = useCallback(async () => {
+    try {
+      setIsPurging(true)
+      const response = await fetch('/api/admin/bookings/purge', {
+        method: 'DELETE',
+        credentials: 'include'
+      })
+
+      if (response.status === 401) {
+        router.push('/admin')
+        return
+      }
+
+      const data = await response.json() as {
+        success: boolean
+        message?: string
+        deletedBookings?: number
+        error?: string
+      }
+
+      if (data.success) {
+        setMessageModal({
+          message: data.message || 'Alte Buchungen gelöscht.',
+          type: data.deletedBookings ? 'success' : 'info'
+        })
+        // Refresh bookings
+        fetchBookings()
+      } else {
+        setMessageModal({
+          message: data.error || 'Fehler beim Löschen',
+          type: 'error'
+        })
+      }
+    } catch (err) {
+      console.error('Error purging bookings:', err)
+      setMessageModal({
+        message: 'Fehler beim Löschen alter Buchungen.',
+        type: 'error'
+      })
+    } finally {
+      setIsPurging(false)
+      setPurgeConfirm(false)
+    }
+  }, [router, fetchBookings])
 
   useEffect(() => {
     if (plays.length > 0) {
@@ -322,6 +369,16 @@ export default function AdminDashboardPage() {
             </svg>
             Tickets Scannen
           </a>
+          <button
+            onClick={() => setPurgeConfirm(true)}
+            disabled={isPurging}
+            className='px-4 py-2 rounded-lg border border-red-700 hover:bg-red-900/30 text-red-400 font-semibold transition-colors flex items-center gap-2 disabled:opacity-50'
+          >
+            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+            </svg>
+            Alte Daten löschen
+          </button>
           <button
             onClick={handleLogout}
             className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
@@ -767,6 +824,48 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </div>
+
+      {/* Purge Confirmation Dialog */}
+      {purgeConfirm && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
+          <div className='glass rounded-xl p-6 max-w-md mx-4 border border-red-700'>
+            <h3 className='text-xl font-display font-bold text-red-400 mb-3'>
+              ⚠️ Alte Buchungen löschen
+            </h3>
+            <p className='text-site-100 mb-2'>
+              Alle Buchungen für Vorstellungen, die <strong>älter als 2 Wochen</strong> sind, werden unwiderruflich gelöscht.
+            </p>
+            <p className='text-site-100 mb-6 text-sm'>
+              Dies betrifft Namen, E-Mail-Adressen und Sitzplatzdaten (Datenschutz). Es werden keine E-Mails versendet.
+            </p>
+            <div className='flex gap-3 justify-end'>
+              <button
+                onClick={() => setPurgeConfirm(false)}
+                className='px-4 py-2 rounded-lg border border-site-700 hover:bg-site-700/30 transition-colors'
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handlePurgeOldBookings}
+                disabled={isPurging}
+                className='px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition-colors disabled:opacity-50 flex items-center gap-2'
+              >
+                {isPurging ? (
+                  <>
+                    <svg className='w-4 h-4 animate-spin' fill='none' viewBox='0 0 24 24'>
+                      <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
+                      <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z' />
+                    </svg>
+                    Lösche...
+                  </>
+                ) : (
+                  'Endgültig löschen'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {messageModal && (
         <MessageModal
