@@ -4,7 +4,21 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import MessageModal from '@/components/MessageModal'
-import type { BookingWithSeats, PlayWithAvailability } from '@/types/database'
+import type { BookingWithSeats, PlayWithAvailability, Play } from '@/types/database'
+
+interface AdminPlay extends Play {
+  booking_count: number
+}
+
+function formatDisplayDate(date: string, time: string): string {
+  const d = new Date(date + 'T' + time)
+  const weekdays = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
+  const day = weekdays[d.getDay()]
+  const dd = d.getDate().toString().padStart(2, '0')
+  const mm = (d.getMonth() + 1).toString().padStart(2, '0')
+  const yyyy = d.getFullYear()
+  return `${day}, ${dd}.${mm}.${yyyy} - ${time} Uhr`
+}
 
 export default function AdminDashboardPage() {
   const [plays, setPlays] = useState<PlayWithAvailability[]>([])
@@ -20,6 +34,14 @@ export default function AdminDashboardPage() {
   const [showEmails, setShowEmails] = useState(false)
   const [purgeConfirm, setPurgeConfirm] = useState(false)
   const [isPurging, setIsPurging] = useState(false)
+  // Play management state
+  const [adminPlays, setAdminPlays] = useState<AdminPlay[]>([])
+  const [playsExpanded, setPlaysExpanded] = useState(false)
+  const [showPlayForm, setShowPlayForm] = useState(false)
+  const [editingPlayId, setEditingPlayId] = useState<string | null>(null)
+  const [playForm, setPlayForm] = useState({ title: '', date: '', time: '', total_seats: 68 })
+  const [playFormLoading, setPlayFormLoading] = useState(false)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const router = useRouter()
 
   const ROWS = 7
@@ -55,6 +77,112 @@ export default function AdminDashboardPage() {
       console.error('Error fetching plays:', err)
       setError('Fehler beim Laden der Vorstellungen')
     }
+  }
+
+  const fetchAdminPlays = useCallback(async () => {
+    try {
+      const response = await fetch('/api/admin/plays', { credentials: 'include' })
+      if (response.status === 401) { router.push('/admin'); return }
+      const data = await response.json() as { success: boolean; plays?: AdminPlay[] }
+      if (data.success && data.plays) {
+        setAdminPlays(data.plays)
+      }
+    } catch (err) {
+      console.error('Error fetching admin plays:', err)
+    }
+  }, [router])
+
+  useEffect(() => {
+    fetchAdminPlays()
+  }, [fetchAdminPlays])
+
+  const handleCreatePlay = async () => {
+    if (!playForm.title || !playForm.date || !playForm.time) return
+    setPlayFormLoading(true)
+    try {
+      const display_date = formatDisplayDate(playForm.date, playForm.time)
+      const response = await fetch('/api/admin/plays', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ ...playForm, display_date }),
+      })
+      const data = await response.json() as { success: boolean; error?: string }
+      if (data.success) {
+        setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+        setShowPlayForm(false)
+        fetchAdminPlays()
+        fetchPlays()
+        setMessageModal({ message: 'Vorstellung erfolgreich erstellt', type: 'success' })
+      } else {
+        setMessageModal({ message: data.error || 'Fehler beim Erstellen', type: 'error' })
+      }
+    } catch {
+      setMessageModal({ message: 'Fehler beim Erstellen der Vorstellung', type: 'error' })
+    } finally {
+      setPlayFormLoading(false)
+    }
+  }
+
+  const handleUpdatePlay = async (id: string) => {
+    if (!playForm.title || !playForm.date || !playForm.time) return
+    setPlayFormLoading(true)
+    try {
+      const display_date = formatDisplayDate(playForm.date, playForm.time)
+      const response = await fetch('/api/admin/plays', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ id, ...playForm, display_date }),
+      })
+      const data = await response.json() as { success: boolean; error?: string }
+      if (data.success) {
+        setEditingPlayId(null)
+        setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+        fetchAdminPlays()
+        fetchPlays()
+        setMessageModal({ message: 'Vorstellung aktualisiert', type: 'success' })
+      } else {
+        setMessageModal({ message: data.error || 'Fehler beim Aktualisieren', type: 'error' })
+      }
+    } catch {
+      setMessageModal({ message: 'Fehler beim Aktualisieren der Vorstellung', type: 'error' })
+    } finally {
+      setPlayFormLoading(false)
+    }
+  }
+
+  const handleDeletePlay = async (id: string) => {
+    try {
+      const response = await fetch('/api/admin/plays', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ id }),
+      })
+      const data = await response.json() as { success: boolean; error?: string }
+      if (data.success) {
+        setDeleteConfirmId(null)
+        fetchAdminPlays()
+        fetchPlays()
+        setMessageModal({ message: 'Vorstellung gelöscht', type: 'success' })
+      } else {
+        setMessageModal({ message: data.error || 'Fehler beim Löschen', type: 'error' })
+      }
+    } catch {
+      setMessageModal({ message: 'Fehler beim Löschen der Vorstellung', type: 'error' })
+    }
+  }
+
+  const startEditPlay = (play: AdminPlay) => {
+    setEditingPlayId(play.id)
+    setPlayForm({ title: play.title, date: play.date, time: play.time, total_seats: play.total_seats })
+    setShowPlayForm(false)
+  }
+
+  const cancelEditPlay = () => {
+    setEditingPlayId(null)
+    setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
   }
 
   const fetchBookings = useCallback(async () => {
@@ -410,6 +538,251 @@ export default function AdminDashboardPage() {
             {bookings.filter(b => b.status === 'confirmed').length}
           </p>
         </div>
+      </div>
+
+      {/* Play Management Section */}
+      <div className='glass rounded-xl mb-8'>
+        <button
+          onClick={() => setPlaysExpanded(!playsExpanded)}
+          className='w-full flex items-center justify-between p-6 text-left'
+        >
+          <h2 className='text-xl font-display font-bold'>Stücke verwalten</h2>
+          <svg
+            className={`w-5 h-5 transition-transform duration-200 ${playsExpanded ? 'rotate-180' : ''}`}
+            fill='none' stroke='currentColor' viewBox='0 0 24 24'
+          >
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 9l-7 7-7-7' />
+          </svg>
+        </button>
+
+        {playsExpanded && (
+          <div className='px-6 pb-6'>
+            {/* New Play Button */}
+            {!showPlayForm && !editingPlayId && (
+              <button
+                onClick={() => {
+                  setShowPlayForm(true)
+                  setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+                }}
+                className='mb-4 px-4 py-2 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors text-sm flex items-center gap-2'
+              >
+                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
+                </svg>
+                Neues Stück anlegen
+              </button>
+            )}
+
+            {/* Inline Create Form */}
+            {showPlayForm && (
+              <div className='mb-4 p-4 rounded-lg bg-site-800/50 border border-site-700'>
+                <h3 className='text-sm font-semibold mb-3'>Neues Stück anlegen</h3>
+                <div className='grid grid-cols-1 md:grid-cols-5 gap-3'>
+                  <input
+                    type='text'
+                    placeholder='Titel'
+                    value={playForm.title}
+                    onChange={(e) => setPlayForm({ ...playForm, title: e.target.value })}
+                    className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                  />
+                  <input
+                    type='date'
+                    value={playForm.date}
+                    onChange={(e) => setPlayForm({ ...playForm, date: e.target.value })}
+                    className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                  />
+                  <input
+                    type='time'
+                    value={playForm.time}
+                    onChange={(e) => setPlayForm({ ...playForm, time: e.target.value })}
+                    className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                  />
+                  <input
+                    type='number'
+                    placeholder='Plätze'
+                    value={playForm.total_seats}
+                    onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 68 })}
+                    className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                  />
+                  <div className='flex gap-2'>
+                    <button
+                      onClick={handleCreatePlay}
+                      disabled={playFormLoading || !playForm.title || !playForm.date || !playForm.time}
+                      className='flex-1 px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-colors disabled:opacity-50'
+                    >
+                      {playFormLoading ? 'Speichern...' : 'Erstellen'}
+                    </button>
+                    <button
+                      onClick={() => setShowPlayForm(false)}
+                      className='px-3 py-2 rounded-lg border border-site-700 hover:bg-site-700/30 text-sm transition-colors'
+                    >
+                      Abbrechen
+                    </button>
+                  </div>
+                </div>
+                {playForm.date && playForm.time && (
+                  <p className='mt-2 text-xs text-site-400'>
+                    Anzeige-Datum: {formatDisplayDate(playForm.date, playForm.time)}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Plays Table */}
+            <div className='overflow-x-auto'>
+              <table className='w-full'>
+                <thead>
+                  <tr className='border-b border-site-700'>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Titel</th>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Datum</th>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Uhrzeit</th>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Anzeige-Datum</th>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Plätze</th>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Buchungen</th>
+                    <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Aktionen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminPlays.map((play) => (
+                    editingPlayId === play.id ? (
+                      <tr key={play.id} className='border-b border-site-800 bg-site-800/30'>
+                        <td className='py-2 px-2'>
+                          <input
+                            type='text'
+                            value={playForm.title}
+                            onChange={(e) => setPlayForm({ ...playForm, title: e.target.value })}
+                            className='w-full px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                          />
+                        </td>
+                        <td className='py-2 px-2'>
+                          <input
+                            type='date'
+                            value={playForm.date}
+                            onChange={(e) => setPlayForm({ ...playForm, date: e.target.value })}
+                            className='px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                          />
+                        </td>
+                        <td className='py-2 px-2'>
+                          <input
+                            type='time'
+                            value={playForm.time}
+                            onChange={(e) => setPlayForm({ ...playForm, time: e.target.value })}
+                            className='px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                          />
+                        </td>
+                        <td className='py-2 px-2 text-sm text-site-400'>
+                          {playForm.date && playForm.time ? formatDisplayDate(playForm.date, playForm.time) : '—'}
+                        </td>
+                        <td className='py-2 px-2'>
+                          <input
+                            type='number'
+                            value={playForm.total_seats}
+                            onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 68 })}
+                            className='w-20 px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
+                          />
+                        </td>
+                        <td className='py-2 px-2 text-sm text-site-100'>{play.booking_count}</td>
+                        <td className='py-2 px-2'>
+                          <div className='flex gap-2'>
+                            <button
+                              onClick={() => handleUpdatePlay(play.id)}
+                              disabled={playFormLoading || !playForm.title || !playForm.date || !playForm.time}
+                              className='px-2 py-1 rounded bg-green-600 hover:bg-green-700 text-white text-xs font-semibold transition-colors disabled:opacity-50'
+                            >
+                              {playFormLoading ? '...' : 'Speichern'}
+                            </button>
+                            <button
+                              onClick={cancelEditPlay}
+                              className='px-2 py-1 rounded border border-site-700 hover:bg-site-700/30 text-xs transition-colors'
+                            >
+                              Abbrechen
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr key={play.id} className='border-b border-site-800 hover:bg-site-800/30'>
+                        <td className='py-3 px-2 text-sm font-medium'>{play.title}</td>
+                        <td className='py-3 px-2 text-sm text-site-100'>{play.date}</td>
+                        <td className='py-3 px-2 text-sm text-site-100'>{play.time}</td>
+                        <td className='py-3 px-2 text-sm text-site-100'>{play.display_date}</td>
+                        <td className='py-3 px-2 text-sm text-site-100'>{play.total_seats}</td>
+                        <td className='py-3 px-2 text-sm'>
+                          <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                            play.booking_count > 0
+                              ? 'bg-blue-900/30 text-blue-400 border border-blue-700'
+                              : 'bg-site-700 text-site-300'
+                          }`}>
+                            {play.booking_count}
+                          </span>
+                        </td>
+                        <td className='py-3 px-2 text-sm'>
+                          <div className='flex gap-2'>
+                            {play.booking_count > 0 ? (
+                              <>
+                                <span
+                                  className='px-2 py-1 rounded text-xs text-site-500 cursor-not-allowed'
+                                  title={`${play.booking_count} Buchung(en) vorhanden — Bearbeiten nicht möglich`}
+                                >
+                                  Bearbeiten
+                                </span>
+                                <span
+                                  className='px-2 py-1 rounded text-xs text-site-500 cursor-not-allowed'
+                                  title={`${play.booking_count} Buchung(en) vorhanden — Löschen nicht möglich`}
+                                >
+                                  Löschen
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => startEditPlay(play)}
+                                  className='px-2 py-1 rounded border border-kolping-400 text-kolping-400 hover:bg-kolping-500/10 text-xs font-semibold transition-colors'
+                                >
+                                  Bearbeiten
+                                </button>
+                                {deleteConfirmId === play.id ? (
+                                  <div className='flex gap-1'>
+                                    <button
+                                      onClick={() => handleDeletePlay(play.id)}
+                                      className='px-2 py-1 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition-colors'
+                                    >
+                                      Ja, löschen
+                                    </button>
+                                    <button
+                                      onClick={() => setDeleteConfirmId(null)}
+                                      className='px-2 py-1 rounded border border-site-700 hover:bg-site-700/30 text-xs transition-colors'
+                                    >
+                                      Nein
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => setDeleteConfirmId(play.id)}
+                                    className='px-2 py-1 rounded border border-red-700 text-red-400 hover:bg-red-900/30 text-xs font-semibold transition-colors'
+                                  >
+                                    Löschen
+                                  </button>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  ))}
+                  {adminPlays.length === 0 && (
+                    <tr>
+                      <td colSpan={7} className='py-8 text-center text-site-400 text-sm'>
+                        Keine Vorstellungen vorhanden
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Seats Available per Show Chart */}
