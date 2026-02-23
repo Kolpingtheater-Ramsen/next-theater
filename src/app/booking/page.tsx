@@ -186,6 +186,11 @@ export default function BookingPage() {
           
           {isLoading ? (
             <LoadingSpinner text='Lade Vorstellungen...' size='lg' />
+          ) : plays.length === 0 ? (
+            <div className='glass rounded-xl p-12 text-center'>
+              <p className='text-site-100 text-lg'>Aktuell sind keine Vorstellungen verfügbar.</p>
+              <p className='text-site-200 text-sm mt-2'>Bitte schauen Sie später noch einmal vorbei.</p>
+            </div>
           ) : (
             <div className='grid gap-4 md:grid-cols-2'>
               {plays.map((play) => {
