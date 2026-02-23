@@ -164,7 +164,7 @@ export default function GalleryPage() {
       <section className='relative -mx-4 -mt-8 overflow-hidden'>
         <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
           <Image
-            src='/img/home_team.jpg'
+            src={latestShow?.galleryHash ? `/img/banners/${latestShow.galleryHash}.jpg` : '/img/home_team.jpg'}
             alt={latestShow ? `Aktuelle Produktion: ${latestShow.header}` : 'Galerie des Kolpingtheaters Ramsen'}
             fill
             priority
