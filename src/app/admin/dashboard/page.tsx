@@ -322,6 +322,8 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (plays.length > 0) {
       fetchBookings()
+    } else {
+      setIsLoading(false)
     }
   }, [selectedPlayId, plays.length, fetchBookings])
 
@@ -516,6 +518,7 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
+      {plays.length > 0 && (<>
       {/* Stats */}
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
         <div className='glass rounded-xl p-6'>
@@ -1197,6 +1200,14 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </div>
+      </>)}
+
+      {plays.length === 0 && !isLoading && (
+        <div className='glass rounded-xl p-12 text-center'>
+          <p className='text-site-100 text-lg'>Keine Stücke angelegt.</p>
+          <p className='text-site-200 text-sm mt-2'>Erstelle über &quot;Stücke verwalten&quot; oben eine neue Vorstellung.</p>
+        </div>
+      )}
 
       {/* Purge Confirmation Dialog */}
       {purgeConfirm && (
