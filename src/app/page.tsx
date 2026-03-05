@@ -139,58 +139,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* === AWARD BANNER === */}
-      <section className='relative -mx-4 bg-kolping-400/5 border-y border-kolping-400/20'>
-        <div className='mx-auto max-w-6xl px-4 py-8 sm:py-10'>
-          <div className='flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8'>
-            {/* Photo */}
-            <div className='flex-shrink-0 w-full sm:w-48 md:w-56'>
-              <Image
-                src='/img/award-rlp-2026.jpg'
-                alt='Jugend-Engagement-Preis RLP 2026 – Verleihung durch Ministerpräsident Alexander Schweitzer'
-                width={224}
-                height={150}
-                className='rounded-xl object-cover w-full sm:w-48 md:w-56 h-36 sm:h-32 md:h-36 shadow-lg'
-              />
-            </div>
-            {/* Text */}
-            <div>
-              <span className='block text-[11px] tracking-[0.2em] uppercase text-kolping-400 font-semibold mb-1'>
-                Auszeichnung · Februar 2026
-              </span>
-              <h3 className='font-display text-lg sm:text-xl font-bold tracking-tight'>
-                Jugend-Engagement-Preis Rheinland-Pfalz
-              </h3>
-              <p className='mt-1 text-sm sm:text-base text-site-100 max-w-2xl'>
-                Am 27.02.2026 wurden wir in Mainz mit dem Jugend-Engagement-Preis des Landes Rheinland-Pfalz durch unseren Ministerpräsidenten Alexander Schweitzer geehrt.
-              </p>
-              <p className='mt-2 text-xs text-site-400'>Foto: Staatskanzlei RLP / Schäfer</p>
-            </div>
+      {/* === AWARD FEATURE === full-bleed cinematic section */}
+      <section className='relative -mx-4 overflow-hidden'>
+        {/* Background photo */}
+        <div className='absolute inset-0'>
+          <Image
+            src='/img/award-rlp-2026.jpg'
+            alt=''
+            fill
+            sizes='100vw'
+            className='object-cover object-top'
+          />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/95 via-site-950/75 to-site-950/30' />
+          <div className='absolute inset-0 bg-gradient-to-t from-site-950/60 via-transparent to-site-950/20' />
+        </div>
+
+        {/* Content */}
+        <div className='relative mx-auto max-w-6xl px-4 py-16 sm:py-20 md:py-24'>
+          <div className='max-w-xl'>
+            <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-4 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-kolping-400 uppercase mb-6'>
+              <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24'>
+                <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
+              </svg>
+              Auszeichnung · 27. Februar 2026
+            </span>
+            <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[0.95] text-shadow-lg'>
+              Jugend-Engagement-<br />
+              <span className='text-kolping-400'>Preis RLP</span>
+            </h2>
+            <p className='mt-6 text-base sm:text-lg text-site-100/90 leading-relaxed text-shadow max-w-lg'>
+              Am 27.02.2026 wurden wir in Mainz mit dem Jugend-Engagement-Preis des Landes Rheinland-Pfalz durch unseren Ministerpräsidenten Alexander Schweitzer geehrt.
+            </p>
+            <p className='mt-4 text-xs text-site-400'>Foto: Staatskanzlei RLP / Schäfer</p>
           </div>
         </div>
       </section>
 
-      {/* === THANK YOU BANNER === */}
-      <section className='relative -mx-4 bg-site-800/50'>
-        <div className='mx-auto max-w-6xl px-4 py-8 sm:py-10'>
-          <div className='flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6'>
-            <div className='flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-kolping-400/10 border border-kolping-400/30 flex items-center justify-center'>
-              <svg className='w-5 h-5 sm:w-6 sm:h-6 text-kolping-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' />
-              </svg>
-            </div>
-            <div>
-              <h3 className='font-display text-lg sm:text-xl font-bold tracking-tight'>
-                Vielen Dank!
-              </h3>
-              <p className='mt-1 text-sm sm:text-base text-site-100 max-w-2xl'>
-                Die Aufführungen sind vorüber. Wir bedanken uns herzlich bei allen Besuchern
-                für den großen Zuspruch und die tolle Stimmung! Bis zum nächsten Mal.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* === MARQUEE === */}
       <section className='-mx-4 border-y border-site-700'>
