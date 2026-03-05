@@ -34,42 +34,43 @@ export default function Home() {
 
   return (
     <div className='space-y-0'>
-      {/* === HERO === Full-bleed cinematic hero */}
+      {/* === HERO === Award feature */}
       <section className='relative -mx-4 -mt-8 overflow-hidden'>
-        {/* Background image with Ken Burns */}
         <div className='relative w-full h-[85vh] min-h-[500px] max-h-[900px]'>
           <Image
-            src='/img/home_team.jpg'
-            alt='Schicksalsfäden - Winterstück 2025'
+            src='/img/award-rlp-2026.jpg'
+            alt='Jugend-Engagement-Preis RLP 2026'
             fill
             priority
             sizes='100vw'
-            className='object-cover animate-kenburns'
+            className='object-cover object-top'
           />
           {/* Cinematic overlays */}
           <div className='absolute inset-0 bg-gradient-to-b from-site-950/40 via-transparent to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/60 via-transparent to-site-950/30' />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/85 via-site-950/50 to-site-950/10' />
           <div className='vignette' />
 
-          {/* Hero content - editorial layout */}
+          {/* Hero content */}
           <div className='absolute inset-0 flex flex-col justify-end pb-12 sm:pb-16 md:pb-20'>
             <div className='mx-auto w-full max-w-6xl px-4'>
-              {/* Status badge */}
+              {/* Badge */}
               <div className='animate-fade-in-up mb-4' style={{ animationDelay: '0.1s' }}>
                 <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-4 py-1.5 text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-kolping-400 uppercase'>
-                  <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-glow-pulse' />
-                  2025 &middot; Kreativbühne
+                  <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24'>
+                    <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
+                  </svg>
+                  Auszeichnung &middot; 27. Februar 2026
                 </span>
               </div>
 
-              {/* Title - massive editorial typography */}
+              {/* Title */}
               <h1
                 className='animate-fade-in-up font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.9] text-shadow-lg'
                 style={{ animationDelay: '0.2s' }}
               >
-                Schicksals
+                Jugend-Engagement-
                 <br />
-                <span className='text-kolping-400'>fäden</span>
+                <span className='text-kolping-400'>Preis RLP</span>
               </h1>
 
               {/* Subtitle */}
@@ -77,31 +78,33 @@ export default function Home() {
                 className='animate-fade-in-up mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-xl leading-relaxed text-shadow'
                 style={{ animationDelay: '0.35s' }}
               >
-                Eine Tragödie, inspiriert von den griechischen
-                Schicksalsgöttinnen, den Moiren.
+                Geehrt durch Ministerpräsident Alexander Schweitzer in Mainz.
               </p>
 
-              {/* CTA row */}
+              {/* CTA */}
               <div
                 className='animate-fade-in-up mt-6 sm:mt-8 flex flex-wrap items-center gap-3'
                 style={{ animationDelay: '0.5s' }}
               >
                 <Link
-                  href='/gallery/schicksal'
+                  href='/about'
                   className='group inline-flex items-center gap-2 rounded-full bg-kolping-400 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.3)]'
                 >
-                  Galerie ansehen
+                  Unsere Geschichte
                   <svg className='w-4 h-4 transition-transform group-hover:translate-x-0.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                   </svg>
                 </Link>
                 <Link
-                  href='/about'
+                  href='/gallery'
                   className='inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white/90 transition-all hover:bg-white/10 hover:border-white/30'
                 >
-                  Über uns
+                  Galerie
                 </Link>
               </div>
+              <p className='animate-fade-in-up mt-4 text-xs text-site-400 text-shadow' style={{ animationDelay: '0.6s' }}>
+                Foto: Staatskanzlei RLP / Schäfer
+              </p>
             </div>
           </div>
         </div>
@@ -139,41 +142,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* === AWARD FEATURE === full-bleed cinematic section */}
-      <section className='relative -mx-4 overflow-hidden'>
-        {/* Background photo */}
-        <div className='absolute inset-0'>
-          <Image
-            src='/img/award-rlp-2026.jpg'
-            alt=''
-            fill
-            sizes='100vw'
-            className='object-cover object-top'
-          />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/95 via-site-950/75 to-site-950/30' />
-          <div className='absolute inset-0 bg-gradient-to-t from-site-950/60 via-transparent to-site-950/20' />
-        </div>
 
-        {/* Content */}
-        <div className='relative mx-auto max-w-6xl px-4 py-16 sm:py-20 md:py-24'>
-          <div className='max-w-xl'>
-            <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-4 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-kolping-400 uppercase mb-6'>
-              <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24'>
-                <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
-              </svg>
-              Auszeichnung · 27. Februar 2026
-            </span>
-            <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[0.95] text-shadow-lg'>
-              Jugend-Engagement-<br />
-              <span className='text-kolping-400'>Preis RLP</span>
-            </h2>
-            <p className='mt-6 text-base sm:text-lg text-site-100/90 leading-relaxed text-shadow max-w-lg'>
-              Am 27.02.2026 wurden wir in Mainz mit dem Jugend-Engagement-Preis des Landes Rheinland-Pfalz durch unseren Ministerpräsidenten Alexander Schweitzer geehrt.
-            </p>
-            <p className='mt-4 text-xs text-site-400'>Foto: Staatskanzlei RLP / Schäfer</p>
-          </div>
-        </div>
-      </section>
 
 
 
