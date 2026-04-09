@@ -200,7 +200,6 @@ export default function TeamPage() {
             {[
               { id: 'team-current', label: 'Aktuelle Mitglieder' },
               { id: 'team-tech', label: 'Technik & Crew' },
-              { id: 'team-former', label: 'Ehemalige Mitglieder' },
             ].map((section) => (
               <a
                 key={section.id}
@@ -229,13 +228,14 @@ export default function TeamPage() {
           people={tech}
           type='tech'
         />
-        <TeamSection
+        {/* Ehemalige ausgeblendet per Feedback April 2025 */}
+        {/* <TeamSection
           id='team-former'
           title='Ehemalige Mitglieder'
           subtitle='Mit Dankbarkeit für viele Jahre gemeinsamer Theaterarbeit'
           people={former}
           type='former'
-        />
+        /> */}
       </div>
 
       <section className='mx-auto max-w-6xl px-4 py-12 sm:py-16'>

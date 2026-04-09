@@ -417,7 +417,7 @@ export default function AboutPage() {
           Chronik
         </h2>
 
-        <div className='grid gap-3 sm:gap-4 sm:grid-cols-3'>
+        <div className='grid gap-3 sm:gap-4 sm:grid-cols-2'>
           <div className='glass rounded-xl border border-site-700 p-4 sm:p-5'>
             <p className='text-[11px] tracking-[0.18em] uppercase text-kolping-400 font-semibold'>
               Gesamt
@@ -436,15 +436,7 @@ export default function AboutPage() {
             </p>
             <p className='text-sm text-site-100'>Einträge mit Bühnenbild/Galerie</p>
           </div>
-          <div className='glass rounded-xl border border-site-700 p-4 sm:p-5'>
-            <p className='text-[11px] tracking-[0.18em] uppercase text-kolping-400 font-semibold'>
-              Ereignisse
-            </p>
-            <p className='mt-2 font-display text-3xl font-black text-site-50'>
-              {eventsInTimeline}
-            </p>
-            <p className='text-sm text-site-100'>Probenstarts, Preise und Wendepunkte</p>
-          </div>
+          {/* Ereignisse-Karte ausgeblendet per Feedback April 2025 */}
         </div>
 
         <div className='relative pl-8 sm:pl-10'>

@@ -1071,18 +1071,6 @@
       "images": 1
     },
     {
-      "id": "Noah",
-      "placeholderAvatar": true,
-      "icon": "lightbulb",
-      "jobs": [
-        {
-          "job": "Lichttechnik",
-          "icon": "lightbulb"
-        }
-      ],
-      "images": 1
-    },
-    {
       "id": "Wolfgang",
       "placeholderAvatar": true,
       "icon": "headphones",
