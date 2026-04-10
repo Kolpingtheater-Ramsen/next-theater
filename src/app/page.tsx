@@ -136,15 +136,7 @@ export default function Home() {
                 <p className='font-display text-sm sm:text-base font-bold text-site-50'>28. + 29. August</p>
               </div>
             </div>
-            <Link
-              href='/contact'
-              className='shrink-0 inline-flex items-center gap-2 rounded-full border border-kolping-400/40 bg-kolping-400/10 px-4 py-2 text-xs font-semibold text-kolping-400 hover:bg-kolping-400/20 transition-colors'
-            >
-              Karten reservieren
-              <svg className='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-              </svg>
-            </Link>
+
           </div>
         </div>
       </section>
