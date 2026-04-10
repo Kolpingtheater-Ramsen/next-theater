@@ -122,18 +122,22 @@ export default function Home() {
               </div>
               <div>
                 <p className='text-[10px] tracking-[0.2em] uppercase text-kolping-400 font-semibold'>Saison 2026</p>
-                <p className='font-display text-lg sm:text-xl font-bold text-site-50'>Open-Air Aufführungen</p>
+                <p className='font-display text-lg sm:text-xl font-bold text-site-50'>
+                  <span className='text-kolping-400'>Creepshow</span> &mdash; Open-Air-Premiere
+                </p>
               </div>
             </div>
             <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4'>
               <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-2 text-center'>
                 <p className='text-xs text-site-400 uppercase tracking-wider'>Block 1</p>
                 <p className='font-display text-sm sm:text-base font-bold text-site-50'>21. + 22. August</p>
+                <p className='text-[10px] text-site-400 mt-0.5'>Premiere</p>
               </div>
               <span className='text-site-600 font-bold'>&bull;</span>
               <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-2 text-center'>
                 <p className='text-xs text-site-400 uppercase tracking-wider'>Block 2</p>
                 <p className='font-display text-sm sm:text-base font-bold text-site-50'>28. + 29. August</p>
+                <p className='text-[10px] text-site-400 mt-0.5'>Zusatzvorstellungen</p>
               </div>
             </div>
 

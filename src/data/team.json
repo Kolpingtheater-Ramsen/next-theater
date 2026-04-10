@@ -90,6 +90,13 @@
       "year": 2025,
       "location": "Kreativbühne",
       "gallery": true
+    },
+    {
+      "play": "Creepshow",
+      "slug": "creepshow",
+      "year": 2026,
+      "location": "Open-Air-Bühne",
+      "gallery": false
     }
   ],
   "current": [
