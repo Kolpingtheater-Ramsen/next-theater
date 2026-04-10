@@ -131,7 +131,7 @@ export default function Home() {
               <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-2 text-center'>
                 <p className='text-xs text-site-400 uppercase tracking-wider'>Block 1</p>
                 <p className='font-display text-sm sm:text-base font-bold text-site-50'>21. + 22. August</p>
-                <p className='text-[10px] text-site-400 mt-0.5'>Premiere</p>
+                <p className='text-[10px] text-site-400 mt-0.5'>Premiere + Zusatz</p>
               </div>
               <span className='text-site-600 font-bold'>&bull;</span>
               <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-2 text-center'>
