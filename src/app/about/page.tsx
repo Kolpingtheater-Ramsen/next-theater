@@ -432,9 +432,9 @@ export default function AboutPage() {
               Produktionen
             </p>
             <p className='mt-2 font-display text-3xl font-black text-site-50'>
-              {productionsInTimeline}
+              {productionCount}
             </p>
-            <p className='text-sm text-site-100'>Einträge mit Bühnenbild/Galerie</p>
+            <p className='text-sm text-site-100'>Eigenproduktionen</p>
           </div>
           {/* Ereignisse-Karte ausgeblendet per Feedback April 2025 */}
         </div>
