@@ -191,22 +191,22 @@ function EventCard({
       style={{ animationDelay: `${index * 30}ms` }}
     >
       <div className='absolute -left-[46px] sm:-left-[56px] top-5 z-10'>
-        <div className='relative w-8 h-8 rounded-full border border-kolping-500/35 bg-site-900 flex items-center justify-center'>
-          <div className='absolute -inset-1 bg-kolping-500/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity' />
-          <span className='relative text-[10px] font-bold text-kolping-400'>
+        <div className='relative w-8 h-8 rounded-full border border-site-500/35 bg-site-900 flex items-center justify-center'>
+          <div className='absolute -inset-1 bg-site-400/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity' />
+          <span className='relative text-[10px] font-bold text-site-300'>
             {entry.order}
           </span>
         </div>
       </div>
 
-      <div className='glass rounded-xl p-5 sm:p-6 space-y-3 transition-all duration-300 hover:border-kolping-500/30 hover:bg-site-800/80'>
+      <div className='glass rounded-xl p-5 sm:p-6 space-y-3 transition-all duration-300 hover:border-site-500/30 hover:bg-site-800/80'>
         <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4'>
-          <div className='px-3 py-1 rounded-full bg-kolping-500/15 border border-kolping-500/25 w-fit'>
-            <time className='text-xs font-bold text-kolping-400 uppercase tracking-wider font-mono whitespace-nowrap'>
+          <div className='px-3 py-1 rounded-full bg-site-500/15 border border-site-500/25 w-fit'>
+            <time className='text-xs font-bold text-site-300 uppercase tracking-wider font-mono whitespace-nowrap'>
               {entry.month} {entry.year}
             </time>
           </div>
-          <span className='text-[10px] font-semibold uppercase tracking-[0.16em] text-site-100'>
+          <span className='text-[10px] font-semibold uppercase tracking-[0.16em] text-site-400'>
             Ereignis
           </span>
           <h3 className='font-display text-lg sm:text-xl font-bold text-site-50 group-hover:text-kolping-400 transition-colors'>
