@@ -1097,7 +1097,8 @@
           "icon": "audio-lines"
         }
       ],
-      "images": 1
+      "images": 1,
+      "placeholderAvatar": true
     }
   ]
 }
