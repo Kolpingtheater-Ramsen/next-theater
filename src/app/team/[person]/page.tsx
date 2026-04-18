@@ -242,17 +242,31 @@ export default async function PersonPage({
               title='Aufgaben im Team'
               subtitle='Beiträge in Technik, Organisation und Produktion'
             />
-            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5'>
+            <div className='space-y-3'>
               {person.jobs!.map((job, index) => (
                 <div
                   key={`${job.job}-${index}`}
-                  className='group relative glass border border-site-700 rounded-xl p-5 text-center transition-all duration-300 hover:border-kolping-500/40 hover:bg-site-800/80'
+                  className='group relative glass border border-site-700 rounded-xl p-4 sm:p-5 flex items-center gap-4 transition-all duration-300 hover:border-kolping-500/40 hover:bg-site-800/80'
                 >
-                  <div className='absolute -inset-3 bg-kolping-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none' />
-                  <div className='relative space-y-3'>
+                  <div className='flex-shrink-0'>
                     <JobIcon icon={job.icon} />
-                    <p className='text-sm sm:text-base font-semibold text-site-50 group-hover:text-kolping-400 transition-colors'>
+                  </div>
+                  <div className='flex-1 min-w-0'>
+                    <p className='text-base sm:text-lg font-semibold text-site-50 group-hover:text-kolping-400 transition-colors'>
                       {job.job}
+                    </p>
+                    <p className='text-xs sm:text-sm text-site-300 mt-1'>
+                      {job.job === 'Regie' ? 'Künstlerische Leitung und Inszenierung der Produktion'
+                        : job.job === 'Tontechnik' ? 'Beschallung und Tonmischung bei Aufführungen'
+                        : job.job === 'Lichttechnik' ? 'Lichtdesign und Beleuchtung der Bühne'
+                        : job.job === 'Bühnenbau' ? 'Konstruktion und Aufbau der Bühnenkulisse'
+                        : job.job === 'Kostüme' ? 'Entwurf und Anfertigung der Kostüme'
+                        : job.job === 'Maske' ? 'Make-up und Charaktergestaltung der Darsteller'
+                        : job.job === 'Requisite' ? 'Besorgung und Pflege der Requisiten'
+                        : job.job === 'Organisation' ? 'Planung und Koordination hinter den Kulissen'
+                        : job.job === 'Fotografie' ? 'Dokumentation der Aufführungen in Bildern'
+                        : job.job === 'Video' ? 'Aufnahme und Schnitt der Aufführungen'
+                        : `Beitrag als ${job.job} im Team`}
                     </p>
                   </div>
                 </div>
