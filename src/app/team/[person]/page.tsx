@@ -201,7 +201,7 @@ export default async function PersonPage({
               <p className='mt-4 sm:mt-6 text-base sm:text-lg text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
                 {personType === 'tech'
                   ? 'Einblick in Aufgaben hinter den Kulissen und Beiträge zum Gesamtbild jeder Produktion.'
-                  : 'Überblick über Rollen, Auftritte und Stationen auf der Bühne des Kolpingtheaters Ramsen.'}
+                  : `Alle Rollen und Produktionen von ${person.name || person.id} auf einen Blick.`}
               </p>
             </div>
 
