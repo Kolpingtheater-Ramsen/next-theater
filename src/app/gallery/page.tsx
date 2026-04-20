@@ -30,46 +30,14 @@ function parseDateParts(date: string) {
   return { month, year }
 }
 
-function SectionDivider({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <div className='relative py-8 sm:py-12'>
-      <div className='relative text-center space-y-3'>
-        <div className='flex items-center justify-center gap-4'>
-          <div className='hidden sm:flex items-center gap-2'>
-            <div className='w-8 h-px bg-gradient-to-l from-kolping-500 to-transparent' />
-            <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
-            <div className='w-16 h-px bg-gradient-to-l from-kolping-500/80 to-transparent' />
-          </div>
-
-          <h2 className='font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-kolping-400 drop-shadow-[0_0_20px_rgba(255,122,0,0.3)]'>
-            {title}
-          </h2>
-
-          <div className='hidden sm:flex items-center gap-2'>
-            <div className='w-16 h-px bg-gradient-to-r from-kolping-500/80 to-transparent' />
-            <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
-            <div className='w-8 h-px bg-gradient-to-r from-kolping-500 to-transparent' />
-          </div>
-        </div>
-
-        {subtitle && (
-          <p className='text-site-100 text-sm sm:text-base max-w-xl mx-auto'>
-            {subtitle}
-          </p>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function GalleryCard({
+function ProductionPoster({
   show,
   index,
-  isHero,
+  size = 'default',
 }: {
   show: TimelineShow
   index: number
-  isHero?: boolean
+  size?: 'default' | 'hero'
 }) {
   const locationLabel =
     show.location === 'Open-Air-Bühne'
@@ -78,59 +46,104 @@ function GalleryCard({
         ? 'Kreativbühne'
         : null
 
+  const isHero = size === 'hero'
+
   return (
     <Link
       href={`/gallery/${show.galleryHash}`}
-      className='group relative block'
       aria-label={`Galerie ansehen: ${show.header}`}
-      style={{ viewTransitionName: `gallery-${show.galleryHash}` }}
+      className='group relative block animate-fade-in-up'
+      style={{
+        viewTransitionName: `gallery-${show.galleryHash}`,
+        animationDelay: `${Math.min(index, 24) * 40}ms`,
+      }}
     >
-      <div
-        className='relative poster-frame border-epic bg-site-800 transition-all duration-500 ease-out hover:scale-[1.02] hover:-translate-y-1 animate-fade-in-up'
-        style={{ animationDelay: `${index * 35}ms` }}
-      >
-        <div className='absolute -inset-4 bg-gradient-to-b from-kolping-500/20 via-kolping-500/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none' />
-
+      <article className='relative'>
         <div
-          className={`relative overflow-hidden bg-site-800 ${isHero ? 'aspect-[21/9] sm:aspect-[16/8] md:aspect-[16/6]' : 'aspect-[16/10]'}`}
+          className={[
+            'relative overflow-hidden border-epic rounded-xl bg-site-950 shadow-[0_18px_50px_-12px_rgba(0,0,0,0.8)] transition-transform duration-700 group-hover:-translate-y-1',
+            isHero
+              ? 'aspect-[21/9] sm:aspect-[16/7]'
+              : 'aspect-[4/5] sm:aspect-[3/4]',
+          ].join(' ')}
           style={{ backgroundColor: show.dominantColor }}
         >
           <Image
             src={`/img/${show.image}`}
             alt={show.header}
             fill
-            className={`transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110 ${isHero ? 'object-cover' : 'object-cover object-center'}`}
+            sizes={
+              isHero
+                ? '100vw'
+                : '(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw'
+            }
+            priority={isHero}
+            className='object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.05]'
             style={{ viewTransitionName: `gallery-image-${show.galleryHash}` }}
           />
-          <div className='absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent z-10' />
-          <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/15 z-10' />
 
-          <div className='absolute top-3 left-3 z-20 flex items-center gap-2'>
-            <span className='rounded-full border border-kolping-500/45 bg-black/65 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-kolping-400'>
-              {show.month} {show.year}
-            </span>
-            {locationLabel && (
-              <span className='rounded-full border border-site-700 bg-site-900/80 backdrop-blur-sm px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-site-100'>
-                {locationLabel}
-              </span>
-            )}
+          <div className='sweep' aria-hidden />
+          <div className='absolute inset-0 scanlines opacity-15' aria-hidden />
+
+          {/* Tonal overlays — subtle all-over tint + heavy bottom scrim for title */}
+          <div className='absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/20' aria-hidden />
+          <div className='absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black via-black/80 via-40% to-transparent' aria-hidden />
+          <div className='absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-transparent' aria-hidden />
+
+          {/* Corner ticks */}
+          <span className='absolute top-2 left-2 w-3 h-3 border-l border-t border-kolping-400/60' aria-hidden />
+          <span className='absolute top-2 right-2 w-3 h-3 border-r border-t border-kolping-400/60' aria-hidden />
+          <span className='absolute bottom-2 left-2 w-3 h-3 border-l border-b border-kolping-400/60' aria-hidden />
+          <span className='absolute bottom-2 right-2 w-3 h-3 border-r border-b border-kolping-400/60' aria-hidden />
+
+          {/* Top meta row */}
+          <div className='absolute top-4 left-4 right-4 z-10 flex items-start justify-between gap-3'>
+            <div className='flex flex-wrap gap-2'>
+              {locationLabel && (
+                <span className='inline-flex items-center font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.25em] text-white bg-black/55 backdrop-blur-sm border border-white/15 rounded-sm px-2 py-1'>
+                  {locationLabel}
+                </span>
+              )}
+            </div>
+            <div
+              className={[
+                'font-display italic text-kolping-300 tabular-nums drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] leading-none',
+                isHero
+                  ? 'text-3xl sm:text-5xl md:text-6xl'
+                  : 'text-xl sm:text-2xl',
+              ].join(' ')}
+            >
+              {show.year}
+            </div>
           </div>
 
-          <div className='absolute bottom-0 inset-x-0 p-4 sm:p-5 z-20'>
-            <h3 className={`font-display font-black text-white drop-shadow-lg group-hover:text-kolping-400 transition-colors duration-300 ${isHero ? 'text-2xl sm:text-3xl md:text-4xl' : 'text-base sm:text-lg md:text-xl'}`}>
+          {/* Bottom content */}
+          <div className='absolute inset-x-0 bottom-0 p-4 sm:p-6 z-10'>
+            {isHero && (
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                Jüngste Produktion · {show.month}
+              </div>
+            )}
+            <h3
+              className={[
+                'font-display font-black uppercase tracking-tight leading-[0.95] text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] group-hover:text-kolping-400 transition-colors',
+                isHero
+                  ? 'text-3xl sm:text-5xl md:text-6xl'
+                  : 'text-xl sm:text-2xl',
+              ].join(' ')}
+            >
               {show.header}
             </h3>
-            <div className='mt-2 flex items-center gap-2 text-sm text-white/80 group-hover:text-kolping-400 transition-colors'>
+            <div className='mt-3 flex items-center gap-3 font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-white/85 group-hover:text-kolping-400 transition-colors'>
+              <span className='h-px w-6 sm:w-10 bg-kolping-400 transition-all group-hover:w-16' aria-hidden />
               Galerie öffnen
-              <svg className='w-4 h-4 transition-transform group-hover:translate-x-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
-              </svg>
+              <span className='transition-transform group-hover:translate-x-1' aria-hidden>
+                →
+              </span>
             </div>
           </div>
         </div>
-
-        <div className='h-1 bg-gradient-to-r from-transparent via-kolping-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-      </div>
+      </article>
     </Link>
   )
 }
@@ -144,7 +157,10 @@ export default function GalleryPage() {
   )
 
   const shows: TimelineShow[] = (timeline as TimelineEntry[])
-    .filter((entry): entry is TimelineEntry & Required<Pick<TimelineEntry, 'image' | 'galleryHash'>> => !!entry.image && !!entry.galleryHash)
+    .filter(
+      (entry): entry is TimelineEntry & Required<Pick<TimelineEntry, 'image' | 'galleryHash'>> =>
+        !!entry.image && !!entry.galleryHash,
+    )
     .reverse()
     .map((entry) => {
       const { month, year } = parseDateParts(entry.date)
@@ -159,9 +175,20 @@ export default function GalleryPage() {
   const latestShow = shows[0]
   const [featuredShow, ...restShows] = shows
 
+  // Founding year — the earliest year in the full timeline (not just the ones
+  // with galleries). First timeline entry is the "Gründung".
+  const foundingYear = (() => {
+    const ys = (timeline as TimelineEntry[])
+      .map((e) => (e.date ?? '').trim().match(/(\d{4})$/)?.[1])
+      .filter((y): y is string => Boolean(y))
+      .map((y) => parseInt(y, 10))
+    return ys.length ? Math.min(...ys) : null
+  })()
+
   return (
-    <div className='space-y-0'>
-      <section className='relative -mx-4 -mt-8 overflow-hidden'>
+    <div className='-mx-4 -mt-8'>
+      {/* ══════ HERO ══════ */}
+      <section className='relative overflow-hidden force-dark'>
         <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
           <Image
             src={latestShow?.galleryHash ? `/img/banners/${latestShow.galleryHash}.jpg` : '/img/home_team.jpg'}
@@ -181,9 +208,6 @@ export default function GalleryPage() {
                 <span className='inline-flex items-center rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-kolping-400 uppercase'>
                   Fotoarchive
                 </span>
-                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-site-100 uppercase'>
-                  Open-Air & Kreativbühne
-                </span>
               </div>
 
               <h1 className='animate-fade-in-up font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.92] text-shadow-lg'>
@@ -201,85 +225,119 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      <section className='relative -mx-4 border-y border-site-700 bg-site-900'>
-        <div className='mx-auto max-w-6xl px-4 py-5 sm:py-6'>
-          <div className='grid sm:grid-cols-3 gap-3 sm:gap-4'>
-            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Archiv: Alle verfügbaren Produktionen in einer durchgehenden
-              Übersicht.
+      {/* ══════ STAT STRIP ══════ */}
+      <section className='bg-site-950 border-b border-site-700'>
+        <div className='mx-auto max-w-6xl px-4 py-8 sm:py-10 grid grid-cols-2 gap-2 sm:gap-8 divide-x divide-site-700/80 text-center'>
+          {[
+            { value: String(shows.length).padStart(2, '0'), label: 'Produktionen' },
+            { value: `${foundingYear}`, label: 'seit' },
+          ].map(({ value, label }) => (
+            <div key={label} className='px-2'>
+              <div className='font-display italic text-4xl sm:text-6xl text-kolping-400/90 leading-none tabular-nums'>
+                {value}
+              </div>
+              <div className='mt-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-site-300'>
+                {label}
+              </div>
             </div>
-            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Schnellzugriff: Neueste Stücke zuerst, ältere Produktionen direkt
-              darunter.
-            </div>
-            <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-3 text-sm text-site-100'>
-              Detailansicht: In jeder Produktion stehen Fotos im Lightbox-Modus bereit.
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      <section className='mx-auto max-w-6xl px-4 py-8 sm:py-10'>
-        <SectionDivider
-          title='Produktionen'
-          subtitle='Alle verfügbaren Galerien in chronologischer Reihenfolge'
-        />
+      {/* ══════ FEATURED — latest production as marquee ══════ */}
+      {featuredShow && (
+        <section className='relative bg-site-950 scroll-mt-24'>
+          <div className='mx-auto max-w-7xl px-4 sm:px-8 pt-16 sm:pt-24 pb-8 sm:pb-12'>
+            <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                  Zuletzt auf der Bühne
+                </div>
+                <h2 className='font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+                  Aktuelles <span className='italic text-kolping-400'>Werk</span>
+                </h2>
+                <div className='hairline-gold w-24 mt-5' />
+              </div>
+            </div>
 
-        <div className='space-y-6 sm:space-y-8'>
-          {featuredShow && <GalleryCard show={featuredShow} index={0} isHero />}
+            <ProductionPoster show={featuredShow} index={0} size='hero' />
+          </div>
+        </section>
+      )}
 
-          {restShows.length > 0 && (
-            <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6'>
+      {/* ══════ ARCHIVE GRID ══════ */}
+      {restShows.length > 0 && (
+        <section className='relative bg-site-950 border-t border-site-700 scroll-mt-24'>
+          <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-14 sm:py-20'>
+            <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                  Archiv
+                </div>
+                <h2 className='font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+                  Das <span className='italic text-kolping-400'>Repertoire</span>
+                </h2>
+                <div className='hairline-gold w-24 mt-5' />
+              </div>
+              <p className='max-w-sm text-site-100/80 text-sm sm:text-base leading-relaxed'>
+                Sämtliche dokumentierte Produktionen in chronologischer
+                Reihenfolge — vom jüngsten Stück zurück zu unseren Anfängen.
+              </p>
+            </div>
+
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10'>
               {restShows.map((show, index) => (
-                <GalleryCard
+                <ProductionPoster
                   key={show.galleryHash}
                   show={show}
                   index={index + 1}
                 />
               ))}
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      <section className='mx-auto max-w-6xl px-4 py-12 sm:py-16'>
-        <div className='relative overflow-hidden rounded-2xl border border-site-700'>
-          <div className='absolute inset-0 bg-gradient-to-br from-kolping-400/10 via-site-900 to-site-900' />
-          <div className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-400/[0.05] to-transparent' />
+      {/* ══════ CTA — Clapperboard ══════ */}
+      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 force-dark'>
+        <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
+          <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
 
-          <div className='relative p-8 sm:p-10 md:p-14 flex flex-col md:flex-row items-center gap-8 md:gap-12'>
-            <div className='flex-1 text-center md:text-left'>
-              <span className='block text-[11px] sm:text-xs tracking-[0.2em] uppercase text-kolping-400 font-semibold mb-3'>
-                Mehr entdecken
-              </span>
-              <h2 className='font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight'>
-                Hinter den Bildern
-                <br className='hidden sm:block' />
-                steckt das Team
-              </h2>
-              <p className='text-site-100 mt-3 sm:mt-4 text-sm sm:text-base max-w-md leading-relaxed'>
-                Schau dir an, wer die Produktionen auf, vor und hinter der
-                Bühne möglich macht.
-              </p>
-            </div>
-            <div className='flex flex-col sm:flex-row items-center gap-3'>
-              <Link
-                href='/team'
-                className='group inline-flex items-center gap-2.5 rounded-full bg-kolping-400 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.3)]'
-              >
-                Zum Team
-                <svg className='w-4 h-4 transition-transform group-hover:translate-x-0.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-                </svg>
-              </Link>
-              <Link
-                href='/about'
-                className='inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/50 px-6 py-3 text-sm font-medium transition-all hover:border-kolping-400/50 hover:bg-site-800'
-              >
-                Chronik ansehen
-              </Link>
+          <div className='relative p-8 sm:p-12 md:p-16 bg-site-900'>
+            <div className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-500/10 to-transparent pointer-events-none' aria-hidden />
+
+            <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
+                  Hinter den Bildern
+                </div>
+                <h3 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95]'>
+                  Triff das <span className='italic text-kolping-400'>Ensemble</span>
+                </h3>
+                <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
+                  Die Gesichter hinter und vor der Kamera — Schauspiel, Technik
+                  und Organisation auf einen Blick.
+                </p>
+              </div>
+              <div className='flex flex-col gap-3 sm:items-end'>
+                <Link
+                  href='/team'
+                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'
+                >
+                  Zum Team
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                </Link>
+                <Link
+                  href='/about'
+                  className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
+                >
+                  ↺ Chronik ansehen
+                </Link>
+              </div>
             </div>
           </div>
+
+          <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
         </div>
       </section>
     </div>

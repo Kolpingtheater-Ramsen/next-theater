@@ -382,27 +382,6 @@
       "images": 3
     },
     {
-      "id": "Magdalena",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble",
-        "Carmen",
-        null,
-        "Serentiy Chrome",
-        null,
-        "Fiora",
-        null,
-        null
-      ],
-      "placeholderAvatar": true,
-      "images": 1
-    },
-    {
       "id": "Marcella",
       "roles": [
         null,
@@ -421,27 +400,6 @@
         "Suzie"
       ],
       "images": 3
-    },
-    {
-      "id": "Maria",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        "Ensemble",
-        "Ruth",
-        "Lilly",
-        "Isabella Mendoza",
-        null,
-        "Seraphina Chrome",
-        null,
-        "Talina",
-        null,
-        "Ensemble"
-      ],
-      "placeholderAvatar": true,
-      "images": 1
     },
     {
       "id": "Max",
@@ -562,26 +520,6 @@
         "Portrait"
       ],
       "images": 3
-    },
-    {
-      "id": "Philipp",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble",
-        null,
-        null,
-        null,
-        null
-      ],
-      "images": 2
     },
     {
       "id": "Raphael",
@@ -755,7 +693,7 @@
         }
       ],
       "images": 2,
-      "since": 2015
+      "since": 2025
     },
     {
       "id": "Christian",
@@ -770,7 +708,7 @@
         }
       ],
       "images": 2,
-      "since": 2015
+      "since": 2020
     },
     {
       "id": "Daniel",
@@ -782,7 +720,7 @@
         }
       ],
       "images": 1,
-      "since": 2015
+      "since": 2021
     },
     {
       "id": "Florian",
@@ -794,7 +732,7 @@
         }
       ],
       "images": 3,
-      "since": 2015
+      "since": 2020
     },
     {
       "id": "Jonas",
@@ -806,7 +744,7 @@
         }
       ],
       "images": 3,
-      "since": 2015
+      "since": 2024
     },
     {
       "id": "Julian",
@@ -817,7 +755,7 @@
         }
       ],
       "images": 3,
-      "since": 2015
+      "since": 2016
     },
     {
       "id": "Leo",
@@ -833,7 +771,7 @@
         }
       ],
       "images": 2,
-      "since": 2015
+      "since": 2022
     },
     {
       "id": "Logge",
@@ -844,7 +782,18 @@
         }
       ],
       "images": 3,
-      "since": 2015
+      "since": 2020
+    },
+    {
+      "id": "Philipp",
+      "jobs": [
+        {
+          "job": "Bühnentechnik",
+          "icon": "settings"
+        }
+      ],
+      "images": 2,
+      "since": 2024
     },
     {
       "id": "Maren",
@@ -856,7 +805,7 @@
         }
       ],
       "images": 2,
-      "since": 2015
+      "since": 2025
     },
     {
       "id": "Wolfgang",
@@ -868,7 +817,7 @@
         }
       ],
       "images": 2,
-      "since": 2015
+      "since": 2017
     },
     {
       "id": "Ursula",
@@ -879,7 +828,7 @@
         }
       ],
       "images": 2,
-      "since": 2015
+      "since": 2017
     }
   ]
 }

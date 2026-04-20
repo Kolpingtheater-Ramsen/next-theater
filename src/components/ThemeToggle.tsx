@@ -12,14 +12,19 @@ export default function ThemeToggle() {
   }, [theme])
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
-    if (saved) {
-      setTheme(saved)
+    const urlTheme = new URLSearchParams(window.location.search).get('theme')
+    if (urlTheme === 'light' || urlTheme === 'dark') {
+      setTheme(urlTheme)
     } else {
-      const prefersLight = window.matchMedia(
-        '(prefers-color-scheme: light)'
-      ).matches
-      setTheme(prefersLight ? 'light' : 'dark')
+      const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
+      if (saved) {
+        setTheme(saved)
+      } else {
+        const prefersLight = window.matchMedia(
+          '(prefers-color-scheme: light)'
+        ).matches
+        setTheme(prefersLight ? 'light' : 'dark')
+      }
     }
     setMounted(true)
   }, [])

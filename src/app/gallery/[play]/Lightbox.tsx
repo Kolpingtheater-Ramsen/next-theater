@@ -16,6 +16,9 @@ export function Lightbox({
   onPrev,
   onNext,
   downloadHref,
+  index,
+  total,
+  title,
 }: {
   src: string
   alt: string
@@ -25,6 +28,9 @@ export function Lightbox({
   onPrev: () => void
   onNext: () => void
   downloadHref?: string
+  index?: number
+  total?: number
+  title?: string
 }) {
   const [loading, setLoading] = useState(true)
   const [isVisible, setIsVisible] = useState(false)
@@ -35,19 +41,14 @@ export function Lightbox({
   const decodedAlt = decodeHtmlEntities(alt)
   const decodedCaption = caption ? decodeHtmlEntities(caption) : undefined
 
-  // Trigger entrance animation
   useEffect(() => {
     setMounted(true)
-    requestAnimationFrame(() => {
-      setIsVisible(true)
-    })
+    requestAnimationFrame(() => setIsVisible(true))
   }, [])
 
-  // Handle image change with animation
   useEffect(() => {
     if (src !== imageKey) {
       setLoading(true)
-      // Small delay to allow slide animation to start
       const timer = setTimeout(() => {
         setImageKey(src)
         setSlideDirection(null)
@@ -58,9 +59,7 @@ export function Lightbox({
 
   const handleClose = useCallback(() => {
     setIsClosing(true)
-    setTimeout(() => {
-      onClose()
-    }, 200)
+    setTimeout(onClose, 200)
   }, [onClose])
 
   const handlePrev = useCallback(() => {
@@ -83,7 +82,6 @@ export function Lightbox({
     return () => window.removeEventListener('keydown', onKey)
   }, [handleClose, handlePrev, handleNext])
 
-  // Prevent body scroll when lightbox is open
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => {
@@ -91,276 +89,259 @@ export function Lightbox({
     }
   }, [])
 
-  const getImageAnimationClass = () => {
-    if (slideDirection === 'left') {
-      return 'animate-slide-in-right'
-    }
-    if (slideDirection === 'right') {
-      return 'animate-slide-in-left'
-    }
-    return 'animate-scale-fade-in'
-  }
+  const imgAnimClass =
+    slideDirection === 'left'
+      ? 'animate-slide-in-right'
+      : slideDirection === 'right'
+        ? 'animate-slide-in-left'
+        : 'animate-scale-fade-in'
 
   if (!mounted) return null
 
+  const showCounter = typeof index === 'number' && typeof total === 'number'
+
   const content = (
     <div
-      className={`
-        fixed inset-0 z-50 flex items-center justify-center p-4
-        transition-all duration-300 ease-out
-        ${isVisible && !isClosing ? 'bg-black/90 backdrop-blur-md' : 'bg-black/0 backdrop-blur-none'}
-      `}
+      className={[
+        'force-dark fixed inset-0 z-50 flex items-center justify-center transition-colors duration-300 ease-out',
+        isVisible && !isClosing ? 'bg-black/94 backdrop-blur-md' : 'bg-black/0 backdrop-blur-none',
+      ].join(' ')}
       onClick={handleClose}
+      role='dialog'
+      aria-modal='true'
+      aria-label={decodedAlt}
     >
-      {/* Background theatrical elements */}
-      <div className={`
-        absolute inset-0 pointer-events-none overflow-hidden
-        transition-opacity duration-500
-        ${isVisible && !isClosing ? 'opacity-100' : 'opacity-0'}
-      `}>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/8 to-transparent blur-3xl animate-pulse-slow' />
-        <div className='absolute top-0 right-1/4 w-96 h-96 bg-gradient-radial from-kolping-500/8 to-transparent blur-3xl animate-pulse-slow animation-delay-1000' />
-        <div className='absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-96 bg-gradient-radial from-kolping-500/5 to-transparent blur-3xl' />
-      </div>
-      
-      {/* Main content container */}
+      {/* Atmosphere: spotlight + grain + vignette */}
       <div
-        className={`
-          relative max-w-5xl w-full h-[80vh]
-          transition-all duration-300 ease-out
-          ${isVisible && !isClosing ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
-        `}
+        className={[
+          'absolute inset-0 pointer-events-none overflow-hidden transition-opacity duration-500',
+          isVisible && !isClosing ? 'opacity-100' : 'opacity-0',
+        ].join(' ')}
+        aria-hidden
+      >
+        <div className='absolute inset-x-0 top-0 h-[55%] bg-[radial-gradient(ellipse_60%_90%_at_50%_0%,rgba(255,180,120,0.06),transparent_70%)]' />
+        <div className='absolute inset-x-0 bottom-0 h-[40%] bg-[radial-gradient(ellipse_80%_80%_at_50%_100%,rgba(255,122,0,0.05),transparent_75%)]' />
+        <div className='absolute inset-0 grain opacity-40' />
+        <div className='vignette' />
+      </div>
+
+      {/* Letterbox bars */}
+      <div
+        className={[
+          'absolute top-0 inset-x-0 h-3 sm:h-4 bg-black z-20 transition-transform duration-500 ease-out',
+          isVisible && !isClosing ? 'translate-y-0' : '-translate-y-full',
+        ].join(' ')}
+        aria-hidden
+      />
+      <div
+        className={[
+          'absolute bottom-0 inset-x-0 h-3 sm:h-4 bg-black z-20 transition-transform duration-500 ease-out',
+          isVisible && !isClosing ? 'translate-y-0' : 'translate-y-full',
+        ].join(' ')}
+        aria-hidden
+      />
+
+      {/* Main image stage */}
+      <div
+        className={[
+          'relative w-[min(92vw,1400px)] h-[min(82vh,900px)] mx-4',
+          'transition-[opacity,transform] duration-300 ease-out',
+          isVisible && !isClosing ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.97]',
+        ].join(' ')}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Image container with animations */}
-        <div className='relative w-full h-full'>
-          {/* Low-res placeholder while full image loads */}
-          {loading && thumbSrc ? (
-            <Image
-              src={thumbSrc}
-              alt={decodedAlt}
-              fill
-              className='object-contain blur-md opacity-50'
-              sizes='100vw'
-              priority
-            />
-          ) : null}
-          
-          {/* Loading spinner */}
-          {loading && (
-            <div className='absolute inset-0 grid place-items-center z-10'>
-              <div className='relative'>
-                <div className='w-14 h-14 rounded-full border-2 border-kolping-500/20' />
-                <div className='absolute inset-0 w-14 h-14 rounded-full border-2 border-transparent border-t-kolping-500 animate-spin' />
-                <div className='absolute inset-2 w-10 h-10 rounded-full border-2 border-transparent border-b-kolping-400 animate-spin animation-reverse' style={{ animationDuration: '0.8s' }} />
-              </div>
+        {/* Corner ticks framing the image */}
+        <span className='absolute -top-1 -left-1 w-4 h-4 border-l border-t border-kolping-400/60 z-30' aria-hidden />
+        <span className='absolute -top-1 -right-1 w-4 h-4 border-r border-t border-kolping-400/60 z-30' aria-hidden />
+        <span className='absolute -bottom-1 -left-1 w-4 h-4 border-l border-b border-kolping-400/60 z-30' aria-hidden />
+        <span className='absolute -bottom-1 -right-1 w-4 h-4 border-r border-b border-kolping-400/60 z-30' aria-hidden />
+
+        {/* Loading state */}
+        {loading && thumbSrc ? (
+          <Image
+            src={thumbSrc}
+            alt={decodedAlt}
+            fill
+            className='object-contain blur-lg opacity-40'
+            sizes='100vw'
+            priority
+          />
+        ) : null}
+
+        {loading && (
+          <div className='absolute inset-0 grid place-items-center z-10 pointer-events-none'>
+            <div className='relative w-10 h-10'>
+              <div className='absolute inset-0 rounded-full border border-white/20' />
+              <div className='absolute inset-0 rounded-full border border-transparent border-t-kolping-400 animate-spin' />
+            </div>
+          </div>
+        )}
+
+        {/* Full image */}
+        <div key={imageKey} className={`absolute inset-0 ${imgAnimClass}`}>
+          <Image
+            src={imageKey}
+            alt={decodedAlt}
+            fill
+            className={[
+              'object-contain transition-opacity duration-500 drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]',
+              loading ? 'opacity-0' : 'opacity-100',
+            ].join(' ')}
+            sizes='100vw'
+            onLoadingComplete={() => setLoading(false)}
+          />
+        </div>
+      </div>
+
+      {/* ══ TOP BAR ══ */}
+      <div
+        className={[
+          'absolute top-0 inset-x-0 z-30 pt-5 sm:pt-7 px-4 sm:px-8 flex items-start justify-between gap-4 pointer-events-none transition-opacity duration-500 ease-out',
+          isVisible && !isClosing ? 'opacity-100' : 'opacity-0',
+        ].join(' ')}
+      >
+        {/* Counter + production title */}
+        <div className='pointer-events-auto flex flex-col gap-2'>
+          {showCounter && (
+            <div className='flex items-baseline gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.35em] text-white/80'>
+              <span className='font-mono text-[10px] uppercase tracking-[0.3em] text-kolping-400/90 mr-1'>
+                Szene
+              </span>
+              <span className='font-display italic text-kolping-400 text-2xl sm:text-3xl leading-none tabular-nums'>
+                {String((index ?? 0) + 1).padStart(2, '0')}
+              </span>
+              <span className='text-white/40'>/</span>
+              <span className='tabular-nums'>{String(total).padStart(2, '0')}</span>
             </div>
           )}
-          
-          {/* Main image with slide animation */}
-          <div 
-            key={imageKey}
-            className={`absolute inset-0 ${getImageAnimationClass()}`}
-          >
-            <Image
-              src={imageKey}
-              alt={decodedAlt}
-              fill
-              className={`
-                object-contain transition-all duration-500
-                ${loading ? 'opacity-0 scale-98' : 'opacity-100 scale-100'}
-              `}
-              sizes='100vw'
-              onLoadingComplete={() => setLoading(false)}
-            />
-          </div>
-          
-          {/* Theatrical frame effect */}
-          <div className='absolute inset-0 pointer-events-none'>
-            <div className='absolute inset-0 shadow-[inset_0_0_100px_rgba(0,0,0,0.3)]' />
-          </div>
+          {title && (
+            <div className='font-display italic text-sm sm:text-lg text-white/80 leading-tight max-w-xs sm:max-w-md truncate'>
+              {title}
+            </div>
+          )}
         </div>
 
-        {/* Navigation controls - slide in from sides */}
-        <button
-          aria-label='Vorheriges Bild'
-          className={`
-            absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 p-3 sm:p-4
-            rounded-full bg-site-800/80 backdrop-blur-sm border border-kolping-500/30 
-            text-white hover:bg-site-700 hover:border-kolping-500/60 hover:text-kolping-400 
-            hover:scale-110 active:scale-95
-            transition-all duration-300 group
-            ${isVisible && !isClosing ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'}
-          `}
-          style={{ transitionDelay: '150ms' }}
-          onClick={handlePrev}
-        >
-          <svg className='w-6 h-6 transition-transform duration-300 group-hover:-translate-x-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
-          </svg>
-        </button>
-        
-        <button
-          aria-label='Nächstes Bild'
-          className={`
-            absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 p-3 sm:p-4
-            rounded-full bg-site-800/80 backdrop-blur-sm border border-kolping-500/30 
-            text-white hover:bg-site-700 hover:border-kolping-500/60 hover:text-kolping-400 
-            hover:scale-110 active:scale-95
-            transition-all duration-300 group
-            ${isVisible && !isClosing ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}
-          `}
-          style={{ transitionDelay: '150ms' }}
-          onClick={handleNext}
-        >
-          <svg className='w-6 h-6 transition-transform duration-300 group-hover:translate-x-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-          </svg>
-        </button>
-        
-        {/* Top controls - slide down */}
-        <div className={`
-          absolute top-2 sm:top-4 right-2 sm:right-4 flex items-center gap-2
-          transition-all duration-300
-          ${isVisible && !isClosing ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
-        `}
-        style={{ transitionDelay: '100ms' }}
-        >
-          {downloadHref ? (
+        {/* Top-right controls */}
+        <div className='pointer-events-auto flex items-center gap-2'>
+          {downloadHref && (
             <a
               href={downloadHref}
               download
               target='_blank'
               rel='noreferrer'
               aria-label='Bild herunterladen'
-              className='p-2.5 sm:p-3 rounded-full bg-site-800/80 backdrop-blur-sm border border-kolping-500/30 text-white hover:bg-site-700 hover:border-kolping-500/60 hover:text-kolping-400 hover:scale-110 active:scale-95 transition-all duration-300'
+              className='group inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-sm text-white/80 hover:text-kolping-400 hover:border-kolping-400/40 hover:bg-black/80 transition-all'
+              onClick={(e) => e.stopPropagation()}
             >
-              <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' />
+              <svg className='w-4 h-4 sm:w-5 sm:h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.5}>
+                <path strokeLinecap='round' strokeLinejoin='round' d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' />
               </svg>
             </a>
-          ) : null}
+          )}
           <button
             aria-label='Schließen'
-            className='p-2.5 sm:p-3 rounded-full bg-site-800/80 backdrop-blur-sm border border-kolping-500/30 text-white hover:bg-red-600/80 hover:border-red-500/60 hover:scale-110 active:scale-95 transition-all duration-300'
+            className='group inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full border border-white/15 bg-black/60 backdrop-blur-sm text-white/80 hover:text-kolping-400 hover:border-kolping-400/40 hover:bg-black/80 transition-all'
             onClick={handleClose}
           >
-            <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+            <svg className='w-4 h-4 sm:w-5 sm:h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.8}>
+              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
             </svg>
           </button>
         </div>
-        
-        {/* Caption - slide up */}
-        {decodedCaption ? (
-          <div className={`
-            absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-center
-            transition-all duration-300
-            ${isVisible && !isClosing ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-          `}
-          style={{ transitionDelay: '200ms' }}
-          >
-            <div className='inline-block max-w-2xl'>
-              <div className='px-5 py-3 rounded-xl bg-site-800/80 backdrop-blur-sm border border-kolping-500/20 shadow-lg shadow-black/20'>
-                <p className='text-sm sm:text-base text-white font-medium leading-relaxed'>
-                  {decodedCaption}
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {/* Keyboard hints - fade in late */}
-        <div className={`
-          absolute bottom-4 left-4 hidden sm:flex items-center gap-3
-          transition-all duration-500
-          ${isVisible && !isClosing ? 'opacity-60' : 'opacity-0'}
-        `}
-        style={{ transitionDelay: '400ms' }}
-        >
-          <div className='flex items-center gap-1.5 text-xs text-white/70'>
-            <kbd className='px-2 py-1 rounded bg-site-700/60 border border-site-600/50 font-mono text-[10px]'>←</kbd>
-            <kbd className='px-2 py-1 rounded bg-site-700/60 border border-site-600/50 font-mono text-[10px]'>→</kbd>
-            <span className='ml-1'>Navigation</span>
-          </div>
-          <div className='flex items-center gap-1.5 text-xs text-white/70'>
-            <kbd className='px-2 py-1 rounded bg-site-700/60 border border-site-600/50 font-mono text-[10px]'>ESC</kbd>
-            <span className='ml-1'>Schließen</span>
-          </div>
-        </div>
       </div>
 
-      {/* Inline styles for custom animations */}
+      {/* ══ SIDE CONTROLS ══ */}
+      <button
+        aria-label='Vorheriges Bild'
+        className={[
+          'group absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30',
+          'inline-flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full',
+          'border border-white/15 bg-black/60 backdrop-blur-sm text-white/80',
+          'hover:text-kolping-400 hover:border-kolping-400/40 hover:bg-black/80',
+          'active:scale-95 transition-all duration-300',
+          isVisible && !isClosing ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4',
+        ].join(' ')}
+        style={{ transitionDelay: isVisible ? '150ms' : '0ms' }}
+        onClick={(e) => {
+          e.stopPropagation()
+          handlePrev()
+        }}
+      >
+        <svg className='w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:-translate-x-0.5' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.5}>
+          <path strokeLinecap='round' strokeLinejoin='round' d='M15 19l-7-7 7-7' />
+        </svg>
+      </button>
+
+      <button
+        aria-label='Nächstes Bild'
+        className={[
+          'group absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30',
+          'inline-flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full',
+          'border border-white/15 bg-black/60 backdrop-blur-sm text-white/80',
+          'hover:text-kolping-400 hover:border-kolping-400/40 hover:bg-black/80',
+          'active:scale-95 transition-all duration-300',
+          isVisible && !isClosing ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4',
+        ].join(' ')}
+        style={{ transitionDelay: isVisible ? '150ms' : '0ms' }}
+        onClick={(e) => {
+          e.stopPropagation()
+          handleNext()
+        }}
+      >
+        <svg className='w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:translate-x-0.5' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.5}>
+          <path strokeLinecap='round' strokeLinejoin='round' d='M9 5l7 7-7 7' />
+        </svg>
+      </button>
+
+      {/* ══ BOTTOM BAR ══ */}
+      <div
+        className={[
+          'absolute bottom-0 inset-x-0 z-30 pb-5 sm:pb-7 px-4 sm:px-8 flex items-end justify-between gap-4 pointer-events-none transition-opacity duration-500',
+          isVisible && !isClosing ? 'opacity-100' : 'opacity-0',
+        ].join(' ')}
+        style={{ transitionDelay: isVisible ? '200ms' : '0ms' }}
+      >
+        {/* Keyboard hints */}
+        <div className='hidden sm:flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.3em] text-white/55'>
+          <span className='flex items-center gap-1.5'>
+            <kbd className='px-2 py-1 rounded-sm bg-black/60 border border-white/15 text-[10px]'>←</kbd>
+            <kbd className='px-2 py-1 rounded-sm bg-black/60 border border-white/15 text-[10px]'>→</kbd>
+            Navigation
+          </span>
+          <span className='flex items-center gap-1.5'>
+            <kbd className='px-2 py-1 rounded-sm bg-black/60 border border-white/15 text-[10px]'>Esc</kbd>
+            Schließen
+          </span>
+        </div>
+
+        {/* Caption */}
+        {decodedCaption ? (
+          <div className='pointer-events-auto flex-1 text-right'>
+            <p className='inline-block max-w-2xl font-display italic text-sm sm:text-base text-white/90 leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]'>
+              „{decodedCaption}"
+            </p>
+          </div>
+        ) : (
+          <span />
+        )}
+      </div>
+
       <style jsx>{`
         @keyframes slide-in-left {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
+          from { opacity: 0; transform: translateX(-30px); }
+          to   { opacity: 1; transform: translateX(0); }
         }
-        
         @keyframes slide-in-right {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
+          from { opacity: 0; transform: translateX(30px); }
+          to   { opacity: 1; transform: translateX(0); }
         }
-        
         @keyframes scale-fade-in {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.97); }
+          to   { opacity: 1; transform: scale(1); }
         }
-        
-        @keyframes pulse-slow {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.5;
-          }
-        }
-        
-        .animate-slide-in-left {
-          animation: slide-in-left 0.4s ease-out forwards;
-        }
-        
-        .animate-slide-in-right {
-          animation: slide-in-right 0.4s ease-out forwards;
-        }
-        
-        .animate-scale-fade-in {
-          animation: scale-fade-in 0.4s ease-out forwards;
-        }
-        
-        .animate-pulse-slow {
-          animation: pulse-slow 4s ease-in-out infinite;
-        }
-        
-        .animation-delay-1000 {
-          animation-delay: 1s;
-        }
-        
-        .animation-reverse {
-          animation-direction: reverse;
-        }
-        
-        .scale-98 {
-          transform: scale(0.98);
-        }
+        .animate-slide-in-left  { animation: slide-in-left  0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .animate-slide-in-right { animation: slide-in-right 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .animate-scale-fade-in  { animation: scale-fade-in  0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
       `}</style>
     </div>
   )

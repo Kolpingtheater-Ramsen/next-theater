@@ -247,7 +247,7 @@ export default function AboutPage() {
 
   return (
     <div className='space-y-0'>
-      <section className='relative -mx-4 -mt-8 overflow-hidden'>
+      <section className='relative -mx-4 -mt-8 overflow-hidden force-dark'>
         <div className='relative w-full h-[75vh] min-h-[480px] max-h-[860px]'>
           <Image
             src='/img/other_images/Gruppenbild.jpg'

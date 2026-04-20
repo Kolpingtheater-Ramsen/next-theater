@@ -35,38 +35,6 @@ function parseDateParts(date: string) {
   return { month, year }
 }
 
-function SectionDivider({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <div className='relative py-8 sm:py-12'>
-      <div className='relative text-center space-y-3'>
-        <div className='flex items-center justify-center gap-4'>
-          <div className='hidden sm:flex items-center gap-2'>
-            <div className='w-8 h-px bg-gradient-to-l from-kolping-500 to-transparent' />
-            <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
-            <div className='w-16 h-px bg-gradient-to-l from-kolping-500/80 to-transparent' />
-          </div>
-
-          <h2 className='font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-kolping-400 drop-shadow-[0_0_20px_rgba(255,122,0,0.3)]'>
-            {title}
-          </h2>
-
-          <div className='hidden sm:flex items-center gap-2'>
-            <div className='w-16 h-px bg-gradient-to-r from-kolping-500/80 to-transparent' />
-            <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
-            <div className='w-8 h-px bg-gradient-to-r from-kolping-500 to-transparent' />
-          </div>
-        </div>
-
-        {subtitle && (
-          <p className='text-site-100 text-sm sm:text-base max-w-xl mx-auto'>
-            {subtitle}
-          </p>
-        )}
-      </div>
-    </div>
-  )
-}
-
 export default async function PlayGalleryPage({
   params,
 }: {
@@ -98,8 +66,9 @@ export default async function PlayGalleryPage({
   const heroImage = timelineEntry?.image ? `/img/${timelineEntry.image}` : '/img/home_team.jpg'
 
   return (
-    <div className='space-y-0'>
-      <section className='relative -mx-4 -mt-8 overflow-hidden'>
+    <div className='-mx-4 -mt-8'>
+      {/* ══════ HERO ══════ */}
+      <section className='relative overflow-hidden force-dark'>
         <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
           <Image
             src={heroImage}
@@ -109,51 +78,54 @@ export default async function PlayGalleryPage({
             sizes='100vw'
             className='absolute inset-0 h-full w-full object-cover'
           />
-          <div className='absolute inset-0 bg-gradient-to-b from-site-950/30 via-site-950/35 to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/60 via-transparent to-site-950/40' />
+          <div className='absolute inset-0 bg-gradient-to-b from-site-950/35 via-site-950/30 to-site-950' />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/60 via-transparent to-site-950/35' />
           <div className='vignette' />
 
           <div className='absolute inset-0'>
             <div className='mx-auto max-w-6xl px-4 pt-8'>
               <Link
                 href='/gallery'
-                className='inline-flex items-center gap-2 text-site-100 hover:text-kolping-400 transition-colors group'
+                className='group inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.35em] text-site-100 hover:text-kolping-400 transition-colors'
               >
-                <svg className='w-5 h-5 transition-transform group-hover:-translate-x-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
-                </svg>
-                <span className='text-sm font-medium'>Zurück zur Galerie</span>
+                <span className='transition-transform group-hover:-translate-x-1'>←</span>
+                Zurück zur Galerie
               </Link>
             </div>
 
             <div className='absolute inset-x-0 bottom-0 pb-10 sm:pb-14 md:pb-16'>
               <div className='mx-auto max-w-6xl px-4'>
-                <div className='mb-4 flex flex-wrap items-center gap-2.5'>
+                <div className='mb-5 flex flex-wrap items-center gap-2.5 font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em]'>
                   {dateRaw && (
-                    <span className='inline-flex items-center rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-kolping-400 uppercase'>
+                    <span className='inline-flex items-center rounded-md border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1.5 text-kolping-400'>
                       {month} {year}
                     </span>
                   )}
                   {locationLabel && (
-                    <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-site-100 uppercase'>
+                    <span className='inline-flex items-center rounded-md border border-white/20 bg-black/55 backdrop-blur-sm px-3 py-1.5 text-white'>
                       {locationLabel}
                     </span>
                   )}
                   {hasImages && (
-                    <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-site-100 uppercase'>
-                      {metas!.length} Fotos
+                    <span className='inline-flex items-center gap-2 rounded-md border border-white/20 bg-black/55 backdrop-blur-sm px-3 py-1.5 text-white'>
+                      <span className='text-kolping-400'>{metas!.length}</span>
+                      Fotos
                     </span>
                   )}
                 </div>
 
                 <h1
-                  className='font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.94] text-shadow-lg'
+                  className='font-display font-black leading-[0.88] tracking-tight text-shadow-lg'
                   style={{ viewTransitionName: `gallery-title-${play}` }}
                 >
-                  <span className='text-site-50'>{title}</span>
+                  <span className='block text-4xl sm:text-6xl md:text-7xl lg:text-8xl italic text-kolping-400 drop-shadow-[0_6px_28px_rgba(255,122,0,0.35)]'>
+                    {title}
+                  </span>
                 </h1>
 
-                <p className='mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
+                <div className='hairline-gold w-32 mt-6' />
+
+                <p className='mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
                   {hasImages
                     ? 'Alle verfügbaren Szenen dieser Produktion in einer zusammenhängenden Galerie.'
                     : 'Für diese Produktion sind aktuell noch keine Bilder veröffentlicht.'}
@@ -164,75 +136,102 @@ export default async function PlayGalleryPage({
         </div>
       </section>
 
-      {!hasImages ? (
-        <section className='mx-auto max-w-6xl px-4 py-12 sm:py-16'>
-          <div className='glass rounded-2xl border border-site-700 p-8 sm:p-10 text-center'>
-            <div className='mx-auto w-16 h-16 rounded-full bg-kolping-500/10 border border-kolping-500/30 flex items-center justify-center mb-5'>
-              <svg className='w-8 h-8 text-kolping-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' />
-              </svg>
+      {/* ══════ PHOTO GRID ══════ */}
+      {hasImages ? (
+        <section className='relative bg-site-950 border-t border-site-700'>
+          <div className='mx-auto max-w-7xl px-4 sm:px-8 pt-14 sm:pt-20 pb-8 sm:pb-12'>
+            <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                  Foto-Archiv
+                </div>
+                <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+                  Die <span className='italic text-kolping-400'>Szenen</span>
+                </h2>
+                <div className='hairline-gold w-24 mt-5' />
+              </div>
+              <p className='max-w-sm text-site-100/80 text-sm sm:text-base leading-relaxed font-mono text-[11px] uppercase tracking-[0.25em]'>
+                Klick auf ein Bild öffnet die Lightbox
+              </p>
             </div>
-            <h2 className='font-display text-2xl sm:text-3xl font-bold text-site-50'>
-              Noch keine Galerie verfügbar
+
+            <ClientGrid
+              play={play}
+              metas={metas!}
+              captions={captions!}
+              title={title}
+            />
+          </div>
+        </section>
+      ) : (
+        <section className='relative bg-site-950 border-t border-site-700'>
+          <div className='relative mx-auto max-w-4xl px-4 sm:px-8 py-20 sm:py-28 text-center'>
+            <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-5'>
+              Vorhang noch nicht offen
+            </div>
+            <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+              Noch keine <span className='italic text-kolping-400'>Bilder.</span>
             </h2>
-            <p className='mt-2 text-site-100 max-w-lg mx-auto'>
-              Sobald Bilder zu dieser Produktion veröffentlicht sind, erscheinen sie hier.
+            <div className='hairline-gold w-24 mt-6 mx-auto' />
+            <p className='mt-6 text-site-100/80 max-w-md mx-auto text-sm sm:text-base leading-relaxed'>
+              Sobald Bilder zu dieser Produktion veröffentlicht sind, erscheinen
+              sie hier.
             </p>
-            <div className='mt-6 flex justify-center gap-3'>
+            <div className='mt-8 flex justify-center gap-3'>
               <Link
                 href='/gallery'
-                className='inline-flex items-center gap-2 rounded-full bg-kolping-400 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-kolping-500'
+                className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
               >
                 Alle Produktionen
+                <span className='transition-transform group-hover:translate-x-1'>→</span>
               </Link>
               <Link
                 href='/about'
-                className='inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/50 px-5 py-2.5 text-sm font-medium transition-all hover:border-kolping-400/50 hover:bg-site-800'
+                className='inline-flex items-center gap-2 rounded-sm border border-site-700 bg-site-800/60 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 hover:border-kolping-400/40 transition-all'
               >
                 Zur Chronik
               </Link>
             </div>
           </div>
         </section>
-      ) : (
-        <section className='mx-auto max-w-6xl px-4 py-8 sm:py-10'>
-          <div className='rounded-xl border border-site-700 bg-site-800/50 p-4 sm:p-5 text-sm text-site-100'>
-            Tipp: Klicke auf ein Bild, um es im Lightbox-Modus in voller Größe zu öffnen.
-          </div>
-
-          <SectionDivider
-            title='Fotogalerie'
-            subtitle='Szenen, Details und Momente dieser Aufführung'
-          />
-
-          <div className='glass border border-site-700 rounded-2xl p-3 sm:p-4 md:p-6'>
-            <ClientGrid play={play} metas={metas!} captions={captions!} />
-          </div>
-        </section>
       )}
 
-      <section className='mx-auto max-w-6xl px-4 pb-12 sm:pb-16'>
-        <div className='relative overflow-hidden rounded-2xl border border-site-700'>
-          <div className='absolute inset-0 bg-gradient-to-br from-kolping-400/10 via-site-900 to-site-900' />
-          <div className='relative p-6 sm:p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-4'>
-            <p className='text-sm sm:text-base text-site-100 text-center sm:text-left'>
-              Weitere Produktionen oder das Team hinter dem Stück entdecken.
-            </p>
-            <div className='flex items-center gap-3'>
-              <Link
-                href='/gallery'
-                className='inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/60 px-5 py-2.5 text-sm font-medium transition-all hover:border-kolping-400/50 hover:bg-site-800'
-              >
-                Zur Galerie
-              </Link>
-              <Link
-                href='/team'
-                className='inline-flex items-center gap-2 rounded-full bg-kolping-400 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-kolping-500'
-              >
-                Zum Team
-              </Link>
+      {/* ══════ CTA — Clapperboard ══════ */}
+      <section className='relative bg-site-950 py-14 sm:py-20 px-4 sm:px-8 force-dark'>
+        <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
+          <div className='clapper-stripes h-5 sm:h-7' aria-hidden />
+          <div className='relative p-6 sm:p-10 md:p-14 bg-site-900'>
+            <div className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-500/10 to-transparent pointer-events-none' aria-hidden />
+            <div className='relative grid sm:grid-cols-[1fr_auto] gap-6 sm:gap-10 items-end'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                  Weiter stöbern
+                </div>
+                <h3 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]'>
+                  Noch mehr <span className='italic text-kolping-400'>Szenen?</span>
+                </h3>
+                <p className='mt-4 text-site-100/80 text-sm sm:text-base max-w-lg leading-relaxed'>
+                  Weitere Produktionen oder das Team hinter dem Stück entdecken.
+                </p>
+              </div>
+              <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3'>
+                <Link
+                  href='/gallery'
+                  className='inline-flex items-center justify-center gap-2 border border-site-700 bg-site-800/60 px-5 py-3 rounded-sm font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:border-kolping-400/50 hover:text-kolping-400 transition-all'
+                >
+                  Zur Galerie
+                </Link>
+                <Link
+                  href='/team'
+                  className='group inline-flex items-center justify-center gap-2 bg-kolping-400 hover:bg-kolping-500 px-6 py-3 rounded-sm font-mono text-[11px] uppercase tracking-[0.3em] font-bold text-black transition-all hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
+                >
+                  Zum Team
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                </Link>
+              </div>
             </div>
           </div>
+          <div className='clapper-stripes h-5 sm:h-7' aria-hidden />
         </div>
       </section>
     </div>

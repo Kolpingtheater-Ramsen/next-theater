@@ -151,9 +151,9 @@ export default function TeamPage() {
   const castOnStage = castSorted.filter((p) => Boolean(currentRole(p))).length
 
   return (
-    <div className='-mx-4 -mt-8 force-dark'>
+    <div className='-mx-4 -mt-8'>
       {/* ══════ HERO (restored original) ══════ */}
-      <section className='relative overflow-hidden'>
+      <section className='relative overflow-hidden force-dark'>
         <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
           <Image
             src='/img/team/team_header.jpg'
@@ -192,7 +192,7 @@ export default function TeamPage() {
       </section>
 
       {/* ══════ MARQUEE BULB STRIP ══════ */}
-      <section className='relative bg-site-950 border-y border-kolping-500/30 overflow-hidden'>
+      <section className='relative bg-site-950 border-y border-kolping-500/30 overflow-hidden force-dark'>
         <div className='h-2 bulbs opacity-80' aria-hidden />
         <div className='marquee py-3'>
           <div className='marquee__track text-white font-display uppercase tracking-[0.35em] text-sm sm:text-base'>
@@ -203,7 +203,6 @@ export default function TeamPage() {
                   `${currentPlay.play} · ${currentPlay.year}`,
                   currentPlay.location ?? 'Open-Air-Bühne',
                   `${data.current.length} auf der Bühne`,
-                  `Regie · Sebastian`,
                   `Kolpingtheater · Ramsen`,
                 ].map((txt, i) => (
                   <span key={i} className='flex items-center gap-8 whitespace-nowrap'>
@@ -242,9 +241,6 @@ export default function TeamPage() {
         <div className='mx-auto max-w-7xl px-4 sm:px-8 pt-16 sm:pt-24 pb-8 sm:pb-12'>
           <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-16'>
             <div>
-              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
-                Akt I
-              </div>
               <h2 className='font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
                 Die <span className='italic text-kolping-400'>Besetzung</span>
               </h2>
@@ -281,9 +277,6 @@ export default function TeamPage() {
         <div className='relative mx-auto max-w-6xl px-4 sm:px-8 py-16 sm:py-24'>
           <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14'>
             <div>
-              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
-                Akt II
-              </div>
               <h2 className='font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
                 Hinter den
                 <br />
@@ -307,7 +300,7 @@ export default function TeamPage() {
       </section>
 
       {/* ══════ CTA — Clapperboard ══════ */}
-      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8'>
+      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 force-dark'>
         <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
           {/* clapper top stripe */}
           <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
