@@ -58,6 +58,12 @@
 [data-theme='light'] .bg-site-900\/80 {
   background-color: rgba(255, 255, 255, 0.8) !important;
 }
+[data-theme='light'] .bg-site-900\/60 {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+[data-theme='light'] .bg-site-900\/50 {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
 [data-theme='light'] .bg-site-700\/80 {
   background-color: rgba(229, 231, 235, 0.9) !important;
 }
