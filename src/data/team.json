@@ -176,7 +176,7 @@
         null,
         "Pater Rabanus",
         null,
-        "Ensemble 3"
+        "Ensemble"
       ],
       "images": 3
     },
@@ -196,7 +196,7 @@
         null,
         null,
         null,
-        "Ensemble 10/ Karl"
+        "Karl"
       ],
       "images": 3
     },
@@ -216,7 +216,7 @@
         null,
         null,
         "Hermes",
-        "Ensemble 4/ Bruno"
+        "Bruno"
       ],
       "images": 3
     },
@@ -276,7 +276,7 @@
         null,
         "Ensemble",
         null,
-        "Ensemble 1"
+        "Ensemble"
       ],
       "images": 3
     },
@@ -296,27 +296,7 @@
         null,
         "Ensemble",
         "Nyx",
-        "Ensemble 8"
-      ],
-      "images": 3
-    },
-    {
-      "id": "Leon",
-      "roles": [
-        null,
-        "Graf Philipp",
-        "Johann",
-        "Lizard",
-        "Jens",
-        "Georg",
-        "Ben McConnell",
-        "Ensemble",
-        null,
-        "Collin Charleston / Ensemble",
-        null,
-        "Dorfvogt Roderich",
-        null,
-        null
+        "Ensemble"
       ],
       "images": 3
     },
@@ -357,7 +337,7 @@
         null,
         "Ensemble",
         "Athene",
-        "Portrait 2"
+        "Portrait"
       ],
       "images": 3
     },
@@ -377,7 +357,7 @@
         null,
         "Ensemble",
         null,
-        "Ensemble 13/ Bote/ Diener 3"
+        "Bote / Diener 3"
       ],
       "images": 3
     },
@@ -438,7 +418,7 @@
         null,
         null,
         "Ensemble",
-        "Ensemble 12/ Suzie"
+        "Suzie"
       ],
       "images": 3
     },
@@ -458,7 +438,7 @@
         null,
         "Talina",
         null,
-        "Ensemble 7"
+        "Ensemble"
       ],
       "placeholderAvatar": true,
       "images": 1
@@ -479,7 +459,7 @@
         null,
         "Ensemble",
         null,
-        "Ensemble 2"
+        "Ensemble"
       ],
       "images": 3
     },
@@ -499,7 +479,7 @@
         null,
         "Ensemble",
         null,
-        "Ensemble 5"
+        "Ensemble"
       ],
       "images": 3
     },
@@ -579,7 +559,7 @@
         "Seele 1/Prof. Dr. Dr. Glutheiß",
         "Agnes",
         null,
-        "Portrait 1"
+        "Portrait"
       ],
       "images": 3
     },
@@ -619,7 +599,7 @@
         null,
         "Ensemble",
         "Hades",
-        "Ensemble 6/ Diener 2"
+        "Diener 2"
       ],
       "images": 3
     },
@@ -700,7 +680,7 @@
         null,
         null,
         null,
-        "Ensemble 11/ Herr Schniebli/ Diener 4"
+        "Herr Schniebli"
       ],
       "images": 3
     },
@@ -740,7 +720,7 @@
         "Engel",
         "Ensemble",
         "Persephone",
-        "Ensemble 9"
+        "Ensemble"
       ],
       "images": 3
     },
@@ -774,7 +754,8 @@
           "icon": "scissors"
         }
       ],
-      "images": 2
+      "images": 2,
+      "since": 2015
     },
     {
       "id": "Christian",
@@ -788,7 +769,8 @@
           "icon": "camera"
         }
       ],
-      "images": 2
+      "images": 2,
+      "since": 2015
     },
     {
       "id": "Daniel",
@@ -799,7 +781,8 @@
           "icon": "lightbulb"
         }
       ],
-      "images": 1
+      "images": 1,
+      "since": 2015
     },
     {
       "id": "Florian",
@@ -810,7 +793,8 @@
           "icon": "lightbulb"
         }
       ],
-      "images": 3
+      "images": 3,
+      "since": 2015
     },
     {
       "id": "Jonas",
@@ -821,7 +805,8 @@
           "icon": "lightbulb"
         }
       ],
-      "images": 3
+      "images": 3,
+      "since": 2015
     },
     {
       "id": "Julian",
@@ -831,7 +816,8 @@
           "icon": "settings"
         }
       ],
-      "images": 3
+      "images": 3,
+      "since": 2015
     },
     {
       "id": "Leo",
@@ -846,7 +832,8 @@
           "icon": "camera"
         }
       ],
-      "images": 2
+      "images": 2,
+      "since": 2015
     },
     {
       "id": "Logge",
@@ -856,7 +843,8 @@
           "icon": "explore"
         }
       ],
-      "images": 3
+      "images": 3,
+      "since": 2015
     },
     {
       "id": "Maren",
@@ -867,7 +855,8 @@
           "icon": "settings"
         }
       ],
-      "images": 2
+      "images": 2,
+      "since": 2015
     },
     {
       "id": "Wolfgang",
@@ -878,7 +867,8 @@
           "icon": "headphones"
         }
       ],
-      "images": 2
+      "images": 2,
+      "since": 2015
     },
     {
       "id": "Ursula",
@@ -888,7 +878,8 @@
           "icon": "audio-lines"
         }
       ],
-      "images": 2
+      "images": 2,
+      "since": 2015
     }
   ]
 }

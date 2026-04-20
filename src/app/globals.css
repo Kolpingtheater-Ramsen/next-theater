@@ -460,6 +460,133 @@ img {
   .marquee__track { animation: none !important; }
 }
 
+/* ─── Cinematic utilities for the team page ─── */
+
+/* Film-strip sprocket rail — vertical perforation band */
+.sprockets {
+  background:
+    radial-gradient(ellipse 40% 40% at 50% 50%, #000 38%, transparent 42%) 0 0 / 100% 28px repeat-y,
+    linear-gradient(#1a0e06, #0a0604);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+}
+
+/* Marquee bulb strip — horizontal dots that imitate theater bulbs */
+.bulbs {
+  background:
+    radial-gradient(circle at 50% 50%, #ffd496 0 3px, transparent 4px) 0 50% / 28px 100% repeat-x;
+  filter: drop-shadow(0 0 6px rgba(255, 180, 100, 0.6));
+}
+
+/* Subtle scanlines for CRT / film feel */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Flicker animation for film projector feel */
+@keyframes flicker {
+  0%, 98%, 100% { opacity: 1; }
+  2% { opacity: 0.86; }
+  6% { opacity: 0.98; }
+  9% { opacity: 0.92; }
+}
+.animate-flicker { animation: flicker 5s infinite steps(1, end); }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flicker { animation: none !important; }
+}
+
+/* Curtain-rise reveal for hero title */
+@keyframes curtain-rise {
+  0% { clip-path: inset(100% 0 0 0); opacity: 0; }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+.animate-curtain-rise {
+  animation: curtain-rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-curtain-rise { animation: none !important; opacity: 1 !important; clip-path: none !important; }
+}
+
+/* Lettering track — slow expanding spacing on load */
+@keyframes letter-breathe {
+  0% { letter-spacing: 0.02em; opacity: 0; }
+  100% { letter-spacing: 0.12em; opacity: 1; }
+}
+.animate-letter-breathe {
+  animation: letter-breathe 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Spotlight sweep on hover — diagonal beam crossing a card */
+.sweep {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 180, 100, 0.08) 45%,
+    rgba(255, 220, 160, 0.16) 50%,
+    rgba(255, 180, 100, 0.08) 55%,
+    transparent 65%
+  );
+  transform: translateX(-30%);
+  opacity: 0;
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms;
+  mix-blend-mode: screen;
+}
+.group:hover .sweep { opacity: 1; transform: translateX(30%); }
+
+/* Cast-number typographic block */
+.cast-number {
+  font-family: var(--font-display), serif;
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  color: rgba(255, 122, 0, 0.85);
+  letter-spacing: 0.08em;
+}
+
+/* Fine paper/cream hairline for display underline */
+.hairline-gold {
+  background: linear-gradient(90deg, transparent, rgba(255, 180, 100, 0.9), transparent);
+  height: 1px;
+}
+
+/* Stage footlight wash on bottom of hero */
+.footlight {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 260px;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 100% at 50% 100%, rgba(255, 122, 0, 0.18), transparent 60%),
+    linear-gradient(to top, rgba(10, 6, 2, 0.9), transparent);
+}
+
+/* ── subtle column counter for "Das Ensemble" section ── */
+@keyframes slow-drift {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+.animate-slow-drift { animation: slow-drift 6s ease-in-out infinite; }
+
+/* Clapperboard stripe pattern */
+.clapper-stripes {
+  background: repeating-linear-gradient(
+    -54deg,
+    #0a0a0a 0 28px,
+    #f3f3f3 28px 56px
+  );
+}
+
 /* Custom scrollbar styles */
 .scrollbar-thin {
   scrollbar-width: thin;

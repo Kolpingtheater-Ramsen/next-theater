@@ -13,6 +13,7 @@ type Entry = {
   images?: number
   placeholderAvatar?: boolean
   jobs?: { job: string; icon?: string }[]
+  since?: number
 }
 
 type Play = {
@@ -24,13 +25,14 @@ type Play = {
 }
 
 const plays: Play[] = (data as { plays: Play[] }).plays
+const CURRENT_PLAY_INDEX = plays.length - 1
 
 function findPerson(id: string): Entry | undefined {
   const lower = id.toLowerCase()
   const current = ((data as { current: Entry[] }).current || []).find(
     (person) => person.id.toLowerCase() === lower,
   )
-  const former = ((data as { former: Entry[] }).former || []).find(
+  const former = ((data as { former?: Entry[] }).former || []).find(
     (person) => person.id.toLowerCase() === lower,
   )
   const tech = ((data as { tech: Entry[] }).tech || []).find(
@@ -47,8 +49,11 @@ function findPerson(id: string): Entry | undefined {
     name: base.name,
     roles: current?.roles ?? former?.roles,
     images: images || base.images,
-    placeholderAvatar: Boolean(current?.placeholderAvatar || former?.placeholderAvatar || tech?.placeholderAvatar),
+    placeholderAvatar: Boolean(
+      current?.placeholderAvatar || former?.placeholderAvatar || tech?.placeholderAvatar,
+    ),
     jobs: tech?.jobs,
+    since: tech?.since,
   }
 }
 
@@ -57,61 +62,31 @@ function getPersonType(id: string): 'current' | 'former' | 'tech' | null {
   const inCurrent = ((data as { current: Entry[] }).current || []).some(
     (person) => person.id.toLowerCase() === lower,
   )
-  const inFormer = ((data as { former: Entry[] }).former || []).some(
-    (person) => person.id.toLowerCase() === lower,
-  )
   const inTech = ((data as { tech: Entry[] }).tech || []).some(
     (person) => person.id.toLowerCase() === lower,
   )
-
   if (inCurrent) return 'current'
   if (inTech) return 'tech'
-  if (inFormer) return 'former'
   return null
 }
 
-function JobIcon({ icon }: { icon?: string }) {
-  const iconMap: Record<string, string> = {
-    settings: '⚙️',
-    camera: '📷',
-    lightbulb: '💡',
-    headphones: '🎧',
-    explore: '🧭',
-    scissors: '✂️',
+function jobDescription(job: string): string {
+  const map: Record<string, string> = {
+    Regie: 'Künstlerische Leitung und Inszenierung der Produktion',
+    Tontechnik: 'Beschallung und Tonmischung bei Aufführungen',
+    Lichttechnik: 'Lichtdesign und Beleuchtung der Bühne',
+    Bühnenbau: 'Konstruktion und Aufbau der Bühnenkulisse',
+    Bühnentechnik: 'Aufbau, Technik und Ablauf auf der Bühne',
+    Videotechnik: 'Kameras, Projektion und Videotechnik',
+    Kostüme: 'Entwurf und Anfertigung der Kostüme',
+    Maske: 'Make-up und Charaktergestaltung der Darsteller',
+    Requisite: 'Besorgung und Pflege der Requisiten',
+    Organisation: 'Planung und Koordination hinter den Kulissen',
+    Fotografie: 'Dokumentation der Aufführungen in Bildern',
+    Video: 'Aufnahme und Schnitt der Aufführungen',
+    Website: 'Gestaltung und Pflege des digitalen Auftritts',
   }
-  return <span className='text-4xl'>{iconMap[icon || ''] || '🎭'}</span>
-}
-
-function SectionDivider({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <div className='relative py-8 sm:py-12'>
-      <div className='relative text-center space-y-3'>
-        <div className='flex items-center justify-center gap-4'>
-          <div className='hidden sm:flex items-center gap-2'>
-            <div className='w-8 h-px bg-gradient-to-l from-kolping-500 to-transparent' />
-            <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
-            <div className='w-16 h-px bg-gradient-to-l from-kolping-500/80 to-transparent' />
-          </div>
-
-          <h2 className='font-display text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-kolping-400 drop-shadow-[0_0_20px_rgba(255,122,0,0.3)]'>
-            {title}
-          </h2>
-
-          <div className='hidden sm:flex items-center gap-2'>
-            <div className='w-16 h-px bg-gradient-to-r from-kolping-500/80 to-transparent' />
-            <div className='w-2 h-2 rotate-45 bg-kolping-500/60' />
-            <div className='w-8 h-px bg-gradient-to-r from-kolping-500 to-transparent' />
-          </div>
-        </div>
-
-        {subtitle && (
-          <p className='text-site-100 text-sm sm:text-base max-w-xl mx-auto'>
-            {subtitle}
-          </p>
-        )}
-      </div>
-    </div>
-  )
+  return map[job] ?? `Beitrag als ${job} im Team`
 }
 
 export default async function PersonPage({
@@ -129,9 +104,22 @@ export default async function PersonPage({
 
   const rolesData = person.roles
     ? person.roles
-      .map((role, index) => ({ role: role!, playData: plays[index] }))
-      .filter((item) => item.role && item.role.trim().length > 0)
+        .map((role, index) => ({ role: role!, playData: plays[index] }))
+        .filter((item) => item.role && item.role.trim().length > 0 && item.playData)
     : []
+
+  // Earliest year an actor appeared on stage — first non-null role's play year
+  const castSince = person.roles
+    ? (() => {
+        for (let i = 0; i < person.roles.length; i++) {
+          const r = person.roles[i]
+          if (r && r.trim()) return plays[i]?.year ?? null
+        }
+        return null
+      })()
+    : null
+
+  const sinceYear = personType === 'tech' ? person.since : castSince
 
   const hasRoles = rolesData.length > 0
   const hasJobs = Boolean(person.jobs && person.jobs.length > 0)
@@ -140,82 +128,115 @@ export default async function PersonPage({
     personType === 'current'
       ? 'Aktives Ensemble'
       : personType === 'tech'
-        ? 'Technik & Crew'
+        ? 'Crew · Technik'
         : 'Ehemaliges Mitglied'
 
-  const heroImage = hasPlaceholder
-    ? null
-    : `/img/team/avatar/${person.id}.jpg`
+  const currentRole = person.roles?.[CURRENT_PLAY_INDEX]
+  const currentPlay = plays[CURRENT_PLAY_INDEX]
+  const displayName = person.name ?? person.id
+  const heroImage = hasPlaceholder ? null : `/img/team/avatar/${person.id}.jpg`
 
   return (
-    <div className='space-y-0'>
-      <section className='relative -mx-4 -mt-8 overflow-hidden force-dark'>
-        <div className='absolute inset-0 bg-site-950'>
+    <div className='-mx-4 -mt-8 force-dark bg-site-950'>
+      {/* ══════ HERO ══════ */}
+      <section className='relative overflow-hidden'>
+        {/* Atmosphere */}
+        <div className='absolute inset-0 bg-site-950' aria-hidden>
           {heroImage && (
             <Image
               src={heroImage}
-              alt={person.name ?? person.id}
+              alt=''
               fill
               priority
               sizes='100vw'
-              className='object-cover opacity-30 blur-sm scale-105'
+              className='object-cover opacity-25 blur-md scale-110'
             />
           )}
-          <div className='absolute inset-0 bg-gradient-to-b from-site-950/30 via-site-950/75 to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/70 via-transparent to-site-950/60' />
         </div>
+        <div className='absolute inset-0 bg-gradient-to-b from-black/40 via-site-950/80 to-site-950' aria-hidden />
+        <div className='absolute inset-0 bg-[radial-gradient(ellipse_70%_70%_at_50%_30%,transparent,rgba(0,0,0,0.65))]' aria-hidden />
+        <div className='spotlight' aria-hidden />
+        <div className='absolute inset-0 grain' aria-hidden />
+        <div className='vignette' aria-hidden />
 
-        <div className='relative mx-auto max-w-6xl px-4 pt-8 pb-10 sm:pb-14'>
+        <div className='relative mx-auto max-w-6xl px-4 sm:px-8 pt-6 sm:pt-10 pb-14 sm:pb-20'>
+          {/* Back link */}
           <Link
             href='/team'
-            className='inline-flex items-center gap-2 text-site-100 hover:text-kolping-400 transition-colors group'
+            className='group inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.35em] text-site-100 hover:text-kolping-400 transition-colors'
           >
-            <svg className='w-5 h-5 transition-transform group-hover:-translate-x-1' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
-            </svg>
-            <span className='text-sm font-medium'>Zurück zum Team</span>
+            <span className='transition-transform group-hover:-translate-x-1'>←</span>
+            Zurück zum Ensemble
           </Link>
 
           <div
-            className={`mt-6 grid gap-6 lg:gap-10 items-end ${hasPlaceholder ? '' : 'lg:grid-cols-[1.1fr_0.9fr]'}`}
+            className={`mt-10 sm:mt-14 grid gap-8 sm:gap-14 items-end ${
+              hasPlaceholder ? '' : 'lg:grid-cols-[1.15fr_0.85fr]'
+            }`}
           >
+            {/* Left: Identity block */}
             <div>
-              <div className='flex flex-wrap items-center gap-2 mb-4'>
-                <span className='inline-flex items-center rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-kolping-400 uppercase'>
-                  Profil
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-5'>
+                <span aria-hidden>— </span>
+                {typeLabel}
+                <span aria-hidden> —</span>
+              </div>
+
+              <h1 className='font-display font-black leading-[0.85] tracking-tight'>
+                <span className='block text-5xl sm:text-7xl md:text-8xl italic text-kolping-400 drop-shadow-[0_6px_28px_rgba(255,122,0,0.35)]'>
+                  {displayName}
                 </span>
-                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-site-100 uppercase'>
-                  {typeLabel}
-                </span>
+              </h1>
+
+              <div className='hairline-gold w-32 mt-6 sm:mt-8' />
+
+              {/* Current role call-out */}
+              {currentRole && currentPlay && (
+                <div className='mt-8 sm:mt-10'>
+                  <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.35em] text-kolping-300/90 mb-2'>
+                    Diese Saison · {currentPlay.year}
+                  </div>
+                  <div className='font-display italic text-2xl sm:text-3xl md:text-4xl text-white leading-tight'>
+                    {currentRole}
+                  </div>
+                  <div className='mt-2 font-mono text-[11px] sm:text-xs uppercase tracking-[0.25em] text-site-300'>
+                    {currentPlay.play}
+                    {currentPlay.location ? ` · ${currentPlay.location}` : ''}
+                  </div>
+                </div>
+              )}
+
+              {/* Summary chips */}
+              <div className='mt-8 flex flex-wrap gap-3 font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em]'>
                 {hasRoles && (
-                  <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-site-100 uppercase'>
-                    Rollenchronik
+                  <span className='inline-flex items-center gap-2 border border-site-700 bg-site-900/60 px-3 py-1.5 rounded-md text-site-100'>
+                    <span className='text-kolping-400'>{rolesData.length}</span>
+                    Produktionen
+                  </span>
+                )}
+                {sinceYear && (
+                  <span className='inline-flex items-center gap-2 border border-site-700 bg-site-900/60 px-3 py-1.5 rounded-md text-site-100'>
+                    Dabei seit
+                    <span className='text-kolping-400'>{sinceYear}</span>
                   </span>
                 )}
               </div>
-
-              <h1 className='font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[0.94] text-shadow-lg'>
-                <span className='text-site-50'>{person.name ?? person.id}</span>
-              </h1>
-
-              <p className='mt-4 sm:mt-6 text-base sm:text-lg text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                {personType === 'tech'
-                  ? 'Einblick in Aufgaben hinter den Kulissen und Beiträge zum Gesamtbild jeder Produktion.'
-                  : `Alle Rollen und Produktionen von ${person.name || person.id} auf einen Blick.`}
-              </p>
             </div>
 
+            {/* Right: Portrait poster */}
             {!hasPlaceholder && (
               <div style={{ viewTransitionName: `person-${person.id}` }}>
-                <div className='relative poster-frame border-epic overflow-hidden'>
-                  <div className='relative aspect-[3/4] w-full'>
-                    <Slideshow
-                      name={person.id}
-                      count={imageCount}
-                      aspect='hero'
-                    />
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none' />
-                  </div>
+                <div className='relative aspect-[3/4] overflow-hidden border-epic rounded-xl bg-site-950 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]'>
+                  <Slideshow name={person.id} count={imageCount} aspect='hero' />
+
+                  {/* Scanlines + subtle grain on top */}
+                  <div className='absolute inset-0 scanlines opacity-20 z-[5] pointer-events-none' aria-hidden />
+
+                  {/* Corner tick marks */}
+                  <span className='absolute top-2 left-2 w-3 h-3 border-l border-t border-kolping-400/60 z-[6]' aria-hidden />
+                  <span className='absolute top-2 right-2 w-3 h-3 border-r border-t border-kolping-400/60 z-[6]' aria-hidden />
+                  <span className='absolute bottom-2 left-2 w-3 h-3 border-l border-b border-kolping-400/60 z-[6]' aria-hidden />
+                  <span className='absolute bottom-2 right-2 w-3 h-3 border-r border-b border-kolping-400/60 z-[6]' aria-hidden />
                 </div>
               </div>
             )}
@@ -223,97 +244,132 @@ export default async function PersonPage({
         </div>
       </section>
 
-      <section className='mx-auto max-w-6xl px-4 pt-8 sm:pt-10 pb-6 sm:pb-10'>
-        {hasRoles && (
-          <div>
-            <SectionDivider
-              title='Rollenchronik'
-              subtitle='Alle dokumentierten Rollen im zeitlichen Verlauf'
-            />
-            <div className='glass border border-site-700 rounded-2xl p-4 sm:p-6 md:p-8'>
-              <RolesList roles={rolesData} />
+      {/* ══════ CHRONIK ══════ */}
+      {hasRoles && (
+        <section className='relative bg-site-950 border-t border-site-700'>
+          <div className='relative mx-auto max-w-6xl px-4 sm:px-8 py-14 sm:py-20'>
+            <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                  Chronik
+                </div>
+                <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+                  Die <span className='italic text-kolping-400'>Rollen</span>
+                </h2>
+                <div className='hairline-gold w-24 mt-5' />
+              </div>
+              <p className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-site-300'>
+                Jüngste Produktion zuerst
+              </p>
             </div>
-          </div>
-        )}
 
-        {hasJobs && (
-          <div>
-            <SectionDivider
-              title='Aufgaben im Team'
-              subtitle='Beiträge in Technik, Organisation und Produktion'
-            />
-            <div className='space-y-3'>
-              {person.jobs!.map((job, index) => (
+            <RolesList roles={rolesData} />
+          </div>
+        </section>
+      )}
+
+      {/* ══════ AUFGABEN ══════ */}
+      {hasJobs && (
+        <section className='relative bg-site-900 border-t border-site-700'>
+          {/* blueprint-style grid */}
+          <div
+            className='absolute inset-0 opacity-[0.04] pointer-events-none'
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
+            aria-hidden
+          />
+          <div className='relative mx-auto max-w-6xl px-4 sm:px-8 py-14 sm:py-20'>
+            <div>
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                Aufgaben
+              </div>
+              <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+                Hinter den <span className='italic text-kolping-400'>Kulissen</span>
+              </h2>
+              <div className='hairline-gold w-24 mt-5' />
+            </div>
+
+            <div className='mt-10 sm:mt-14 border-t border-site-700/80'>
+              {person.jobs!.map((job, i) => (
                 <div
-                  key={`${job.job}-${index}`}
-                  className='group relative glass border border-site-700 rounded-xl p-4 sm:p-5 flex items-center gap-4 transition-all duration-300 hover:border-kolping-500/40 hover:bg-site-800/80'
+                  key={`${job.job}-${i}`}
+                  className='grid grid-cols-[auto_1fr] items-center gap-6 sm:gap-10 py-6 sm:py-7 px-2 sm:px-4 border-b border-site-700/80 hover:bg-site-800/30 transition-colors'
                 >
-                  <div className='flex-shrink-0'>
-                    <JobIcon icon={job.icon} />
+                  <div className='font-display italic text-3xl sm:text-5xl text-kolping-400/80 tabular-nums leading-none w-14 sm:w-20 shrink-0'>
+                    {String(i + 1).padStart(2, '0')}
                   </div>
-                  <div className='flex-1 min-w-0'>
-                    <p className='text-base sm:text-lg font-semibold text-site-50 group-hover:text-kolping-400 transition-colors'>
+                  <div className='min-w-0'>
+                    <div className='font-display text-xl sm:text-3xl uppercase tracking-wide text-site-50 leading-tight'>
                       {job.job}
-                    </p>
-                    <p className='text-xs sm:text-sm text-site-300 mt-1'>
-                      {job.job === 'Regie' ? 'Künstlerische Leitung und Inszenierung der Produktion'
-                        : job.job === 'Tontechnik' ? 'Beschallung und Tonmischung bei Aufführungen'
-                        : job.job === 'Lichttechnik' ? 'Lichtdesign und Beleuchtung der Bühne'
-                        : job.job === 'Bühnenbau' ? 'Konstruktion und Aufbau der Bühnenkulisse'
-                        : job.job === 'Kostüme' ? 'Entwurf und Anfertigung der Kostüme'
-                        : job.job === 'Maske' ? 'Make-up und Charaktergestaltung der Darsteller'
-                        : job.job === 'Requisite' ? 'Besorgung und Pflege der Requisiten'
-                        : job.job === 'Organisation' ? 'Planung und Koordination hinter den Kulissen'
-                        : job.job === 'Fotografie' ? 'Dokumentation der Aufführungen in Bildern'
-                        : job.job === 'Video' ? 'Aufnahme und Schnitt der Aufführungen'
-                        : `Beitrag als ${job.job} im Team`}
-                    </p>
+                    </div>
+                    <div className='mt-1.5 text-sm sm:text-base text-site-300 leading-relaxed max-w-xl'>
+                      {jobDescription(job.job)}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {!hasRoles && !hasJobs && (
-          <div className='py-14 text-center'>
-            <div className='inline-flex items-center justify-center w-16 h-16 rounded-full bg-site-800 border border-site-700 mb-5'>
-              <svg className='w-8 h-8 text-kolping-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
-              </svg>
+      {/* ══════ EMPTY STATE ══════ */}
+      {!hasRoles && !hasJobs && (
+        <section className='relative bg-site-950 border-t border-site-700'>
+          <div className='relative mx-auto max-w-4xl px-4 sm:px-8 py-20 sm:py-28 text-center'>
+            <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-5'>
+              Pause zwischen den Akten
             </div>
-            <h2 className='font-display text-2xl sm:text-3xl font-bold text-site-50'>
-              Neue Stationen folgen
+            <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+              Neue <span className='italic text-kolping-400'>Stationen</span>
+              <br />
+              folgen.
             </h2>
-            <p className='mt-2 text-site-100 max-w-md mx-auto'>
-              Für dieses Profil sind aktuell noch keine Rollen oder Aufgaben veröffentlicht.
+            <div className='hairline-gold w-24 mt-6 mx-auto' />
+            <p className='mt-6 text-site-100/80 max-w-md mx-auto text-sm sm:text-base leading-relaxed'>
+              Für dieses Profil sind aktuell noch keine Rollen oder Aufgaben
+              veröffentlicht.
             </p>
           </div>
-        )}
-      </section>
+        </section>
+      )}
 
-      <section className='mx-auto max-w-6xl px-4 pb-12 sm:pb-16'>
-        <div className='relative overflow-hidden rounded-2xl border border-site-700 force-dark'>
-          <div className='absolute inset-0 bg-gradient-to-br from-kolping-400/10 via-site-900 to-site-900' />
-          <div className='relative p-6 sm:p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-4'>
-            <p className='text-sm sm:text-base text-site-100 text-center sm:text-left'>
-              Mehr vom Ensemble oder direkt in die Galerie wechseln.
-            </p>
-            <div className='flex items-center gap-3'>
-              <Link
-                href='/team'
-                className='inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/60 px-5 py-2.5 text-sm font-medium transition-all hover:border-kolping-400/50 hover:bg-site-800'
-              >
-                Teamübersicht
-              </Link>
-              <Link
-                href='/gallery'
-                className='inline-flex items-center gap-2 rounded-full bg-kolping-400 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-kolping-500'
-              >
-                Zur Galerie
-              </Link>
+      {/* ══════ CTA — Clapperboard ══════ */}
+      <section className='relative bg-site-950 py-14 sm:py-20 px-4 sm:px-8'>
+        <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
+          <div className='clapper-stripes h-5 sm:h-7' aria-hidden />
+          <div className='relative p-6 sm:p-10 md:p-14 bg-site-900'>
+            <div className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-500/10 to-transparent pointer-events-none' aria-hidden />
+            <div className='relative grid sm:grid-cols-[1fr_auto] gap-6 sm:gap-10 items-end'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                  Mehr vom Ensemble
+                </div>
+                <h3 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]'>
+                  Zurück zur <span className='italic text-kolping-400'>Besetzung</span>
+                </h3>
+              </div>
+              <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3'>
+                <Link
+                  href='/team'
+                  className='inline-flex items-center justify-center gap-2 border border-site-700 bg-site-800/60 px-5 py-3 rounded-sm font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:border-kolping-400/50 hover:text-kolping-400 transition-all'
+                >
+                  Teamübersicht
+                </Link>
+                <Link
+                  href='/gallery'
+                  className='group inline-flex items-center justify-center gap-2 bg-kolping-400 hover:bg-kolping-500 px-6 py-3 rounded-sm font-mono text-[11px] uppercase tracking-[0.3em] font-bold text-black transition-all hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
+                >
+                  Galerie
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                </Link>
+              </div>
             </div>
           </div>
+          <div className='clapper-stripes h-5 sm:h-7' aria-hidden />
         </div>
       </section>
     </div>
