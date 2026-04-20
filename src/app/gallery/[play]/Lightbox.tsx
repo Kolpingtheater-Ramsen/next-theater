@@ -318,7 +318,7 @@ export function Lightbox({
         {decodedCaption ? (
           <div className='pointer-events-auto flex-1 text-right'>
             <p className='inline-block max-w-2xl font-display italic text-sm sm:text-base text-white/90 leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]'>
-              „{decodedCaption}"
+              „{decodedCaption}&ldquo;
             </p>
           </div>
         ) : (
