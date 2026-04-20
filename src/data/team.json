@@ -101,25 +101,6 @@
   ],
   "current": [
     {
-      "id": "Anton",
-      "roles": [
-        "Sir Richard Black",
-        "Hauptmann Lorentz",
-        "Graf Harras",
-        "Alan",
-        "Kaiser Richard",
-        "Fürstbischof Reinhard",
-        "Morgan Bullock",
-        "Laurent",
-        null,
-        "Hunter",
-        null,
-        "Graf Gottfried",
-        null
-      ],
-      "images": 3
-    },
-    {
       "id": "Carina",
       "roles": [
         "Jacky",
@@ -134,7 +115,8 @@
         "Alesa",
         null,
         "Maribel / Mathilde",
-        null
+        null,
+        "Drusilla"
       ],
       "images": 3
     },
@@ -153,7 +135,8 @@
         "Aria",
         "Lucy",
         "Johanna",
-        "Eurydike"
+        "Eurydike",
+        "Lucy"
       ],
       "images": 3
     },
@@ -172,7 +155,8 @@
         "Ensemble",
         "Mammonia",
         "Gräfin Hedwig",
-        null
+        null,
+        "Tante Heideltraut von Storchensumpf"
       ],
       "images": 3
     },
@@ -191,7 +175,28 @@
         "Ensemble",
         null,
         "Pater Rabanus",
-        null
+        null,
+        "Ensemble 3"
+      ],
+      "images": 3
+    },
+    {
+      "id": "Hendrik",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble 10/ Karl"
       ],
       "images": 3
     },
@@ -210,10 +215,10 @@
         null,
         null,
         null,
-        "Hermes"
+        "Hermes",
+        "Ensemble 4/ Bruno"
       ],
-      "placeholderAvatar": true,
-      "images": 1
+      "images": 3
     },
     {
       "id": "Jonas",
@@ -230,7 +235,8 @@
         "Ripper",
         "Teufel",
         "Berthold von Winzingen",
-        null
+        null,
+        "Vetter Viktor"
       ],
       "images": 3
     },
@@ -249,7 +255,8 @@
         null,
         null,
         "Ensemble",
-        "Melinoe"
+        "Melinoe",
+        "Motte"
       ],
       "images": 3
     },
@@ -268,26 +275,8 @@
         "Richter / Ensemble",
         null,
         "Ensemble",
-        null
-      ],
-      "images": 3
-    },
-    {
-      "id": "Lea",
-      "roles": [
         null,
-        null,
-        null,
-        null,
-        "Riccarda",
-        "Maren",
-        "Kate O`Hara",
-        "Anne Bonny",
-        null,
-        "Raven",
-        null,
-        "Ysabel",
-        null
+        "Ensemble 1"
       ],
       "images": 3
     },
@@ -306,7 +295,8 @@
         null,
         null,
         "Ensemble",
-        "Nyx"
+        "Nyx",
+        "Ensemble 8"
       ],
       "images": 3
     },
@@ -325,6 +315,7 @@
         "Collin Charleston / Ensemble",
         null,
         "Dorfvogt Roderich",
+        null,
         null
       ],
       "images": 3
@@ -344,7 +335,8 @@
         "Daria",
         "Teufelchen",
         "Emma (jung)",
-        "Lachesis"
+        "Lachesis",
+        "Fiona"
       ],
       "images": 3
     },
@@ -364,7 +356,8 @@
         null,
         null,
         "Ensemble",
-        "Athene"
+        "Athene",
+        "Portrait 2"
       ],
       "images": 3
     },
@@ -383,7 +376,8 @@
         "KI",
         null,
         "Ensemble",
-        null
+        null,
+        "Ensemble 13/ Bote/ Diener 3"
       ],
       "images": 3
     },
@@ -402,7 +396,8 @@
         "Blade",
         null,
         "Barde Mattes",
-        null
+        null,
+        "Graf Thaddäus von Falkenstein"
       ],
       "images": 3
     },
@@ -421,9 +416,11 @@
         "Serentiy Chrome",
         null,
         "Fiora",
+        null,
         null
       ],
-      "images": 3
+      "placeholderAvatar": true,
+      "images": 1
     },
     {
       "id": "Marcella",
@@ -440,10 +437,10 @@
         null,
         null,
         null,
-        "Ensemble"
+        "Ensemble",
+        "Ensemble 12/ Suzie"
       ],
-      "placeholderAvatar": true,
-      "images": 1
+      "images": 3
     },
     {
       "id": "Maria",
@@ -460,9 +457,11 @@
         "Seraphina Chrome",
         null,
         "Talina",
-        null
+        null,
+        "Ensemble 7"
       ],
-      "images": 3
+      "placeholderAvatar": true,
+      "images": 1
     },
     {
       "id": "Max",
@@ -479,7 +478,8 @@
         "Ensemble",
         null,
         "Ensemble",
-        null
+        null,
+        "Ensemble 2"
       ],
       "images": 3
     },
@@ -498,7 +498,8 @@
         "Ensemble",
         null,
         "Ensemble",
-        null
+        null,
+        "Ensemble 5"
       ],
       "images": 3
     },
@@ -517,7 +518,8 @@
         "Freya",
         "Teufelchen",
         "Marie (jung)",
-        "Atropos"
+        "Atropos",
+        "Felia"
       ],
       "images": 3
     },
@@ -536,7 +538,8 @@
         "Vega",
         "Seele 2/Gabriel",
         "Marie",
-        null
+        null,
+        "Prinzessin Iset"
       ],
       "images": 3
     },
@@ -555,7 +558,8 @@
         "Jakko",
         "Beelzebub",
         "Knappe Fridolin",
-        "Pan"
+        "Pan",
+        "Praktikant Emil"
       ],
       "images": 3
     },
@@ -574,7 +578,8 @@
         "Sybella Chrome",
         "Seele 1/Prof. Dr. Dr. Glutheiß",
         "Agnes",
-        null
+        null,
+        "Portrait 1"
       ],
       "images": 3
     },
@@ -591,6 +596,9 @@
         null,
         null,
         "Ensemble",
+        null,
+        null,
+        null,
         null
       ],
       "images": 2
@@ -610,7 +618,8 @@
         null,
         null,
         "Ensemble",
-        "Hades"
+        "Hades",
+        "Ensemble 6/ Diener 2"
       ],
       "images": 3
     },
@@ -629,7 +638,8 @@
         "Dante / Regie",
         "Regie",
         "Konrad / Regie",
-        null
+        null,
+        "Butler Wilson / Regie"
       ],
       "images": 3
     },
@@ -648,28 +658,10 @@
         null,
         null,
         "Johanna (jung)",
-        "Klotho"
+        "Klotho",
+        "Mia"
       ],
       "placeholderAvatar": false,
-      "images": 3
-    },
-    {
-      "id": "Theo",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble",
-        null,
-        "Ensemble",
-        "Orpheus"
-      ],
       "images": 3
     },
     {
@@ -687,7 +679,8 @@
         "Nyra",
         "Lillith",
         "Emma",
-        null
+        null,
+        "Clara"
       ],
       "images": 3
     },
@@ -701,9 +694,15 @@
         "Archibald",
         "Barde Mattes",
         "Eddie",
-        null
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble 11/ Herr Schniebli/ Diener 4"
       ],
-      "placeholderAvatar": true
+      "images": 3
     },
     {
       "id": "Tobias",
@@ -720,7 +719,8 @@
         "Barkeeper",
         null,
         "Ensemble",
-        null
+        null,
+        "Jacques"
       ],
       "images": 3
     },
@@ -739,7 +739,8 @@
         "Delya Delloraine",
         "Engel",
         "Ensemble",
-        "Persephone"
+        "Persephone",
+        "Ensemble 9"
       ],
       "images": 3
     },
@@ -758,230 +759,22 @@
         "Xion Venom",
         null,
         "Lothar von Greifenfels",
-        null
+        null,
+        "Dr. Adrian Düsterwald"
       ],
       "images": 3
-    }
-  ],
-  "former": [
-    {
-      "id": "Anna",
-      "roles": [
-        "Susan Campbell",
-        "Anne",
-        "Ida",
-        "Moon",
-        "Emily",
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Anna R",
-      "roles": [
-        "Alice",
-        "Stumpfwaldhexe",
-        "Hausgeist Anastasia",
-        "Lilly"
-      ],
-      "placeholderAvatar": true
-    },
-    {
-      "id": "Anika",
-      "roles": [
-        "Ensemble",
-        "Ensemble",
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Frankie",
-      "roles": [
-        null,
-        null,
-        null,
-        "Vyper"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Franek",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Richie",
-        "Matteo",
-        null
-      ],
-      "images": 1
-    },
-    {
-      "id": "Hatice",
-      "placeholderAvatar": true,
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Asmodia"
-      ]
-    },
-    {
-      "id": "Jack",
-      "roles": [
-        null,
-        null,
-        null,
-        "Cover Moon/ Ensemble",
-        "Dr. von Hofmannsthal",
-        "Pater Markus"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Laura",
-      "roles": [
-        "Lucy",
-        "Ensemble",
-        "Ensemble",
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Luisa",
-      "roles": [
-        null,
-        null,
-        null,
-        "Cat",
-        "Merle",
-        "Klara",
-        "Jane",
-        "Sofia Mendoza",
-        null
-      ],
-      "images": 1
-    },
-    {
-      "id": "Leonhard",
-      "roles": [
-        "Gouverneur Campbell",
-        "Kaiser Heinrich",
-        "Wirt Otto",
-        "Richy"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Leni",
-      "placeholderAvatar": true,
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble",
-        null
-      ],
-      "images": 1
-    },
-    {
-      "id": "Marc",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        "Theodor",
-        "Wilhelm"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Marleen",
-      "roles": [
-        "Kate Campbell",
-        "Prinzessin Elisabeth",
-        "Martha",
-        "Mira"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Paul",
-      "roles": [
-        null,
-        null,
-        "Ensemble",
-        "Ensemble",
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Paulina",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Sophia",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble"
-      ],
-      "images": 1
-    },
-    {
-      "id": "Toni",
-      "roles": [
-        "Captain Anne",
-        "Agnes",
-        "Emma"
-      ],
-      "images": 1
     }
   ],
   "tech": [
     {
       "id": "Cathrin",
-      "placeholderAvatar": true,
       "jobs": [
         {
           "job": "Kostüme",
           "icon": "scissors"
         }
       ],
-      "images": 1
+      "images": 2
     },
     {
       "id": "Christian",
@@ -1063,11 +856,10 @@
           "icon": "explore"
         }
       ],
-      "images": 2
+      "images": 3
     },
     {
       "id": "Maren",
-      "placeholderAvatar": true,
       "icon": "lightbulb",
       "jobs": [
         {
@@ -1075,11 +867,10 @@
           "icon": "settings"
         }
       ],
-      "images": 1
+      "images": 2
     },
     {
       "id": "Wolfgang",
-      "placeholderAvatar": true,
       "icon": "headphones",
       "jobs": [
         {
@@ -1087,7 +878,7 @@
           "icon": "headphones"
         }
       ],
-      "images": 1
+      "images": 2
     },
     {
       "id": "Ursula",
@@ -1097,8 +888,7 @@
           "icon": "audio-lines"
         }
       ],
-      "images": 1,
-      "placeholderAvatar": true
+      "images": 2
     }
   ]
 }
