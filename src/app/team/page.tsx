@@ -152,69 +152,73 @@ export default function TeamPage() {
 
   return (
     <div className='-mx-4 -mt-8'>
-      {/* ══════ HERO (restored original) ══════ */}
-      <section className='relative overflow-hidden force-dark'>
-        <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
+      {/* ══════ HERO ══════ */}
+      <section className='relative overflow-hidden'>
+        <div className='relative w-full h-[78vh] min-h-[520px] max-h-[860px]'>
           <Image
             src='/img/team/team_header.jpg'
             alt='Team des Kolpingtheaters Ramsen'
             fill
             priority
             sizes='100vw'
-            className='object-cover'
+            className='object-cover animate-kenburns'
           />
-          <div className='absolute inset-0 bg-gradient-to-b from-site-950/35 via-site-950/25 to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/55 via-transparent to-site-950/35' />
+          <div className='absolute inset-0 bg-gradient-to-b from-site-950/40 via-site-950/25 to-site-950' />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/75 via-site-950/35 to-transparent' />
           <div className='vignette' />
+          <div className='footlight' />
 
-          <div className='absolute inset-0 flex flex-col justify-end pb-10 sm:pb-14 md:pb-16'>
-            <div className='mx-auto w-full max-w-6xl px-4'>
-              <div className='animate-fade-in-up mb-4 flex flex-wrap gap-2.5'>
-                <span className='inline-flex items-center rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold tracking-[0.16em] text-kolping-400 uppercase'>
-                  Rollen & Crew
+          {/* corner film-frame ticks */}
+          <span className='absolute top-6 left-6 w-4 h-4 border-l-2 border-t-2 border-kolping-400/70' aria-hidden />
+          <span className='absolute top-6 right-6 w-4 h-4 border-r-2 border-t-2 border-kolping-400/70' aria-hidden />
+          <span className='absolute bottom-6 left-6 w-4 h-4 border-l-2 border-b-2 border-kolping-400/70' aria-hidden />
+          <span className='absolute bottom-6 right-6 w-4 h-4 border-r-2 border-b-2 border-kolping-400/70' aria-hidden />
+
+          <div className='absolute inset-0 flex flex-col justify-end pb-14 sm:pb-20 md:pb-24'>
+            <div className='mx-auto w-full max-w-7xl px-4 sm:px-8'>
+              <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
+                <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
+                  <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
+                  Saison {currentPlay.year}
+                </span>
+                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
+                  Rollen &amp; Crew
                 </span>
               </div>
 
-              <h1 className='animate-fade-in-up font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.92] text-shadow-lg'>
-                Unser Team
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] text-kolping-400 mb-3 animate-fade-in-up'>
+                Kolpingtheater Ramsen
+              </div>
+
+              <h1 className='animate-curtain-rise font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-[0.88] text-shadow-lg'>
+                Vor der
                 <br />
-                <span className='text-kolping-400'>Kolpingtheater Ramsen</span>
+                <span className='italic text-kolping-400'>Kulisse.</span>
               </h1>
 
-              <p className='animate-fade-in-up mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
+              <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
                 Hinter jeder Produktion stehen viele Gesichter. Schauspiel,
-                Technik und Organisation arbeiten bei uns als eingespieltes
-                Ensemble.
+                Technik und Organisation — zusammen ein eingespieltes Ensemble.
               </p>
+
+              <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
+                <a
+                  href='#team-current'
+                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
+                >
+                  Die Besetzung
+                  <span className='transition-transform group-hover:translate-y-0.5'>↓</span>
+                </a>
+                <Link
+                  href='/about'
+                  className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
+                >
+                  → Unsere Geschichte
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-
-      {/* ══════ MARQUEE BULB STRIP ══════ */}
-      <section className='relative bg-site-950 border-y border-kolping-500/30 overflow-hidden force-dark'>
-        <div className='h-2 bulbs opacity-80' aria-hidden />
-        <div className='marquee py-3'>
-          <div className='marquee__track text-white font-display uppercase tracking-[0.35em] text-sm sm:text-base'>
-            {Array.from({ length: 2 }).map((_, k) => (
-              <div key={k} className='flex items-center gap-8'>
-                {[
-                  `Jetzt in Probe`,
-                  `${currentPlay.play} · ${currentPlay.year}`,
-                  currentPlay.location ?? 'Open-Air-Bühne',
-                  `${data.current.length} auf der Bühne`,
-                  `Kolpingtheater · Ramsen`,
-                ].map((txt, i) => (
-                  <span key={i} className='flex items-center gap-8 whitespace-nowrap'>
-                    <span className='text-kolping-400 text-xl leading-none' aria-hidden>◆</span>
-                    <span>{txt}</span>
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className='h-2 bulbs opacity-80' aria-hidden />
       </section>
 
       {/* ══════ STAT STRIP ══════ */}
@@ -300,7 +304,7 @@ export default function TeamPage() {
       </section>
 
       {/* ══════ CTA — Clapperboard ══════ */}
-      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 force-dark'>
+      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8'>
         <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
           {/* clapper top stripe */}
           <div className='clapper-stripes h-6 sm:h-8' aria-hidden />

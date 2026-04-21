@@ -14,7 +14,8 @@ export default function Header() {
         <Link href='/' className='flex items-center gap-2 font-semibold text-site-50 flex-1 min-w-0'>
           <Image
             src='/img/logo.png'
-            alt='Kolpingtheater Ramsen'
+            alt=''
+            aria-hidden='true'
             width={36}
             height={36}
             className='rounded-sm'
@@ -33,6 +34,9 @@ export default function Header() {
           </Link>
           <Link href='/gallery' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Galerie
+          </Link>
+          <Link href='/contact' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
+            Kontakt
           </Link>
         </nav>
 

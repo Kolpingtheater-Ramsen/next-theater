@@ -1,5 +1,6 @@
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
+import PremiereCountdown from '@/components/PremiereCountdown'
 import Image from 'next/image'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
@@ -17,7 +18,9 @@ export default function Home() {
     .reverse()
     .slice(0, 6)
     .map((p, idx) => {
-      const entry = timeline.find((t) => 'galleryHash' in t && t.galleryHash === p.slug)
+      const entry = timeline.find(
+        (t) => 'galleryHash' in t && t.galleryHash === p.slug,
+      )
       return {
         title: p.play,
         image: `/img/banners/${p.slug}.jpg`,
@@ -25,253 +28,351 @@ export default function Home() {
         tag: idx === 0 ? 'Neu' : undefined,
         year: p.year,
         location: p.location,
-        dominantColor: entry && 'dominantColor' in entry ? entry.dominantColor : '#0a0a0a',
+        dominantColor:
+          entry && 'dominantColor' in entry ? entry.dominantColor : '#0a0a0a',
       }
     })
 
-  const productionCount = teamData.plays.length
-  const yearsActive = new Date().getFullYear() - 2014
+  const currentPlay = teamData.plays[teamData.plays.length - 1]
 
   return (
-    <div className='space-y-0'>
-      {/* === HERO === Award feature */}
-      <section className='relative -mx-4 -mt-8 overflow-hidden'>
-        <div className='relative w-full h-[85vh] min-h-[500px] max-h-[900px]'>
+    <div className='-mx-4 -mt-8'>
+      {/* ══════ HERO · NEXT SHOW ══════ */}
+      <section className='relative overflow-hidden'>
+        <div className='relative w-full h-[88vh] min-h-[540px] max-h-[960px]'>
           <Image
-            src='/img/award-rlp-2026.jpg'
-            alt='Jugend-Engagement-Preis RLP 2026'
+            src='/img/banners/creepshow.svg'
+            alt='Creepshow 2026 — Platzhalter'
             fill
             priority
             sizes='100vw'
-            className='object-cover object-top'
+            className='object-cover object-center animate-kenburns'
+            unoptimized
           />
-          {/* Cinematic overlays */}
-          <div className='absolute inset-0 bg-gradient-to-b from-site-950/40 via-transparent to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/85 via-site-950/50 to-site-950/10' />
+          <div className='absolute inset-0 bg-gradient-to-b from-site-950/50 via-site-950/30 to-site-950' />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/85 via-site-950/45 to-transparent' />
           <div className='vignette' />
+          <div className='footlight' />
 
-          {/* Hero content */}
-          <div className='absolute inset-0 flex flex-col justify-end pb-12 sm:pb-16 md:pb-20'>
-            <div className='mx-auto w-full max-w-6xl px-4'>
-              {/* Badge */}
-              <div className='animate-fade-in-up mb-4' style={{ animationDelay: '0.1s' }}>
-                <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-4 py-1.5 text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-kolping-400 uppercase'>
-                  <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24'>
-                    <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
-                  </svg>
-                  Auszeichnung &middot; 27. Februar 2026
+          {/* corner film-frame ticks */}
+          <span className='absolute top-6 left-6 w-4 h-4 border-l-2 border-t-2 border-kolping-400/70' aria-hidden />
+          <span className='absolute top-6 right-6 w-4 h-4 border-r-2 border-t-2 border-kolping-400/70' aria-hidden />
+          <span className='absolute bottom-6 left-6 w-4 h-4 border-l-2 border-b-2 border-kolping-400/70' aria-hidden />
+          <span className='absolute bottom-6 right-6 w-4 h-4 border-r-2 border-b-2 border-kolping-400/70' aria-hidden />
+
+          <div className='absolute inset-0 flex flex-col justify-end pb-14 sm:pb-20 md:pb-24'>
+            <div className='mx-auto w-full max-w-7xl px-4 sm:px-8'>
+              <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
+                <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
+                  <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
+                  Sommer 2026 · Open-Air-Premiere
+                </span>
+                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
+                  Eintritt frei
                 </span>
               </div>
 
-              {/* Title */}
-              <h1
-                className='animate-fade-in-up font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.9] text-shadow-lg'
-                style={{ animationDelay: '0.2s' }}
-              >
-                Jugend-Engagement-
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] text-kolping-400 mb-3 animate-fade-in-up'>
+                Kolpingtheater Ramsen · präsentiert
+              </div>
+
+              <h1 className='animate-curtain-rise font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-[0.88] text-shadow-lg'>
+                <span className='italic text-kolping-400'>{currentPlay.play}</span>
                 <br />
-                <span className='text-kolping-400'>Preis RLP</span>
+                auf der Kolpingwiese.
               </h1>
 
-              {/* Subtitle */}
-              <p
-                className='animate-fade-in-up mt-4 sm:mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-xl leading-relaxed text-shadow'
-                style={{ animationDelay: '0.35s' }}
-              >
-                Geehrt durch Ministerpräsident Alexander Schweitzer in Mainz.
+              <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
+                Open-Air-Theater unter freiem Himmel, zwischen den
+                historischen Mauern von Ramsen — vier Abende im August 2026.
               </p>
 
-              {/* CTA */}
-              <div
-                className='animate-fade-in-up mt-6 sm:mt-8 flex flex-wrap items-center gap-3'
-                style={{ animationDelay: '0.5s' }}
-              >
-                <Link
-                  href='/about'
-                  className='group inline-flex items-center gap-2 rounded-full bg-kolping-400 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.3)]'
+              <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
+                <a
+                  href='#termine'
+                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
                 >
-                  Unsere Geschichte
-                  <svg className='w-4 h-4 transition-transform group-hover:translate-x-0.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-                  </svg>
-                </Link>
+                  Termine
+                  <span className='transition-transform group-hover:translate-y-0.5'>↓</span>
+                </a>
                 <Link
                   href='/gallery'
-                  className='inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-6 py-3 text-sm font-medium text-white/90 transition-all hover:bg-white/10 hover:border-white/30'
+                  className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
                 >
-                  Galerie
+                  → Einblicke in vergangene Stücke
                 </Link>
               </div>
-              <p className='animate-fade-in-up mt-4 text-xs text-site-400 text-shadow' style={{ animationDelay: '0.6s' }}>
-                Foto: Staatskanzlei RLP / Schäfer
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ TERMINE ══════ */}
+      <section
+        id='termine'
+        className='relative bg-site-950 border-y border-site-700 overflow-hidden scroll-mt-24'
+      >
+        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-12 sm:py-16'>
+          <div className='grid lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center'>
+            <div>
+              <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                Vorstellungen · August 2026
+              </div>
+              <h2 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]'>
+                Vier Abende
+                <br />
+                unter <span className='italic text-kolping-400'>offenem Himmel.</span>
+              </h2>
+              <div className='hairline-gold w-24 mt-5' />
+              <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
+                Einlass am frühen Abend auf der Kolpingwiese. Bitte wetterfest
+                kleiden — gespielt wird auch bei leichtem Nieselregen.
               </p>
+              <div className='mt-6'>
+                <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
+              </div>
+            </div>
+
+            <div className='grid grid-cols-2 gap-3 sm:gap-4'>
+              {[
+                { block: 'Block 01', dates: '21. · 22.', month: 'August', sub: 'Premiere + Zusatz' },
+                { block: 'Block 02', dates: '28. · 29.', month: 'August', sub: 'Zusatzvorstellungen' },
+              ].map((d) => (
+                <div
+                  key={d.block}
+                  className='relative overflow-hidden rounded-sm border border-kolping-500/30 bg-site-900/80 p-4 sm:p-5 min-w-[150px]'
+                >
+                  <div className='clapper-stripes h-1.5 -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4 opacity-60' aria-hidden />
+                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400 mb-2'>
+                    {d.block}
+                  </div>
+                  <div className='cast-number font-display text-3xl sm:text-4xl italic leading-none'>
+                    {d.dates}
+                  </div>
+                  <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-100 mt-2'>
+                    {d.month}
+                  </div>
+                  <div className='text-[10px] text-site-300 mt-1'>{d.sub}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* === DATES TEASER 2026 === */}
-      <section className='relative -mx-4 bg-gradient-to-r from-site-900 via-site-800 to-site-900 border-b border-site-700'>
-        <div className='mx-auto max-w-6xl px-4 py-6 sm:py-8'>
-          <div className='flex flex-col sm:flex-row items-center gap-4 sm:gap-8'>
-            <div className='flex items-center gap-3 shrink-0'>
-              <div className='w-10 h-10 rounded-full bg-kolping-400/15 border border-kolping-400/30 flex items-center justify-center'>
-                <svg className='w-5 h-5 text-kolping-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' />
-                </svg>
-              </div>
-              <div>
-                <p className='text-[10px] tracking-[0.2em] uppercase text-kolping-400 font-semibold'>Saison 2026</p>
-                <p className='font-display text-lg sm:text-xl font-bold text-site-50'>
-                  <span className='text-kolping-400'>Creepshow</span> &mdash; Open-Air-Premiere
-                </p>
-              </div>
+      {/* ══════ WAS SIE ERWARTET ══════ */}
+      <section className='relative bg-site-900 border-b border-site-700'>
+        <div
+          className='absolute inset-0 opacity-[0.04] pointer-events-none'
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+          aria-hidden
+        />
+        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-20'>
+          <div className='mb-10 sm:mb-14'>
+            <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
+              Für das Publikum
             </div>
-            <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4'>
-              <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-2 text-center'>
-                <p className='text-xs text-site-400 uppercase tracking-wider'>Block 1</p>
-                <p className='font-display text-sm sm:text-base font-bold text-site-50'>21. + 22. August</p>
-                <p className='text-[10px] text-site-400 mt-0.5'>Premiere + Zusatz</p>
-              </div>
-              <span className='text-site-600 font-bold'>&bull;</span>
-              <div className='rounded-lg border border-site-700 bg-site-800/60 px-4 py-2 text-center'>
-                <p className='text-xs text-site-400 uppercase tracking-wider'>Block 2</p>
-                <p className='font-display text-sm sm:text-base font-bold text-site-50'>28. + 29. August</p>
-                <p className='text-[10px] text-site-400 mt-0.5'>Zusatzvorstellungen</p>
-              </div>
-            </div>
+            <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
+              Was Sie <span className='italic text-kolping-400'>erwartet.</span>
+            </h2>
+            <div className='hairline-gold w-24 mt-5' />
+          </div>
 
+          <div className='grid md:grid-cols-3 gap-4 sm:gap-6'>
+            {[
+              {
+                num: '01',
+                title: 'Eigene Geschichten',
+                body: 'Jedes Stück entsteht aus eigener Feder — historisch, fantastisch, düster oder komisch. Kein Kanon, keine Abziehbilder.',
+              },
+              {
+                num: '02',
+                title: 'Open-Air-Atmosphäre',
+                body: 'Sommerabende auf der Kolpingwiese, zwischen Kulisse und Klostermauern. Im Winter nahbar im Pfarrheim auf der Kreativbühne.',
+              },
+              {
+                num: '03',
+                title: 'Eintritt frei',
+                body: 'Theater für alle — ohne Eintrittskarten, ohne Hürden. Getragen von Ehrenamt, Gemeinschaft und Ihrer Begeisterung.',
+              },
+            ].map((c) => (
+              <article
+                key={c.num}
+                className='group relative p-6 sm:p-8 border border-site-700 bg-site-900 rounded-sm hover:border-kolping-400/40 transition-colors'
+              >
+                <div className='flex items-start justify-between mb-5'>
+                  <div className='cast-number font-display text-5xl italic leading-none'>
+                    {c.num}
+                  </div>
+                  <div className='flex gap-1 pt-2'>
+                    <span className='w-1.5 h-1.5 rounded-full bg-kolping-400/80' />
+                    <span className='w-1.5 h-1.5 rounded-full bg-kolping-400/40' />
+                    <span className='w-1.5 h-1.5 rounded-full bg-kolping-400/20' />
+                  </div>
+                </div>
+                <h3 className='font-display text-2xl uppercase tracking-tight text-site-50 leading-tight'>
+                  {c.title}
+                </h3>
+                <div className='hairline-gold w-10 my-4 group-hover:w-24 transition-all duration-500' />
+                <p className='text-sm text-site-100 leading-relaxed'>{c.body}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* === STATS RIBBON === */}
-      <section className='relative -mx-4 border-y border-site-700 bg-site-900'>
-        <div className='mx-auto max-w-6xl px-4 py-6 sm:py-8'>
-          <div className='grid grid-cols-3 gap-4 sm:gap-8 text-center'>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {yearsActive}
-              </div>
-              <div className='mt-1 text-xs sm:text-sm tracking-[0.15em] uppercase text-site-100'>
-                Jahre Bühne
-              </div>
-            </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {productionCount}
-              </div>
-              <div className='mt-1 text-xs sm:text-sm tracking-[0.15em] uppercase text-site-100'>
-                Produktionen
-              </div>
-            </div>
-            <div>
-              <div className='font-display text-2xl sm:text-3xl md:text-4xl font-black text-kolping-400'>
-                {teamData.current.length}
-              </div>
-              <div className='mt-1 text-xs sm:text-sm tracking-[0.15em] uppercase text-site-100'>
-                Ensemble
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-
-
-
-      {/* === MARQUEE === */}
-      <section className='-mx-4 border-y border-site-700'>
+      {/* ══════ MARQUEE · Repertoire ══════ */}
+      <section className='border-y border-site-700'>
         <Marquee items={marqueeItems} />
       </section>
 
-      {/* === PRODUCTIONS === Editorial grid */}
-      <section className='mx-auto max-w-6xl px-4 pt-16 sm:pt-20 pb-4' aria-labelledby='productions-heading'>
-        <div className='flex items-end justify-between mb-8 sm:mb-10'>
-          <div>
-            <span className='block text-[11px] sm:text-xs tracking-[0.2em] uppercase text-kolping-400 font-semibold mb-2'>
-              Unsere Stücke
-            </span>
-            <h2
-              id='productions-heading'
-              className='font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-none'
+      {/* ══════ PRODUCTIONS · Einblicke ══════ */}
+      <section
+        className='relative bg-site-900'
+        aria-labelledby='productions-heading'
+      >
+        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 pt-16 sm:pt-24 pb-16 sm:pb-20'>
+          <div className='flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-14'>
+            <div>
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
+                Einblicke
+              </div>
+              <h2
+                id='productions-heading'
+                className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'
+              >
+                Vergangene <span className='italic text-kolping-400'>Stücke.</span>
+              </h2>
+              <div className='hairline-gold w-24 mt-5' />
+              <p className='mt-4 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
+                Ein Blick zurück: Fotos und Atmosphäre unserer Eigenproduktionen
+                der letzten Jahre.
+              </p>
+            </div>
+            <Link
+              href='/gallery'
+              className='group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
             >
-              Produktionen
-            </h2>
+              Alle Galerien
+              <span className='transition-transform group-hover:translate-x-1'>→</span>
+            </Link>
           </div>
-          <Link
-            href='/gallery'
-            className='group hidden sm:inline-flex items-center gap-2 text-sm text-site-100 hover:text-kolping-400 transition-colors'
-          >
-            Alle ansehen
-            <svg className='w-4 h-4 transition-transform group-hover:translate-x-0.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-            </svg>
-          </Link>
-        </div>
 
-        <FeaturedProductions items={featuredItems} />
-
-        <div className='mt-6 sm:hidden text-center'>
-          <Link
-            href='/gallery'
-            className='inline-flex items-center gap-2 text-sm text-site-100 hover:text-kolping-400 transition-colors'
-          >
-            Alle Produktionen ansehen
-            <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-            </svg>
-          </Link>
+          <FeaturedProductions items={featuredItems} />
         </div>
       </section>
 
-      {/* === JOIN CTA === */}
-      <section className='mx-auto max-w-6xl px-4 py-16 sm:py-20' aria-labelledby='join-heading'>
-        <div className='relative overflow-hidden rounded-2xl border border-site-700 force-dark'>
-          {/* Background atmospheric effect */}
-          <div className='absolute inset-0 bg-gradient-to-br from-kolping-400/5 via-site-900 to-site-900' />
-          <div className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-400/[0.03] to-transparent' />
+      {/* ══════ AWARD · Trust signal ══════ */}
+      <section className='relative bg-site-950 border-t border-site-700'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-8 py-12 sm:py-16'>
+          <div className='grid md:grid-cols-[auto_1fr_auto] gap-6 sm:gap-8 items-center'>
+            <div className='relative w-28 h-28 sm:w-36 sm:h-36 shrink-0 overflow-hidden rounded-sm border border-kolping-500/30 bg-site-900'>
+              <Image
+                src='/img/award-rlp-2026.jpg'
+                alt='Jugend-Engagement-Preis RLP 2026'
+                fill
+                sizes='(min-width: 640px) 144px, 112px'
+                className='object-cover object-top'
+              />
+              <div className='absolute inset-0 bg-gradient-to-t from-site-950/40 to-transparent' />
+            </div>
 
-          <div className='relative p-8 sm:p-10 md:p-14 flex flex-col md:flex-row items-center gap-8 md:gap-12'>
-            <div className='flex-1 text-center md:text-left'>
-              <span className='block text-[11px] sm:text-xs tracking-[0.2em] uppercase text-kolping-400 font-semibold mb-3'>
-                Mach mit
-              </span>
-              <h3
-                id='join-heading'
-                className='font-display text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight'
-              >
-                Werde Teil
-                <br className='hidden sm:block' />
-                der Bühne
+            <div className='min-w-0'>
+              <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-2 flex items-center gap-2'>
+                <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 24 24' aria-hidden>
+                  <path d='M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' />
+                </svg>
+                Ausgezeichnet · Februar 2026
+              </div>
+              <h3 className='font-display text-xl sm:text-2xl md:text-3xl uppercase tracking-tight text-site-50 leading-tight'>
+                Jugend-Engagement-Preis <span className='italic text-kolping-400'>Rheinland-Pfalz</span>
               </h3>
-              <p className='text-site-100 mt-3 sm:mt-4 text-sm sm:text-base max-w-md leading-relaxed'>
-                Ob Schauspiel, Technik oder Organisation &ndash; bei uns ist
-                Platz für alle, die Theater lieben.
+              <p className='mt-2 text-sm text-site-100/80 leading-relaxed max-w-xl'>
+                Geehrt durch Ministerpräsident Alexander Schweitzer in der
+                Staatskanzlei Mainz.
               </p>
             </div>
-            <div className='flex flex-col sm:flex-row items-center gap-3'>
-              <a
-                href='https://www.instagram.com/kolpingjugend_ramsen/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='group inline-flex items-center gap-2.5 rounded-full bg-kolping-400 px-6 py-3 text-sm font-bold text-white transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.3)]'
-                aria-label='Besuche uns auf Instagram'
-              >
-                <svg className='w-4 h-4' viewBox='0 0 24 24' fill='currentColor'>
-                  <path d='M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM18 6.8a1 1 0 1 1-2 0 1 1 0 0 1 2 0z' />
-                </svg>
-                Instagram
-              </a>
-              <Link
-                href='/about'
-                className='inline-flex items-center gap-2 rounded-full border border-site-700 bg-site-800/50 px-6 py-3 text-sm font-medium transition-all hover:border-kolping-400/50 hover:bg-site-800'
-              >
-                Über uns erfahren
-              </Link>
+
+            <Link
+              href='/about'
+              className='inline-flex items-center gap-2 rounded-sm border border-site-700 bg-site-900 px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:border-kolping-400/60 hover:text-kolping-400 transition-all self-start sm:self-center'
+            >
+              Mehr lesen →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ CTA · Bleiben Sie auf dem Laufenden ══════ */}
+      <section
+        className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 border-t border-site-700'
+        aria-labelledby='stay-heading'
+      >
+        <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
+          <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
+
+          <div className='relative p-8 sm:p-12 md:p-16 bg-site-900'>
+            <div
+              className='absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-kolping-500/10 to-transparent pointer-events-none'
+              aria-hidden
+            />
+
+            <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
+              <div>
+                <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
+                  Wir sehen uns im August
+                </div>
+                <h3
+                  id='stay-heading'
+                  className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95]'
+                >
+                  Nichts
+                  <br />
+                  <span className='italic text-kolping-400'>verpassen.</span>
+                </h3>
+                <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
+                  Termine, neue Stücke, Blicke hinter die Kulissen — auf
+                  Instagram und YouTube bleiben Sie dran. Fragen zur Anfahrt
+                  oder zum Platz? Schreiben Sie uns.
+                </p>
+              </div>
+              <div className='flex flex-col gap-3 sm:items-end'>
+                <a
+                  href='https://www.instagram.com/kolpingjugend_ramsen/'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'
+                >
+                  Instagram folgen
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                </a>
+                <a
+                  href='https://www.youtube.com/@kolpingtheaterramsen'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group inline-flex items-center gap-3 rounded-sm border border-site-700 bg-site-800/70 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-site-100 transition-all hover:border-kolping-400/60 hover:text-kolping-400'
+                >
+                  <svg className='w-4 h-4' viewBox='0 0 24 24' fill='currentColor' aria-hidden>
+                    <path d='M23.498 6.186a3 3 0 0 0-2.118-2.118C19.8 3.5 12 3.5 12 3.5s-7.8 0-9.38.568A3 3 0 0 0 .502 6.186C0 7.766 0 12 0 12s0 4.234.502 5.814a3 3 0 0 0 2.118 2.118C4.2 20.5 12 20.5 12 20.5s7.8 0 9.38-.568a3 3 0 0 0 2.118-2.118C24 16.234 24 12 24 12s0-4.234-.502-5.814zM9.75 15.568V8.432L15.818 12l-6.068 3.568z' />
+                  </svg>
+                  YouTube
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                </a>
+                <Link
+                  href='/contact'
+                  className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
+                >
+                  ✉ Kontakt &amp; Anfahrt
+                </Link>
+              </div>
             </div>
           </div>
+
+          <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
         </div>
       </section>
     </div>

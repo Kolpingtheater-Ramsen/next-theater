@@ -239,7 +239,7 @@ export default function AboutPage() {
   return (
     <div className='-mx-4 -mt-8'>
       {/* ══════ HERO ══════ */}
-      <section className='relative overflow-hidden force-dark'>
+      <section className='relative overflow-hidden'>
         <div className='relative w-full h-[78vh] min-h-[520px] max-h-[860px]'>
           <Image
             src='/img/other_images/Gruppenbild.jpg'
@@ -260,16 +260,16 @@ export default function AboutPage() {
                 <span className='inline-flex items-center rounded-full border border-kolping-400/40 bg-site-950/60 backdrop-blur-sm px-3 py-1 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
                   Seit 2014
                 </span>
-                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-mono font-semibold tracking-[0.25em] text-site-100 uppercase'>
+                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
                   Open-Air &amp; Kreativbühne
                 </span>
-                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-mono font-semibold tracking-[0.25em] text-site-100 uppercase'>
+                <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
                   Eintritt frei
                 </span>
               </div>
 
               <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] text-kolping-400 mb-3 animate-fade-in-up'>
-                Kolpingtheater Ramsen — Akt&nbsp;I
+                Kolpingtheater Ramsen
               </div>
 
               <h1 className='animate-curtain-rise font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-[0.88] text-shadow-lg'>
@@ -281,7 +281,7 @@ export default function AboutPage() {
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
                 Aus einer spontanen Idee in der Kolpingjugend wurde eine Bühne
                 mit eigenem Repertoire: jedes Jahr eine neue Eigenproduktion —
-                groß im Sommer, intim im Winter.
+                groß im Sommer, nahbar im Winter.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
@@ -305,13 +305,10 @@ export default function AboutPage() {
       </section>
 
       {/* ══════ MANIFESTO ══════ */}
-      <section className='relative bg-site-950 force-dark'>
+      <section className='relative bg-site-950'>
         <div className='mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-24'>
           <div className='grid lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-16 items-start'>
             <div>
-              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-5'>
-                Manifest · Akt&nbsp;II
-              </div>
               <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.95]'>
                 Wir schreiben
                 <br />
@@ -325,7 +322,7 @@ export default function AboutPage() {
                   Historische Stoffe, Fantasie, Gesellschaftskritik oder
                   Komödie — jedes Jahr entsteht aus eigener Feder ein neues
                   Stück. Im Sommer unter freiem Himmel auf der Kolpingwiese,
-                  im Winter auf der intimen Kreativbühne im Pfarrheim.
+                  im Winter auf der nahbaren Kreativbühne im Pfarrheim.
                 </p>
                 <p className='text-site-100/70 text-base leading-relaxed'>
                   Ob auf der Bühne, in der Technik, beim Bau, in Kostüm oder
@@ -408,10 +405,10 @@ export default function AboutPage() {
         />
         <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-24'>
           <SectionHead
-            eyebrow='Akt III · Zwei Bühnen'
+            eyebrow='Zwei Bühnen'
             title='Sommer &'
             accent='Winter.'
-            body='Wir spielen in zwei sehr verschiedenen Welten: Open-Air auf der Kolpingwiese und intim auf der Kreativbühne im Pfarrheim. Jedes Stück neu, jedes Jahr.'
+            body='Wir spielen in zwei sehr verschiedenen Welten: Open-Air auf der Kolpingwiese und nahbar auf der Kreativbühne im Pfarrheim. Jedes Stück neu, jedes Jahr.'
           />
 
           <div className='grid md:grid-cols-2 gap-6 sm:gap-8 mt-12 sm:mt-16'>
@@ -424,6 +421,8 @@ export default function AboutPage() {
                 blurb:
                   'Unser großes Sommerstück. Unter offenem Himmel, mit aufwendiger Kulisse zwischen den historischen Mauern rund um das Kloster Ramosa.',
                 latest: latestOpenAir,
+                posterOverride: '/img/banners/creepshow.svg',
+                posterOverrideUnoptimized: true,
               },
               {
                 key: 'Kreativbühne',
@@ -433,25 +432,28 @@ export default function AboutPage() {
                 blurb:
                   'Seit 2023 füllt die Kreativbühne die Winterpause: jüngere Akteure, kleinere Formate, nahbar und experimentell im Saal.',
                 latest: latestKreativ,
+                posterOverride: undefined as string | undefined,
+                posterOverrideUnoptimized: false,
               },
             ].map((f) => {
               const galleryEntry = entries.find(
                 (e) => e.galleryHash && e.header.toLowerCase().includes((f.latest?.play ?? '').toLowerCase().slice(0, 6)),
               )
-              const poster = galleryEntry?.image
+              const posterSrc = f.posterOverride ?? (galleryEntry?.image ? `/img/${galleryEntry.image}` : undefined)
               return (
                 <article
                   key={f.key}
                   className='group relative overflow-hidden rounded-xl border-epic bg-site-900 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]'
                 >
                   <div className='relative aspect-[16/10] overflow-hidden bg-site-950'>
-                    {poster ? (
+                    {posterSrc ? (
                       <Image
-                        src={`/img/${poster}`}
+                        src={posterSrc}
                         alt={f.title}
                         fill
                         sizes='(min-width: 768px) 50vw, 100vw'
                         className='object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105'
+                        unoptimized={f.posterOverrideUnoptimized}
                       />
                     ) : null}
                     <div className='absolute inset-0 bg-gradient-to-t from-site-900 via-site-900/60 to-transparent' />
@@ -506,10 +508,10 @@ export default function AboutPage() {
 
       {/* ══════ AWARDS / AUSZEICHNUNGEN ══════ */}
       {awardEntries.length > 0 && (
-        <section className='relative bg-site-950 border-t border-site-700 force-dark'>
+        <section className='relative bg-site-950 border-t border-site-700'>
           <div className='mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-24'>
             <SectionHead
-              eyebrow='Akt IV · Honor Roll'
+              eyebrow='Honor Roll'
               title='Ausgezeichnet.'
             />
 
@@ -566,7 +568,7 @@ export default function AboutPage() {
       >
         <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-24'>
           <SectionHead
-            eyebrow='Akt V · Filmrolle'
+            eyebrow='Filmrolle'
             title='Die'
             accent='Chronik.'
             body='Vom ersten Impuls in der Kolpingjugend bis zum letzten Vorhang. Jedes Jahr ein Stück, jede Probe ein kleiner Schritt.'
@@ -623,7 +625,7 @@ export default function AboutPage() {
       </section>
 
       {/* ══════ CTA — Clapperboard ══════ */}
-      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 force-dark border-t border-site-700'>
+      <section className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 border-t border-site-700'>
         <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
           <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
 
@@ -633,7 +635,7 @@ export default function AboutPage() {
             <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
               <div>
                 <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-                  Letzter Akt · Vorhang auf
+                  Vorhang auf
                 </div>
                 <h3 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95]'>
                   Werde Teil

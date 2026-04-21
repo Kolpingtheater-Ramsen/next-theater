@@ -68,7 +68,7 @@ export default async function PlayGalleryPage({
   return (
     <div className='-mx-4 -mt-8'>
       {/* ══════ HERO ══════ */}
-      <section className='relative overflow-hidden force-dark'>
+      <section className='relative overflow-hidden'>
         <div className='relative w-full h-[72vh] min-h-[460px] max-h-[820px]'>
           <Image
             src={heroImage}
@@ -197,7 +197,7 @@ export default async function PlayGalleryPage({
       )}
 
       {/* ══════ CTA — Clapperboard ══════ */}
-      <section className='relative bg-site-950 py-14 sm:py-20 px-4 sm:px-8 force-dark'>
+      <section className='relative bg-site-950 py-14 sm:py-20 px-4 sm:px-8'>
         <div className='relative mx-auto max-w-5xl overflow-hidden rounded-sm border border-site-700 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]'>
           <div className='clapper-stripes h-5 sm:h-7' aria-hidden />
           <div className='relative p-6 sm:p-10 md:p-14 bg-site-900'>

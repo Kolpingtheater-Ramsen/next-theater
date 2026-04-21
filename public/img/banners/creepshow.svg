@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Creepshow — Platzhalter">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a1440"/>
+      <stop offset="35%" stop-color="#5a1a3a"/>
+      <stop offset="70%" stop-color="#c2541a"/>
+      <stop offset="100%" stop-color="#f5a849"/>
+    </linearGradient>
+    <radialGradient id="skyGlow" cx="75%" cy="65%" r="60%">
+      <stop offset="0%" stop-color="#ffd27a" stop-opacity="0.7"/>
+      <stop offset="60%" stop-color="#c2541a" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2a1440" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffe8bd" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#ff7a00" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ff7a00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="moonDisk" cx="38%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#ffecc0"/>
+      <stop offset="65%" stop-color="#f0a257"/>
+      <stop offset="100%" stop-color="#7a2d0f"/>
+    </radialGradient>
+    <mask id="crescent">
+      <rect width="100%" height="100%" fill="#fff"/>
+      <circle cx="1140" cy="245" r="86" fill="#000"/>
+    </mask>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#skyGlow)"/>
+
+  <!-- Moon: halo + disk with masked crescent -->
+  <circle cx="1100" cy="260" r="420" fill="url(#moonGlow)" opacity="0.7"/>
+  <g mask="url(#crescent)">
+    <circle cx="1100" cy="260" r="95" fill="url(#moonDisk)"/>
+  </g>
+
+  <!-- Distant hill silhouette -->
+  <path d="M0,900 L0,680 Q200,630 420,650 T840,640 T1280,660 T1600,640 L1600,900 Z" fill="#2a0f1a" opacity="0.85"/>
+
+  <!-- Near tree silhouettes (pure black) -->
+  <g fill="#060204">
+    <path d="M0,900 L0,720 L80,640 L130,680 L180,610 L240,660 L310,600 L380,670 L460,620 L540,700 L620,640 L700,710 L780,650 L860,720 L940,670 L1020,730 L1100,670 L1180,740 L1260,680 L1340,750 L1420,700 L1500,760 L1600,700 L1600,900 Z"/>
+  </g>
+
+  <!-- Branches -->
+  <g stroke="#060204" stroke-width="5" opacity="0.9" fill="none">
+    <path d="M150,900 L150,640 L110,570 M150,640 L200,590 M150,720 L115,680"/>
+    <path d="M1380,900 L1380,620 L1340,550 M1380,620 L1430,570 M1380,700 L1345,660"/>
+    <path d="M760,900 L760,680 L720,610 M760,680 L810,630"/>
+  </g>
+
+  <!-- Bats (silhouettes against warm sky) -->
+  <g fill="#060204" opacity="0.95">
+    <path d="M640 300 q15 -12 30 0 q15 -12 30 0 q-7 10 -30 10 q-23 0 -30 -10 Z"/>
+    <path d="M820 220 q10 -8 20 0 q10 -8 20 0 q-5 7 -20 7 q-15 0 -20 -7 Z"/>
+    <path d="M960 340 q12 -10 24 0 q12 -10 24 0 q-6 8 -24 8 q-18 0 -24 -8 Z"/>
+    <path d="M420 380 q10 -8 20 0 q10 -8 20 0 q-5 7 -20 7 q-15 0 -20 -7 Z"/>
+  </g>
+
+  <!-- Floor mist -->
+  <rect x="0" y="760" width="1600" height="80" fill="#f0b071" opacity="0.12"/>
+
+  <!-- Grain overlay -->
+  <rect width="1600" height="900" filter="url(#grain)"/>
+
+  <!-- Corner film ticks -->
+  <g stroke="#ff7a00" stroke-width="2" fill="none" opacity="0.55">
+    <path d="M40,40 L40,64 M40,40 L64,40"/>
+    <path d="M1560,40 L1560,64 M1560,40 L1536,40"/>
+    <path d="M40,860 L40,836 M40,860 L64,860"/>
+    <path d="M1560,860 L1560,836 M1560,860 L1536,860"/>
+  </g>
+
+  <!-- Watermark -->
+  <g font-family="Georgia, 'Times New Roman', serif" fill="#ffe3b8" opacity="0.35" text-anchor="middle">
+    <text x="800" y="500" font-size="18" letter-spacing="12" font-style="italic">— PLATZHALTER —</text>
+  </g>
+</svg>

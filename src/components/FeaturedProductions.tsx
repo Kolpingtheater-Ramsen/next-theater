@@ -20,7 +20,6 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
         <a
           href={hero.href}
           className='group relative block overflow-hidden rounded-xl border border-site-700 bg-site-900 tilt'
-          aria-label={`Zur Galerie von ${hero.title}`}
         >
           <div className='flex flex-col sm:flex-row'>
             {/* Poster image */}
@@ -83,7 +82,6 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
             key={idx}
             href={item.href}
             className='group block tilt'
-            aria-label={`Zur Galerie von ${item.title}`}
           >
             <div className='relative overflow-hidden rounded-xl border border-site-700 bg-site-900'>
               <div className='relative aspect-[3/4] w-full'>
@@ -108,7 +106,7 @@ export default function FeaturedProductions({ items }: { items: Item[] }) {
                     </span>
                   )}
                   {item.year && (
-                    <span className='rounded-full bg-black/50 backdrop-blur-sm px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-white/80'>
+                    <span className='rounded-full bg-black/60 backdrop-blur-sm px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-white'>
                       {item.year}
                     </span>
                   )}
