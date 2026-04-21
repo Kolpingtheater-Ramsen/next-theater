@@ -343,12 +343,53 @@ body {
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Gallery lightbox morph — the named element is the lightbox stage (when
+   open) or the source grid card (when opening/closing). A dedicated group
+   rule gives it a higher timing curve and, importantly, no stacking rivals
+   because the source card is the only other element carrying this name. */
+::view-transition-group(gallery-morph) {
+  animation-duration: 0.55s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 10;
+}
+
+/* Nav slide: when html[data-slide] is set, old image slides out and new
+   slides in from the corresponding direction. The slide replaces the default
+   cross-fade; the group itself still runs its normal geometry animation. */
+:root[data-slide='next'] ::view-transition-old(gallery-morph) {
+  animation: lb-slide-out-left 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+:root[data-slide='next'] ::view-transition-new(gallery-morph) {
+  animation: lb-slide-in-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+:root[data-slide='prev'] ::view-transition-old(gallery-morph) {
+  animation: lb-slide-out-right 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+:root[data-slide='prev'] ::view-transition-new(gallery-morph) {
+  animation: lb-slide-in-left 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes lb-slide-out-left {
+  to { opacity: 0; transform: translateX(-18%); }
+}
+@keyframes lb-slide-in-right {
+  from { opacity: 0; transform: translateX(18%); }
+}
+@keyframes lb-slide-out-right {
+  to { opacity: 0; transform: translateX(18%); }
+}
+@keyframes lb-slide-in-left {
+  from { opacity: 0; transform: translateX(-18%); }
+}
+
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root),
   ::view-transition-old(gallery-image),
   ::view-transition-new(gallery-image),
+  ::view-transition-old(gallery-morph),
+  ::view-transition-new(gallery-morph),
   ::view-transition-group(*) {
     animation-duration: 0.01ms !important;
   }

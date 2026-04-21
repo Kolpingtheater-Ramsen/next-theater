@@ -19,6 +19,7 @@ export function Lightbox({
   index,
   total,
   title,
+  morphName,
 }: {
   src: string
   alt: string
@@ -31,46 +32,58 @@ export function Lightbox({
   index?: number
   total?: number
   title?: string
+  morphName?: string
 }) {
   const [loading, setLoading] = useState(true)
-  const [isVisible, setIsVisible] = useState(false)
+  // When a view-transition morph is running, the new snapshot is captured
+  // right after the parent's state flush — so the stage must be in the DOM
+  // and fully visible on the first render. Otherwise the browser has nothing
+  // to pair with the grid card's name and falls back to no animation.
+  const [isVisible, setIsVisible] = useState(!!morphName)
   const [isClosing, setIsClosing] = useState(false)
   const [slideDirection, setSlideDirection] = useState<SlideDirection>(null)
-  const [imageKey, setImageKey] = useState(src)
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(
+    () => typeof document !== 'undefined'
+  )
   const decodedAlt = decodeHtmlEntities(alt)
   const decodedCaption = caption ? decodeHtmlEntities(caption) : undefined
 
   useEffect(() => {
-    setMounted(true)
-    requestAnimationFrame(() => setIsVisible(true))
+    if (!mounted) setMounted(true)
+    if (!isVisible) requestAnimationFrame(() => setIsVisible(true))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Reset the loading spinner whenever the source image changes. We no longer
+  // delay the swap via a timer — when a view transition is driving the nav,
+  // the browser captures old/new snapshots at the exact state-flush boundary
+  // and a delayed imageKey would make both snapshots show the same image.
   useEffect(() => {
-    if (src !== imageKey) {
-      setLoading(true)
-      const timer = setTimeout(() => {
-        setImageKey(src)
-        setSlideDirection(null)
-      }, 50)
-      return () => clearTimeout(timer)
-    }
-  }, [src, imageKey])
+    setLoading(true)
+  }, [src])
 
   const handleClose = useCallback(() => {
+    // When a view-transition morph is driving the close, skip the internal
+    // 200ms fade — the browser animates the stage back to the grid thumb.
+    if (morphName) {
+      onClose()
+      return
+    }
     setIsClosing(true)
     setTimeout(onClose, 200)
-  }, [onClose])
+  }, [onClose, morphName])
 
   const handlePrev = useCallback(() => {
-    setSlideDirection('right')
+    // When view transitions are driving the nav slide, skip the internal
+    // JS-driven animation to avoid doubling up.
+    if (!morphName) setSlideDirection('right')
     onPrev()
-  }, [onPrev])
+  }, [onPrev, morphName])
 
   const handleNext = useCallback(() => {
-    setSlideDirection('left')
+    if (!morphName) setSlideDirection('left')
     onNext()
-  }, [onNext])
+  }, [onNext, morphName])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -89,8 +102,9 @@ export function Lightbox({
     }
   }, [])
 
-  const imgAnimClass =
-    slideDirection === 'left'
+  const imgAnimClass = morphName
+    ? ''
+    : slideDirection === 'left'
       ? 'animate-slide-in-right'
       : slideDirection === 'right'
         ? 'animate-slide-in-left'
@@ -145,9 +159,19 @@ export function Lightbox({
       <div
         className={[
           'relative w-[min(92vw,1400px)] h-[min(82vh,900px)] mx-4',
-          'transition-[opacity,transform] duration-300 ease-out',
-          isVisible && !isClosing ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.97]',
+          // Skip the scale-in CSS animation when a view-transition morph is
+          // driving the open — otherwise the new snapshot captures the stage
+          // at scale-0.97/opacity-0 and the morph lands on an invisible box.
+          morphName
+            ? ''
+            : [
+                'transition-[opacity,transform] duration-300 ease-out',
+                isVisible && !isClosing
+                  ? 'opacity-100 scale-100'
+                  : 'opacity-0 scale-[0.97]',
+              ].join(' '),
         ].join(' ')}
+        style={morphName ? { viewTransitionName: morphName } : undefined}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Corner ticks framing the image */}
@@ -178,9 +202,9 @@ export function Lightbox({
         )}
 
         {/* Full image */}
-        <div key={imageKey} className={`absolute inset-0 ${imgAnimClass}`}>
+        <div key={src} className={`absolute inset-0 ${imgAnimClass}`}>
           <Image
-            src={imageKey}
+            src={src}
             alt={decodedAlt}
             fill
             className={[

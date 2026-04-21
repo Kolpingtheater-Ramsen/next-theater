@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+import { flushSync } from 'react-dom'
 import { Lightbox } from './Lightbox'
 import { decodeHtmlEntities } from '@/lib/html'
 
@@ -15,18 +16,35 @@ type PhotoMeta = {
   blurhash?: string
 }
 
+// A single shared name — only the card that is currently morphing carries it,
+// so at most one element in the DOM holds the name at any given time. That
+// avoids both duplicate-name errors AND the z-order issue where every named
+// grid card ends up in the view-transition overlay layer (the active morph
+// would otherwise render behind later-sourced cards).
+const MORPH_NAME = 'gallery-morph'
+
+type ViewTransitionDoc = Document & {
+  startViewTransition?: (cb: () => void) => {
+    finished?: Promise<unknown>
+    updateCallbackDone?: Promise<unknown>
+    ready?: Promise<unknown>
+  } | void
+}
+
 // Theatrical photo card component
 function PhotoCard({
   play,
   meta,
   caption,
   index,
+  isNamed,
   onClick,
 }: {
   play: string
   meta: PhotoMeta
   caption: string
   index: number
+  isNamed: boolean
   onClick: () => void
 }) {
   const thumb = `/img/gallery_thumbs/${play}/Bild_${meta.index + 1}.jpg`
@@ -38,7 +56,7 @@ function PhotoCard({
       className='group relative inline-block w-full mb-5 md:mb-6 break-inside-avoid text-left focus:outline-none focus:ring-2 focus:ring-kolping-500 focus:ring-offset-2 focus:ring-offset-site-900'
       onClick={onClick}
       style={{
-        viewTransitionName: `photo-${play}-${index}`,
+        viewTransitionName: isNamed ? MORPH_NAME : undefined,
         animationDelay: `${Math.min(index, 30) * 30}ms`,
       }}
     >
@@ -90,6 +108,81 @@ export default function ClientGrid({
   title?: string
 }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  // The index of the card that currently "owns" the morph name (either about
+  // to open, or about to receive the reverse-close). Exactly one card carries
+  // MORPH_NAME at a time — or zero when idle.
+  const [morphIndex, setMorphIndex] = useState<number | null>(null)
+
+  const handleOpen = (i: number) => {
+    const doc = document as ViewTransitionDoc
+    if (!doc.startViewTransition) {
+      setOpenIndex(i)
+      return
+    }
+    // Make sure no stale slide direction leaks into the open morph.
+    delete document.documentElement.dataset.slide
+    // 1) Name the source card synchronously so the OLD snapshot has it.
+    flushSync(() => setMorphIndex(i))
+    // 2) Start the transition; inside, flip openIndex so the lightbox mounts
+    //    and the source card loses the name (openIndex === index guard below).
+    const t = doc.startViewTransition(() => {
+      flushSync(() => setOpenIndex(i))
+    })
+    // 3) After the browser is done animating, clear the marker.
+    const done =
+      (t && typeof t === 'object' && 'finished' in t && t.finished) || null
+    if (done) done.finally(() => setMorphIndex(null))
+    else setMorphIndex(null)
+  }
+
+  const handleClose = () => {
+    const doc = document as ViewTransitionDoc
+    const current = openIndex
+    if (!doc.startViewTransition || current === null) {
+      setOpenIndex(null)
+      return
+    }
+    delete document.documentElement.dataset.slide
+    // 1) Mark the destination card so it can reclaim the name in the NEW snap
+    //    (the card currently has no name because openIndex === index).
+    flushSync(() => setMorphIndex(current))
+    const t = doc.startViewTransition(() => {
+      flushSync(() => setOpenIndex(null))
+    })
+    const done =
+      (t && typeof t === 'object' && 'finished' in t && t.finished) || null
+    if (done) done.finally(() => setMorphIndex(null))
+    else setMorphIndex(null)
+  }
+
+  const navigate = (direction: 'prev' | 'next') => {
+    const doc = document as ViewTransitionDoc
+    const step = () => {
+      setOpenIndex((i) => {
+        if (i === null) return i
+        return direction === 'next'
+          ? (i + 1) % metas.length
+          : (i - 1 + metas.length) % metas.length
+      })
+    }
+    if (!doc.startViewTransition) {
+      step()
+      return
+    }
+    // Signal direction to the CSS so ::view-transition-old/new get the right
+    // slide keyframes. Cleared after the transition finishes.
+    document.documentElement.dataset.slide = direction
+    const t = doc.startViewTransition(() => flushSync(step))
+    const done =
+      (t && typeof t === 'object' && 'finished' in t && t.finished) || null
+    const clear = () => {
+      delete document.documentElement.dataset.slide
+    }
+    if (done) done.finally(clear)
+    else clear()
+  }
+  const handlePrev = () => navigate('prev')
+  const handleNext = () => navigate('next')
 
   return (
     <>
@@ -101,7 +194,11 @@ export default function ClientGrid({
             meta={m}
             caption={captions[i] ?? m.alt}
             index={i}
-            onClick={() => setOpenIndex(i)}
+            // Only the morph-source card carries the name — and only when
+            // the lightbox is NOT currently showing it (to avoid duplicate
+            // names during the transition commit).
+            isNamed={morphIndex === i && openIndex !== i}
+            onClick={() => handleOpen(i)}
           />
         ))}
       </div>
@@ -121,11 +218,10 @@ export default function ClientGrid({
           index={openIndex}
           total={metas.length}
           title={title}
-          onClose={() => setOpenIndex(null)}
-          onPrev={() =>
-            setOpenIndex((i) => (i! - 1 + metas.length) % metas.length)
-          }
-          onNext={() => setOpenIndex((i) => (i! + 1) % metas.length)}
+          morphName={MORPH_NAME}
+          onClose={handleClose}
+          onPrev={handlePrev}
+          onNext={handleNext}
         />
       )}
     </>
