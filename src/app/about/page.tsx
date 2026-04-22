@@ -188,7 +188,7 @@ export default function AboutPage() {
     return { ...entry, month, year, order: index + 1 }
   })
 
-  // Group entries by year (newest year first, entries within sorted newest → oldest)
+  // Group entries by year (newest year first, entries within sorted oldest → newest)
   const byYear = new Map<string, TimelineItem[]>()
   for (const e of entries) {
     const list = byYear.get(e.year) ?? []
@@ -203,7 +203,7 @@ export default function AboutPage() {
     list.sort((a, b) => {
       const am = MONTH_ORDER[a.month.toLowerCase()] ?? 0
       const bm = MONTH_ORDER[b.month.toLowerCase()] ?? 0
-      return bm - am
+      return am - bm
     })
   }
 

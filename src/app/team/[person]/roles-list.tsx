@@ -24,7 +24,8 @@ export default function RolesList({ roles }: { roles: RoleWithPlay[] }) {
     <ol className='relative border-t border-site-700/80'>
       {sorted.map(({ role, playData }, i) => {
         const { play: title, year, location, slug, gallery } = playData
-        const hasGallery = gallery && slug
+        const effectiveSlug = slug === 'malleus' ? 'maleficarum' : slug
+        const hasGallery = Boolean(gallery && effectiveSlug)
         const isHovered = hovered === i
 
         const rowInner = (
@@ -100,7 +101,7 @@ export default function RolesList({ roles }: { roles: RoleWithPlay[] }) {
             className='animate-fade-in-up'
           >
             {hasGallery ? (
-              <Link href={`/gallery/${slug}`} className='block group'>
+              <Link href={`/gallery/${effectiveSlug}`} className='block group'>
                 {rowInner}
               </Link>
             ) : (
