@@ -602,19 +602,17 @@ export default function AboutPage() {
 
                   {/* Year content */}
                   <div className='relative space-y-8'>
-                    {/* Vertical rail for events */}
-                    {prods.map((p) => (
-                      <ProductionCard key={p.date + p.header} entry={p} />
-                    ))}
-
-                    {events.length > 0 && (
-                      <div className='relative pl-0 border-l border-site-700/60 ml-2'>
-                        <div className='space-y-1'>
-                          {events.map((e) => (
-                            <EventChip key={e.date + e.header} entry={e} />
-                          ))}
+                    {items.map((item) =>
+                      item.image ? (
+                        <ProductionCard key={item.date + item.header} entry={item} />
+                      ) : (
+                        <div
+                          key={item.date + item.header}
+                          className='relative pl-0 border-l border-site-700/60 ml-2'
+                        >
+                          <EventChip entry={item} />
                         </div>
-                      </div>
+                      ),
                     )}
                   </div>
                 </div>
