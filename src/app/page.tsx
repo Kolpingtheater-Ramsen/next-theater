@@ -177,7 +177,7 @@ export default function Home() {
               Für das Publikum
             </div>
             <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
-              Was Sie <span className='italic text-kolping-400'>erwartet.</span>
+              Was dich <span className='italic text-kolping-400'>erwartet.</span>
             </h2>
             <div className='hairline-gold w-24 mt-5' />
           </div>
@@ -197,7 +197,7 @@ export default function Home() {
               {
                 num: '03',
                 title: 'Eintritt frei',
-                body: 'Theater für alle — ohne Eintrittskarten, ohne Hürden. Getragen von Ehrenamt, Gemeinschaft und Ihrer Begeisterung.',
+                body: 'Theater für alle, ohne Eintrittskarten, ohne Hürden. Getragen von Ehrenamt, Gemeinschaft und eurer Begeisterung.',
               },
             ].map((c) => (
               <article
@@ -307,7 +307,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════ CTA · Bleiben Sie auf dem Laufenden ══════ */}
+      {/* ══════ CTA · Bleib auf dem Laufenden ══════ */}
       <section
         className='relative bg-site-950 py-16 sm:py-24 px-4 sm:px-8 border-t border-site-700'
         aria-labelledby='stay-heading'
@@ -335,9 +335,9 @@ export default function Home() {
                   <span className='italic text-kolping-400'>verpassen.</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Termine, neue Stücke, Blicke hinter die Kulissen — auf
-                  Instagram und YouTube bleiben Sie dran. Fragen zur Anfahrt
-                  oder zum Platz? Schreiben Sie uns.
+                  Termine, neue Stücke, Blicke hinter die Kulissen, auf
+                  Instagram und YouTube bleibst du dran. Fragen zur Anfahrt
+                  oder zum Platz? Schreib uns.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>

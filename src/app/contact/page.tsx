@@ -172,14 +172,14 @@ export default function ContactPage() {
                 Vor Ort
               </div>
               <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
-                Kommen Sie
+                Komm
                 <br />
                 <span className='italic text-kolping-400'>vorbei.</span>
               </h2>
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-6 text-site-100 text-base sm:text-lg leading-relaxed max-w-xl'>
-                Unsere Proben sind offen. Schauen Sie rein, sagen Sie Hallo,
-                probieren Sie Theater aus — keine Voranmeldung nötig.
+                Unsere Proben sind offen. Schau rein, sag Hallo,
+                probier Theater aus, keine Voranmeldung nötig.
               </p>
 
               <div className='mt-8 flex flex-wrap gap-3'>
