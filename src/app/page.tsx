@@ -42,7 +42,7 @@ export default function Home() {
         <div className='relative w-full h-[88vh] min-h-[540px] max-h-[960px]'>
           <Image
             src='/img/banners/creepshow.svg'
-            alt='Creepshow 2026 — Platzhalter'
+            alt='Creepshow 2026'
             fill
             priority
             sizes='100vw'
