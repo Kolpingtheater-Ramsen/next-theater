@@ -83,8 +83,8 @@ export default function Home() {
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Open-Air-Theater unter freiem Himmel, zwischen den
-                historischen Mauern von Ramsen — vier Abende im August 2026.
+                Open-Air-Theater am Waldrand auf der Kolpingwiese in Ramsen,
+                vier Sommerabende im August 2026.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
@@ -125,8 +125,8 @@ export default function Home() {
               </h2>
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
-                Einlass am frühen Abend auf der Kolpingwiese. Bitte wetterfest
-                kleiden — gespielt wird auch bei leichtem Nieselregen.
+                Einlass am frühen Abend auf der Kolpingwiese. Alle Termine für
+                die Sommerabende 2026 auf einen Blick.
               </p>
               <div className='mt-6'>
                 <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
@@ -192,7 +192,7 @@ export default function Home() {
               {
                 num: '02',
                 title: 'Open-Air-Atmosphäre',
-                body: 'Sommerabende auf der Kolpingwiese, zwischen Kulisse und Klostermauern. Im Winter nahbar im Pfarrheim auf der Kreativbühne.',
+                body: 'Sommerabende auf der Kolpingwiese unter freiem Himmel, im Winter auf der Kreativbühne im Pfarrheim.',
               },
               {
                 num: '03',
