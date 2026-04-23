@@ -241,8 +241,8 @@ export default function BookingPage() {
             <div className='glass rounded-xl p-6'>
               <h3 className='text-xl font-display font-bold mb-4'>Über die Vorstellung</h3>
               <p className='text-site-100 mb-4'>
-                Erleben Sie &quot;Schicksalsfäden&quot; - ein selbst geschriebenes Stück der Kolping Kreativbühne: Eine Tragödie, inspiriert von den griechischen Schicksalsgöttinnen, den Moiren. Diese mischen sich, vom Gott der Unterwelt beeinflusst, in das Schicksal der Nymphe Eurydike ein, was sie jedoch relativ schnell wieder bereuen.
-                &quot;Schicksalsfäden&quot; verknüpft verschiedene Figuren und Geschichten der griechischen Sagen und bringt so die faszinierende Welt der antiken Mythologie auf die Bühne.
+                „Schicksalsfäden“ ist ein selbst geschriebenes Stück der Kolping Kreativbühne. Die Tragödie greift die griechischen Schicksalsgöttinnen, die Moiren, auf und erzählt von ihrem Eingriff in das Schicksal der Nymphe Eurydike.
+                Dabei verbindet das Stück verschiedene Figuren und Geschichten der griechischen Mythologie auf der Bühne.
               </p>
             </div>
 
@@ -253,25 +253,25 @@ export default function BookingPage() {
                   <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
                   </svg>
-                  <span>Die Buchung ist kostenfrei. Falls Sie nicht kommen können, bitten wir um Stornierung, damit andere den Platz nutzen können.</span>
+                  <span>Die Buchung ist kostenfrei. Falls du doch nicht kommen kannst, storniere bitte, damit andere den Platz nutzen können.</span>
                 </li>
                 <li className='flex items-start gap-3'>
                   <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
                   </svg>
-                  <span>Sie können maximal 5 Sitzplätze pro Buchung reservieren</span>
+                  <span>Du kannst maximal 5 Sitzplätze pro Buchung reservieren</span>
                 </li>
                 <li className='flex items-start gap-3'>
                   <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
                   </svg>
-                  <span>Sie erhalten eine Bestätigungs-E-Mail mit allen Details</span>
+                  <span>Du erhältst eine Bestätigungs-E-Mail mit allen Details</span>
                 </li>
                 <li className='flex items-start gap-3'>
                   <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
                   </svg>
-                  <span>Bitte erscheinen Sie 15 Minuten vor Vorstellungsbeginn</span>
+                  <span>Bitte sei 15 Minuten vor Vorstellungsbeginn da</span>
                 </li>
               </ul>
             </div>
@@ -279,11 +279,11 @@ export default function BookingPage() {
             <div className='glass rounded-xl p-6'>
               <h3 className='text-xl font-display font-bold mb-4'>Kontakt & Fragen</h3>
               <p className='text-site-100 mb-4'>
-                Haben Sie Fragen zur Buchung oder zur Vorstellung? Wir helfen Ihnen gerne weiter.
+                Hast du Fragen zur Buchung oder zur Vorstellung? Wir helfen dir gern weiter.
               </p>
               <p className='text-site-100'>
-                Besuchen Sie unsere <a href='/contact' className='text-kolping-400 hover:text-kolping-300 underline transition-colors'>Kontaktseite</a> oder 
-                wenden Sie sich direkt an uns. Wir freuen uns auf Ihren Besuch!
+                Schau auf unsere <a href='/contact' className='text-kolping-400 hover:text-kolping-300 underline transition-colors'>Kontaktseite</a> oder 
+                schreib uns direkt. Wir freuen uns auf dich!
               </p>
             </div>
           </div>
@@ -332,7 +332,7 @@ export default function BookingPage() {
               ← Zurück
             </button>
             <div>
-              <h2 className='text-xl font-display font-bold'>Ihre Daten</h2>
+              <h2 className='text-xl font-display font-bold'>Deine Daten</h2>
               <p className='text-site-100'>{selectedPlay.display_date} • {selectedSeats.length} Plätze</p>
             </div>
           </div>

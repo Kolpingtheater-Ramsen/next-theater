@@ -15,13 +15,13 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
     const newErrors: { name?: string; email?: string } = {}
 
     if (!name.trim()) {
-      newErrors.name = 'Bitte geben Sie Ihren Namen ein.'
+      newErrors.name = 'Bitte gib deinen Namen ein.'
     }
 
     if (!email.trim()) {
-      newErrors.email = 'Bitte geben Sie Ihre E-Mail-Adresse ein.'
+      newErrors.email = 'Bitte gib deine E-Mail-Adresse ein.'
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'
+      newErrors.email = 'Bitte gib eine gültige E-Mail-Adresse ein.'
     }
 
     setErrors(newErrors)
@@ -54,7 +54,7 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
               focus:outline-none focus:ring-2 focus:ring-kolping-400
               transition-colors
             `}
-            placeholder='Ihr vollständiger Name'
+            placeholder='Dein vollständiger Name'
           />
           {errors.name && (
             <p className='mt-2 text-sm text-red-400'>{errors.name}</p>
@@ -77,13 +77,13 @@ export default function BookingForm({ onSubmit }: BookingFormProps) {
               focus:outline-none focus:ring-2 focus:ring-kolping-400
               transition-colors
             `}
-            placeholder='ihre.email@beispiel.de'
+            placeholder='deine.email@beispiel.de'
           />
           {errors.email && (
             <p className='mt-2 text-sm text-red-400'>{errors.email}</p>
           )}
           <p className='mt-2 text-xs text-site-300'>
-            Sie erhalten Ihre Buchungsbestätigung an diese E-Mail-Adresse.
+            Du erhältst deine Buchungsbestätigung an diese E-Mail-Adresse.
           </p>
         </div>
 

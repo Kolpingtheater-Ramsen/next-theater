@@ -97,7 +97,7 @@ export default function EditBookingPage() {
     } else {
       // Select seat (if not exceeding max)
       if (selectedSeats.length >= MAX_SEATS) {
-        setMessageModal({ message: `Sie können maximal ${MAX_SEATS} Plätze auswählen.`, type: 'error' })
+        setMessageModal({ message: `Du kannst maximal ${MAX_SEATS} Plätze auswählen.`, type: 'error' })
         return
       }
       setSelectedSeats([...selectedSeats, seatNumber])
@@ -119,7 +119,7 @@ export default function EditBookingPage() {
 
   const handleSaveClick = () => {
     if (selectedSeats.length === 0) {
-      setMessageModal({ message: 'Bitte wählen Sie mindestens einen Sitzplatz oder stornieren Sie die Buchung.', type: 'error' })
+      setMessageModal({ message: 'Bitte wähle mindestens einen Sitzplatz oder storniere die Buchung.', type: 'error' })
       return
     }
     if (!hasChanges()) {
@@ -149,7 +149,7 @@ export default function EditBookingPage() {
       const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
-        setMessageModal({ message: 'Ihre Buchung wurde erfolgreich aktualisiert.', type: 'success' })
+        setMessageModal({ message: 'Deine Buchung wurde erfolgreich aktualisiert.', type: 'success' })
       } else {
         setMessageModal({ message: data.error || 'Fehler beim Aktualisieren der Buchung', type: 'error' })
       }
@@ -180,7 +180,7 @@ export default function EditBookingPage() {
       const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
-        setMessageModal({ message: 'Ihre Buchung wurde erfolgreich storniert.', type: 'success' })
+        setMessageModal({ message: 'Deine Buchung wurde erfolgreich storniert.', type: 'success' })
         setShowCancelConfirm(false)
       } else {
         setMessageModal({ message: data.error || 'Fehler beim Stornieren der Buchung', type: 'error' })
@@ -500,7 +500,7 @@ export default function EditBookingPage() {
               Änderungen speichern?
             </h3>
             <p className='text-site-100 mb-4'>
-              Möchten Sie die Änderungen an Ihrer Buchung speichern?
+              Möchtest du die Änderungen an deiner Buchung speichern?
             </p>
             <div className='text-sm mb-6'>
               <p className='mb-2'><strong>Neue Sitzplätze:</strong></p>
@@ -540,7 +540,7 @@ export default function EditBookingPage() {
               Buchung stornieren?
             </h3>
             <p className='text-site-100 mb-6'>
-              Sind Sie sicher, dass Sie diese Buchung stornieren möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+              Bist du sicher, dass du diese Buchung stornieren möchtest? Diese Aktion kann nicht rückgängig gemacht werden.
             </p>
             <div className='flex gap-3'>
               <button

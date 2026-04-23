@@ -52,7 +52,7 @@ export default function ContactPage() {
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
                 Fragen zur Vorstellung, zur Anfahrt, zum Mitmachen oder einfach
-                nur Lust auf Theater? Wir freuen uns über jede Nachricht.
+                Lust auf Theater? Schreib uns.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
@@ -83,7 +83,7 @@ export default function ContactPage() {
               Kontaktwege
             </div>
             <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
-              So <span className='italic text-kolping-400'>erreichen</span> Sie uns.
+              So <span className='italic text-kolping-400'>erreichst</span> du uns.
             </h2>
             <div className='hairline-gold w-24 mt-5' />
           </div>

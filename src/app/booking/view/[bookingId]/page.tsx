@@ -144,7 +144,7 @@ export default function BookingViewPage() {
           </div>
         )}
         <h1 className='font-display text-3xl md:text-4xl font-bold mb-2 print:text-2xl'>
-          {isNewBooking ? 'Buchung bestätigt!' : 'Ihre Buchung'}
+          {isNewBooking ? 'Buchung bestätigt!' : 'Deine Buchung'}
         </h1>
         <p className='text-site-100 print:text-sm'>
           {isNewBooking ? (
@@ -228,10 +228,10 @@ export default function BookingViewPage() {
               </div>
               <div className='flex-1 text-center md:text-left print:text-left'>
                 <h3 className='text-sm font-semibold mb-2 print:text-xs print:mb-1'>
-                  Ihr Ticket-Code
+                  Dein Ticket-Code
                 </h3>
                 <p className='text-xs text-site-300 print:text-[10px] print:leading-tight'>
-                  Bitte zeigen Sie diesen QR-Code am Eingang vor.
+                  Bitte zeig diesen QR-Code am Eingang vor.
                 </p>
               </div>
             </div>
@@ -314,7 +314,7 @@ export default function BookingViewPage() {
       <div className='mt-6 p-4 bg-site-800 rounded-lg text-sm text-site-100 print:mt-3 print:p-2 print:text-[10px] print:leading-tight'>
         <h3 className='font-semibold mb-2 print:mb-1 print:text-xs'>Wichtige Informationen:</h3>
         <ul className='space-y-1 list-disc list-inside print:space-y-0'>
-          <li>Bitte erscheinen Sie 15 Minuten vor Vorstellungsbeginn</li>
+          <li>Bitte sei 15 Minuten vor Vorstellungsbeginn da</li>
           <li>Die Platzreservierung ist verbindlich</li>
         </ul>
       </div>
@@ -327,7 +327,7 @@ export default function BookingViewPage() {
               Buchung stornieren?
             </h3>
             <p className='text-site-100 mb-6'>
-              Sind Sie sicher, dass Sie diese Buchung stornieren möchten? Diese Aktion kann nicht rückgängig gemacht werden.
+              Bist du sicher, dass du diese Buchung stornieren möchtest? Diese Aktion kann nicht rückgängig gemacht werden.
             </p>
             <div className='flex gap-3'>
               <button

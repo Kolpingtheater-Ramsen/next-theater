@@ -64,7 +64,7 @@ export default function AddToCalendar({
     const icsEnd = formatICSDate(endDateTime)
     
     const seatsText = seats.join(', ')
-    const description = `${eventDescription}\\n\\nPlätze: ${seatsText}\\nName: ${name}\\nBuchungs-ID: ${bookingId}\\n\\nBitte zeigen Sie Ihr Ticket am Eingang vor.`
+    const description = `${eventDescription}\\n\\nPlätze: ${seatsText}\\nName: ${name}\\nBuchungs-ID: ${bookingId}\\n\\nBitte zeig dein Ticket am Eingang vor.`
     
     // Create ICS file content
     const icsContent = `BEGIN:VCALENDAR

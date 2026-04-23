@@ -55,7 +55,7 @@ export default function SeatSelection({
     } else {
       // Select seat (if not exceeding max)
       if (tempSelectedSeats.length >= maxSeats) {
-        onShowMessage?.(`Sie können maximal ${maxSeats} Plätze auswählen.`, 'error')
+        onShowMessage?.(`Du kannst maximal ${maxSeats} Plätze auswählen.`, 'error')
         return
       }
       newSelection = [...tempSelectedSeats, seatNumber]
@@ -66,7 +66,7 @@ export default function SeatSelection({
 
   const handleConfirm = () => {
     if (tempSelectedSeats.length === 0) {
-      onShowMessage?.('Bitte wählen Sie mindestens einen Sitzplatz aus.', 'error')
+      onShowMessage?.('Bitte wähle mindestens einen Sitzplatz aus.', 'error')
       return
     }
     onSeatSelection(tempSelectedSeats)
