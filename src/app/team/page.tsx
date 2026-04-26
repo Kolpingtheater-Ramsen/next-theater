@@ -42,22 +42,10 @@ function currentRole(p: Person): string | null {
   return r && r.trim() ? r : null
 }
 
-function isPrincipal(role: string | null): boolean {
-  if (!role) return false
-  return !/^(Ensemble|Portrait)$/i.test(role.trim())
-}
-
-// Sort: principals first, then ensemble, then inactive; alphabetical within each bucket.
 function sortCast(people: Person[]): Person[] {
-  return [...people].sort((a, b) => {
-    const ra = currentRole(a)
-    const rb = currentRole(b)
-    const bucket = (r: string | null) => (r == null ? 2 : isPrincipal(r) ? 0 : 1)
-    const ba = bucket(ra)
-    const bb = bucket(rb)
-    if (ba !== bb) return ba - bb
-    return displayName(a).localeCompare(displayName(b), 'de')
-  })
+  return [...people].sort((a, b) =>
+    displayName(a).localeCompare(displayName(b), 'de')
+  )
 }
 
 function Poster({
@@ -251,9 +239,7 @@ export default function TeamPage() {
               <div className='hairline-gold w-24 mt-5' />
             </div>
             <p className='max-w-sm text-site-100/80 text-sm sm:text-base leading-relaxed'>
-              Alphabetisch sortiert nach Bühnenpräsenz der laufenden Saison.
-              Hauptrollen voran, danach das Ensemble, zuletzt jene, die diese
-              Saison nicht auf der Bühne stehen.
+              Alphabetisch sortiert.
             </p>
           </div>
 
