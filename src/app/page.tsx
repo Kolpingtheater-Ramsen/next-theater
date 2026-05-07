@@ -121,12 +121,11 @@ export default function Home() {
         <div className='mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-8 sm:py-12 lg:grid-cols-[minmax(280px,0.75fr)_1fr] lg:items-center'>
           <div className='relative aspect-[16/9] overflow-hidden rounded-sm border border-site-700 bg-site-900'>
             <Image
-              src={`/img/banners/${currentPlay.slug}.svg`}
+              src='/img/creepshow-preview.webp'
               alt={`${currentPlay.play} ${currentPlay.year}`}
               fill
               sizes='(min-width: 1024px) 42vw, 100vw'
               className='object-cover object-center'
-              unoptimized
             />
             <div className='absolute inset-0 bg-gradient-to-r from-site-950/10 via-transparent to-site-950/35' />
           </div>
