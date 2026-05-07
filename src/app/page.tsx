@@ -107,6 +107,96 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══════ THEATERGAUDI · 10 Jahre Kolping-Theater ══════ */}
+      <section
+        id='theatergaudi'
+        className='relative bg-site-950 border-y border-site-700 overflow-hidden'
+        aria-labelledby='theatergaudi-heading'
+      >
+        <div
+          className='absolute inset-0 opacity-[0.05] pointer-events-none'
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.55) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.55) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+          aria-hidden
+        />
+        <div className='relative mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.86fr)_minmax(360px,0.56fr)] lg:items-center'>
+          <div>
+            <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-4'>
+              Samstag, 4. Juli · ab 15:00 Uhr
+            </div>
+            <h2
+              id='theatergaudi-heading'
+              className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'
+            >
+              Theatergaudi
+              <br />
+              <span className='italic text-kolping-400'>10 Jahre Kolping-Theater.</span>
+            </h2>
+            <div className='hairline-gold w-24 mt-5' />
+            <p className='mt-5 max-w-2xl text-sm sm:text-base leading-relaxed text-site-100/85'>
+              Offenes Theaterfest am Kolping-Gelände in Ramsen: Kaffee und
+              Kuchen, Hüpfburg, Kinderschminken, Fotobox, Kostüm- und
+              Requisiten-Stand, Technik-Stand, Spielestationen und
+              Pop-up-Auftritte. Abends geht es mit Live-Musik, Cocktails und
+              Sommerabend weiter.
+            </p>
+
+            <div className='mt-8 grid gap-3 sm:grid-cols-3'>
+              {[
+                { label: 'Ort', value: 'Klosterhof 7, Ramsen' },
+                { label: 'Nachmittag', value: '15:00-20:00 Uhr' },
+                { label: 'Eintritt', value: 'frei' },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className='border border-site-700 bg-site-900/75 px-4 py-4'
+                >
+                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400'>
+                    {item.label}
+                  </div>
+                  <div className='mt-2 text-sm font-semibold text-site-50'>
+                    {item.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className='mt-8 flex flex-wrap items-center gap-3'>
+              <Link
+                href='/contact'
+                className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
+              >
+                Anfahrt
+                <span className='transition-transform group-hover:translate-x-1'>→</span>
+              </Link>
+              <a
+                href='https://www.instagram.com/kolpingjugend_ramsen/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 transition-colors hover:text-kolping-400'
+              >
+                Updates auf Instagram
+              </a>
+            </div>
+          </div>
+
+          <div className='mx-auto w-full max-w-[420px] lg:max-w-none'>
+            <Image
+              src='/img/theatergaudi-2026.webp'
+              alt='Poster zur Theatergaudi am Samstag, 4. Juli, 10 Jahre Kolping-Theater'
+              width={1122}
+              height={1402}
+              sizes='(min-width: 1024px) 420px, (min-width: 640px) 70vw, 100vw'
+              className='h-auto w-full rounded-sm border border-kolping-400/35 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.9)]'
+              priority
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ══════ TERMINE ══════ */}
       <section
         id='termine'
