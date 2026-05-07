@@ -58,8 +58,8 @@ export default function Home() {
           <span className='absolute bottom-6 left-6 w-4 h-4 border-l-2 border-b-2 border-kolping-400/70' aria-hidden />
           <span className='absolute bottom-6 right-6 w-4 h-4 border-r-2 border-b-2 border-kolping-400/70' aria-hidden />
 
-          <div className='relative mx-auto grid h-full w-full max-w-7xl items-end gap-10 px-4 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-center xl:grid-cols-[minmax(0,1fr)_minmax(320px,400px)] xl:gap-16'>
-            <div className='max-w-[760px] pt-32 sm:pt-36 lg:pt-12'>
+          <div className='relative mx-auto grid h-full w-full max-w-7xl items-end gap-10 px-4 sm:px-8 lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,440px)] lg:items-center xl:grid-cols-[minmax(0,0.92fr)_minmax(420px,520px)] xl:gap-20'>
+            <div className='max-w-[680px] pt-32 sm:pt-36 lg:pt-12'>
               <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
                 <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
                   <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />

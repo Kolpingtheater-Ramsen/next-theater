@@ -38,7 +38,7 @@ export default function TheatergaudiPoster() {
       <button
         type='button'
         onClick={() => setOpen(true)}
-        className='group relative mx-auto block w-full max-w-[260px] rounded-sm text-left sm:max-w-[320px] lg:max-w-[360px] xl:max-w-[400px]'
+        className='group relative mx-auto block w-full max-w-[300px] rounded-sm text-left sm:max-w-[380px] lg:max-w-[440px] xl:max-w-[520px]'
         aria-label='Theatergaudi-Plakat vergrößern'
       >
         <Image
@@ -46,7 +46,7 @@ export default function TheatergaudiPoster() {
           alt={posterAlt}
           width={1600}
           height={2010}
-          sizes='(min-width: 1280px) 400px, (min-width: 1024px) 360px, (min-width: 640px) 320px, 260px'
+          sizes='(min-width: 1280px) 520px, (min-width: 1024px) 440px, (min-width: 640px) 380px, 300px'
           className='h-auto w-full rounded-sm border border-kolping-400/45 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.95)] transition-transform duration-300 group-hover:scale-[1.015] group-focus-visible:scale-[1.015]'
           priority
         />
