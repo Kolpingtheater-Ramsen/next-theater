@@ -90,20 +90,23 @@ export default function Home() {
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
-                <Link
-                  href='/contact'
+                <a
+                  href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
+                  target='_blank'
+                  rel='noopener noreferrer'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
                 >
                   Anfahrt
                   <span className='transition-transform group-hover:translate-x-1'>→</span>
-                </Link>
+                </a>
                 <a
                   href='https://www.instagram.com/kolpingjugend_ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
+                  className='group inline-flex items-center gap-3 rounded-sm border border-kolping-400/50 bg-site-950/70 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.3em] text-kolping-400 backdrop-blur-sm transition-all hover:border-kolping-400 hover:bg-kolping-400 hover:text-black hover:shadow-[0_0_30px_rgba(255,122,0,0.24)]'
                 >
-                  → Updates auf Instagram
+                  Instagram
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
                 </a>
               </div>
             </div>
@@ -360,12 +363,14 @@ export default function Home() {
                   YouTube
                   <span className='transition-transform group-hover:translate-x-1'>→</span>
                 </a>
-                <Link
-                  href='/contact'
+                <a
+                  href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
+                  target='_blank'
+                  rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
                 >
-                  ✉ Kontakt &amp; Anfahrt
-                </Link>
+                  Google Maps
+                </a>
               </div>
             </div>
           </div>
