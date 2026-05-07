@@ -1,5 +1,6 @@
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
+import TheatergaudiPoster from '@/components/TheatergaudiPoster'
 import Image from 'next/image'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
@@ -38,7 +39,7 @@ export default function Home() {
       <section id='theatergaudi' className='relative overflow-hidden'>
         <div className='relative min-h-[760px] w-full py-24 sm:py-28 lg:min-h-[calc(100vh-2rem)] lg:py-20'>
           <Image
-            src='/img/theatergaudi-2026.webp'
+            src='/img/theatergaudi-2026-extended.webp'
             alt=''
             fill
             priority
@@ -57,8 +58,8 @@ export default function Home() {
           <span className='absolute bottom-6 left-6 w-4 h-4 border-l-2 border-b-2 border-kolping-400/70' aria-hidden />
           <span className='absolute bottom-6 right-6 w-4 h-4 border-r-2 border-b-2 border-kolping-400/70' aria-hidden />
 
-          <div className='relative mx-auto grid h-full w-full max-w-7xl items-end gap-8 px-4 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,430px)] lg:items-center'>
-            <div className='pt-32 sm:pt-36 lg:pt-12'>
+          <div className='relative mx-auto grid h-full w-full max-w-7xl items-end gap-10 px-4 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:items-center xl:grid-cols-[minmax(0,1fr)_minmax(320px,400px)] xl:gap-16'>
+            <div className='max-w-[760px] pt-32 sm:pt-36 lg:pt-12'>
               <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
                 <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
                   <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
@@ -73,10 +74,10 @@ export default function Home() {
                 Kolpingtheater Ramsen · 10 Jahre
               </div>
 
-              <h1 className='animate-curtain-rise font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-[0.88] text-shadow-lg'>
+              <h1 className='animate-curtain-rise font-display text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[0.9] text-shadow-lg'>
                 <span className='italic text-kolping-400'>Theatergaudi</span>
                 <br />
-                auf dem Kolping-Gelände.
+                10 Jahre Kolping-Theater.
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
@@ -105,17 +106,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='mx-auto w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[430px]'>
-              <Image
-                src='/img/theatergaudi-2026.webp'
-                alt='Poster zur Theatergaudi am Samstag, 4. Juli, 10 Jahre Kolping-Theater'
-                width={1122}
-                height={1402}
-                sizes='(min-width: 1024px) 430px, (min-width: 640px) 320px, 260px'
-                className='h-auto w-full rounded-sm border border-kolping-400/45 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.95)]'
-                priority
-              />
-            </div>
+            <TheatergaudiPoster />
           </div>
         </div>
       </section>
