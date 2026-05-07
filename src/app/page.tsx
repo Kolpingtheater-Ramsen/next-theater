@@ -1,6 +1,5 @@
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
-import PremiereCountdown from '@/components/PremiereCountdown'
 import Image from 'next/image'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
@@ -39,16 +38,16 @@ export default function Home() {
       <section id='theatergaudi' className='relative overflow-hidden'>
         <div className='relative min-h-[760px] w-full py-24 sm:py-28 lg:min-h-[calc(100vh-2rem)] lg:py-20'>
           <Image
-            src='/img/banners/creepshow.svg'
-            alt='Creepshow 2026'
+            src='/img/theatergaudi-2026.webp'
+            alt=''
             fill
             priority
             sizes='100vw'
-            className='object-cover object-center animate-kenburns'
-            unoptimized
+            className='object-cover object-center opacity-25 blur-sm scale-105'
+            aria-hidden
           />
-          <div className='absolute inset-0 bg-gradient-to-b from-site-950/50 via-site-950/30 to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/85 via-site-950/45 to-transparent' />
+          <div className='absolute inset-0 bg-gradient-to-b from-site-950/70 via-site-950/55 to-site-950' />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/95 via-site-950/70 to-site-950/35' />
           <div className='vignette' />
           <div className='footlight' />
 
@@ -81,45 +80,28 @@ export default function Home() {
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Offenes Theaterfest in Ramsen mit Kaffee und Kuchen, Hüpfburg,
-                Kinderschminken, Fotobox, Spielestationen und Pop-up-Auftritten.
-                Ab 20:00 Uhr: Live-Musik, Cocktails und Sommerabend.
+                Samstag, 4. Juli am Kolping-Gelände in Ramsen: ab 15:00 Uhr
+                offenes Theaterfest mit Kaffee und Kuchen, Hüpfburg,
+                Kinderschminken, Fotobox und Pop-up-Auftritten. Ab 20:00 Uhr
+                Live-Musik, Cocktails und Sommerabend.
               </p>
 
-              <div className='mt-7 grid max-w-2xl gap-3 sm:grid-cols-3 animate-fade-in-up'>
-                {[
-                  { label: 'Ort', value: 'Klosterhof 7' },
-                  { label: 'Fest', value: '15:00-20:00 Uhr' },
-                  { label: 'Abends', value: 'ab 20:00 Uhr' },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className='border border-white/15 bg-site-950/60 px-4 py-3 backdrop-blur-sm'
-                  >
-                    <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400'>
-                      {item.label}
-                    </div>
-                    <div className='mt-1 text-sm font-semibold text-site-50'>
-                      {item.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
-                <a
-                  href='#termine'
-                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
-                >
-                  August-Termine
-                  <span className='transition-transform group-hover:translate-y-0.5'>↓</span>
-                </a>
                 <Link
                   href='/contact'
+                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
+                >
+                  Anfahrt
+                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                </Link>
+                <a
+                  href='https://www.instagram.com/kolpingjugend_ramsen/'
+                  target='_blank'
+                  rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
                 >
-                  → Anfahrt
-                </Link>
+                  → Updates auf Instagram
+                </a>
               </div>
             </div>
 
@@ -133,59 +115,6 @@ export default function Home() {
                 className='h-auto w-full rounded-sm border border-kolping-400/45 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.95)]'
                 priority
               />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════ TERMINE ══════ */}
-      <section
-        id='termine'
-        className='relative bg-site-950 border-y border-site-700 overflow-hidden scroll-mt-24'
-      >
-        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-12 sm:py-16'>
-          <div className='grid lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center'>
-            <div>
-              <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-3'>
-                Vorstellungen · August 2026
-              </div>
-              <h2 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]'>
-                Vier Abende
-                <br />
-                unter <span className='italic text-kolping-400'>offenem Himmel.</span>
-              </h2>
-              <div className='hairline-gold w-24 mt-5' />
-              <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
-                Einlass am frühen Abend auf der Kolpingwiese. Alle Termine für
-                die Sommerabende 2026 auf einen Blick.
-              </p>
-              <div className='mt-6'>
-                <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
-              </div>
-            </div>
-
-            <div className='grid grid-cols-2 gap-3 sm:gap-4'>
-              {[
-                { block: 'Block 01', dates: '21. · 22.', month: 'August', sub: 'Premiere + Zusatz' },
-                { block: 'Block 02', dates: '28. · 29.', month: 'August', sub: 'Zusatzvorstellungen' },
-              ].map((d) => (
-                <div
-                  key={d.block}
-                  className='relative overflow-hidden rounded-sm border border-kolping-500/30 bg-site-900/80 p-4 sm:p-5 min-w-[150px]'
-                >
-                  <div className='clapper-stripes h-1.5 -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4 opacity-60' aria-hidden />
-                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400 mb-2'>
-                    {d.block}
-                  </div>
-                  <div className='cast-number font-display text-3xl sm:text-4xl italic leading-none'>
-                    {d.dates}
-                  </div>
-                  <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-100 mt-2'>
-                    {d.month}
-                  </div>
-                  <div className='text-[10px] text-site-300 mt-1'>{d.sub}</div>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -217,18 +146,18 @@ export default function Home() {
             {[
               {
                 num: '01',
-                title: 'Eigene Geschichten',
-                body: 'Jedes Stück entsteht aus eigener Feder — historisch, fantastisch, düster oder komisch. Kein Kanon, keine Abziehbilder.',
+                title: 'Theater zum Anfassen',
+                body: 'Kostüme, Requisiten, Technik und kleine Auftritte zeigen, was hinter unseren Stücken steckt.',
               },
               {
                 num: '02',
-                title: 'Open-Air-Atmosphäre',
-                body: 'Sommerabende auf der Kolpingwiese unter freiem Himmel, im Winter auf der Kreativbühne im Pfarrheim.',
+                title: 'Fest für Familien',
+                body: 'Kaffee und Kuchen, Hüpfburg, Kinderschminken, Fotobox und Spielestationen für den Nachmittag.',
               },
               {
                 num: '03',
-                title: 'Eintritt frei',
-                body: 'Theater für alle, ohne Eintrittskarten, ohne Hürden. Getragen von Ehrenamt, Gemeinschaft und eurer Begeisterung.',
+                title: 'Sommerabend',
+                body: 'Ab 20:00 Uhr wird aus dem Theaterfest ein Abend mit Live-Musik, Cocktails und guter Stimmung.',
               },
             ].map((c) => (
               <article
@@ -355,7 +284,7 @@ export default function Home() {
             <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
               <div>
                 <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-                  Wir sehen uns im August
+                  Wir sehen uns am 4. Juli
                 </div>
                 <h3
                   id='stay-heading'
@@ -366,9 +295,9 @@ export default function Home() {
                   <span className='italic text-kolping-400'>verpassen.</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Termine, neue Stücke, Blicke hinter die Kulissen, auf
-                  Instagram und YouTube bleibst du dran. Fragen zur Anfahrt
-                  oder zum Platz? Schreib uns.
+                  Alle Updates zur Theatergaudi, Blicke hinter die Kulissen
+                  und Eindrücke aus zehn Jahren Kolping-Theater findest du auf
+                  Instagram und YouTube. Fragen zur Anfahrt? Schreib uns.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>
