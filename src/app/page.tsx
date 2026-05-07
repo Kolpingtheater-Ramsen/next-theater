@@ -33,6 +33,8 @@ export default function Home() {
       }
     })
 
+  const currentPlay = teamData.plays[teamData.plays.length - 1]
+
   return (
     <div className='-mx-4 -mt-8'>
       {/* ══════ HERO · THEATERGAUDI ══════ */}
@@ -107,6 +109,51 @@ export default function Home() {
             </div>
 
             <TheatergaudiPoster />
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ NEXT PLAY · Teaser ══════ */}
+      <section className='relative bg-site-950 border-y border-site-700'>
+        <div className='mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-8 sm:py-12 lg:grid-cols-[minmax(280px,0.75fr)_1fr] lg:items-center'>
+          <div className='relative aspect-[16/9] overflow-hidden rounded-sm border border-site-700 bg-site-900'>
+            <Image
+              src={`/img/banners/${currentPlay.slug}.svg`}
+              alt={`${currentPlay.play} ${currentPlay.year}`}
+              fill
+              sizes='(min-width: 1024px) 42vw, 100vw'
+              className='object-cover object-center'
+              unoptimized
+            />
+            <div className='absolute inset-0 bg-gradient-to-r from-site-950/10 via-transparent to-site-950/35' />
+          </div>
+
+          <div className='max-w-2xl'>
+            <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+              Neues Stück · {currentPlay.year}
+            </div>
+            <h2 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-site-50 leading-[0.95]'>
+              <span className='italic text-kolping-400'>{currentPlay.play}</span>
+              <br />
+              kommt auf die Bühne.
+            </h2>
+            <div className='hairline-gold w-20 mt-5' />
+            <p className='mt-5 text-site-100/80 text-sm sm:text-base leading-relaxed'>
+              Nach der Theatergaudi geht der Blick nach vorne: unser neues
+              Open-Air-Stück für 2026 entsteht bereits. Weitere Infos zu
+              Terminen und Einblicken folgen hier und auf Instagram.
+            </p>
+            <div className='mt-6 flex flex-wrap gap-3'>
+              <a
+                href='https://www.instagram.com/kolpingjugend_ramsen/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 transition-colors hover:text-kolping-400'
+              >
+                Updates folgen
+                <span className='transition-transform group-hover:translate-x-1'>→</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
