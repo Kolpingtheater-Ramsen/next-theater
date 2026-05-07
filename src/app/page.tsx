@@ -33,13 +33,11 @@ export default function Home() {
       }
     })
 
-  const currentPlay = teamData.plays[teamData.plays.length - 1]
-
   return (
     <div className='-mx-4 -mt-8'>
-      {/* ══════ HERO · NEXT SHOW ══════ */}
-      <section className='relative overflow-hidden'>
-        <div className='relative w-full h-[88vh] min-h-[540px] max-h-[960px]'>
+      {/* ══════ HERO · THEATERGAUDI ══════ */}
+      <section id='theatergaudi' className='relative overflow-hidden'>
+        <div className='relative min-h-[760px] w-full py-24 sm:py-28 lg:min-h-[calc(100vh-2rem)] lg:py-20'>
           <Image
             src='/img/banners/creepshow.svg'
             alt='Creepshow 2026'
@@ -60,12 +58,12 @@ export default function Home() {
           <span className='absolute bottom-6 left-6 w-4 h-4 border-l-2 border-b-2 border-kolping-400/70' aria-hidden />
           <span className='absolute bottom-6 right-6 w-4 h-4 border-r-2 border-b-2 border-kolping-400/70' aria-hidden />
 
-          <div className='absolute inset-0 flex flex-col justify-end pb-14 sm:pb-20 md:pb-24'>
-            <div className='mx-auto w-full max-w-7xl px-4 sm:px-8'>
+          <div className='relative mx-auto grid h-full w-full max-w-7xl items-end gap-8 px-4 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(320px,430px)] lg:items-center'>
+            <div className='pt-32 sm:pt-36 lg:pt-12'>
               <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
                 <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
                   <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
-                  Sommer 2026 · Open-Air-Premiere
+                  Samstag, 4. Juli · ab 15:00 Uhr
                 </span>
                 <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
                   Eintritt frei
@@ -73,126 +71,69 @@ export default function Home() {
               </div>
 
               <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] text-kolping-400 mb-3 animate-fade-in-up'>
-                Kolpingtheater Ramsen · präsentiert
+                Kolpingtheater Ramsen · 10 Jahre
               </div>
 
               <h1 className='animate-curtain-rise font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-[0.88] text-shadow-lg'>
-                <span className='italic text-kolping-400'>{currentPlay.play}</span>
+                <span className='italic text-kolping-400'>Theatergaudi</span>
                 <br />
-                auf der Kolpingwiese.
+                auf dem Kolping-Gelände.
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Open-Air-Theater am Waldrand auf der Kolpingwiese in Ramsen,
-                vier Sommerabende im August 2026.
+                Offenes Theaterfest in Ramsen mit Kaffee und Kuchen, Hüpfburg,
+                Kinderschminken, Fotobox, Spielestationen und Pop-up-Auftritten.
+                Ab 20:00 Uhr: Live-Musik, Cocktails und Sommerabend.
               </p>
+
+              <div className='mt-7 grid max-w-2xl gap-3 sm:grid-cols-3 animate-fade-in-up'>
+                {[
+                  { label: 'Ort', value: 'Klosterhof 7' },
+                  { label: 'Fest', value: '15:00-20:00 Uhr' },
+                  { label: 'Abends', value: 'ab 20:00 Uhr' },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className='border border-white/15 bg-site-950/60 px-4 py-3 backdrop-blur-sm'
+                  >
+                    <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400'>
+                      {item.label}
+                    </div>
+                    <div className='mt-1 text-sm font-semibold text-site-50'>
+                      {item.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
                 <a
                   href='#termine'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
                 >
-                  Termine
+                  August-Termine
                   <span className='transition-transform group-hover:translate-y-0.5'>↓</span>
                 </a>
                 <Link
-                  href='/gallery'
+                  href='/contact'
                   className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
                 >
-                  → Einblicke in vergangene Stücke
+                  → Anfahrt
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ══════ THEATERGAUDI · 10 Jahre Kolping-Theater ══════ */}
-      <section
-        id='theatergaudi'
-        className='relative bg-site-950 border-y border-site-700 overflow-hidden'
-        aria-labelledby='theatergaudi-heading'
-      >
-        <div
-          className='absolute inset-0 opacity-[0.05] pointer-events-none'
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,.55) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.55) 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
-          aria-hidden
-        />
-        <div className='relative mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,0.86fr)_minmax(360px,0.56fr)] lg:items-center'>
-          <div>
-            <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-              Samstag, 4. Juli · ab 15:00 Uhr
+            <div className='mx-auto w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[430px]'>
+              <Image
+                src='/img/theatergaudi-2026.webp'
+                alt='Poster zur Theatergaudi am Samstag, 4. Juli, 10 Jahre Kolping-Theater'
+                width={1122}
+                height={1402}
+                sizes='(min-width: 1024px) 430px, (min-width: 640px) 320px, 260px'
+                className='h-auto w-full rounded-sm border border-kolping-400/45 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.95)]'
+                priority
+              />
             </div>
-            <h2
-              id='theatergaudi-heading'
-              className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'
-            >
-              Theatergaudi
-              <br />
-              <span className='italic text-kolping-400'>10 Jahre Kolping-Theater.</span>
-            </h2>
-            <div className='hairline-gold w-24 mt-5' />
-            <p className='mt-5 max-w-2xl text-sm sm:text-base leading-relaxed text-site-100/85'>
-              Offenes Theaterfest am Kolping-Gelände in Ramsen: Kaffee und
-              Kuchen, Hüpfburg, Kinderschminken, Fotobox, Kostüm- und
-              Requisiten-Stand, Technik-Stand, Spielestationen und
-              Pop-up-Auftritte. Abends geht es mit Live-Musik, Cocktails und
-              Sommerabend weiter.
-            </p>
-
-            <div className='mt-8 grid gap-3 sm:grid-cols-3'>
-              {[
-                { label: 'Ort', value: 'Klosterhof 7, Ramsen' },
-                { label: 'Nachmittag', value: '15:00-20:00 Uhr' },
-                { label: 'Eintritt', value: 'frei' },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className='border border-site-700 bg-site-900/75 px-4 py-4'
-                >
-                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400'>
-                    {item.label}
-                  </div>
-                  <div className='mt-2 text-sm font-semibold text-site-50'>
-                    {item.value}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className='mt-8 flex flex-wrap items-center gap-3'>
-              <Link
-                href='/contact'
-                className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
-              >
-                Anfahrt
-                <span className='transition-transform group-hover:translate-x-1'>→</span>
-              </Link>
-              <a
-                href='https://www.instagram.com/kolpingjugend_ramsen/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 transition-colors hover:text-kolping-400'
-              >
-                Updates auf Instagram
-              </a>
-            </div>
-          </div>
-
-          <div className='mx-auto w-full max-w-[420px] lg:max-w-none'>
-            <Image
-              src='/img/theatergaudi-2026.webp'
-              alt='Poster zur Theatergaudi am Samstag, 4. Juli, 10 Jahre Kolping-Theater'
-              width={1122}
-              height={1402}
-              sizes='(min-width: 1024px) 420px, (min-width: 640px) 70vw, 100vw'
-              className='h-auto w-full rounded-sm border border-kolping-400/35 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.9)]'
-              priority
-            />
           </div>
         </div>
       </section>
