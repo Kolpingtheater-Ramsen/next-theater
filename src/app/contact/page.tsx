@@ -184,7 +184,7 @@ export default function ContactPage() {
 
               <div className='mt-8 flex flex-wrap gap-3'>
                 <a
-                  href='https://www.google.com/maps/place/Kolpingtheater+Ramsen/'
+                  href='https://www.google.com/maps/place/Kolpingtheater+Ramsen/@49.5348618,8.0127179,749m/data=!3m2!1e3!4b1!4m6!3m5!1s0x47963db8fbddfe63:0x4bd016aecb1935bf!8m2!3d49.5348618!4d8.0152982!16s%2Fg%2F11tc_4w8gy?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500'
