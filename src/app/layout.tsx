@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Script from 'next/script'
 import Header from '@/components/Header'
 import { ViewTransitions } from '@/components/ViewTransitions'
 import { Geist, Geist_Mono, Cinzel } from 'next/font/google'
@@ -64,6 +65,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${display.variable} antialiased bg-site-900 text-site-50 min-h-screen overflow-x-hidden flex flex-col`}
       >
+        <Script
+          defer
+          src='https://insights.logge.top/script.js'
+          data-website-id='2d621ee9-c326-47aa-af7b-b7bd7df0fd6a'
+          strategy='afterInteractive'
+        />
         <ViewTransitions />
         <Header />
         <main className='mx-auto max-w-7xl px-4 py-8 flex-1 w-full'>{children}</main>

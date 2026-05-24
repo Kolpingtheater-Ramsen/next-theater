@@ -155,7 +155,7 @@ export default function PrivacyPage() {
             >
               <path d='M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z' />
             </svg>
-            <h2 className='font-display text-2xl font-bold text-site-50'>Webanalyse (Cloudflare Web Analytics)</h2>
+            <h2 className='font-display text-2xl font-bold text-site-50'>Webanalyse (Umami)</h2>
           </div>
 
           <div className='space-y-4 text-site-100'>
@@ -181,12 +181,12 @@ export default function PrivacyPage() {
 
             <div className='pt-4 border-t border-site-700'>
               <a
-                href='https://www.cloudflare.com/web-analytics/'
+                href='https://umami.is/'
                 target='_blank'
                 rel='noreferrer'
                 className='inline-flex items-center gap-2 text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors text-sm'
               >
-                <span>Mehr Infos zu Cloudflare Web Analytics</span>
+                <span>Mehr Infos zu Umami</span>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 20 20'
