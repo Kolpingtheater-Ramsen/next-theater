@@ -91,7 +91,7 @@ export default function Home() {
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
                 <a
-                  href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
+                  href='https://www.google.com/maps/place/Kolpingtheater+Ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
@@ -363,7 +363,7 @@ export default function Home() {
                   <span className='transition-transform group-hover:translate-x-1'>→</span>
                 </a>
                 <a
-                  href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
+                  href='https://www.google.com/maps/place/Kolpingtheater+Ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
