@@ -41,7 +41,7 @@ export default function Home() {
       <section id='theatergaudi' className='relative overflow-hidden'>
         <div className='relative min-h-[760px] w-full py-24 sm:py-28 lg:min-h-[calc(100vh-2rem)] lg:py-20'>
           <Image
-            src='/img/theatergaudi-2026-extended.webp'
+            src='/img/theatergaudi-2026-poster.jpg'
             alt=''
             fill
             priority

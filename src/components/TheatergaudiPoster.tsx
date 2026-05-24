@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-const posterSrc = '/img/theatergaudi-2026-extended.webp'
+const posterSrc = '/img/theatergaudi-2026-poster.jpg'
 const posterAlt =
   'Poster zur Theatergaudi am Samstag, 4. Juli, 10 Jahre Kolping-Theater'
 
@@ -44,8 +44,8 @@ export default function TheatergaudiPoster() {
         <Image
           src={posterSrc}
           alt={posterAlt}
-          width={1600}
-          height={2010}
+          width={911}
+          height={1280}
           sizes='(min-width: 1280px) 520px, (min-width: 1024px) 440px, (min-width: 640px) 380px, 300px'
           className='h-auto w-full rounded-sm border border-kolping-400/45 shadow-[0_32px_90px_-28px_rgba(0,0,0,0.95)] transition-transform duration-300 group-hover:scale-[1.015] group-focus-visible:scale-[1.015]'
           priority
