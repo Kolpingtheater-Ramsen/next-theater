@@ -421,8 +421,9 @@ export default function AboutPage() {
                 blurb:
                   'Unser großes Sommerstück. Unter offenem Himmel, mit aufwendiger Kulisse zwischen den historischen Mauern rund um das Kloster Ramosa.',
                 latest: latestOpenAir,
-                posterOverride: '/img/banners/creepshow.svg',
-                posterOverrideUnoptimized: true,
+                posterOverride: '/img/creepshow-preview.webp',
+                posterOverrideUnoptimized: false,
+                badge: 'Proben laufen',
               },
               {
                 key: 'Kreativbühne',
@@ -434,6 +435,7 @@ export default function AboutPage() {
                 latest: latestKreativ,
                 posterOverride: undefined as string | undefined,
                 posterOverrideUnoptimized: false,
+                badge: undefined as string | undefined,
               },
             ].map((f) => {
               const galleryEntry = entries.find(
@@ -463,6 +465,19 @@ export default function AboutPage() {
                     <div className='absolute top-4 left-4 font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400 bg-site-950/70 backdrop-blur-sm border border-kolping-500/30 px-2.5 py-1 rounded-sm'>
                       {f.kicker}
                     </div>
+
+                    {f.badge && (
+                      <div className='pointer-events-none absolute top-0 right-0 h-36 w-36 overflow-hidden z-10' aria-hidden>
+                        <div className='absolute top-[30px] right-[-58px] w-[220px] rotate-45 bg-gradient-to-r from-kolping-500 via-kolping-400 to-kolping-500 py-2 text-center shadow-[0_6px_20px_rgba(0,0,0,0.55)] ring-1 ring-black/20'>
+                          <span className='flex items-center justify-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-black drop-shadow-sm'>
+                            <span className='h-1.5 w-1.5 rounded-full bg-black/70 animate-pulse' />
+                            {f.badge}
+                          </span>
+                          <span className='absolute inset-x-0 top-0 h-px bg-white/40' />
+                          <span className='absolute inset-x-0 bottom-0 h-px bg-black/30' />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className='p-6 sm:p-8 space-y-4'>
