@@ -43,13 +43,16 @@ export default function PremiereCountdown({ targetISO, label = 'Bis zur Premiere
         <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
         {label}
       </div>
-      <div className='flex items-baseline gap-3 sm:gap-5'>
+      <span className='sr-only'>
+        {parts.days} Tage, {parts.hours} Stunden, {parts.minutes} Minuten,{' '}
+        {parts.seconds} Sekunden
+      </span>
+      <div className='flex items-baseline gap-3 sm:gap-5' aria-hidden='true'>
         {units.map((u, i) => (
           <div key={u.l} className='flex items-baseline gap-3 sm:gap-5'>
             <div className='flex flex-col items-center'>
               <span
                 className='cast-number font-display text-3xl sm:text-4xl italic leading-none tabular-nums'
-                aria-hidden
               >
                 {String(u.v).padStart(2, '0')}
               </span>

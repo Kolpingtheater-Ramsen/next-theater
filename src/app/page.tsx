@@ -1,10 +1,23 @@
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
-import TheatergaudiPoster from '@/components/TheatergaudiPoster'
+import PremiereCountdown from '@/components/PremiereCountdown'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
 import timeline from '@/data/timeline.json'
+
+export const metadata: Metadata = {
+  title: 'Creepshow 2026 | Kolpingtheater Ramsen',
+  description:
+    'Creepshow feiert am 21. August 2026 Open-Air-Premiere auf der Kolpingwiese in Ramsen.',
+  openGraph: {
+    title: 'Creepshow 2026 | Kolpingtheater Ramsen',
+    description:
+      'Vier Sommerabende, eine neue Eigenproduktion. Open-Air-Premiere am 21. August 2026.',
+    images: ['/img/creepshow-preview.webp'],
+  },
+}
 
 export default function Home() {
   const marqueeItems = teamData.plays.map((p) => ({
@@ -33,24 +46,25 @@ export default function Home() {
       }
     })
 
-  const currentPlay = teamData.plays[teamData.plays.length - 1]
+  const currentPlay = teamData.plays.find((play) => play.slug === 'creepshow')
+
+  if (!currentPlay) return null
 
   return (
     <div className='-mx-4 -mt-8'>
-      {/* ══════ HERO · THEATERGAUDI ══════ */}
-      <section id='theatergaudi' className='relative overflow-hidden'>
-        <div className='relative min-h-[760px] w-full py-24 sm:py-28 lg:min-h-[calc(100vh-2rem)] lg:py-20'>
+      {/* ══════ HERO · CREEPSHOW PREMIERE ══════ */}
+      <section id='creepshow' className='force-dark relative overflow-hidden bg-site-950'>
+        <div className='relative h-[88svh] min-h-[620px] max-h-[940px] w-full'>
           <Image
-            src='/img/theatergaudi-2026-poster.jpg'
-            alt=''
+            src='/img/creepshow-preview.webp'
+            alt='Creepshow – Theaterproduktion 2026'
             fill
             priority
             sizes='100vw'
-            className='object-cover object-center opacity-25 blur-sm scale-105'
-            aria-hidden
+            className='animate-kenburns object-cover object-center'
           />
-          <div className='absolute inset-0 bg-gradient-to-b from-site-950/70 via-site-950/55 to-site-950' />
-          <div className='absolute inset-0 bg-gradient-to-r from-site-950/95 via-site-950/70 to-site-950/35' />
+          <div className='absolute inset-0 bg-gradient-to-b from-site-950/10 via-site-950/20 to-site-950' />
+          <div className='absolute inset-0 bg-gradient-to-r from-site-950/90 via-site-950/45 to-site-950/5' />
           <div className='vignette' />
           <div className='footlight' />
 
@@ -60,101 +74,135 @@ export default function Home() {
           <span className='absolute bottom-6 left-6 w-4 h-4 border-l-2 border-b-2 border-kolping-400/70' aria-hidden />
           <span className='absolute bottom-6 right-6 w-4 h-4 border-r-2 border-b-2 border-kolping-400/70' aria-hidden />
 
-          <div className='relative mx-auto grid h-full w-full max-w-7xl items-end gap-10 px-4 sm:px-8 lg:grid-cols-[minmax(0,0.98fr)_minmax(360px,440px)] lg:items-center xl:grid-cols-[minmax(0,0.92fr)_minmax(420px,520px)] xl:gap-20'>
-            <div className='max-w-[620px] pt-32 sm:pt-36 lg:pt-12 xl:max-w-[660px]'>
+          <div className='absolute inset-0 flex flex-col justify-end pb-12 sm:pb-16 md:pb-20'>
+            <div className='mx-auto w-full max-w-7xl px-4 sm:px-8'>
               <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
                 <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
                   <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
-                  Samstag, 4. Juli · ab 15:00 Uhr
+                  Premiere · 21. August 2026
                 </span>
                 <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
-                  Eintritt frei
+                  4 Vorstellungen · Eintritt frei
                 </span>
               </div>
 
               <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.5em] text-kolping-400 mb-3 animate-fade-in-up'>
-                Kolpingtheater Ramsen · 10 Jahre
+                Kolpingtheater Ramsen · präsentiert
               </div>
 
-              <h1 className='animate-curtain-rise font-display text-5xl sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[0.92] text-shadow-lg'>
-                <span className='italic text-kolping-400'>Theatergaudi</span>
-                <br />
-                10 Jahre Kolping-Theater.
+              <h1 className='animate-curtain-rise max-w-4xl font-display text-4xl font-black leading-[0.92] tracking-tight text-shadow-lg sm:text-6xl md:text-7xl'>
+                <span className='mb-2 block text-3xl italic text-kolping-400 sm:sr-only'>
+                  {currentPlay.play}
+                </span>
+                Die Premiere <span className='italic text-kolping-400'>naht.</span>
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Samstag, 4. Juli am Kolping-Gelände in Ramsen: ab 15:00 Uhr
-                offenes Theaterfest mit Kaffee und Kuchen, Hüpfburg,
-                Kinderschminken, Fotobox und Pop-up-Auftritten. Ab 20:00 Uhr
-                Live-Musik, Cocktails und Sommerabend.
+                Ein schaurig-skurriles Theaterereignis aus eigener Feder –
+                Open Air auf der Kolpingwiese in Ramsen, an vier Abenden im
+                August 2026.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
                 <a
-                  href='https://www.google.com/maps/place/Kolpingtheater+Ramsen/@49.5348618,8.0127179,749m/data=!3m2!1e3!4b1!4m6!3m5!1s0x47963db8fbddfe63:0x4bd016aecb1935bf!8m2!3d49.5348618!4d8.0152982!16s%2Fg%2F11tc_4w8gy?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D'
-                  target='_blank'
-                  rel='noopener noreferrer'
+                  href='#termine'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
                 >
-                  Anfahrt
-                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                  Alle 4 Termine
+                  <span className='transition-transform group-hover:translate-y-0.5'>↓</span>
                 </a>
                 <a
                   href='https://www.instagram.com/kolpingjugend_ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='group inline-flex items-center gap-3 rounded-sm border border-kolping-400/50 bg-site-950/70 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.3em] text-kolping-400 backdrop-blur-sm transition-all hover:border-kolping-400 hover:bg-kolping-400 hover:text-black hover:shadow-[0_0_30px_rgba(255,122,0,0.24)]'
+                  className='inline-flex items-center gap-2 rounded-sm border border-white/20 bg-site-950/45 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 backdrop-blur-sm transition-colors hover:border-kolping-400/60 hover:text-kolping-400'
                 >
-                  Instagram
-                  <span className='transition-transform group-hover:translate-x-1'>→</span>
+                  Proben verfolgen →
                 </a>
               </div>
             </div>
-
-            <TheatergaudiPoster />
           </div>
         </div>
       </section>
 
-      {/* ══════ NEXT PLAY · Teaser ══════ */}
-      <section className='relative bg-site-950 border-y border-site-700'>
-        <div className='mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-8 sm:py-12 lg:grid-cols-[minmax(280px,0.75fr)_1fr] lg:items-center'>
-          <div className='relative aspect-[16/9] overflow-hidden rounded-sm border border-site-700 bg-site-900'>
-            <Image
-              src='/img/creepshow-preview.webp'
-              alt={`${currentPlay.play} ${currentPlay.year}`}
-              fill
-              sizes='(min-width: 1024px) 42vw, 100vw'
-              className='object-cover object-center'
-            />
-            <div className='absolute inset-0 bg-gradient-to-r from-site-950/10 via-transparent to-site-950/35' />
-          </div>
-
-          <div className='max-w-2xl'>
-            <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-3'>
-              Neues Stück · {currentPlay.year}
+      {/* ══════ TERMINE ══════ */}
+      <section
+        id='termine'
+        className='relative bg-site-950 border-y border-site-700 overflow-hidden scroll-mt-24'
+      >
+        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-12 sm:py-16'>
+          <div className='grid lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center'>
+            <div>
+              <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                4 Vorstellungen · August 2026
+              </div>
+              <h2 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]'>
+                Vier Abende
+                <br />
+                unter <span className='italic text-kolping-400'>offenem Himmel.</span>
+              </h2>
+              <div className='hairline-gold w-24 mt-5' />
+              <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
+                Die Premiere beginnt am Freitag, 21. August um 20:00 Uhr. Drei
+                weitere Vorstellungen folgen an den beiden Augustwochenenden.
+              </p>
+              <div className='mt-6'>
+                <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
+              </div>
             </div>
-            <h2 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-site-50 leading-[0.95]'>
-              <span className='italic text-kolping-400'>{currentPlay.play}</span>
-              <br />
-              kommt auf die Bühne.
-            </h2>
-            <div className='hairline-gold w-20 mt-5' />
-            <p className='mt-5 text-site-100/80 text-sm sm:text-base leading-relaxed'>
-              Nach der Theatergaudi geht der Blick nach vorne: unser neues
-              Open-Air-Stück für 2026 entsteht bereits. Weitere Infos zu
-              Terminen und Einblicken folgen hier und auf Instagram.
-            </p>
-            <div className='mt-6 flex flex-wrap gap-3'>
-              <a
-                href='https://www.instagram.com/kolpingjugend_ramsen/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='group inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 transition-colors hover:text-kolping-400'
-              >
-                Updates folgen
-                <span className='transition-transform group-hover:translate-x-1'>→</span>
-              </a>
+
+            <div className='grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:w-[420px] lg:grid-cols-2'>
+              {[
+                {
+                  num: 'Termin 01',
+                  date: '21.',
+                  month: 'August',
+                  sub: 'Freitag · Premiere · 20 Uhr',
+                  premiere: true,
+                },
+                {
+                  num: 'Termin 02',
+                  date: '22.',
+                  month: 'August',
+                  sub: 'Samstag · Vorstellung',
+                  premiere: false,
+                },
+                {
+                  num: 'Termin 03',
+                  date: '28.',
+                  month: 'August',
+                  sub: 'Freitag · Vorstellung',
+                  premiere: false,
+                },
+                {
+                  num: 'Termin 04',
+                  date: '29.',
+                  month: 'August',
+                  sub: 'Samstag · Vorstellung',
+                  premiere: false,
+                },
+              ].map((d) => (
+                <div
+                  key={d.num}
+                  className={`relative min-w-0 overflow-hidden rounded-sm border p-4 sm:p-5 ${
+                    d.premiere
+                      ? 'border-kolping-400/55 bg-kolping-500/10 shadow-[0_0_35px_rgba(255,122,0,0.08)]'
+                      : 'border-site-700 bg-site-900/80'
+                  }`}
+                >
+                  <div className='clapper-stripes h-1.5 -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4 opacity-60' aria-hidden />
+                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400 mb-2'>
+                    {d.num}
+                  </div>
+                  <div className='cast-number font-display text-3xl sm:text-4xl italic leading-none'>
+                    {d.date}
+                  </div>
+                  <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-100 mt-2'>
+                    {d.month}
+                  </div>
+                  <div className='text-[10px] text-site-300 mt-1'>{d.sub}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -186,18 +234,18 @@ export default function Home() {
             {[
               {
                 num: '01',
-                title: 'Theater zum Anfassen',
-                body: 'Kostüme, Requisiten, Technik und kleine Auftritte zeigen, was hinter unseren Stücken steckt.',
+                title: 'Eigene Geschichten',
+                body: 'Jedes Stück entsteht aus eigener Feder — historisch, fantastisch, düster oder komisch. Kein Kanon, keine Abziehbilder.',
               },
               {
                 num: '02',
-                title: 'Fest für Familien',
-                body: 'Kaffee und Kuchen, Hüpfburg, Kinderschminken, Fotobox und Spielestationen für den Nachmittag.',
+                title: 'Open-Air-Atmosphäre',
+                body: 'Sommerabende auf der Kolpingwiese unter freiem Himmel, im Winter auf der Kreativbühne im Pfarrheim.',
               },
               {
                 num: '03',
-                title: 'Sommerabend',
-                body: 'Ab 20:00 Uhr wird aus dem Theaterfest ein Abend mit Live-Musik, Cocktails und guter Stimmung.',
+                title: 'Eintritt frei',
+                body: 'Theater für alle, ohne Eintrittskarten, ohne Hürden. Getragen von Ehrenamt, Gemeinschaft und eurer Begeisterung.',
               },
             ].map((c) => (
               <article
@@ -324,7 +372,7 @@ export default function Home() {
             <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
               <div>
                 <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-                  Wir sehen uns am 4. Juli
+                  Wir sehen uns im August
                 </div>
                 <h3
                   id='stay-heading'
@@ -335,9 +383,9 @@ export default function Home() {
                   <span className='italic text-kolping-400'>verpassen.</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Alle Updates zur Theatergaudi, Blicke hinter die Kulissen
-                  und Eindrücke aus zehn Jahren Kolping-Theater findest du auf
-                  Instagram und YouTube. Fragen zur Anfahrt? Schreib uns.
+                  Vom Probenraum bis zur Creepshow-Premiere: Auf Instagram und
+                  YouTube bleibst du hinter den Kulissen dabei. Fragen zur
+                  Anfahrt oder zum Platz? Schreib uns.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>
@@ -362,14 +410,12 @@ export default function Home() {
                   YouTube
                   <span className='transition-transform group-hover:translate-x-1'>→</span>
                 </a>
-                <a
-                  href='https://www.google.com/maps/place/Kolpingtheater+Ramsen/@49.5348618,8.0127179,749m/data=!3m2!1e3!4b1!4m6!3m5!1s0x47963db8fbddfe63:0x4bd016aecb1935bf!8m2!3d49.5348618!4d8.0152982!16s%2Fg%2F11tc_4w8gy?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D'
-                  target='_blank'
-                  rel='noopener noreferrer'
+                <Link
+                  href='/contact'
                   className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'
                 >
-                  Google Maps
-                </a>
+                  ✉ Kontakt &amp; Anfahrt
+                </Link>
               </div>
             </div>
           </div>
