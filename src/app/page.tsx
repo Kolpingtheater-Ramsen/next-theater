@@ -143,8 +143,8 @@ export default function Home() {
               </h2>
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
-                Die Premiere beginnt am Freitag, 21. August um 20:00 Uhr. Drei
-                weitere Vorstellungen folgen an den beiden Augustwochenenden.
+                Alle vier Vorstellungen beginnen um 20:00 Uhr und finden an
+                den beiden Augustwochenenden statt.
               </p>
               <div className='mt-6'>
                 <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
@@ -157,28 +157,28 @@ export default function Home() {
                   num: 'Termin 01',
                   date: '21.',
                   month: 'August',
-                  sub: 'Freitag · Premiere · 20 Uhr',
+                  sub: 'Freitag · Premiere · 20:00 Uhr',
                   premiere: true,
                 },
                 {
                   num: 'Termin 02',
                   date: '22.',
                   month: 'August',
-                  sub: 'Samstag · Vorstellung',
+                  sub: 'Samstag · Vorstellung · 20:00 Uhr',
                   premiere: false,
                 },
                 {
                   num: 'Termin 03',
                   date: '28.',
                   month: 'August',
-                  sub: 'Freitag · Vorstellung',
+                  sub: 'Freitag · Vorstellung · 20:00 Uhr',
                   premiere: false,
                 },
                 {
                   num: 'Termin 04',
                   date: '29.',
                   month: 'August',
-                  sub: 'Samstag · Vorstellung',
+                  sub: 'Samstag · Vorstellung · 20:00 Uhr',
                   premiere: false,
                 },
               ].map((d) => (
