@@ -30,7 +30,7 @@ export default function Home() {
     .filter((p) => p.gallery)
     .reverse()
     .slice(0, 6)
-    .map((p, idx) => {
+    .map((p) => {
       const entry = timeline.find(
         (t) => 'galleryHash' in t && t.galleryHash === p.slug,
       )
@@ -38,7 +38,6 @@ export default function Home() {
         title: p.play,
         image: `/img/banners/${p.slug}.jpg`,
         href: `/gallery/${p.slug}`,
-        tag: idx === 0 ? 'Neu' : undefined,
         year: p.year,
         location: p.location,
         dominantColor:
@@ -110,6 +109,17 @@ export default function Home() {
                 >
                   Alle 4 Termine
                   <span className='transition-transform group-hover:translate-y-0.5'>↓</span>
+                </a>
+                <a
+                  href='https://www.youtube.com/watch?v=FyqtNxaxHBc'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group inline-flex items-center gap-3 rounded-sm border border-kolping-400/60 bg-site-950/55 px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-kolping-400 backdrop-blur-sm transition-all hover:border-kolping-400 hover:bg-kolping-400 hover:text-black'
+                >
+                  <svg className='h-4 w-4' viewBox='0 0 24 24' fill='currentColor' aria-hidden>
+                    <path d='M8 5v14l11-7z' />
+                  </svg>
+                  Trailer ansehen
                 </a>
                 <a
                   href='https://www.instagram.com/kolpingjugend_ramsen/'
