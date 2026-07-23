@@ -39,8 +39,8 @@ export default function PrivacyPage() {
           <div>
             <div className='text-site-100 text-sm'>Adresse</div>
             <div className='text-site-50 font-medium'>
-              Fischerstraße 12<br />
-              01945 Ruhland
+              Am Kirchrain 8<br />
+              67271 Kindenheim
             </div>
           </div>
           <div>
