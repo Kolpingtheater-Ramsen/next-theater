@@ -421,7 +421,7 @@ export default function AboutPage() {
                 blurb:
                   'Unser großes Sommerstück. Unter offenem Himmel, mit aufwendiger Kulisse zwischen den historischen Mauern rund um das Kloster Ramosa.',
                 latest: latestOpenAir,
-                posterOverride: '/img/creepshow-preview.webp',
+                posterOverride: '/img/banners/creepshow.jpg',
                 posterOverrideUnoptimized: false,
                 badge: 'Proben laufen',
               },

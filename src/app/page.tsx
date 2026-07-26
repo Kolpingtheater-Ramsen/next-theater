@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: 'Creepshow 2026 | Kolpingtheater Ramsen',
     description:
       'Vier Sommerabende, eine neue Eigenproduktion. Open-Air-Premiere am 21. August 2026.',
-    images: ['/img/creepshow-preview.webp'],
+    images: ['/img/creepshow-banner.webp'],
   },
 }
 
@@ -55,7 +55,7 @@ export default function Home() {
       <section id='creepshow' className='force-dark relative overflow-hidden bg-site-950'>
         <div className='relative h-[88svh] min-h-[620px] max-h-[940px] w-full'>
           <Image
-            src='/img/creepshow-preview.webp'
+            src='/img/creepshow-banner.webp'
             alt='Creepshow – Theaterproduktion 2026'
             fill
             priority
