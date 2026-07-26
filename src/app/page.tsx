@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
 import timeline from '@/data/timeline.json'
+import faq from '@/data/faq.json'
 
 export const metadata: Metadata = {
   title: 'Creepshow 2026 | Kolpingtheater Ramsen',
@@ -361,6 +362,59 @@ export default function Home() {
             >
               Mehr lesen →
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ FAQ ══════ */}
+      <section
+        className='relative border-t border-site-700 bg-site-900'
+        aria-labelledby='faq-heading'
+      >
+        <div className='mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24'>
+          <div className='mb-10 sm:mb-14'>
+            <div className='mb-4 font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>
+              Gut zu wissen
+            </div>
+            <h2
+              id='faq-heading'
+              className='font-display text-4xl font-black uppercase leading-[0.9] tracking-tight text-site-50 sm:text-5xl md:text-6xl'
+            >
+              Häufige <span className='italic text-kolping-400'>Fragen.</span>
+            </h2>
+            <div className='hairline-gold mt-5 w-24' />
+          </div>
+
+          <div className='grid gap-3 md:grid-cols-2 md:gap-4'>
+            {faq.map((item) => (
+              <details
+                key={item.q}
+                className='group rounded-sm border border-site-700 bg-site-950 open:border-kolping-400/40'
+              >
+                <summary className='flex cursor-pointer list-none items-center justify-between gap-5 p-5 font-display text-lg font-bold tracking-tight text-site-50 marker:content-none sm:p-6 sm:text-xl'>
+                  {item.q}
+                  <span className='text-2xl font-light text-kolping-400 transition-transform group-open:rotate-45' aria-hidden>
+                    +
+                  </span>
+                </summary>
+                <div className='px-5 pb-5 sm:px-6 sm:pb-6'>
+                  <div className='hairline-gold mb-4 w-10' />
+                  <p className='text-sm leading-relaxed text-site-100 sm:text-base'>
+                    {item.a}
+                  </p>
+                  {item.link && (
+                    <a
+                      href={item.link}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='mt-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-kolping-400 transition-colors hover:text-kolping-500'
+                    >
+                      {item.button ?? 'Mehr erfahren'} →
+                    </a>
+                  )}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>
