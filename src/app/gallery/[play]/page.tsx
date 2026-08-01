@@ -24,6 +24,7 @@ type TimelineEntry = {
   date?: string
   image?: string
   dominantColor?: string
+  synopsis?: string[]
 }
 
 const plays: Play[] = (team as { plays: Play[] }).plays
@@ -64,6 +65,7 @@ export default async function PlayGalleryPage({
         ? 'Kreativbühne'
         : null
   const heroImage = timelineEntry?.image ? `/img/${timelineEntry.image}` : '/img/home_team.jpg'
+  const synopsis = timelineEntry?.synopsis ?? []
 
   return (
     <div className='-mx-4 -mt-8'>
@@ -125,16 +127,55 @@ export default async function PlayGalleryPage({
 
                 <div className='hairline-gold w-32 mt-6' />
 
-                <p className='mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                  {hasImages
-                    ? 'Alle verfügbaren Szenen dieser Produktion in einer zusammenhängenden Galerie.'
-                    : 'Für diese Produktion sind aktuell noch keine Bilder veröffentlicht.'}
-                </p>
+                {synopsis.length === 0 && (
+                  <p className='mt-6 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
+                    {hasImages
+                      ? 'Alle verfügbaren Szenen dieser Produktion in einer zusammenhängenden Galerie.'
+                      : 'Für diese Produktion sind aktuell noch keine Bilder veröffentlicht.'}
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {synopsis.length > 0 && (
+        <section className='relative border-y border-site-700 bg-site-900'>
+          <div className='mx-auto max-w-6xl px-4 py-8 sm:py-10'>
+            <div className='max-w-4xl'>
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400'>
+                Über das Stück
+              </div>
+              <p className='mt-3 text-base leading-relaxed text-site-100 sm:text-lg'>
+                {synopsis[0]}
+              </p>
+
+              {synopsis.length > 1 && (
+                <details className='group mt-5 rounded-sm border border-site-700 bg-site-950/50 open:border-kolping-400/40'>
+                  <summary className='flex cursor-pointer list-none items-center justify-between gap-5 px-5 py-4 font-display text-base font-bold tracking-tight text-site-50 marker:content-none sm:px-6 sm:text-lg'>
+                    Mehr zur Handlung
+                    <span
+                      className='text-2xl font-light text-kolping-400 transition-transform group-open:rotate-45'
+                      aria-hidden
+                    >
+                      +
+                    </span>
+                  </summary>
+                  <div className='px-5 pb-5 sm:px-6 sm:pb-6'>
+                    <div className='hairline-gold mb-4 w-10' />
+                    <div className='space-y-4 text-sm leading-relaxed text-site-100 sm:text-base'>
+                      {synopsis.slice(1).map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </div>
+                </details>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ══════ PHOTO GRID ══════ */}
       {hasImages ? (
