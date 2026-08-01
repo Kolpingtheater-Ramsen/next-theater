@@ -156,7 +156,7 @@ export default function Home() {
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
                 Alle vier Vorstellungen beginnen um 20:00 Uhr und finden an
-                den beiden Augustwochenenden statt. Der Eintritt ist frei.
+                zwei Augustwochenenden statt. Der Eintritt ist frei.
               </p>
               <div className='mt-6'>
                 <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
@@ -249,11 +249,11 @@ export default function Home() {
             <div className='hairline-gold w-24 mt-5' />
             <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-2xl leading-relaxed'>
               Alles Wichtige für deinen Besuch – von Anfahrt und Eintritt bis
-              zu Wetter, Ablauf und Barrierefreiheit.
+              zu Ablauf und Barrierefreiheit.
             </p>
           </div>
 
-          <div className='grid gap-3 md:grid-cols-2 md:gap-4'>
+          <div className='grid gap-3'>
             {faq.map((item) => (
               <details
                 key={item.q}
