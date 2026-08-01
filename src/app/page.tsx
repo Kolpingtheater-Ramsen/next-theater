@@ -145,17 +145,18 @@ export default function Home() {
           <div className='grid lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center'>
             <div>
               <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 mb-3'>
-                4 Vorstellungen · August 2026
+                4 Vorstellungen · Eintritt frei · August 2026
               </div>
               <h2 className='font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-[0.95]'>
-                Vier Abende
+                {currentPlay.play} – vier{' '}
                 <br />
-                unter <span className='italic text-kolping-400'>offenem Himmel.</span>
+                <span className='italic text-kolping-400'>schaurig-schöne</span>{' '}
+                Theaterabende.
               </h2>
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
                 Alle vier Vorstellungen beginnen um 20:00 Uhr und finden an
-                den beiden Augustwochenenden statt.
+                den beiden Augustwochenenden statt. Der Eintritt ist frei.
               </p>
               <div className='mt-6'>
                 <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
@@ -219,8 +220,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════ WAS SIE ERWARTET ══════ */}
-      <section className='relative bg-site-900 border-b border-site-700'>
+      {/* ══════ FAQ ══════ */}
+      <section
+        id='faq'
+        className='relative bg-site-900 border-b border-site-700 scroll-mt-24'
+        aria-labelledby='faq-heading'
+      >
         <div
           className='absolute inset-0 opacity-[0.04] pointer-events-none'
           style={{
@@ -233,52 +238,53 @@ export default function Home() {
         <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-20'>
           <div className='mb-10 sm:mb-14'>
             <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-              Für das Publikum
+              Gut zu wissen
             </div>
-            <h2 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
-              Was dich <span className='italic text-kolping-400'>erwartet.</span>
+            <h2
+              id='faq-heading'
+              className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'
+            >
+              Häufige <span className='italic text-kolping-400'>Fragen.</span>
             </h2>
             <div className='hairline-gold w-24 mt-5' />
+            <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-2xl leading-relaxed'>
+              Alles Wichtige für deinen Besuch – von Anfahrt und Eintritt bis
+              zu Wetter, Ablauf und Barrierefreiheit.
+            </p>
           </div>
 
-          <div className='grid md:grid-cols-3 gap-4 sm:gap-6'>
-            {[
-              {
-                num: '01',
-                title: 'Eigene Geschichten',
-                body: 'Jedes Stück entsteht aus eigener Feder — historisch, fantastisch, düster oder komisch. Kein Kanon, keine Abziehbilder.',
-              },
-              {
-                num: '02',
-                title: 'Open-Air-Atmosphäre',
-                body: 'Sommerabende auf der Kolpingwiese unter freiem Himmel, im Winter auf der Kreativbühne im Pfarrheim.',
-              },
-              {
-                num: '03',
-                title: 'Eintritt frei',
-                body: 'Theater für alle, ohne Eintrittskarten, ohne Hürden. Getragen von Ehrenamt, Gemeinschaft und eurer Begeisterung.',
-              },
-            ].map((c) => (
-              <article
-                key={c.num}
-                className='group relative p-6 sm:p-8 border border-site-700 bg-site-900 rounded-sm hover:border-kolping-400/40 transition-colors'
+          <div className='grid gap-3 md:grid-cols-2 md:gap-4'>
+            {faq.map((item) => (
+              <details
+                key={item.q}
+                className='group rounded-sm border border-site-700 bg-site-950/60 open:border-kolping-400/40'
               >
-                <div className='flex items-start justify-between mb-5'>
-                  <div className='cast-number font-display text-5xl italic leading-none'>
-                    {c.num}
-                  </div>
-                  <div className='flex gap-1 pt-2'>
-                    <span className='w-1.5 h-1.5 rounded-full bg-kolping-400/80' />
-                    <span className='w-1.5 h-1.5 rounded-full bg-kolping-400/40' />
-                    <span className='w-1.5 h-1.5 rounded-full bg-kolping-400/20' />
-                  </div>
+                <summary className='flex cursor-pointer list-none items-center justify-between gap-5 p-5 font-display text-lg font-bold tracking-tight text-site-50 marker:content-none sm:p-6 sm:text-xl'>
+                  {item.q}
+                  <span
+                    className='text-2xl font-light text-kolping-400 transition-transform group-open:rotate-45'
+                    aria-hidden
+                  >
+                    +
+                  </span>
+                </summary>
+                <div className='px-5 pb-5 sm:px-6 sm:pb-6'>
+                  <div className='hairline-gold mb-4 w-10' />
+                  <p className='text-sm leading-relaxed text-site-100 sm:text-base'>
+                    {item.a}
+                  </p>
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='mt-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-kolping-400 transition-colors hover:text-kolping-500'
+                    >
+                      {item.button ?? 'Mehr erfahren'} →
+                    </a>
+                  ) : null}
                 </div>
-                <h3 className='font-display text-2xl uppercase tracking-tight text-site-50 leading-tight'>
-                  {c.title}
-                </h3>
-                <div className='hairline-gold w-10 my-4 group-hover:w-24 transition-all duration-500' />
-                <p className='text-sm text-site-100 leading-relaxed'>{c.body}</p>
-              </article>
+              </details>
             ))}
           </div>
         </div>
@@ -362,59 +368,6 @@ export default function Home() {
             >
               Mehr lesen →
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════ FAQ ══════ */}
-      <section
-        className='relative border-t border-site-700 bg-site-900'
-        aria-labelledby='faq-heading'
-      >
-        <div className='mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24'>
-          <div className='mb-10 sm:mb-14'>
-            <div className='mb-4 font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>
-              Gut zu wissen
-            </div>
-            <h2
-              id='faq-heading'
-              className='font-display text-4xl font-black uppercase leading-[0.9] tracking-tight text-site-50 sm:text-5xl md:text-6xl'
-            >
-              Häufige <span className='italic text-kolping-400'>Fragen.</span>
-            </h2>
-            <div className='hairline-gold mt-5 w-24' />
-          </div>
-
-          <div className='grid gap-3 md:grid-cols-2 md:gap-4'>
-            {faq.map((item) => (
-              <details
-                key={item.q}
-                className='group rounded-sm border border-site-700 bg-site-950 open:border-kolping-400/40'
-              >
-                <summary className='flex cursor-pointer list-none items-center justify-between gap-5 p-5 font-display text-lg font-bold tracking-tight text-site-50 marker:content-none sm:p-6 sm:text-xl'>
-                  {item.q}
-                  <span className='text-2xl font-light text-kolping-400 transition-transform group-open:rotate-45' aria-hidden>
-                    +
-                  </span>
-                </summary>
-                <div className='px-5 pb-5 sm:px-6 sm:pb-6'>
-                  <div className='hairline-gold mb-4 w-10' />
-                  <p className='text-sm leading-relaxed text-site-100 sm:text-base'>
-                    {item.a}
-                  </p>
-                  {item.link && (
-                    <a
-                      href={item.link}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='mt-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-kolping-400 transition-colors hover:text-kolping-500'
-                    >
-                      {item.button ?? 'Mehr erfahren'} →
-                    </a>
-                  )}
-                </div>
-              </details>
-            ))}
           </div>
         </div>
       </section>
