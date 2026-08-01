@@ -109,7 +109,7 @@ export default function RootLayout({
                 <span>YouTube</span>
               </a>
               <a
-                href='https://www.instagram.com/kolpingjugend_ramsen/'
+                href='https://www.instagram.com/kolpingtheater_ramsen/'
                 target='_blank'
                 rel='noreferrer'
                 className='inline-flex items-center gap-2 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded transition-colors'

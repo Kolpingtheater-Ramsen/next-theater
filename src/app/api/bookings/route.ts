@@ -206,7 +206,7 @@ export async function POST(request: NextRequest) {
             apiKey: env.RESEND_API_KEY,
             fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
             theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
-            replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingjugendramsen@gmail.com',
+            replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingtheaterramsen@gmail.com',
           },
           baseUrl
         )
@@ -261,4 +261,3 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-

@@ -57,7 +57,7 @@ export default function ContactPage() {
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
                 <a
-                  href='mailto:kolpingjugendramsen@gmail.com'
+                  href='mailto:kolpingtheaterramsen@gmail.com'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.4)]'
                 >
                   E-Mail schreiben
@@ -93,17 +93,17 @@ export default function ContactPage() {
               {
                 num: '01',
                 label: 'E-Mail',
-                value: 'kolpingjugendramsen@gmail.com',
+                value: 'kolpingtheaterramsen@gmail.com',
                 sub: 'Für alles Inhaltliche — meist innerhalb weniger Tage',
-                href: 'mailto:kolpingjugendramsen@gmail.com',
+                href: 'mailto:kolpingtheaterramsen@gmail.com',
                 cta: 'Schreiben',
               },
               {
                 num: '02',
                 label: 'Instagram',
-                value: '@kolpingjugend_ramsen',
+                value: '@kolpingtheater_ramsen',
                 sub: 'Neues aus Proben, Backstage & Premieren',
-                href: 'https://www.instagram.com/kolpingjugend_ramsen/',
+                href: 'https://www.instagram.com/kolpingtheater_ramsen/',
                 cta: 'Folgen',
                 external: true,
               },
@@ -333,14 +333,14 @@ export default function ContactPage() {
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>
                 <a
-                  href='mailto:kolpingjugendramsen@gmail.com'
+                  href='mailto:kolpingtheaterramsen@gmail.com'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'
                 >
                   E-Mail
                   <span className='transition-transform group-hover:translate-x-1'>→</span>
                 </a>
                 <a
-                  href='https://www.instagram.com/kolpingjugend_ramsen/'
+                  href='https://www.instagram.com/kolpingtheater_ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 hover:text-kolping-400 transition-colors'

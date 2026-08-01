@@ -123,7 +123,7 @@ export default function Home() {
                   Trailer ansehen
                 </a>
                 <a
-                  href='https://www.instagram.com/kolpingjugend_ramsen/'
+                  href='https://www.instagram.com/kolpingtheater_ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 rounded-sm border border-white/20 bg-site-950/45 px-5 py-3 font-mono text-[11px] uppercase tracking-[0.3em] text-site-100 backdrop-blur-sm transition-colors hover:border-kolping-400/60 hover:text-kolping-400'
@@ -407,7 +407,7 @@ export default function Home() {
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>
                 <a
-                  href='https://www.instagram.com/kolpingjugend_ramsen/'
+                  href='https://www.instagram.com/kolpingtheater_ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'

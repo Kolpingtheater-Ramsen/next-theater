@@ -46,10 +46,10 @@ export default function PrivacyPage() {
           <div>
             <div className='text-site-100 text-sm'>E-Mail</div>
             <a
-              href='mailto:hyper.xjo@gmail.com'
+              href='mailto:kolpingtheaterramsen@gmail.com'
               className='text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded transition-colors'
             >
-              hyper.xjo@gmail.com
+              kolpingtheaterramsen@gmail.com
             </a>
           </div>
         </div>
@@ -271,10 +271,10 @@ export default function PrivacyPage() {
                 Bei Fragen zum Datenschutz oder zur Geltendmachung von Rechten kannst du dich an folgende Adresse wenden:
               </p>
               <a
-                href='mailto:hyper.xjo@gmail.com'
+                href='mailto:kolpingtheaterramsen@gmail.com'
                 className='inline-block text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded transition-colors text-sm'
               >
-                hyper.xjo@gmail.com
+                kolpingtheaterramsen@gmail.com
               </a>
               <p className='text-sm pt-2'>
                 Bei einer E-Mail-Kontaktaufnahme werden deine Angaben ausschließlich zur Bearbeitung der Anfrage 

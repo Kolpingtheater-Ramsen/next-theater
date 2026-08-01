@@ -46,10 +46,10 @@ export default function ImpressumPage() {
           <div>
             <div className='text-site-100 text-sm'>E-Mail</div>
             <a
-              href='mailto:hyper.xjo@gmail.com'
+              href='mailto:kolpingtheaterramsen@gmail.com'
               className='text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded transition-colors'
             >
-              hyper.xjo@gmail.com
+              kolpingtheaterramsen@gmail.com
             </a>
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function ImpressumPage() {
           Kontaktiere uns gerne bei Fragen oder Anmerkungen:
         </p>
         <a
-          href='mailto:hyper.xjo@gmail.com'
+          href='mailto:kolpingtheaterramsen@gmail.com'
           className='inline-flex items-center gap-2 px-4 py-2 bg-kolping-400/20 hover:bg-kolping-400/30 text-kolping-400 rounded-lg transition-colors font-semibold'
         >
           <svg
@@ -259,7 +259,7 @@ export default function ImpressumPage() {
           >
             <path d='M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z' />
           </svg>
-          hyper.xjo@gmail.com
+          kolpingtheaterramsen@gmail.com
         </a>
       </div>
     </div>
