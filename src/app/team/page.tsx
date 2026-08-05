@@ -4,6 +4,7 @@ import teamData from '@/data/team.json'
 
 type Person = {
   id: string
+  slug?: string
   name?: string
   images?: number
   placeholderAvatar?: boolean
@@ -35,6 +36,10 @@ function avatarPath(id: string) {
 
 function displayName(p: Person) {
   return p.name ?? p.id
+}
+
+function profileSlug(p: Person) {
+  return p.slug ?? p.id
 }
 
 function currentRole(p: Person): string | null {
@@ -71,11 +76,11 @@ function Poster({
 
   return (
     <Link
-      href={`/team/${encodeURIComponent(person.id)}`}
+      href={`/team/${encodeURIComponent(profileSlug(person))}`}
       aria-label={`Profil von ${displayName(person)}`}
       className='group relative block animate-fade-in-up'
       style={{
-        viewTransitionName: `person-${person.id}`,
+        viewTransitionName: `person-${profileSlug(person)}`,
         animationDelay: `${Math.min(index, 40) * 30}ms`,
       }}
     >

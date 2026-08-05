@@ -8,6 +8,7 @@ import RolesList from './roles-list'
 
 type Entry = {
   id: string
+  slug?: string
   name?: string
   roles?: (string | null)[]
   images?: number
@@ -29,15 +30,11 @@ const CURRENT_PLAY_INDEX = plays.length - 1
 
 function findPerson(id: string): Entry | undefined {
   const lower = id.toLowerCase()
-  const current = ((data as { current: Entry[] }).current || []).find(
-    (person) => person.id.toLowerCase() === lower,
-  )
-  const former = ((data as { former?: Entry[] }).former || []).find(
-    (person) => person.id.toLowerCase() === lower,
-  )
-  const tech = ((data as { tech: Entry[] }).tech || []).find(
-    (person) => person.id.toLowerCase() === lower,
-  )
+  const matches = (person: Entry) =>
+    (person.slug ?? person.id).toLowerCase() === lower
+  const current = ((data as { current: Entry[] }).current || []).find(matches)
+  const former = ((data as { former?: Entry[] }).former || []).find(matches)
+  const tech = ((data as { tech: Entry[] }).tech || []).find(matches)
 
   if (!current && !former && !tech) return undefined
 
@@ -46,6 +43,7 @@ function findPerson(id: string): Entry | undefined {
 
   return {
     id: base.id,
+    slug: base.slug,
     name: base.name,
     roles: current?.roles ?? former?.roles,
     images: images || base.images,
@@ -57,14 +55,12 @@ function findPerson(id: string): Entry | undefined {
   }
 }
 
-function getPersonType(id: string): 'current' | 'former' | 'tech' | null {
-  const lower = id.toLowerCase()
-  const inCurrent = ((data as { current: Entry[] }).current || []).some(
-    (person) => person.id.toLowerCase() === lower,
-  )
-  const inTech = ((data as { tech: Entry[] }).tech || []).some(
-    (person) => person.id.toLowerCase() === lower,
-  )
+function getPersonType(profileSlug: string): 'current' | 'former' | 'tech' | null {
+  const lower = profileSlug.toLowerCase()
+  const matches = (person: Entry) =>
+    (person.slug ?? person.id).toLowerCase() === lower
+  const inCurrent = ((data as { current: Entry[] }).current || []).some(matches)
+  const inTech = ((data as { tech: Entry[] }).tech || []).some(matches)
   if (inCurrent) return 'current'
   if (inTech) return 'tech'
   return null
@@ -98,7 +94,7 @@ export default async function PersonPage({
   const person = findPerson(decodeURIComponent(slug))
   if (!person) return notFound()
 
-  const personType = getPersonType(person.id)
+  const personType = getPersonType(person.slug ?? person.id)
   const hasPlaceholder = Boolean(person.placeholderAvatar)
   const imageCount = person.images ?? 1
 
