@@ -723,6 +723,28 @@
       "since": 2021
     },
     {
+      "id": "Elea",
+      "placeholderAvatar": true,
+      "jobs": [
+        {
+          "job": "Technik",
+          "icon": "settings"
+        }
+      ],
+      "images": 1
+    },
+    {
+      "id": "Emilia",
+      "placeholderAvatar": true,
+      "jobs": [
+        {
+          "job": "Technik",
+          "icon": "settings"
+        }
+      ],
+      "images": 1
+    },
+    {
       "id": "Florian",
       "icon": "settings",
       "jobs": [
@@ -756,6 +778,18 @@
       ],
       "images": 3,
       "since": 2016
+    },
+    {
+      "id": "Julian2",
+      "name": "Julian",
+      "placeholderAvatar": true,
+      "jobs": [
+        {
+          "job": "Technik",
+          "icon": "settings"
+        }
+      ],
+      "images": 1
     },
     {
       "id": "Leo",
