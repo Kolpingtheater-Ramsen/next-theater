@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
 }
 
-const pressAssets = [
+const baseAssets = [
   {
     src: '/img/logo.png',
     downloadName: 'kolpingtheater-ramsen-logo.png',
@@ -36,21 +36,24 @@ const pressAssets = [
     alt: 'Ensemble des Kolpingtheaters Ramsen',
     fit: 'object-cover',
   },
+]
+
+const productionPressImages = [
   {
+    year: 2025,
     src: '/img/gallery_thumbs/anno/Bild_2.jpg',
     downloadName: 'kolpingtheater-ramsen-anno-1146-szenenfoto.jpg',
-    title: 'Szenenfoto · Anno 1146',
-    detail: 'JPG · 1200 × 800 px · Produktion 2025',
+    title: 'Anno 1146',
+    detail: 'Pressebild · JPG · 1200 × 800 px',
     alt: 'Graf Gottfried beauftragt Lothar von Greifenfels damit, die Gaukler zu töten',
-    fit: 'object-cover',
   },
   {
+    year: 2024,
     src: '/img/gallery_thumbs/nexus/Bild_1.jpg',
     downloadName: 'kolpingtheater-ramsen-nexus-finale.jpg',
-    title: 'Szenenfoto · Nexus',
-    detail: 'JPG · 1200 × 675 px · Produktion 2024',
+    title: 'Nexus',
+    detail: 'Pressebild · JPG · 1200 × 675 px',
     alt: 'Das große Finale der Produktion Nexus',
-    fit: 'object-cover',
   },
 ]
 
@@ -84,6 +87,23 @@ const trailers = [
   { year: 2020, title: 'Der Kristall der Träume – AFTERMOVIE', id: 'jCytcFp1ut4' },
   { year: null, title: 'Kolping Open-Air-Theater in Ramsen – TRAILER', id: 'HJMblxYFka0' },
 ]
+
+const productionYears = Array.from(
+  new Set([
+    ...productionMotifs.map((motif) => motif.year),
+    ...productionPressImages.map((image) => image.year),
+    ...trailers.flatMap((trailer) => (trailer.year === null ? [] : [trailer.year])),
+  ]),
+).sort((a, b) => b - a)
+
+const yearGroups = productionYears.map((year) => ({
+  year,
+  motifs: productionMotifs.filter((motif) => motif.year === year),
+  pressImages: productionPressImages.filter((image) => image.year === year),
+  trailers: trailers.filter((trailer) => trailer.year === year),
+}))
+
+const archiveTrailers = trailers.filter((trailer) => trailer.year === null)
 
 const facts = [
   { value: '2014', label: 'Gründung der Theatergruppe' },
@@ -132,8 +152,8 @@ export default function PressePage() {
               Fakten, Kurzprofil und ausgewähltes Bildmaterial für redaktionelle Berichterstattung über das Kolping-Open-Air-Theater Ramsen.
             </p>
             <div className='mt-8 flex flex-wrap gap-3'>
-              <a href='#downloads' className='inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.25em] text-black transition-colors hover:bg-kolping-500'>
-                Material ansehen <span aria-hidden='true'>↓</span>
+              <a href='#jahr-2026' className='inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.25em] text-black transition-colors hover:bg-kolping-500'>
+                Material 2026 <span aria-hidden='true'>↓</span>
               </a>
               <a href='mailto:kolpingtheaterramsen@gmail.com?subject=Presseanfrage' className='inline-flex items-center gap-2 rounded-sm border border-white/20 bg-site-950/60 px-6 py-3 font-mono text-xs uppercase tracking-[0.25em] text-white transition-colors hover:border-kolping-400 hover:text-kolping-400'>
                 Presseanfrage
@@ -193,12 +213,12 @@ export default function PressePage() {
         <div className='mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24'>
           <div className='max-w-3xl'>
             <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>Downloadbereich</div>
-            <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[.95] tracking-tight sm:text-6xl'>Logo & <span className='italic text-kolping-400'>Pressebilder.</span></h2>
-            <p className='mt-6 text-site-100'>Die Dateien werden in ihrer vorhandenen Auflösung bereitgestellt. Bitte die Nutzungshinweise unterhalb der Auswahl beachten.</p>
+            <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[.95] tracking-tight sm:text-6xl'>Basismaterial</h2>
+            <p className='mt-6 text-site-100'>Logo und allgemeines Ensemblefoto für die produktionsunabhängige Berichterstattung. Bitte die Nutzungshinweise unterhalb der Auswahl beachten.</p>
           </div>
 
           <div className='mt-12 grid gap-5 sm:grid-cols-2'>
-            {pressAssets.map((asset) => (
+            {baseAssets.map((asset) => (
               <article key={asset.src} className='group overflow-hidden rounded-sm border border-site-700 bg-site-900 transition-colors hover:border-kolping-400/60'>
                 <div className='relative aspect-[16/10] overflow-hidden bg-site-800'>
                   <Image src={asset.src} alt={asset.alt} fill sizes='(min-width: 640px) 50vw, 100vw' className={`${asset.fit} transition-transform duration-700 group-hover:scale-[1.025]`} />
@@ -217,28 +237,32 @@ export default function PressePage() {
 
           <div className='mt-20 border-t border-site-700 pt-14'>
             <div className='max-w-3xl'>
-              <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>Plakate & Produktionsmotive</div>
-              <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[.95] tracking-tight sm:text-5xl'>Produktionen im <span className='italic text-kolping-400'>Bild.</span></h2>
-              <p className='mt-5 text-site-100'>Originalplakate sind ausdrücklich gekennzeichnet. Die weiteren Dateien sind historische Produktionsmotive und Banner aus dem jeweiligen Webauftritt.</p>
+              <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>Material nach Spielzeit</div>
+              <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[.95] tracking-tight sm:text-5xl'>Produktionen nach <span className='italic text-kolping-400'>Jahr.</span></h2>
+              <p className='mt-5 text-site-100'>Plakate, Produktionsmotive, geeignete Pressebilder und offizielle Videos stehen gemeinsam bei ihrer belegten Spielzeit. Originalplakate sind ausdrücklich gekennzeichnet.</p>
+              <nav aria-label='Direkt zu einer Spielzeit' className='mt-7 flex flex-wrap gap-2'>{productionYears.map((year) => <a key={year} href={`#jahr-${year}`} className={`rounded-sm border px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] ${year === 2026 ? 'border-kolping-400 bg-kolping-400 text-black' : 'border-site-700 text-site-100 hover:border-kolping-400 hover:text-kolping-400'}`}>{year}{year === 2026 ? ' · aktuell' : ''}</a>)}</nav>
             </div>
-            <div className='mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
-              {productionMotifs.map((motif) => (
-                <article key={motif.file} className='group flex overflow-hidden rounded-sm border border-site-700 bg-site-900 transition-colors hover:border-kolping-400/60'>
-                  <div className='flex w-full flex-col'>
-                    <div className='relative aspect-[4/3] overflow-hidden bg-site-800'>
-                      <Image src={motif.src} alt={`${motif.kind} der Produktion ${motif.title}`} fill sizes='(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw' className='object-contain transition-transform duration-700 group-hover:scale-[1.025]' />
-                    </div>
-                    <div className='flex flex-1 flex-col p-5'>
-                      <div className='font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-kolping-400'>{motif.kind} · {motif.year}</div>
-                      <h3 className='mt-2 font-display text-xl uppercase leading-tight text-site-50'>{motif.title}</h3>
-                      <a href={motif.src} download={motif.file} className='mt-auto inline-flex w-fit items-center gap-2 pt-5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-site-100 transition-colors hover:text-kolping-400' aria-label={`${motif.title}, ${motif.year} herunterladen`}>
-                        <DownloadIcon /> Download
-                      </a>
-                      <div className='mt-2 break-all font-mono text-[8px] leading-relaxed text-site-300'>{motif.file}</div>
-                    </div>
+            <div className='mt-10 space-y-14'>
+              {yearGroups.map((group) => (
+                <section key={group.year} id={`jahr-${group.year}`} className={`scroll-mt-24 ${group.year === 2026 ? 'rounded-sm border border-kolping-400/60 bg-kolping-400/[0.04] p-5 sm:p-8' : 'border-t border-site-700 pt-10'}`}>
+                  <div className='flex flex-wrap items-end justify-between gap-3'><div><div className='font-mono text-[10px] uppercase tracking-[0.3em] text-kolping-400'>{group.year === 2026 ? 'Aktuelle Spielzeit' : 'Spielzeit'}</div><h3 className='mt-2 font-display text-5xl font-black italic text-site-50'>{group.year}</h3></div><div className='font-mono text-[9px] uppercase tracking-[0.15em] text-site-300'>{group.motifs.length + group.pressImages.length} Downloads · {group.trailers.length} {group.trailers.length === 1 ? 'Video' : 'Videos'}</div></div>
+                  <div className='mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+                    {group.motifs.map((motif) => (
+                      <article key={motif.file} className='group flex flex-col overflow-hidden rounded-sm border border-site-700 bg-site-900 transition-colors hover:border-kolping-400/60'>
+                        <div className='relative aspect-[4/3] overflow-hidden bg-site-800'><Image src={motif.src} alt={`${motif.kind} der Produktion ${motif.title}`} fill sizes='(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw' className='object-contain transition-transform duration-700 group-hover:scale-[1.025]' /></div>
+                        <div className='flex flex-1 flex-col p-5'><div className='font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-kolping-400'>{motif.kind}</div><h4 className='mt-2 font-display text-xl uppercase leading-tight text-site-50'>{motif.title}</h4><a href={motif.src} download={motif.file} className='mt-auto inline-flex w-fit items-center gap-2 pt-5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-site-100 hover:text-kolping-400'><DownloadIcon /> Download</a><div className='mt-2 break-all font-mono text-[8px] text-site-300'>{motif.file}</div></div>
+                      </article>
+                    ))}
+                    {group.pressImages.map((image) => (
+                      <article key={image.downloadName} className='group flex flex-col overflow-hidden rounded-sm border border-site-700 bg-site-900'><div className='relative aspect-[4/3] overflow-hidden bg-site-800'><Image src={image.src} alt={image.alt} fill sizes='(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw' className='object-cover transition-transform duration-700 group-hover:scale-[1.025]' /></div><div className='flex flex-1 flex-col p-5'><div className='font-mono text-[9px] uppercase tracking-[0.2em] text-kolping-400'>{image.detail}</div><h4 className='mt-2 font-display text-xl uppercase text-site-50'>{image.title}</h4><a href={image.src} download={image.downloadName} className='mt-auto inline-flex w-fit items-center gap-2 pt-5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-site-100 hover:text-kolping-400'><DownloadIcon /> Download</a></div></article>
+                    ))}
+                    {group.trailers.map((trailer) => (
+                      <a key={trailer.id} href={`https://www.youtube.com/watch?v=${trailer.id}`} target='_blank' rel='noopener noreferrer' className='group flex min-h-52 flex-col justify-between rounded-sm border border-site-700 bg-site-900 p-5 hover:border-kolping-400/70' aria-label={`${trailer.title} auf YouTube ansehen (öffnet in neuem Tab)`}><div><div className='font-mono text-[9px] uppercase tracking-[0.25em] text-kolping-400'>Offizielles Video</div><h4 className='mt-4 font-display text-xl uppercase leading-tight text-site-50'>{trailer.title}</h4></div><div className='mt-8 flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.18em] text-site-100'><span>Auf YouTube ansehen</span><span className='text-kolping-400'><ExternalIcon /></span></div></a>
+                    ))}
                   </div>
-                </article>
+                </section>
               ))}
+              {archiveTrailers.map((trailer) => <a key={trailer.id} href={`https://www.youtube.com/watch?v=${trailer.id}`} target='_blank' rel='noopener noreferrer' className='inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] text-site-300 hover:text-kolping-400'>Archivvideo ohne belegtes Jahr: {trailer.title} <ExternalIcon /></a>)}
             </div>
           </div>
 
@@ -255,33 +279,6 @@ export default function PressePage() {
                 Als Bildnachweis bitte „Kolping-Open-Air-Theater Ramsen“ angeben. Motive nicht sinnentstellend verändern. Für abweichende Formate oder Fragen zu einzelnen Motiven nehmen Sie bitte Kontakt auf.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className='border-b border-site-700 bg-site-900'>
-        <div className='mx-auto max-w-7xl px-4 py-16 sm:px-8 sm:py-24'>
-          <div className='max-w-3xl'>
-            <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>Offizieller YouTube-Kanal</div>
-            <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[.95] tracking-tight sm:text-6xl'>Trailer & <span className='italic text-kolping-400'>Filme.</span></h2>
-            <p className='mt-6 text-site-100'>Direkte Links zu den offiziellen Videos – ohne eingebetteten Player und ohne YouTube-Tracking auf dieser Seite.</p>
-          </div>
-          <div className='mt-12 grid gap-4 md:grid-cols-2'>
-            {trailers.map((trailer) => (
-              <a key={trailer.id} href={`https://www.youtube.com/watch?v=${trailer.id}`} target='_blank' rel='noopener noreferrer' className='group flex min-h-36 items-stretch overflow-hidden rounded-sm border border-site-700 bg-site-950 transition-colors hover:border-kolping-400/70' aria-label={`${trailer.title} auf YouTube ansehen (öffnet in neuem Tab)`}>
-                <div className='flex w-20 shrink-0 items-center justify-center border-r border-site-700 bg-kolping-400 text-black sm:w-24'>
-                  <span className='font-display text-xl font-black'>{trailer.year ?? 'Archiv'}</span>
-                </div>
-                <div className='flex flex-1 items-center justify-between gap-4 p-5 sm:p-6'>
-                  <div>
-                    <div className='font-mono text-[9px] uppercase tracking-[0.25em] text-site-300'>Offizielles Video</div>
-                    <h3 className='mt-2 font-display text-lg uppercase leading-tight text-site-50 sm:text-xl'>{trailer.title}</h3>
-                    <div className='mt-3 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-kolping-400'>Auf YouTube ansehen</div>
-                  </div>
-                  <span className='shrink-0 text-kolping-400 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1'><ExternalIcon /></span>
-                </div>
-              </a>
-            ))}
           </div>
         </div>
       </section>
