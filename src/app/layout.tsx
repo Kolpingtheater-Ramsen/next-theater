@@ -80,6 +80,9 @@ export default function RootLayout({
               © {new Date().getFullYear()} Kolping-Open-Air-Theater Ramsen
             </span>
             <div className='flex items-center gap-4'>
+              <Link href='/presse' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors hidden md:inline'>
+                Presse
+              </Link>
               <Link href='/contact' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors hidden md:inline'>
                 Kontakt
               </Link>
