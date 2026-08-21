@@ -11,11 +11,11 @@ import faq from '@/data/faq.json'
 export const metadata: Metadata = {
   title: 'Creepshow 2026 | Kolpingtheater Ramsen',
   description:
-    'Creepshow feiert am 21. August 2026 Open-Air-Premiere auf der Kolpingwiese in Ramsen.',
+    'Creepshow 2026 auf der Kolpingwiese in Ramsen. Die ausgefallene Freitagsvorstellung wird am Sonntag, 23. August, um 19 Uhr nachgeholt.',
   openGraph: {
     title: 'Creepshow 2026 | Kolpingtheater Ramsen',
     description:
-      'Vier Sommerabende, eine neue Eigenproduktion. Open-Air-Premiere am 21. August 2026.',
+      'Die Freitagsvorstellung ist wegen Regen ausgefallen. Nachholtermin: Sonntag, 23. August 2026, um 19 Uhr.',
     images: ['/img/creepshow-banner.webp'],
   },
 }
@@ -79,7 +79,7 @@ export default function Home() {
               <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
                 <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-kolping-400 uppercase'>
                   <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
-                  Premiere · 21. August 2026
+                  Premiere · 22. August 2026
                 </span>
                 <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.25em] text-white uppercase'>
                   4 Vorstellungen · Eintritt frei
@@ -155,11 +155,16 @@ export default function Home() {
               </h2>
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-xl leading-relaxed'>
-                Alle vier Vorstellungen beginnen um 20:00 Uhr und finden an
-                zwei Augustwochenenden statt. Der Eintritt ist frei.
+                Die Vorstellung am Freitag, 21. August, ist wegen Regen
+                ausgefallen. Sie wird am Sonntag, 23. August, um 19:00 Uhr
+                nachgeholt. Der Eintritt ist frei.
               </p>
+              <div className='mt-5 rounded-sm border border-kolping-400/60 bg-kolping-500/15 px-4 py-3 text-sm text-site-50'>
+                <strong className='text-kolping-400'>Wetterbedingter Ausfall:</strong>{' '}
+                Neuer Termin ist Sonntag, 23. August, um 19:00 Uhr.
+              </div>
               <div className='mt-6'>
-                <PremiereCountdown targetISO='2026-08-21T20:00:00+02:00' />
+                <PremiereCountdown targetISO='2026-08-22T20:00:00+02:00' />
               </div>
             </div>
 
@@ -169,15 +174,22 @@ export default function Home() {
                   num: 'Termin 01',
                   date: '21.',
                   month: 'August',
-                  sub: 'Freitag · Premiere · 20:00 Uhr',
-                  premiere: true,
+                  sub: 'Freitag · Wegen Regen ausgefallen',
+                  premiere: false,
                 },
                 {
                   num: 'Termin 02',
                   date: '22.',
                   month: 'August',
-                  sub: 'Samstag · Vorstellung · 20:00 Uhr',
-                  premiere: false,
+                  sub: 'Samstag · Premiere · 20:00 Uhr',
+                  premiere: true,
+                },
+                {
+                  num: 'Nachholtermin',
+                  date: '23.',
+                  month: 'August',
+                  sub: 'Sonntag · Vorstellung · 19:00 Uhr',
+                  premiere: true,
                 },
                 {
                   num: 'Termin 03',
