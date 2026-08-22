@@ -168,63 +168,37 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:w-[420px] lg:grid-cols-2'>
+            <div className='grid grid-cols-2 gap-3 sm:gap-4 lg:w-[420px]'>
               {[
-                {
-                  num: 'Termin 01',
-                  date: '21.',
-                  month: 'August',
-                  sub: 'Freitag · Wegen Regen ausgefallen',
-                  premiere: false,
-                },
-                {
-                  num: 'Termin 02',
-                  date: '22.',
-                  month: 'August',
-                  sub: 'Samstag · Premiere · 20:00 Uhr',
-                  premiere: true,
-                },
-                {
-                  num: 'Nachholtermin',
-                  date: '23.',
-                  month: 'August',
-                  sub: 'Sonntag · Vorstellung · 19:00 Uhr',
-                  premiere: true,
-                },
-                {
-                  num: 'Termin 03',
-                  date: '28.',
-                  month: 'August',
-                  sub: 'Freitag · Vorstellung · 20:00 Uhr',
-                  premiere: false,
-                },
-                {
-                  num: 'Termin 04',
-                  date: '29.',
-                  month: 'August',
-                  sub: 'Samstag · Vorstellung · 20:00 Uhr',
-                  premiere: false,
-                },
+                { num: 'Termin 01', date: '21.', month: 'August', sub: 'Freitag · Wegen Regen ausgefallen', kind: 'canceled' },
+                { num: 'Termin 02', date: '22.', month: 'August', sub: 'Samstag · Premiere · 20:00 Uhr', kind: 'premiere' },
+                { num: 'Nachholtermin', date: '23.', month: 'August', sub: 'Sonntag · Nachholtermin', kind: 'replacement' },
+                { num: 'Termin 03', date: '28.', month: 'August', sub: 'Freitag · Vorstellung · 20:00 Uhr', kind: 'regular' },
+                { num: 'Termin 04', date: '29.', month: 'August', sub: 'Samstag · Vorstellung · 20:00 Uhr', kind: 'regular' },
               ].map((d) => (
                 <div
                   key={d.num}
                   className={`relative min-w-0 overflow-hidden rounded-sm border p-4 sm:p-5 ${
-                    d.premiere
-                      ? 'border-kolping-400/55 bg-kolping-500/10 shadow-[0_0_35px_rgba(255,122,0,0.08)]'
-                      : 'border-site-700 bg-site-900/80'
+                    d.kind === 'canceled' ? 'col-span-2 border-site-700 bg-site-900/80 opacity-65' :
+                    d.kind === 'replacement' ? 'border-kolping-400 bg-kolping-500/20 shadow-[0_0_40px_rgba(255,122,0,0.18)]' :
+                    d.kind === 'premiere' ? 'border-kolping-400/55 bg-kolping-500/10 shadow-[0_0_35px_rgba(255,122,0,0.08)]' :
+                    'border-site-700 bg-site-900/80'
                   }`}
                 >
+                  {d.kind === 'canceled' && (
+                    <div className='pointer-events-none absolute inset-0 z-10' aria-hidden>
+                      <span className='absolute left-1/2 top-1/2 h-[2px] w-[115%] -translate-x-1/2 -translate-y-1/2 rotate-[8deg] bg-red-500/80' />
+                      <span className='absolute left-1/2 top-1/2 h-[2px] w-[115%] -translate-x-1/2 -translate-y-1/2 -rotate-[8deg] bg-red-500/80' />
+                    </div>
+                  )}
                   <div className='clapper-stripes h-1.5 -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4 opacity-60' aria-hidden />
-                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400 mb-2'>
-                    {d.num}
+                  <div className='font-mono text-[9px] uppercase tracking-[0.35em] text-kolping-400 mb-2'>{d.num}</div>
+                  <div className='cast-number font-display text-3xl sm:text-4xl italic leading-none'>{d.date}</div>
+                  <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-100 mt-2'>{d.month}</div>
+                  <div className={`mt-1 ${d.kind === 'replacement' ? 'text-sm font-bold text-kolping-400' : 'text-[10px] text-site-300'}`}>
+                    {d.sub}
+                    {d.kind === 'replacement' && <span className='block text-lg leading-tight'>19:00 Uhr</span>}
                   </div>
-                  <div className='cast-number font-display text-3xl sm:text-4xl italic leading-none'>
-                    {d.date}
-                  </div>
-                  <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-100 mt-2'>
-                    {d.month}
-                  </div>
-                  <div className='text-[10px] text-site-300 mt-1'>{d.sub}</div>
                 </div>
               ))}
             </div>
