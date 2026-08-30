@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
 import timeline from '@/data/timeline.json'
-import faq from '@/data/faq.json'
 
 export const metadata: Metadata = {
   title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
@@ -124,76 +123,6 @@ export default function Home() {
                 <span aria-hidden>→</span>
               </a>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════ FAQ ══════ */}
-      <section
-        id='faq'
-        className='relative bg-site-900 border-b border-site-700 scroll-mt-24'
-        aria-labelledby='faq-heading'
-      >
-        <div
-          className='absolute inset-0 opacity-[0.04] pointer-events-none'
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-          aria-hidden
-        />
-        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-20'>
-          <div className='mb-10 sm:mb-14'>
-            <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-              Gut zu wissen
-            </div>
-            <h2
-              id='faq-heading'
-              className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'
-            >
-              Häufige <span className='italic text-kolping-400'>Fragen.</span>
-            </h2>
-            <div className='hairline-gold w-24 mt-5' />
-            <p className='mt-5 text-site-100/80 text-sm sm:text-base max-w-2xl leading-relaxed'>
-              Alles Wichtige für deinen Besuch – von Anfahrt und Eintritt bis
-              zu Ablauf und Barrierefreiheit.
-            </p>
-          </div>
-
-          <div className='grid gap-3'>
-            {faq.map((item) => (
-              <details
-                key={item.q}
-                className='group rounded-sm border border-site-700 bg-site-950/60 open:border-kolping-400/40'
-              >
-                <summary className='flex cursor-pointer list-none items-center justify-between gap-5 p-5 font-display text-lg font-bold tracking-tight text-site-50 marker:content-none sm:p-6 sm:text-xl'>
-                  {item.q}
-                  <span
-                    className='text-2xl font-light text-kolping-400 transition-transform group-open:rotate-45'
-                    aria-hidden
-                  >
-                    +
-                  </span>
-                </summary>
-                <div className='px-5 pb-5 sm:px-6 sm:pb-6'>
-                  <div className='hairline-gold mb-4 w-10' />
-                  <p className='text-sm leading-relaxed text-site-100 sm:text-base'>
-                    {item.a}
-                  </p>
-                  {item.link ? (
-                    <a
-                      href={item.link}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='mt-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-kolping-400 transition-colors hover:text-kolping-500'
-                    >
-                      {item.button ?? 'Mehr erfahren'} →
-                    </a>
-                  ) : null}
-                </div>
-              </details>
-            ))}
           </div>
         </div>
       </section>

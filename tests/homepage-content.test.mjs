@@ -36,8 +36,12 @@ test('homepage preserves the historical productions and repertoire', () => {
   assert.match(source, /<FeaturedProductions items=\{featuredItems\}/)
 })
 
+test('homepage omits the finished production FAQ', () => {
+  assert.doesNotMatch(source, /Häufige <span[^>]*>Fragen\.<\/span>/)
+  assert.doesNotMatch(source, /id=['"]faq['"]|faq-heading|@\/data\/faq\.json/)
+})
+
 test('homepage preserves non-current-show sections', () => {
-  assert.match(source, /Häufige <span[^>]*>Fragen\.<\/span>/)
   assert.match(source, /Jugend-Engagement-Preis/)
   assert.match(source, /Kontakt &amp; Anfahrt/)
 })
