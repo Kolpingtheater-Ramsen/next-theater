@@ -28,3 +28,16 @@ test('homepage metadata describes the temporary post-show state', () => {
   assert.match(source, /Danke für euren Besuch \| Kolpingtheater Ramsen/)
   assert.doesNotMatch(source, /Premiere · 22\. August 2026/)
 })
+
+test('homepage preserves the historical productions and repertoire', () => {
+  assert.match(source, /Vergangene <span[^>]*>Stücke\.<\/span>/)
+  assert.match(source, /Alle Galerien/)
+  assert.match(source, /<Marquee items=\{marqueeItems\}/)
+  assert.match(source, /<FeaturedProductions items=\{featuredItems\}/)
+})
+
+test('homepage preserves non-current-show sections', () => {
+  assert.match(source, /Häufige <span[^>]*>Fragen\.<\/span>/)
+  assert.match(source, /Jugend-Engagement-Preis/)
+  assert.match(source, /Kontakt &amp; Anfahrt/)
+})
