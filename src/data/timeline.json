@@ -249,5 +249,13 @@
     "text": "Am 27.02.2026 wurden wir in Mainz mit dem Jugend-Engagement-Preis des Landes Rheinland-Pfalz durch unseren Ministerpräsidenten Alexander Schweitzer geehrt.",
     "image": "award-rlp-2026.jpg",
     "dominantColor": "#d97706"
+  },
+  {
+    "date": "August 2026",
+    "header": "Creepshow",
+    "text": "Vom 21. bis 23. August brachte die Creepshow schaurig-skurrile Geschichten auf die Open-Air-Bühne der Kolpingwiese.",
+    "image": "banners/creepshow.jpg",
+    "galleryHash": "creepshow",
+    "dominantColor": "#132536"
   }
 ]
