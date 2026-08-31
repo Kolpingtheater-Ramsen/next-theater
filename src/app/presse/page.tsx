@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     description: 'Offizielle Presseinformationen und Bildmaterial des Kolping-Open-Air-Theaters Ramsen.',
     url: '/presse',
     type: 'website',
-    images: [{ url: '/img/other_images/Gruppenbild.jpg', alt: 'Ensemble des Kolpingtheaters Ramsen' }],
+    images: [{ url: '/img/creepshow-banner.webp', alt: 'Ensemble der Creepshow 2026' }],
   },
 }
 
@@ -40,6 +40,14 @@ const baseAssets = [
 
 const productionPressImages = [
   {
+    year: 2026,
+    src: '/img/gallery_thumbs/creepshow/Bild_1.jpg',
+    downloadName: 'kolpingtheater-ramsen-creepshow-maskenball-2026.jpg',
+    title: 'Creepshow',
+    detail: 'Pressebild · JPG · 2160 × 1440 px',
+    alt: 'Die Familie von Falkenstein beim Maskenball zum 110. Geburtstag von Graf Thaddäus',
+  },
+  {
     year: 2025,
     src: '/img/gallery_thumbs/anno/Bild_2.jpg',
     downloadName: 'kolpingtheater-ramsen-anno-1146-szenenfoto.jpg',
@@ -58,6 +66,7 @@ const productionPressImages = [
 ]
 
 const productionMotifs = [
+  { title: 'Creepshow', year: 2026, src: '/img/banners/creepshow.jpg', file: 'kolpingtheater-ramsen-creepshow-2026-produktionsmotiv.jpg', kind: 'Produktionsmotiv' },
   { title: 'Verrat im Kloster', year: 2017, src: '/img/banners/kloster.jpg', file: 'kolpingtheater-ramsen-verrat-im-kloster-2017-produktionsmotiv.jpg', kind: 'Produktionsmotiv' },
   { title: 'Bluttribut', year: 2018, src: '/img/banners/bluttribut.jpg', file: 'kolpingtheater-ramsen-bluttribut-2018-produktionsmotiv.jpg', kind: 'Produktionsmotiv' },
   { title: 'Dystopia', year: 2019, src: '/img/banners/dystopia.jpg', file: 'kolpingtheater-ramsen-dystopia-2019-produktionsmotiv.jpg', kind: 'Produktionsmotiv' },
@@ -133,7 +142,7 @@ export default function PressePage() {
     <div className='-mx-4 -mt-8'>
       <section className='force-dark relative overflow-hidden border-b border-site-700 bg-site-950'>
         <div className='absolute inset-0'>
-          <Image src='/img/other_images/Gruppenbild.jpg' alt='' fill priority sizes='100vw' className='object-cover opacity-45' />
+          <Image src='/img/creepshow-banner.webp' alt='' fill priority sizes='100vw' className='object-cover opacity-45' />
           <div className='absolute inset-0 bg-gradient-to-r from-site-950 via-site-950/75 to-site-950/30' />
           <div className='absolute inset-0 bg-gradient-to-t from-site-950 via-transparent to-site-950/40' />
           <div className='scanlines opacity-20' />
@@ -174,16 +183,16 @@ export default function PressePage() {
               <div className='hairline-gold mt-6 w-24' />
               <div className='mt-8 space-y-5 text-base leading-relaxed text-site-100 sm:text-lg'>
                 <p>
-                  Das Kolping-Open-Air-Theater Ramsen entstand 2014 aus einer Idee der Kolpingjugend. Die Gruppe entwickelt und spielt eigene Stücke – im Sommer unter freiem Himmel auf der Kolpingwiese und seit 2023 zusätzlich auf der Kreativbühne im Pfarrheim.
+                  Das Kolping-Open-Air-Theater Ramsen entstand 2014 aus einer Idee der Kolpingjugend. Seitdem schreibt und spielt die Gruppe eigene Stücke. Im Sommer steht sie auf der Kolpingwiese, seit 2023 gibt es im Winter zusätzlich die Kreativbühne im Pfarrheim.
                 </p>
                 <p>
-                  Historische Stoffe, Fantasie, Gesellschaftskritik und Komödie gehören zum Repertoire. Auf und hinter der Bühne arbeitet das Ensemble gemeinschaftlich an Schauspiel, Technik, Kulissen, Kostüm und Organisation. Die Aufführungen sind eintrittsfrei; freiwillige Spenden sind willkommen.
+                  Die Stücke verbinden historische Stoffe, Fantasie, Gesellschaftskritik und Komödie. Schauspiel, Technik, Kulissenbau, Kostüm und Organisation übernimmt die Gruppe selbst. Der Eintritt ist frei, freiwillige Spenden sind willkommen.
                 </p>
               </div>
               <div className='mt-7 rounded-sm border-l-2 border-kolping-400 bg-site-800/60 p-5'>
                 <div className='font-mono text-[10px] uppercase tracking-[0.3em] text-kolping-400'>Boilerplate zur Übernahme</div>
                 <p className='mt-3 text-sm leading-relaxed text-site-100'>
-                  Das 2014 gegründete Kolping-Open-Air-Theater Ramsen bringt selbst entwickelte Theaterstücke auf die Bühne. Gespielt wird im Sommer open air auf der Kolpingwiese und im Winter auf der Kreativbühne im Pfarrheim. Das Ensemble verbindet Schauspiel mit gemeinschaftlicher Arbeit in Technik, Kulissenbau, Kostüm und Organisation; der Eintritt zu den Aufführungen ist frei.
+                  Das Kolping-Open-Air-Theater Ramsen wurde 2014 gegründet und schreibt seine Stücke selbst. Im Sommer spielt die Gruppe open air auf der Kolpingwiese, im Winter auf der Kreativbühne im Pfarrheim. Schauspiel, Technik, Kulissenbau, Kostüm und Organisation liegen in den Händen des Ensembles. Der Eintritt ist frei.
                 </p>
               </div>
             </div>
@@ -239,7 +248,7 @@ export default function PressePage() {
             <div className='max-w-3xl'>
               <div className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>Material nach Spielzeit</div>
               <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[.95] tracking-tight sm:text-5xl'>Produktionen nach <span className='italic text-kolping-400'>Jahr.</span></h2>
-              <p className='mt-5 text-site-100'>Plakate, Produktionsmotive, geeignete Pressebilder und offizielle Videos stehen gemeinsam bei ihrer belegten Spielzeit. Originalplakate sind ausdrücklich gekennzeichnet.</p>
+              <p className='mt-5 text-site-100'>Hier sind Plakate, Produktionsmotive, Pressebilder und offizielle Videos nach Spielzeit sortiert. Originalplakate sind entsprechend gekennzeichnet.</p>
               <nav aria-label='Direkt zu einer Spielzeit' className='mt-7 flex flex-wrap gap-2'>{productionYears.map((year) => <a key={year} href={`#jahr-${year}`} className={`rounded-sm border px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.18em] ${year === 2026 ? 'border-kolping-400 bg-kolping-400 text-black' : 'border-site-700 text-site-100 hover:border-kolping-400 hover:text-kolping-400'}`}>{year}{year === 2026 ? ' · aktuell' : ''}</a>)}</nav>
             </div>
             <div className='mt-10 space-y-14'>

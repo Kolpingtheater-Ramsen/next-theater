@@ -149,8 +149,8 @@ export default function TeamPage() {
       <section className='relative overflow-hidden'>
         <div className='relative w-full h-[78vh] min-h-[520px] max-h-[860px]'>
           <Image
-            src='/img/team/team_header.jpg'
-            alt='Team des Kolpingtheaters Ramsen'
+            src='/img/gallery_thumbs/creepshow/Bild_8.jpg'
+            alt='Gäste der Creepshow beim Maskenball'
             fill
             priority
             sizes='100vw'
@@ -190,8 +190,8 @@ export default function TeamPage() {
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Hinter jeder Produktion stehen viele Gesichter. Schauspiel,
-                Technik und Organisation — zusammen ein eingespieltes Ensemble.
+                Viele Menschen arbeiten an jeder Produktion mit, im
+                Schauspiel, in der Technik und in der Organisation.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
@@ -280,8 +280,8 @@ export default function TeamPage() {
               <div className='hairline-gold w-24 mt-5' />
             </div>
             <p className='max-w-sm text-site-100/80 text-sm sm:text-base leading-relaxed'>
-              Licht, Ton, Bühne, Kostüm, Organisation — ohne dieses Team bliebe
-              der Vorhang unten.
+              Dieses Team kümmert sich um Licht, Ton, Bühne, Kostüm und
+              Organisation.
             </p>
           </div>
 
@@ -306,16 +306,16 @@ export default function TeamPage() {
             <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
               <div>
                 <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-                  Take · 13
+                  Mitmachen
                 </div>
                 <h3 className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95]'>
                   Deine Rolle <br />
                   <span className='italic text-kolping-400'>wartet.</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Ob Bühne, Technik oder Organisation — unser Ensemble lebt von
-                  neuen Gesichtern. Keine Audition, kein Casting: komm einfach
-                  zur nächsten Probe vorbei und werde Teil der Geschichte.
+                  Du kannst auf der Bühne mitspielen oder bei Technik und
+                  Organisation helfen. Ein Casting gibt es nicht. Komm einfach
+                  bei einer Probe vorbei.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>

@@ -10,8 +10,8 @@ export default function ContactPage() {
       <section className='relative overflow-hidden'>
         <div className='relative w-full h-[70vh] min-h-[460px] max-h-[780px]'>
           <Image
-            src='/img/other_images/Gruppenbild.jpg'
-            alt='Ensemble des Kolpingtheaters Ramsen'
+            src='/img/gallery_thumbs/creepshow/Bild_24.jpg'
+            alt='Junge Darstellerinnen und Darsteller der Creepshow im Waisenhaus'
             fill
             priority
             sizes='100vw'
@@ -94,7 +94,7 @@ export default function ContactPage() {
                 num: '01',
                 label: 'E-Mail',
                 value: 'kolpingtheaterramsen@gmail.com',
-                sub: 'Für alles Inhaltliche — meist innerhalb weniger Tage',
+                sub: 'Für Fragen, meist innerhalb weniger Tage',
                 href: 'mailto:kolpingtheaterramsen@gmail.com',
                 cta: 'Schreiben',
               },
@@ -102,7 +102,7 @@ export default function ContactPage() {
                 num: '02',
                 label: 'Instagram',
                 value: '@kolpingtheater_ramsen',
-                sub: 'Neues aus Proben, Backstage & Premieren',
+                sub: 'Neues aus den Proben, von hinter der Bühne und von Premieren',
                 href: 'https://www.instagram.com/kolpingtheater_ramsen/',
                 cta: 'Folgen',
                 external: true,
@@ -178,8 +178,8 @@ export default function ContactPage() {
               </h2>
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-6 text-site-100 text-base sm:text-lg leading-relaxed max-w-xl'>
-                Unsere Proben sind offen. Schau rein, sag Hallo,
-                probier Theater aus, keine Voranmeldung nötig.
+                Unsere Proben sind offen. Du kannst ohne Voranmeldung
+                vorbeikommen und Theater ausprobieren.
               </p>
 
               <div className='mt-8 flex flex-wrap gap-3'>
@@ -218,7 +218,7 @@ export default function ContactPage() {
                 {
                   label: 'Aufführungen',
                   value: 'Sommer · Kolpingwiese',
-                  sub: 'Eintritt frei — freiwillige Spende willkommen',
+                  sub: 'Eintritt frei, freiwillige Spenden willkommen',
                   icon: '★',
                 },
               ].map((c) => (
@@ -267,17 +267,17 @@ export default function ContactPage() {
               {
                 num: '01',
                 title: 'Auf der Bühne',
-                body: 'Schauspiel — ob Anfänger oder mit Erfahrung. Bei uns wird niemand vorgesprochen, alle bekommen eine Rolle.',
+                body: 'Für Anfänger und Erfahrene. Vorsprechen gibt es bei uns nicht, alle bekommen eine Rolle.',
               },
               {
                 num: '02',
                 title: 'Hinter der Bühne',
-                body: 'Technik, Bau, Licht, Ton, Kostüm, Maske, Regieassistenz. Ohne diese Leute kein Vorhang.',
+                body: 'Du kannst bei Technik, Kulissenbau, Licht, Ton, Kostüm, Maske oder Regieassistenz helfen.',
               },
               {
                 num: '03',
                 title: 'Im Hintergrund',
-                body: 'Organisation, Öffentlichkeitsarbeit, Catering, Einlass. Jede Rolle zählt, auch abseits des Scheinwerferlichts.',
+                body: 'Auch bei Organisation, Öffentlichkeitsarbeit, Catering und Einlass wird Unterstützung gebraucht.',
               },
             ].map((c) => (
               <article
@@ -327,8 +327,8 @@ export default function ContactPage() {
                   <span className='italic text-kolping-400'>bald.</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Eine E-Mail, ein Besuch auf der Probe, ein Abend im Publikum —
-                  jeder Weg führt zu uns.
+                  Schreib uns eine E-Mail, besuche eine Probe oder komm zu
+                  einer unserer Aufführungen.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>

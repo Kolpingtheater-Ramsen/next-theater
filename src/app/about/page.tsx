@@ -242,8 +242,8 @@ export default function AboutPage() {
       <section className='relative overflow-hidden'>
         <div className='relative w-full h-[78vh] min-h-[520px] max-h-[860px]'>
           <Image
-            src='/img/other_images/Gruppenbild.jpg'
-            alt='Ensemble des Kolping-Open-Air-Theaters Ramsen'
+            src='/img/gallery_thumbs/creepshow/Bild_1.jpg'
+            alt='Familie von Falkenstein beim Maskenball der Creepshow'
             fill
             priority
             sizes='100vw'
@@ -279,9 +279,10 @@ export default function AboutPage() {
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Aus einer spontanen Idee in der Kolpingjugend wurde eine Bühne
-                mit eigenem Repertoire: jedes Jahr eine neue Eigenproduktion —
-                groß im Sommer, nahbar im Winter.
+                Aus einer spontanen Idee der Kolpingjugend entstand eine
+                Theatergruppe mit eigenem Repertoire. Jedes Jahr schreiben und
+                spielen wir ein neues Stück, im Sommer auf der Kolpingwiese und im
+                Winter auf der Kreativbühne.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
@@ -319,15 +320,15 @@ export default function AboutPage() {
               <div className='hairline-gold w-32 mt-6' />
               <div className='mt-8 space-y-5 text-site-100/90 text-base sm:text-lg leading-relaxed max-w-prose'>
                 <p>
-                  Historische Stoffe, Fantasie, Gesellschaftskritik oder
-                  Komödie — jedes Jahr entsteht aus eigener Feder ein neues
-                  Stück. Im Sommer unter freiem Himmel auf der Kolpingwiese,
-                  im Winter auf der nahbaren Kreativbühne im Pfarrheim.
+                  Jedes Jahr schreiben wir ein neues Stück. Dabei geht es um
+                  historische Stoffe, Fantasie, Gesellschaftskritik oder
+                  Komödie. Im Sommer spielen wir unter freiem Himmel auf der
+                  Kolpingwiese, im Winter auf der Kreativbühne im Pfarrheim.
                 </p>
                 <p className='text-site-100/70 text-base leading-relaxed'>
-                  Ob auf der Bühne, in der Technik, beim Bau, in Kostüm oder
-                  Organisation — bei uns arbeitet eine Gemeinschaft. Theater
-                  für alle, gemacht von Freunden, ohne Casting, ohne Eintritt.
+                  Schauspiel, Technik, Kulissenbau, Kostüm und Organisation
+                  liegen bei der Gruppe selbst. Mitmachen kann jeder, ohne
+                  Casting. Der Eintritt zu unseren Aufführungen ist frei.
                 </p>
               </div>
 
@@ -408,7 +409,7 @@ export default function AboutPage() {
             eyebrow='Zwei Bühnen'
             title='Sommer &'
             accent='Winter.'
-            body='Wir spielen in zwei sehr verschiedenen Welten: Open-Air auf der Kolpingwiese und nahbar auf der Kreativbühne im Pfarrheim. Jedes Stück neu, jedes Jahr.'
+            body='Im Sommer spielen wir open air auf der Kolpingwiese. Im Winter bringt die Kreativbühne kleinere Produktionen ins Pfarrheim.'
           />
 
           <div className='grid md:grid-cols-2 gap-6 sm:gap-8 mt-12 sm:mt-16'>
@@ -419,11 +420,11 @@ export default function AboutPage() {
                 title: 'Open-Air',
                 accent: 'auf der Kolpingwiese',
                 blurb:
-                  'Unser großes Sommerstück. Unter offenem Himmel, mit aufwendiger Kulisse zwischen den historischen Mauern rund um das Kloster Ramosa.',
+                  'Unser Sommerstück entsteht für die Kolpingwiese, mit einer eigenen Kulisse rund um die historischen Mauern des Klosters Ramosa.',
                 latest: latestOpenAir,
                 posterOverride: '/img/banners/creepshow.jpg',
                 posterOverrideUnoptimized: false,
-                badge: 'Proben laufen',
+                badge: 'Gespielt 2026',
               },
               {
                 key: 'Kreativbühne',
@@ -431,7 +432,7 @@ export default function AboutPage() {
                 title: 'Kreativbühne',
                 accent: 'im Pfarrheim',
                 blurb:
-                  'Seit 2023 füllt die Kreativbühne die Winterpause: jüngere Akteure, kleinere Formate, nahbar und experimentell im Saal.',
+                  'Seit 2023 spielen jüngere Akteure im Winter auf der Kreativbühne im Pfarrheim. Die kleineren Formate lassen mehr Raum zum Ausprobieren.',
                 latest: latestKreativ,
                 posterOverride: undefined as string | undefined,
                 posterOverrideUnoptimized: false,
@@ -656,9 +657,9 @@ export default function AboutPage() {
                   der <span className='italic text-kolping-400'>Geschichte.</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Schauspiel, Technik, Bau, Kostüm, Organisation — bei uns
-                  findet jede Stärke ihre Bühne. Komm zur nächsten Probe, wir
-                  freuen uns auf dich.
+                  Du kannst auf der Bühne mitspielen oder bei Technik,
+                  Kulissenbau, Kostüm und Organisation helfen. Komm einfach bei
+                  einer Probe vorbei.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>

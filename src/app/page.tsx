@@ -94,7 +94,7 @@ export default function Home() {
 
             <div className='mt-10 border-l-2 border-kolping-400 pl-5 sm:mt-12 sm:pl-7'>
               <p className='font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs'>
-                Stay tuned
+                Wie es weitergeht
               </p>
               <p className='mt-3 max-w-xl text-sm leading-relaxed text-site-100 sm:text-base'>
                 Auf Instagram und YouTube geben wir bekannt, welches Stück wir

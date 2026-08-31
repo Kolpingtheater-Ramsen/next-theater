@@ -192,7 +192,7 @@ export default function GalleryPage() {
         <div className='relative w-full h-[78vh] min-h-[520px] max-h-[860px]'>
           <Image
             src={latestShow?.galleryHash ? `/img/banners/${latestShow.galleryHash}.jpg` : '/img/home_team.jpg'}
-            alt={latestShow ? `Aktuelle Produktion: ${latestShow.header}` : 'Galerie des Kolpingtheaters Ramsen'}
+            alt={latestShow ? `Jüngste Produktion: ${latestShow.header}` : 'Galerie des Kolpingtheaters Ramsen'}
             fill
             priority
             sizes='100vw'
@@ -232,8 +232,8 @@ export default function GalleryPage() {
               </h1>
 
               <p className='animate-fade-in-up mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-site-100/90 max-w-2xl leading-relaxed text-shadow'>
-                Die wichtigsten Momente unserer Stücke — von den ersten
-                Open-Air-Abenden bis zu den neuesten Winterproduktionen.
+                Fotos aus unseren Open-Air-Stücken und den Produktionen der
+                Kreativbühne.
               </p>
 
               <div className='mt-8 flex flex-wrap items-center gap-3 animate-fade-in-up'>
@@ -285,7 +285,7 @@ export default function GalleryPage() {
                   Zuletzt auf der Bühne
                 </div>
                 <h2 className='font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight text-site-50 leading-[0.9]'>
-                  Aktuelles <span className='italic text-kolping-400'>Werk</span>
+                  Zuletzt <span className='italic text-kolping-400'>gespielt</span>
                 </h2>
                 <div className='hairline-gold w-24 mt-5' />
               </div>
@@ -311,8 +311,8 @@ export default function GalleryPage() {
                 <div className='hairline-gold w-24 mt-5' />
               </div>
               <p className='max-w-sm text-site-100/80 text-sm sm:text-base leading-relaxed'>
-                Sämtliche dokumentierte Produktionen in chronologischer
-                Reihenfolge — vom jüngsten Stück zurück zu unseren Anfängen.
+                Alle dokumentierten Produktionen, beginnend mit dem jüngsten
+                Stück.
               </p>
             </div>
 
@@ -346,8 +346,8 @@ export default function GalleryPage() {
                   Triff das <span className='italic text-kolping-400'>Ensemble</span>
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Die Gesichter hinter und vor der Kamera — Schauspiel, Technik
-                  und Organisation auf einen Blick.
+                  Hier findest du die Menschen aus Schauspiel, Technik und
+                  Organisation.
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>
