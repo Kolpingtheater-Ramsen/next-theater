@@ -7,14 +7,21 @@ import teamData from '@/data/team.json'
 import timeline from '@/data/timeline.json'
 
 export const metadata: Metadata = {
-  title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
+  title: 'Für den Deutschen Engagementpreis 2026 nominiert | Kolpingtheater Ramsen',
   description:
-    'Die Creepshow ist vorbei. Neuigkeiten zu unserem Winterstück und zum nächsten Sommertheater gibt es auf Instagram und YouTube.',
+    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Mehr über die Nominierung und das Publikumsvoting erfahren.',
   openGraph: {
-    title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
+    title: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
     description:
-      'Die Creepshow ist vorbei. Neuigkeiten zu unserem Winterstück und zum nächsten Sommertheater gibt es auf Instagram und YouTube.',
-    images: ['/img/creepshow-banner.webp'],
+      'Das Kolpingtheater Ramsen gehört zu den Nominierten für den Deutschen Engagementpreis 2026.',
+    images: ['/img/deutscher-engagementpreis-2026-banner.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
+    description:
+      'Das Kolpingtheater Ramsen gehört zu den Nominierten für den Deutschen Engagementpreis 2026.',
+    images: ['/img/deutscher-engagementpreis-2026-banner.png'],
   },
 }
 
@@ -45,7 +52,7 @@ export default function Home() {
     })
 
   return (
-    <div className='-mx-4 -mt-8' data-home-state='post-show'>
+    <div className='-mx-4 -mt-8' data-home-state='post-show-nominated'>
       {/* ══════ CURRENT SHOW · POST-SEASON THANK YOU ══════ */}
       <section className='force-dark relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden bg-site-950 px-4 py-16 sm:px-8 sm:py-24'>
         <Image
@@ -121,6 +128,75 @@ export default function Home() {
               >
                 YouTube
                 <span aria-hidden>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ NOMINIERUNG · Deutscher Engagementpreis 2026 ══════ */}
+      <section
+        className='force-dark relative overflow-hidden border-y border-site-700 bg-site-950'
+        aria-labelledby='engagementpreis-heading'
+      >
+        <div className='absolute inset-0 bg-[radial-gradient(circle_at_85%_30%,rgba(255,122,0,0.16),transparent_38%)]' aria-hidden />
+        <div className='relative mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,.85fr)] lg:items-center lg:gap-14'>
+          <div>
+            <div className='relative hidden aspect-[2048/600] overflow-hidden rounded-sm border border-white/15 bg-white shadow-[0_24px_70px_-24px_rgba(0,0,0,0.9)] sm:block'>
+              <Image
+                src='/img/deutscher-engagementpreis-2026-banner.png'
+                alt='Wir sind für den Deutschen Engagementpreis 2026 nominiert'
+                fill
+                sizes='(min-width: 1024px) 55vw, 100vw'
+                className='object-cover'
+              />
+            </div>
+            <div className='relative mx-auto aspect-square w-full max-w-[340px] overflow-hidden rounded-sm bg-white shadow-[0_24px_70px_-24px_rgba(0,0,0,0.9)] sm:hidden'>
+              <Image
+                src='/img/deutscher-engagementpreis-2026-badge.png'
+                alt='Wir sind nominiert'
+                fill
+                sizes='340px'
+                className='object-contain'
+              />
+            </div>
+          </div>
+
+          <div>
+            <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>
+              Nominierung · August 2026
+            </p>
+            <h2
+              id='engagementpreis-heading'
+              className='mt-4 font-display text-4xl font-black uppercase leading-[0.94] tracking-tight text-site-50 sm:text-5xl'
+            >
+              Wir sind <span className='italic text-kolping-400'>nominiert.</span>
+            </h2>
+            <div className='hairline-gold mt-5 w-24' />
+            <p className='mt-5 text-sm leading-relaxed text-site-100 sm:text-base'>
+              Unser ehrenamtliches Theaterprojekt wurde über den
+              Jugend-Engagement-Wettbewerb RLP „Sich einmischen – was bewegen“
+              für den Deutschen Engagementpreis 2026 vorgeschlagen. Diese
+              Anerkennung macht uns stolz – und unser gemeinsames Engagement
+              bundesweit sichtbar.
+            </p>
+            <p className='mt-4 font-mono text-[10px] uppercase tracking-[0.24em] text-site-300 sm:text-[11px]'>
+              Publikumsvoting · 1.–29. Oktober 2026
+            </p>
+            <div className='mt-7 flex flex-col gap-3 sm:flex-row'>
+              <Link
+                href='/engagementpreis-2026'
+                className='inline-flex min-h-12 items-center justify-center gap-2 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-black transition-colors hover:bg-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
+              >
+                Mehr zur Nominierung <span aria-hidden>→</span>
+              </Link>
+              <a
+                href='https://www.deutscher-engagementpreis.de/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex min-h-12 items-center justify-center gap-2 rounded-sm border border-site-700 bg-site-900 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-site-50 transition-colors hover:border-kolping-400 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
+              >
+                Zur Preiswebsite <span aria-hidden>↗</span>
               </a>
             </div>
           </div>
