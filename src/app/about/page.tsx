@@ -10,6 +10,9 @@ type TimelineEntry = {
   image?: string
   galleryHash?: string
   dominantColor?: string
+  kind?: 'recognition'
+  recognitionType?: 'Preis' | 'Nominierung'
+  href?: string
 }
 
 type TimelineItem = TimelineEntry & {
@@ -227,9 +230,10 @@ export default function AboutPage() {
   const latestOpenAir = openAirPlays[openAirPlays.length - 1]
   const latestKreativ = kreativPlays[kreativPlays.length - 1]
 
-  // Awards — entries from timeline whose header mentions Preis/Engagement
-  const awardEntries = entries.filter(
+  // Recognition entries: awards and nominations from the shared timeline.
+  const recognitionEntries = entries.filter(
     (e) =>
+      e.kind === 'recognition' ||
       /Preis|preis|Engagement/.test(e.header) ||
       /Preis|preis|Engagement/.test(e.text),
   )
@@ -522,17 +526,17 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ══════ AWARDS / AUSZEICHNUNGEN ══════ */}
-      {awardEntries.length > 0 && (
+      {/* ══════ AUSZEICHNUNGEN / NOMINIERUNGEN ══════ */}
+      {recognitionEntries.length > 0 && (
         <section className='relative bg-site-950 border-t border-site-700'>
           <div className='mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-24'>
             <SectionHead
               eyebrow='Honor Roll'
-              title='Ausgezeichnet.'
+              title='Ausgezeichnet & nominiert.'
             />
 
             <div className='grid md:grid-cols-2 gap-6 sm:gap-8 mt-10 sm:mt-14'>
-              {awardEntries.map((a) => (
+              {recognitionEntries.map((a) => (
                 <article
                   key={a.date + a.header}
                   className='group relative overflow-hidden rounded-sm border border-kolping-500/30 bg-site-900 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.8)]'
@@ -545,7 +549,7 @@ export default function AboutPage() {
                           {a.month} {a.year}
                         </span>
                         <span className='font-mono text-[9px] uppercase tracking-[0.3em] text-site-300'>
-                          Preis
+                          {a.recognitionType ?? 'Preis'}
                         </span>
                       </div>
                       <h3 className='font-display text-2xl sm:text-3xl uppercase tracking-tight leading-tight group-hover:text-kolping-400 transition-colors'>
@@ -555,6 +559,14 @@ export default function AboutPage() {
                       <p className='text-sm text-site-100 leading-relaxed'>
                         {a.text}
                       </p>
+                      {a.href && (
+                        <Link
+                          href={a.href}
+                          className='inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-kolping-400 transition-colors hover:text-kolping-500'
+                        >
+                          Mehr erfahren <span aria-hidden>→</span>
+                        </Link>
+                      )}
                     </div>
                     {a.image && (
                       <div className='relative w-full sm:w-44 aspect-[4/3] sm:aspect-auto sm:self-stretch sm:min-h-[220px] overflow-hidden bg-site-950'>
@@ -563,7 +575,7 @@ export default function AboutPage() {
                           alt={a.header}
                           fill
                           sizes='(min-width: 640px) 176px, 100vw'
-                          className='object-cover transition-transform duration-700 group-hover:scale-105'
+                          className={`${a.recognitionType === 'Nominierung' ? 'bg-white object-contain p-2' : 'object-cover'} transition-transform duration-700 group-hover:scale-105`}
                         />
                         <div className='absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-site-900/60 hidden sm:block' />
                       </div>
@@ -593,8 +605,12 @@ export default function AboutPage() {
           <div className='mt-14 sm:mt-20 space-y-16 sm:space-y-24'>
             {yearsDesc.map((yr) => {
               const items = byYear.get(yr)!
-              const prods = items.filter((i) => !!i.image)
-              const events = items.filter((i) => !i.image)
+              const prods = items.filter(
+                (i) => !!i.image && i.kind !== 'recognition',
+              )
+              const events = items.filter(
+                (i) => !i.image || i.kind === 'recognition',
+              )
               return (
                 <div
                   key={yr}
@@ -619,7 +635,7 @@ export default function AboutPage() {
                   {/* Year content */}
                   <div className='relative space-y-8'>
                     {items.map((item) =>
-                      item.image ? (
+                      item.image && item.kind !== 'recognition' ? (
                         <ProductionCard key={item.date + item.header} entry={item} />
                       ) : (
                         <div

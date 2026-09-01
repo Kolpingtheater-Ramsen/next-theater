@@ -36,6 +36,22 @@ const baseAssets = [
     alt: 'Ensemble des Kolpingtheaters Ramsen',
     fit: 'object-cover',
   },
+  {
+    src: '/img/deutscher-engagementpreis-2026-banner.png',
+    downloadName: 'deutscher-engagementpreis-2026-nominierung-banner.png',
+    title: 'Nominierungsbanner 2026',
+    detail: 'Offizielle Grafik · PNG · 2048 × 600 px',
+    alt: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
+    fit: 'object-contain bg-white p-3 sm:p-5',
+  },
+  {
+    src: '/img/deutscher-engagementpreis-2026-badge.png',
+    downloadName: 'deutscher-engagementpreis-2026-nominierung-badge.png',
+    title: 'Nominierungsbadge 2026',
+    detail: 'Offizielle Grafik · PNG · 1080 × 1080 px',
+    alt: 'Badge: Wir sind nominiert für den Deutschen Engagementpreis 2026',
+    fit: 'object-contain bg-white p-4 sm:p-8',
+  },
 ]
 
 const productionPressImages = [
@@ -211,7 +227,7 @@ export default function PressePage() {
                 ))}
               </dl>
               <div className='mt-5 text-xs leading-relaxed text-site-300'>
-                Ausgezeichnet mit dem Kolpingjugendpreis 2022 (1. Platz) und dem Jugend-Engagement-Preis Rheinland-Pfalz 2026.
+                Ausgezeichnet mit dem Kolpingjugendpreis 2022 (1. Platz) und beim Jugend-Engagement-Wettbewerb RLP „Sich einmischen – was bewegen“ 2026. Für den Deutschen Engagementpreis 2026 nominiert.
               </div>
             </aside>
           </div>
@@ -279,13 +295,13 @@ export default function PressePage() {
             <div>
               <h3 className='font-display text-xl uppercase text-site-50'>Verwendung</h3>
               <p className='mt-3 text-sm leading-relaxed text-site-100'>
-                Die Bereitstellung als Download überträgt keine Nutzungsrechte. Eine redaktionelle Verwendung bitte vor Veröffentlichung mit dem Pressekontakt abstimmen. Bearbeitung, kommerzielle Nutzung und Weitergabe bedürfen der schriftlichen Zustimmung.
+                Für Logo, Ensemble- und Produktionsbilder überträgt die Bereitstellung als Download keine Nutzungsrechte. Eine redaktionelle Verwendung bitte vor Veröffentlichung mit dem Pressekontakt abstimmen. Für die Grafiken zum Deutschen Engagementpreis gelten die Gestaltungshinweise des offiziellen Kommunikationskits.
               </p>
             </div>
             <div>
               <h3 className='font-display text-xl uppercase text-site-50'>Copyright & Bildnachweis</h3>
               <p className='mt-3 text-sm leading-relaxed text-site-100'>
-                Als Bildnachweis bitte „Kolping-Open-Air-Theater Ramsen“ angeben. Motive nicht sinnentstellend verändern. Für abweichende Formate oder Fragen zu einzelnen Motiven nehmen Sie bitte Kontakt auf.
+                Für unsere eigenen Motive bitte „Kolping-Open-Air-Theater Ramsen“ als Bildnachweis angeben. Die offiziellen Nominierungsgrafiken sind dem Deutschen Engagementpreis zugeordnet. Motive nicht sinnentstellend verändern.
               </p>
             </div>
           </div>
