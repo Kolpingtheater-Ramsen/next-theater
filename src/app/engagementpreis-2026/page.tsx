@@ -42,51 +42,38 @@ export default function EngagementpreisPage() {
   return (
     <div className='-mx-4 -mt-8'>
       <article>
-        <header className='force-dark relative isolate overflow-hidden border-b border-site-700 bg-site-950'>
-          <div className='absolute inset-0 -z-20 bg-[radial-gradient(circle_at_22%_25%,rgba(255,122,0,0.22),transparent_36%),radial-gradient(circle_at_85%_75%,rgba(255,255,255,0.06),transparent_32%)]' />
-          <div className='grain absolute inset-0 -z-10' aria-hidden />
-          <div className='mx-auto grid min-h-[680px] max-w-7xl items-center gap-10 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,.9fr)] lg:gap-16'>
-            <div>
-              <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.42em] text-kolping-400 sm:text-xs'>
-                Ehrenamt · Theater · Gemeinschaft
-              </p>
-              <h1 className='mt-5 max-w-4xl font-display text-5xl font-black uppercase leading-[0.9] tracking-tight text-site-50 sm:text-6xl md:text-7xl'>
-                Wir sind für den Deutschen Engagementpreis 2026{' '}
-                <span className='italic text-kolping-400'>nominiert.</span>
-              </h1>
-              <div className='hairline-gold mt-7 w-24' />
-              <p className='mt-7 max-w-2xl text-base leading-relaxed text-site-100 sm:text-lg'>
-                Der Jugend-Engagement-Wettbewerb RLP „Sich einmischen – was
-                bewegen“ hat unser Projekt für den Deutschen Engagementpreis
-                vorgeschlagen. Über diese Anerkennung freuen wir uns riesig.
-              </p>
-              <div className='mt-9 flex flex-col gap-3 sm:flex-row'>
-                <a
-                  href='https://www.deutscher-engagementpreis.de/'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-black transition-colors hover:bg-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
-                >
-                  Zur Preiswebsite <span aria-hidden>↗</span>
-                </a>
-                <Link
-                  href='/about'
-                  className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm border border-site-700 bg-site-900 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-site-50 transition-colors hover:border-kolping-400 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
-                >
-                  Unsere Geschichte <span aria-hidden>→</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className='relative mx-auto aspect-square w-full max-w-[520px] overflow-hidden rounded-sm bg-white shadow-[0_35px_100px_-35px_rgba(0,0,0,0.95)]'>
+        <header className='nomination-panel'>
+          <div className='mx-auto max-w-6xl px-6 pt-8 sm:px-8'>
+            <Link href='/' className='nomination-link text-sm'>← Zur Startseite</Link>
+          </div>
+          <div className='nomination-layout nomination-layout-detail mx-auto max-w-6xl px-6 py-12 sm:px-8 sm:py-20'>
+            <div className='nomination-artwork'>
               <Image
                 src='/img/deutscher-engagementpreis-2026-badge.png'
                 alt='Offizieller Badge: Wir sind nominiert für den Deutschen Engagementpreis 2026'
-                fill
+                width={1080}
+                height={1080}
                 priority
-                sizes='(min-width: 1024px) 42vw, 90vw'
-                className='object-contain'
+                sizes='(min-width: 768px) 340px, 180px'
+                className='h-auto w-full'
               />
+            </div>
+            <div>
+              <p className='nomination-eyebrow'>Deutscher Engagementpreis 2026</p>
+              <h1 className='nomination-title'>Unser Ehrenamt.<br />Eine besondere <span>Anerkennung.</span></h1>
+              <p className='nomination-copy'>
+                Wir sind nominiert! Der Jugend-Engagement-Wettbewerb RLP
+                „Sich einmischen – was bewegen“ hat unser Theaterprojekt für
+                den Deutschen Engagementpreis vorgeschlagen. Darüber freuen
+                wir uns riesig.
+              </p>
+              <div className='nomination-actions'>
+                <a href='https://www.deutscher-engagementpreis.de/' target='_blank' rel='noopener noreferrer' className='nomination-button'>
+                  Zur Preiswebsite <span aria-hidden>↗</span>
+                </a>
+                <Link href='/about' className='nomination-link'>Unsere Geschichte <span aria-hidden>→</span></Link>
+              </div>
+              <p className='nomination-date'><span aria-hidden className='nomination-dot' />Publikumsvoting: 1.–29. Oktober 2026</p>
             </div>
           </div>
         </header>
