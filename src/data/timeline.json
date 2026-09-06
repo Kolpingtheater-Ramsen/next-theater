@@ -257,5 +257,15 @@
     "image": "banners/creepshow.jpg",
     "galleryHash": "creepshow",
     "dominantColor": "#132536"
+  },
+  {
+    "date": "August 2026",
+    "header": "Nominierung Deutscher Engagementpreis 2026",
+    "text": "Nach der Auszeichnung beim Jugend-Engagement-Wettbewerb RLP „Sich einmischen – was bewegen“ sind wir für den Deutschen Engagementpreis 2026 nominiert – den Dachpreis für freiwilliges Engagement in Deutschland.",
+    "image": "deutscher-engagementpreis-2026-badge.png",
+    "dominantColor": "#ffffff",
+    "kind": "recognition",
+    "recognitionType": "Nominierung",
+    "href": "/engagementpreis-2026"
   }
 ]
