@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import GalleryImage from '@/components/ProgressiveImage'
 import { useState } from 'react'
 import { flushSync } from 'react-dom'
 import { Lightbox } from './Lightbox'
@@ -14,6 +14,7 @@ type PhotoMeta = {
   tw?: number
   th?: number
   blurhash?: string
+  blurDataURL?: string
 }
 
 // A single shared name — only the card that is currently morphing carries it,
@@ -61,11 +62,12 @@ function PhotoCard({
       }}
     >
       <div className='relative overflow-hidden rounded-xl border-epic bg-site-950 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.7)] transition-transform duration-500 ease-out hover:-translate-y-1 animate-fade-in-up'>
-        <Image
+        <GalleryImage
           src={thumb}
           alt={decodedAlt}
           width={meta.tw ?? meta.width}
           height={meta.th ?? meta.height}
+          blurDataURL={meta.blurDataURL}
           className='w-full h-auto object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]'
           sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
         />
@@ -207,9 +209,9 @@ export default function ClientGrid({
           src={`/img/gallery_thumbs/${play}/Bild_${
             metas[openIndex].index + 1
           }.jpg`}
-          thumbSrc={`/img/gallery_thumbs/${play}/Bild_${
-            metas[openIndex].index + 1
-          }.jpg`}
+          width={metas[openIndex].tw ?? metas[openIndex].width}
+          height={metas[openIndex].th ?? metas[openIndex].height}
+          blurDataURL={metas[openIndex].blurDataURL}
           alt={metas[openIndex].alt}
           caption={captions[openIndex] ?? metas[openIndex].alt}
           downloadHref={`/img/gallery_thumbs/${play}/Bild_${

@@ -1,6 +1,6 @@
 export const runtime = 'edge'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@/components/ProgressiveImage'
 import { notFound } from 'next/navigation'
 import ClientGrid from './ClientGrid'
 import pics from '@/data/pics.json'

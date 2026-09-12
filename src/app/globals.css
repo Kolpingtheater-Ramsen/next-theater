@@ -330,6 +330,53 @@ body {
   to { opacity: 1; }
 }
 
+/* Keep the BlurHash visible underneath until the decoded photo has faded in. */
+.progressive-image {
+  display: grid;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.progressive-image-layers {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  object-fit: inherit;
+  object-position: inherit;
+}
+
+.progressive-image-content,
+.progressive-image-placeholder {
+  object-fit: inherit;
+  object-position: inherit;
+}
+
+.progressive-image-content {
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+
+.progressive-image[data-loaded='true'] > .progressive-image-layers > .progressive-image-content {
+  opacity: 1;
+}
+
+.progressive-image[data-loaded='true'] > .progressive-image-layers > .progressive-image-placeholder {
+  visibility: hidden;
+  transition: visibility 0s linear 900ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressive-image-content,
+  .progressive-image[data-loaded='true'] > .progressive-image-layers > .progressive-image-placeholder {
+    transition: none;
+  }
+}
+
+@media (scripting: none) {
+  .progressive-image-content { opacity: 1; }
+  .progressive-image-placeholder { visibility: hidden; }
+}
+
 /* Custom view transition for gallery items */
 ::view-transition-old(gallery-image),
 ::view-transition-new(gallery-image) {

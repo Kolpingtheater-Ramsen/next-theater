@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@/components/ProgressiveImage'
 import timeline from '@/data/timeline.json'
 import teamData from '@/data/team.json'
 

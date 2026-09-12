@@ -4,38 +4,18 @@
   - Rotates images based on EXIF orientation
   - Compresses images larger than 3MB
   - Generates thumbnails (max width 1200px)
-  - Emits src/data/images.json mapping { [play]: [{ width,height, tw, th, alt, index, blurhash }] }
+  - Emits src/data/images.json with dimensions, captions, BlurHashes and inline previews
 */
 
 const fs = require('fs')
 const path = require('path')
 const sharp = require('sharp')
-const { encode } = require('blurhash')
+const { imagePlaceholder } = require('./image-placeholder')
 
 const ROOT = process.cwd()
 const THUMBS_DIR = path.join(ROOT, 'public', 'img', 'gallery_thumbs')
 const PICS_JSON = path.join(ROOT, 'src', 'data', 'pics.json')
 const OUT_JSON = path.join(ROOT, 'src', 'data', 'images.json')
-
-/**
- * @param {string} file
- * @param {number} compX
- * @param {number} compY
- */
-async function computeBlurhash(file, compX = 4, compY = 3) {
-  const image = sharp(file)
-  const { width, height } = await image.metadata()
-  const w = Math.min(64, width || 64)
-  const h = Math.min(64, height || 64)
-  const { data, info } = await image
-    .raw()
-    .ensureAlpha()
-    .resize(w, h, { fit: 'inside' })
-    .toBuffer({ resolveWithObject: true })
-  const blurhash = encode(new Uint8ClampedArray(data), info.width, info.height, compX, compY)
-
-  return { blurhash }
-}
 
 async function generate() {
   // Check if thumbs directory exists (won't exist in CI/CD)
@@ -47,7 +27,7 @@ async function generate() {
   }
 
   const plays = await fs.promises.readdir(THUMBS_DIR)
-  /** @type {Record<string, { width:number, height:number, alt:string, index:number, blurhash:string, tw:number, th:number }[]>} */
+  /** @type {Record<string, { width:number, height:number, alt:string, index:number, blurhash:string, blurDataURL:string, tw:number, th:number }[]>} */
   const output = {}
 
   /** @type {Record<string, string[]>} */
@@ -146,10 +126,10 @@ async function generate() {
         console.log(`Skipping ${play}/${file} (already optimized: ${fileSizeMB.toFixed(2)}MB, ${width}x${height})`)
       }
 
-      const { blurhash } = await computeBlurhash(thumbPath)
+      const { blurhash, blurDataURL } = await imagePlaceholder(thumbPath)
       const alt = captions[index] || ''
 
-      output[play].push({ width, height, tw, th, alt, index, blurhash })
+      output[play].push({ width, height, tw, th, alt, index, blurhash, blurDataURL })
     }
   }
 
@@ -161,5 +141,4 @@ generate().catch((err) => {
   console.error(err)
   process.exit(1)
 })
-
 

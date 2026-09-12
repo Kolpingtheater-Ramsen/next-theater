@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import Image from '@/components/ProgressiveImage'
 import { useMemo, useState, useCallback, useEffect } from 'react'
 
 export default function Slideshow({

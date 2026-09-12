@@ -1,5 +1,5 @@
 
-import Image from 'next/image'
+import Image from '@/components/ProgressiveImage'
 import Link from 'next/link'
 
 export type Person = {

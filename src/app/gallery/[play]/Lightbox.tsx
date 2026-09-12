@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import GalleryImage from '@/components/ProgressiveImage'
 import { useEffect, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { decodeHtmlEntities } from '@/lib/html'
@@ -10,7 +10,9 @@ type SlideDirection = 'left' | 'right' | null
 export function Lightbox({
   src,
   alt,
-  thumbSrc,
+  width,
+  height,
+  blurDataURL,
   caption,
   onClose,
   onPrev,
@@ -23,7 +25,9 @@ export function Lightbox({
 }: {
   src: string
   alt: string
-  thumbSrc?: string
+  width: number
+  height: number
+  blurDataURL?: string
   caption?: string
   onClose: () => void
   onPrev: () => void
@@ -34,7 +38,6 @@ export function Lightbox({
   title?: string
   morphName?: string
 }) {
-  const [loading, setLoading] = useState(true)
   // When a view-transition morph is running, the new snapshot is captured
   // right after the parent's state flush — so the stage must be in the DOM
   // and fully visible on the first render. Otherwise the browser has nothing
@@ -53,14 +56,6 @@ export function Lightbox({
     if (!isVisible) requestAnimationFrame(() => setIsVisible(true))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // Reset the loading spinner whenever the source image changes. We no longer
-  // delay the swap via a timer — when a view transition is driving the nav,
-  // the browser captures old/new snapshots at the exact state-flush boundary
-  // and a delayed imageKey would make both snapshots show the same image.
-  useEffect(() => {
-    setLoading(true)
-  }, [src])
 
   const handleClose = useCallback(() => {
     // When a view-transition morph is driving the close, skip the internal
@@ -180,39 +175,18 @@ export function Lightbox({
         <span className='absolute -bottom-1 -left-1 w-4 h-4 border-l border-b border-kolping-400/60 z-30' aria-hidden />
         <span className='absolute -bottom-1 -right-1 w-4 h-4 border-r border-b border-kolping-400/60 z-30' aria-hidden />
 
-        {/* Loading state */}
-        {loading && thumbSrc ? (
-          <Image
-            src={thumbSrc}
-            alt={decodedAlt}
-            fill
-            className='object-contain blur-lg opacity-40'
-            sizes='100vw'
-            priority
-          />
-        ) : null}
-
-        {loading && (
-          <div className='absolute inset-0 grid place-items-center z-10 pointer-events-none'>
-            <div className='relative w-10 h-10'>
-              <div className='absolute inset-0 rounded-full border border-white/20' />
-              <div className='absolute inset-0 rounded-full border border-transparent border-t-kolping-400 animate-spin' />
-            </div>
-          </div>
-        )}
-
         {/* Full image */}
         <div key={src} className={`absolute inset-0 ${imgAnimClass}`}>
-          <Image
+          <GalleryImage
             src={src}
             alt={decodedAlt}
+            width={width}
+            height={height}
+            blurDataURL={blurDataURL}
             fill
-            className={[
-              'object-contain transition-opacity duration-500 drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]',
-              loading ? 'opacity-0' : 'opacity-100',
-            ].join(' ')}
+            className='object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]'
             sizes='100vw'
-            onLoadingComplete={() => setLoading(false)}
+            priority
           />
         </div>
       </div>

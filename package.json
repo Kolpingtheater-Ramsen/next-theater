@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/generate-image-placeholders.js",
     "dev": "next dev --turbopack",
-    "prebuild": "node scripts/generate-images.js",
+    "prebuild": "node scripts/generate-images.js && node scripts/generate-image-placeholders.js",
     "build": "next build",
     "pages:build": "npx @cloudflare/next-on-pages",
     "preview": "pnpm run pages:build && wrangler pages dev",

@@ -1,7 +1,7 @@
 export const runtime = 'edge'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@/components/ProgressiveImage'
 import data from '@/data/team.json'
 import Slideshow from './slideshow'
 import RolesList from './roles-list'
