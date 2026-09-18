@@ -96,7 +96,7 @@ export default function BookingPage() {
       })
       const data = await response.json() as { success: boolean; bookingId: string; code?: string; bookedSeats: number[]; field?: string; error?: string }
       if (!response.ok || !data.success) {
-        if (data.code === 'seat_conflict' || data.code === 'seat_policy') {
+        if (data.code === 'seat_conflict') {
           setBooked(data.bookedSeats)
           setSeats(existing => existing.filter(seat => !data.bookedSeats.includes(seat)))
           go('seats')

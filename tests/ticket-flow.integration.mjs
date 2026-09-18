@@ -43,17 +43,22 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
     assert.equal((await api(`/api/bookings/${current.id}/wallet`, 'POST', {})).status, 503)
   })
   await t.test('update, prevent stale changes and preserve selected seats', async () => {
-    const invalid = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [21, 22, 23], version: 0 })
-    assert.equal(invalid.status, 409)
-    assert.equal(invalid.data.reason, 'single_seat_gap')
-    assert.deepEqual((await api(`/api/bookings/${current.id}`)).data.booking.seats, [20, 21])
-    const updated = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [20, 21, 22], version: 0 })
+    const withGaps = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [21, 22, 23], version: 0 })
+    assert.equal(withGaps.status, 200)
+    assert.deepEqual(withGaps.data.booking.seats, [21, 22, 23])
+    const updated = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [20, 21, 22], version: withGaps.data.booking.version })
     assert.equal(updated.status, 200)
     assert.deepEqual(updated.data.booking.seats, [20, 21, 22])
     current = updated.data.booking
     const stale = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [24], version: 0 })
     assert.equal(stale.status, 409)
     assert.equal(stale.data.code, 'changed')
+  })
+  await t.test('partial seat release can leave a gap without blocking the guest', async () => {
+    const reduced = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [20, 22], version: current.version })
+    assert.equal(reduced.status, 200)
+    assert.deepEqual(reduced.data.booking.seats, [20, 22])
+    current = reduced.data.booking
   })
   await t.test('concurrent requests cannot reserve one seat twice', async () => {
     const results = await Promise.all([api('/api/bookings', 'POST', booking(play, [30])), api('/api/bookings', 'POST', booking(play, [30]))])
@@ -72,22 +77,22 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
     assert.ok(results.every(r => r.status === 200 || r.status === 201), JSON.stringify(results.map(r => ({status:r.status,data:r.data}))))
     assert.equal(results[0].data.bookingId, results[1].data.bookingId)
   })
-  await t.test('server rejects orphan seats and split groups even when bypassing the UI', async () => {
-    for (const [seats, reason] of [[[2], 'single_seat_gap'], [[1, 8], 'split_group']]) {
+  await t.test('server accepts gaps, separated groups and middle seats', async () => {
+    for (const seats of [[2], [1, 8], [12]]) {
       const result = await api('/api/bookings', 'POST', booking(play, seats))
-      assert.equal(result.status, 409)
-      assert.equal(result.data.reason, reason)
+      assert.equal(result.status, 201, JSON.stringify(result.data))
+      assert.deepEqual((await api(`/api/bookings/${result.data.bookingId}`)).data.booking.seats, seats)
     }
   })
-  await t.test('concurrent disjoint bookings cannot create a single seat between them', async () => {
+  await t.test('concurrent disjoint bookings both succeed even when they leave a gap', async () => {
     const results = await Promise.all([
       api('/api/bookings', 'POST', booking(play, [50, 51])),
       api('/api/bookings', 'POST', booking(play, [53, 54])),
     ])
-    assert.deepEqual(results.map(r => r.status).sort(), [201, 409])
+    assert.deepEqual(results.map(r => r.status).sort(), [201, 201])
     const occupied = (await api(`/api/plays/${play}/seats`)).data.bookedSeats
-    assert.ok(!(occupied.includes(51) && occupied.includes(53)))
-    assert.ok(['seat_policy', 'seat_conflict'].includes(results.find(r => r.status === 409).data.code))
+    assert.ok(occupied.includes(51) && occupied.includes(53))
+    assert.ok(!occupied.includes(52))
   })
   await t.test('admin session rejects forged credentials and supports admission-only scanning', async () => {
     assert.equal((await api('/api/admin/bookings', 'GET', undefined, { Authorization: `Bearer ${Buffer.from(JSON.stringify({ role: 'admin', exp: Date.now() + 86400000 })).toString('base64')}` })).status, 401)

@@ -40,45 +40,37 @@ export type BookingFailure = 'seat_conflict' | 'duplicate_booking' | 'request_co
 export function bookingFailure(error: unknown): BookingFailure {
   const text = error instanceof Error ? `${error.message} ${String(error.cause || '')}` : String(error)
   if (text.includes('duplicate_booking')) return 'duplicate_booking'
-  if (text.includes('seat_layout_changed')) return 'seat_conflict'
   if (text.includes('booked_seats.play_id')) return 'seat_conflict'
   if (text.includes('bookings.request_key')) return 'request_conflict'
   return 'database'
 }
 
 export async function createBooking(db: D1Database, data: {
-  id: string; playId: string; name: string; email: string; seats: number[]; requestKey: string; admissionToken: string; bookedSeats: number[]
+  id: string; playId: string; name: string; email: string; seats: number[]; requestKey: string; admissionToken: string
 }): Promise<{ success: boolean; error?: BookingFailure }> {
   try {
     await db.batch([
       db.prepare(`INSERT INTO bookings (id,play_id,name,email,status,admission_token,request_key,email_status)
         VALUES (?,?,?,?,'confirmed',?,?,'pending')`)
         .bind(data.id, data.playId, data.name, data.email, data.admissionToken, data.requestKey),
-      db.prepare('INSERT INTO seat_layout_checks (id,play_id,expected_seats) VALUES (?,?,?)')
-        .bind(data.id,data.playId,JSON.stringify([...data.bookedSeats].sort((a,b)=>a-b))),
       ...data.seats.map(seat => db.prepare('INSERT INTO booked_seats (booking_id,play_id,seat_number) VALUES (?,?,?)').bind(data.id,data.playId,seat)),
-      db.prepare('DELETE FROM seat_layout_checks WHERE id = ?').bind(data.id),
     ])
     return { success: true }
   } catch (error) { return { success: false, error: bookingFailure(error) } }
 }
 
-export async function updateBookingSeats(db: D1Database, booking: BookingWithSeats, seats: number[], bookedSeats: number[]) {
+export async function updateBookingSeats(db: D1Database, booking: BookingWithSeats, seats: number[]) {
   const version = booking.version || 0
-  const checkId = crypto.randomUUID()
   const allowed = `EXISTS (SELECT 1 FROM bookings WHERE id = ? AND status = 'confirmed' AND version = ?)`
   try {
     const results = await db.batch([
-      db.prepare('INSERT INTO seat_layout_checks (id,play_id,expected_seats) VALUES (?,?,?)')
-        .bind(checkId,booking.play_id,JSON.stringify([...bookedSeats].sort((a,b)=>a-b))),
       db.prepare(`DELETE FROM booked_seats WHERE booking_id = ? AND ${allowed}`).bind(booking.id,booking.id,version),
       ...seats.map(seat => db.prepare(`INSERT INTO booked_seats (booking_id,play_id,seat_number) SELECT ?,?,? WHERE ${allowed}`)
         .bind(booking.id,booking.play_id,seat,booking.id,version)),
       db.prepare(`UPDATE bookings SET version = version + 1, wallet_sync_pending = 1
         WHERE id = ? AND status = 'confirmed' AND version = ?`).bind(booking.id,version),
-      db.prepare('DELETE FROM seat_layout_checks WHERE id = ?').bind(checkId),
     ])
-    return { success: !!results.at(-2)?.meta.changes, error: 'changed' as BookingFailure }
+    return { success: !!results.at(-1)?.meta.changes, error: 'changed' as BookingFailure }
   } catch (error) { return { success: false, error: bookingFailure(error) } }
 }
 

@@ -2,20 +2,33 @@
 
 ## Seat policy
 
-New bookings and seat edits may not create a new isolated free seat within a
-physical block. Row ends, the central aisle and the two blocked front corners
-are block boundaries. Existing isolated seats remain bookable. Groups use
-adjacent seats in one block whenever an orphan-free group of that size remains
-available. When only scattered seats remain, split groups are allowed if they
-do not create new isolated seats. Unchanged existing bookings remain valid.
-Cancellation is never blocked by this policy.
+Seat-layout guidance is optional. New bookings and edits can leave single free
+seats, use separate groups or select the middle of a free block. A short notice
+explains newly isolated seats and explicitly allows continuing with the choice.
+There is no forced alternative and no layout rejection in either write API.
+Row ends, the central aisle and blocked front corners still bound the notice's
+seat blocks. Existing isolated seats, unchanged bookings and partial releases
+do not trigger it.
 
-The seat map explains invalid selections and offers a valid alternative of the
-same size where possible. The API applies the same rules. Migration
-`0006_seat_layout_guard.sql` verifies the occupancy snapshot inside the booking
-transaction, so concurrent bookings cannot jointly leave a singleton behind.
-Apply this additive migration before deploying the application. No existing
-booking is moved or deleted. The check rows are removed within the transaction.
+The five-seat maximum, one active reservation per email and performance, and
+the deadline at performance start remain in force. Occupied or invalid seats
+remain unavailable. Database uniqueness, transactional writes, request keys
+and booking versions continue to protect against double bookings and stale edits.
+The whole-layout snapshot check is no longer used: unrelated simultaneous
+bookings can both succeed, including when they leave a single seat between them.
+Migration 0006 can stay installed; its guard table is unused by the updated code.
+No seat-policy migration or change to existing reservations is required.
+
+`src/lib/seat-policy.ts` provides the notice shared by new bookings and edits.
+
+## Seat-rule verification (18 September 2026)
+
+The release passes 21 unit tests and 11 lifecycle scenarios against the packaged
+Pages worker with isolated local D1 state. These cover new bookings and edits
+with gaps, simultaneous disjoint bookings, duplicate seats, stale edits,
+transaction rollback and the existing email limit. TypeScript, changed-file
+lint, Next.js build and Pages packaging pass. In Brave, selecting A3 shows the
+optional A2 gap notice, enables Continue and retains A3 on the details step.
 
 ## Existing Google Wallet issuer
 

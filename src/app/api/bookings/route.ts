@@ -3,7 +3,6 @@ import { createBooking, getBookingByRequestKey, getBookedSeatsForPlay, getPlayBy
 import { emailConfig, sendBookingConfirmation } from '@/lib/email'
 import { sendDiscordSeatUpdate } from '@/lib/discord'
 import { isBookingOpen, validSeats } from '@/lib/tickets'
-import { seatPolicy } from '@/lib/seat-policy'
 import { rateLimit, sameOrigin, ticketJson } from '@/lib/ticket-http'
 
 export const runtime = 'edge'
@@ -38,10 +37,8 @@ export async function POST(request: Request) {
       if (completed) return replay(completed)
       return ticketJson({ error: 'Ein Platz wurde gerade reserviert. Bitte prüfe deine Auswahl.', code:'seat_conflict', bookedSeats },409)
     }
-    const policy = seatPolicy(play.total_seats,bookedSeats,seats)
-    if (policy.issue) return ticketJson({ error:policy.issue.message, code:'seat_policy', reason:policy.issue.code, bookedSeats },409)
     const id = `booking-${crypto.randomUUID()}`
-    const result = await createBooking(env.DB,{id,playId,name,email,seats,requestKey,admissionToken:crypto.randomUUID(),bookedSeats})
+    const result = await createBooking(env.DB,{id,playId,name,email,seats,requestKey,admissionToken:crypto.randomUUID()})
     if (!result.success) {
       // Another identical request may have committed while this request was waiting.
       const completed = await getBookingByRequestKey(env.DB,requestKey)
