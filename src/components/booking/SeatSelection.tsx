@@ -4,8 +4,6 @@ import { MAX_SEATS, SEATS_PER_ROW, seatLabel, seatNumbers } from '@/lib/tickets'
 
 type Props={bookedSeats:number[];selectedSeats:number[];onChange:(seats:number[])=>void;onContinue:()=>void;totalSeats:number;disabled?:boolean;continueLabel?:string}
 export default function SeatSelection({bookedSeats,selectedSeats,onChange,onContinue,totalSeats,disabled=false,continueLabel='Weiter'}:Props) {
-  const [mode,setMode]=useState<'rows'|'map'>('rows')
-  const [row,setRow]=useState(0)
   const [notice,setNotice]=useState('')
   const numbers=seatNumbers(totalSeats), allowed=new Set(numbers)
   const rows=Math.ceil((totalSeats+2)/SEATS_PER_ROW)
@@ -22,25 +20,11 @@ export default function SeatSelection({bookedSeats,selectedSeats,onChange,onCont
   }
   return <>
     <div className='ticket-seat-toolbar'>
-      <div className='ticket-seat-modes md:hidden' aria-label='Ansicht wählen'>
-        <button type='button' aria-pressed={mode==='rows'} onClick={()=>setMode('rows')}>Nach Reihe</button>
-        <button type='button' aria-pressed={mode==='map'} onClick={()=>setMode('map')}>Saalplan</button>
-      </div>
       <div className='ticket-seat-legend'><span><i/>Frei</span><span><i className='chosen'/>Deine Auswahl</span><span><i className='taken'/>Belegt</span></div>
     </div>
     <div className='ticket-panel'>
-      <div className='ticket-row-view' data-mode={mode}>
-        <p className='ticket-muted mb-4'>Reihe A ist direkt vor der Bühne. Wähle eine Reihe und dann deine Plätze.</p>
-        <div className='ticket-row-picker' aria-label='Sitzreihe auswählen'>{Array.from({length:rows},(_,i)=><button type='button' key={i} aria-label={`Reihe ${String.fromCharCode(65+i)}`} aria-pressed={row===i} onClick={()=>setRow(i)}>{String.fromCharCode(65+i)}</button>)}</div>
-        <h3 className='ticket-section-title'>Reihe {String.fromCharCode(65+row)}</h3>
-        <p className='ticket-bank-label'>Linker Block · Plätze 1–5</p>
-        <div className='ticket-bank'>{Array.from({length:5},(_,i)=>seat(row*10+i))}</div>
-        <p className='ticket-bank-label'>Rechter Block · Plätze 6–10</p>
-        <div className='ticket-bank'>{Array.from({length:5},(_,i)=>seat(row*10+5+i))}</div>
-        <p className='ticket-muted mt-5 text-xs'>Zwischen den beiden Blöcken liegt der Mittelgang.</p>
-      </div>
-      <div className='ticket-map-view' data-mode={mode}>
-        <p className='ticket-muted md:hidden text-xs mb-2'>Du kannst den Saalplan seitlich verschieben. Größere Schaltflächen findest du unter „Nach Reihe“.</p>
+      <div className='ticket-map-view'>
+        <p className='ticket-muted md:hidden text-xs mb-2'>Du kannst den Saalplan seitlich verschieben.</p>
         <div className='ticket-map-scroll' tabIndex={0} role='region' aria-label='Saalplan, horizontal scrollbar'>
           <div className='ticket-map'><div className='ticket-stage'>BÜHNE</div>
             {Array.from({length:rows},(_,r)=><div className='ticket-seat-row' key={r}><span className='ticket-row-letter'>{String.fromCharCode(65+r)}</span>{Array.from({length:5},(_,i)=>seat(r*10+i))}<span aria-hidden='true'/>{Array.from({length:5},(_,i)=>seat(r*10+5+i))}</div>)}
