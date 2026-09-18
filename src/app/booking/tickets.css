@@ -1,5 +1,6 @@
 .ticket-flow{--ticket-accent:#ed7629;--ticket-paper:var(--color-site-800);max-width:1080px;margin:0 auto;color:var(--color-site-50)}
 .ticket-flow *{box-sizing:border-box}
+.ticket-production-banner{display:block;width:100%;height:auto;aspect-ratio:3/1;object-fit:cover;border-radius:18px;margin:0 0 12px}
 .ticket-flow button,.ticket-flow a,.ticket-flow input{touch-action:manipulation}
 .ticket-flow :focus-visible{outline:3px solid var(--ticket-accent);outline-offset:4px}
 .ticket-eyebrow{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--ticket-accent);margin:0 0 12px}

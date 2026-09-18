@@ -30,7 +30,7 @@ async function checkCredentials(credentials) {
   })
   const token = await tokenResponse.json()
   if (!tokenResponse.ok || !token.access_token) throw Error(`Google authentication failed (${tokenResponse.status}).`)
-  const response = await fetch(`https://walletobjects.googleapis.com/walletobjects/v1/eventticketclass?issuerId=${issuer}&maxResults=1`, {
+  const response = await fetch(`https://walletobjects.googleapis.com/walletobjects/v1/eventTicketClass?issuerId=${issuer}&maxResults=1`, {
     headers: { Authorization: `Bearer ${token.access_token}` }, signal: AbortSignal.timeout(15000),
   })
   if (!response.ok) throw Error(`Wallet issuer access failed (${response.status}). Check API activation and issuer permissions.`)
@@ -50,6 +50,13 @@ try {
   await checkCredentials(credentials)
   console.log('Google authentication and access to the specified Wallet issuer verified.')
   if (configure) {
+    // Check the new worker's schema before making any deployment/secret changes.
+    try {
+      wrangler(['d1', 'execute', 'theater-bookings', '--remote', '--command',
+        'SELECT booking_id FROM wallet_sync_jobs LIMIT 0'])
+    } catch {
+      throw Error('Wallet schema check failed. Check Wrangler access and apply migration 0007_wallet_sync_jobs.sql before configuration.')
+    }
     const secrets = JSON.stringify({
       GOOGLE_WALLET_ENABLED: 'false', GOOGLE_WALLET_ISSUER_ID: issuer,
       GOOGLE_WALLET_CLIENT_EMAIL: credentials.client_email, GOOGLE_WALLET_PRIVATE_KEY: credentials.private_key,

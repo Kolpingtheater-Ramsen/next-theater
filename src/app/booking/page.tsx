@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
@@ -112,6 +113,11 @@ export default function BookingPage() {
 
   const days = [...new Set(plays.map(item => item.date))]
   return <>
+    {step === 'date' && (!plays.length || plays[0].id.startsWith('romeo-julia-2026-')) && <Image
+      className='ticket-production-banner' src='/img/banners/romeo-und-julia-2026.webp'
+      alt='Romeo und Julia reichen sich im Mondlicht über einen Balkon die Hände.'
+      width={2172} height={724} priority unoptimized
+    />}
     <header className='ticket-intro'>
       <div><p className='ticket-eyebrow'>Kolpingtheater Ramsen · Wintertheater</p><h1 className='ticket-heading'>{play?.title || plays[0]?.title || 'Romeo und Julia'}</h1><p className='ticket-muted'>Ein Abend im Theater. Deine Plätze warten auf dich.</p></div>
       <span className='ticket-badge'>Eintritt frei</span>

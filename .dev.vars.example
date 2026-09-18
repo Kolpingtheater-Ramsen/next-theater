@@ -22,3 +22,10 @@ THEATER_NAME="Kolpingtheater Ramsen"
 REPLY_TO_EMAIL=your-theater-email@gmail.com
 
 DISCORD_WEBHOOK_URL=your-discord-webhook-url-here
+
+# Google Wallet stays hidden until credentials and publishing access are ready.
+# Use Cloudflare secrets in production; keep private keys out of Git.
+GOOGLE_WALLET_ENABLED=false
+# GOOGLE_WALLET_ISSUER_ID=
+# GOOGLE_WALLET_CLIENT_EMAIL=
+# GOOGLE_WALLET_PRIVATE_KEY=

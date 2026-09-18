@@ -7,7 +7,9 @@ No duration is assumed. Navigation and homepage content are unchanged.
 
 For subsequent seat-selection rules and Wallet credential setup, see
 [seat-policy-and-wallet.md](seat-policy-and-wallet.md). Apply migration 0006
-before deploying the seat-policy changes.
+as historical schema and 0007 for serialized Wallet synchronization before
+deploying the application and retry worker. Seat-layout guidance is optional;
+the updated application no longer uses the whole-layout guard from 0006.
 
 ## Database and deployment order
 
@@ -18,7 +20,8 @@ branch that automatically deploys to production:
 2. Export `theater-bookings` to a private local backup. It contains personal data.
 3. Apply `0004_ticket_flow.sql`, then `0005_romeo_und_julia_2026.sql`. Use the D1
    migration runner when its history matches the current schema. Do not replay old
-   migrations against an untracked production schema.
+   migrations against an untracked production schema. Then apply the additive
+   migrations `0006_seat_layout_guard.sql` and `0007_wallet_sync_jobs.sql`.
 4. Deploy the tested Pages build, then check `/booking` and `/api/plays` on the
    production domain. Do not create real reservations as an automated smoke test.
 

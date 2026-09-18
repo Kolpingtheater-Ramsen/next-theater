@@ -22,13 +22,17 @@ export async function getBookedSeatsForPlay(db: D1Database, id: string): Promise
 }
 
 export async function getBookingById(db: D1Database, id: string): Promise<BookingWithSeats | null> {
-  const booking = await db.prepare('SELECT * FROM bookings WHERE id = ?').bind(id).first<Booking>()
-  if (!booking) return null
-  const [seats, play] = await Promise.all([
-    db.prepare('SELECT seat_number FROM booked_seats WHERE booking_id = ? ORDER BY seat_number').bind(id).all<{seat_number: number}>(),
-    getPlayById(db, booking.play_id),
+  // One transactional snapshot: a concurrent edit must not combine an old
+  // status/version with new seats in the ticket or Google Wallet pass.
+  const [bookingRows, seatRows, playRows] = await db.batch([
+    db.prepare('SELECT * FROM bookings WHERE id = ?').bind(id),
+    db.prepare('SELECT seat_number FROM booked_seats WHERE booking_id = ? ORDER BY seat_number').bind(id),
+    db.prepare('SELECT * FROM plays WHERE id = (SELECT play_id FROM bookings WHERE id = ?)').bind(id),
   ])
-  return { ...booking, seats: (seats.results || []).map(row => row.seat_number), ...(play && { play }) }
+  const booking = bookingRows.results?.[0] as Booking | undefined
+  if (!booking) return null
+  const play = playRows.results?.[0] as Play | undefined
+  return { ...booking, seats: (seatRows.results as {seat_number: number}[] || []).map(row => row.seat_number), ...(play && { play }) }
 }
 
 export async function getBookingByRequestKey(db: D1Database, key: string) {

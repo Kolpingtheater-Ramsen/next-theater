@@ -1,5 +1,5 @@
 import { getBookingById } from './db'
-import { admissionCode, DEFAULT_VENUE, performanceStart, seatLabel } from './tickets'
+import { admissionCode, DEFAULT_VENUE, hasStarted, performanceStart, seatLabel } from './tickets'
 import type { BookingWithSeats, Play } from '@/types/database'
 
 const API = 'https://walletobjects.googleapis.com/walletobjects/v1'
@@ -44,6 +44,7 @@ export function walletClass(env:CloudflareEnv,play:Play) {
   return {id:`${env.GOOGLE_WALLET_ISSUER_ID}.${play.id}`,issuerName:'Kolpingtheater Ramsen',reviewStatus:'UNDER_REVIEW',
     eventName:localized(play.title),eventId:play.id,hexBackgroundColor:'#201c19',
     logo:{sourceUri:{uri:`${SITE}/img/logo.png`},contentDescription:localized('Kolpingtheater Ramsen')},
+    ...(play.id.startsWith('romeo-julia-2026-') ? {heroImage:{sourceUri:{uri:`${SITE}/img/banners/romeo-und-julia-2026-wallet.png`},contentDescription:localized('Romeo und Julia am Balkon im Mondlicht')}} : {}),
     venue:{name:localized('Kolpingtheater Ramsen'),address:localized(play.venue || DEFAULT_VENUE)},
     dateTime:{start:walletEventTime(play)},
     finePrint:localized('Eintritt frei. Bitte 15 Minuten vor Beginn da sein. Dieses Ticket gilt für alle angegebenen Plätze.'),
@@ -63,41 +64,115 @@ export function walletObject(env:CloudflareEnv,booking:BookingWithSeats) {
 }
 async function upsertObject(env:CloudflareEnv,booking:BookingWithSeats) {
   const body=walletObject(env,booking)
-  let response=await walletRequest(env,`eventticketobject/${body.id}`,'PATCH',body)
-  if(response.status===404) response=await walletRequest(env,'eventticketobject','POST',body)
-  if(response.status===409) response=await walletRequest(env,`eventticketobject/${body.id}`,'PATCH',body)
+  let response=await walletRequest(env,`eventTicketObject/${body.id}`,'PATCH',body)
+  if(response.status===404) response=await walletRequest(env,'eventTicketObject','POST',body)
+  if(response.status===409) response=await walletRequest(env,`eventTicketObject/${body.id}`,'PATCH',body)
   if(!response.ok) throw new Error(`Wallet object update failed (${response.status})`)
 }
-export async function syncWalletPass(env:CloudflareEnv,bookingId:string):Promise<void> {
-  if(!walletConfigured(env)) return
-  const booking=await getBookingById(env.DB,bookingId)
-  if(!booking?.wallet_issued || !booking.play) return
-  try {
-    await upsertObject(env,booking)
-    const cleared=await env.DB.prepare('UPDATE bookings SET wallet_sync_pending = 0 WHERE id = ? AND version = ?').bind(booking.id,booking.version || 0).run()
-    if(!cleared.meta.changes) await env.DB.prepare('UPDATE bookings SET wallet_sync_pending = 1 WHERE id = ?').bind(booking.id).run()
-  } catch {
-    await env.DB.prepare('UPDATE bookings SET wallet_sync_pending = 1 WHERE id = ?').bind(booking.id).run()
-    console.error('Wallet update queued for retry')
+async function ensureClass(env: CloudflareEnv, play: Play) {
+  const event = walletClass(env, play)
+  const path = `eventTicketClass/${event.id}`
+  let found = await walletRequest(env, path)
+  if (found.status === 404) {
+    const created = await walletRequest(env, 'eventTicketClass', 'POST', event)
+    if (created.ok) return
+    if (created.status !== 409) throw new Error('Wallet event could not be created')
+    // Another request or the console may have created a draft meanwhile.
+    found = await walletRequest(env, path)
+  }
+  if (!found.ok) throw new Error('Wallet event unavailable')
+  const existing = await found.json() as { reviewStatus?: string }
+  if (existing.reviewStatus?.toUpperCase() === 'DRAFT') {
+    // Console-created drafts cannot issue objects. Preserve their artwork and
+    // other settings; approved classes do not need to be resubmitted.
+    const submitted = await walletRequest(env, path, 'PATCH', { reviewStatus: 'UNDER_REVIEW' })
+    if (!submitted.ok) throw new Error('Wallet event could not be submitted')
   }
 }
-export async function createWalletLink(env:CloudflareEnv,booking:BookingWithSeats,origin:string) {
-  if(!walletConfigured(env) || !booking.play) throw new Error('Wallet unavailable')
-  const event=walletClass(env,booking.play)
-  const found=await walletRequest(env,`eventticketclass/${event.id}`)
-  if(found.status===404) {
-    const created=await walletRequest(env,'eventticketclass','POST',event)
-    if(!created.ok && created.status!==409) throw new Error('Wallet event could not be created')
-  } else if(!found.ok) throw new Error('Wallet event unavailable')
-  // Persist intent before contacting Google, so a concurrent edit/cancellation is retried.
-  await env.DB.prepare('UPDATE bookings SET wallet_issued = 1, wallet_sync_pending = 1 WHERE id = ?').bind(booking.id).run()
-  await upsertObject(env,booking)
-  await syncWalletPass(env,booking.id)
-  const jwt=await signWalletJwt({iss:env.GOOGLE_WALLET_CLIENT_EMAIL,aud:'google',typ:'savetowallet',iat:Math.floor(Date.now()/1000),origins:[new URL(origin).host],payload:{eventTicketObjects:[{id:walletObject(env,booking).id}]}},env.GOOGLE_WALLET_PRIVATE_KEY!)
+
+export type WalletSyncResult = 'synced' | 'pending' | 'busy' | 'unavailable'
+export async function syncWalletPass(env: CloudflareEnv, bookingId: string): Promise<WalletSyncResult> {
+  if (!walletConfigured(env)) return 'unavailable'
+  const now = Math.floor(Date.now() / 1000), lease = crypto.randomUUID()
+  // All writers, including first issuance, use this per-booking lease. A crashed
+  // request releases itself after two minutes; provider calls time out after 8s.
+  const job = await env.DB.prepare(`INSERT INTO wallet_sync_jobs (booking_id, lease_token, lease_until)
+    SELECT id, ?, ? FROM bookings WHERE id = ? AND wallet_issued = 1
+    ON CONFLICT(booking_id) DO UPDATE SET lease_token = excluded.lease_token, lease_until = excluded.lease_until
+    WHERE wallet_sync_jobs.lease_until <= ? RETURNING attempts`)
+    .bind(lease, now + 120, bookingId, now).first<{ attempts: number }>()
+  if (!job) return 'busy'
+  try {
+    const booking = await getBookingById(env.DB, bookingId)
+    if (!booking?.play) throw new Error('Ticket incomplete')
+    // A failed first issuance can be recovered entirely by the retry worker.
+    await ensureClass(env, booking.play)
+    await upsertObject(env, booking)
+    const results = await env.DB.batch([
+      env.DB.prepare(`UPDATE bookings SET wallet_sync_pending = 0 WHERE id = ? AND version = ?
+        AND EXISTS (SELECT 1 FROM wallet_sync_jobs WHERE booking_id = ? AND lease_token = ?)`)
+        .bind(bookingId, booking.version || 0, bookingId, lease),
+      env.DB.prepare('DELETE FROM wallet_sync_jobs WHERE booking_id = ? AND lease_token = ?').bind(bookingId, lease),
+    ])
+    // An edit during the Google request retains its pending flag. The next run
+    // reads the latest booking rather than replaying an obsolete pass body.
+    if (results[0].meta.changes) return 'synced'
+    // If an unusually slow write outlives its lease, a replacement writer may
+    // already have cleared the flag. Schedule reconciliation in that case too.
+    await env.DB.prepare('UPDATE bookings SET wallet_sync_pending = 1 WHERE id = ?').bind(bookingId).run()
+    return 'pending'
+  } catch {
+    const delay = Math.min(3600, 30 * 2 ** Math.min(job.attempts, 7))
+    await env.DB.batch([
+      env.DB.prepare('UPDATE bookings SET wallet_sync_pending = 1 WHERE id = ?').bind(bookingId),
+      env.DB.prepare(`UPDATE wallet_sync_jobs SET lease_token = NULL, lease_until = 0,
+        retry_at = ?, attempts = attempts + 1 WHERE booking_id = ? AND lease_token = ?`)
+        .bind(Math.floor(Date.now() / 1000) + delay, bookingId, lease),
+    ])
+    console.error('Wallet update queued for retry')
+    return 'pending'
+  }
+}
+
+export async function createWalletLink(env: CloudflareEnv, booking: BookingWithSeats, origin: string) {
+  if (!walletConfigured(env) || !booking.play) throw new Error('Wallet unavailable')
+  // Persist intent before the first Google call, including class creation.
+  const issued = await env.DB.prepare(`UPDATE bookings SET wallet_issued = 1, wallet_sync_pending = 1
+    WHERE id = ? AND status = 'confirmed' AND version = ?`).bind(booking.id, booking.version || 0).run()
+  if (!issued.meta.changes) throw new Error('Booking changed')
+  if (await syncWalletPass(env, booking.id) !== 'synced') throw new Error('Wallet update pending')
+  const latest = await getBookingById(env.DB, booking.id)
+  if (!latest?.play || latest.status !== 'confirmed' || hasStarted(latest.play) || latest.wallet_sync_pending) {
+    throw new Error('Booking changed')
+  }
+  const jwt = await signWalletJwt({ iss: env.GOOGLE_WALLET_CLIENT_EMAIL, aud: 'google', typ: 'savetowallet',
+    iat: Math.floor(Date.now() / 1000), origins: [new URL(origin).host],
+    payload: { eventTicketObjects: [{ id: walletObject(env, latest).id }] },
+  }, env.GOOGLE_WALLET_PRIVATE_KEY!)
   return `https://pay.google.com/gp/v/save/${jwt}`
 }
-export async function syncPendingWalletPasses(env:CloudflareEnv) {
-  if(!walletConfigured(env)) return
-  const pending=await env.DB.prepare('SELECT id FROM bookings WHERE wallet_sync_pending = 1 AND wallet_issued = 1 LIMIT 50').all<{id:string}>()
-  for(const row of pending.results || []) await syncWalletPass(env,row.id)
+
+export async function syncPendingWalletPasses(env: CloudflareEnv) {
+  const summary = { enabled: walletConfigured(env), attempted: 0, synced: 0, pending: 0, busy: 0 }
+  if (!summary.enabled) return summary
+  const now = Math.floor(Date.now() / 1000)
+  const pending = await env.DB.prepare(`SELECT b.id FROM bookings b
+    LEFT JOIN wallet_sync_jobs j ON j.booking_id = b.id
+    WHERE b.wallet_sync_pending = 1 AND b.wallet_issued = 1
+      AND COALESCE(j.retry_at, 0) <= ? AND COALESCE(j.lease_until, 0) <= ?
+    ORDER BY COALESCE(j.retry_at, 0), b.id LIMIT 50`).bind(now, now).all<{ id: string }>()
+  for (const row of pending.results || []) {
+    summary.attempted++
+    try {
+      const result = await syncWalletPass(env, row.id)
+      if (result === 'synced') summary.synced++
+      else if (result === 'busy') summary.busy++
+      else summary.pending++
+    } catch {
+      // A failed job must not prevent later reservations from being synchronized.
+      summary.pending++
+      console.error('Wallet synchronization deferred')
+    }
+  }
+  return summary
 }

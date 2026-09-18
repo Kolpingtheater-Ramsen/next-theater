@@ -5,6 +5,6 @@ import { ticketJson } from '@/lib/ticket-http'
 export const runtime='edge'
 export async function POST(request:Request) {
   if(!(await requireAdminAuth(request))) return ticketJson({error:'Nicht angemeldet.'},401)
-  await syncPendingWalletPasses(getRequestContext().env)
-  return ticketJson({success:true})
+  const result = await syncPendingWalletPasses(getRequestContext().env)
+  return ticketJson({success:true,...result})
 }
