@@ -3,6 +3,7 @@ import { getBookingById, cancelBooking, getBookedSeatsForPlay, updateBookingSeat
 import { emailConfig, sendCancellationConfirmation, sendBookingModification } from '@/lib/email'
 import { sendDiscordSeatUpdate } from '@/lib/discord'
 import { hasStarted, validSeats } from '@/lib/tickets'
+import { seatPolicy } from '@/lib/seat-policy'
 import { sameOrigin, ticketJson } from '@/lib/ticket-http'
 import { syncWalletPass, walletConfigured } from '@/lib/google-wallet'
 
@@ -31,7 +32,14 @@ async function change(request:Request,{params}:Context,cancel:boolean) {
     if (body.version !== (booking.version || 0)) return ticketJson({error:'Die Buchung wurde inzwischen geändert. Bitte lade dein Ticket erneut.',code:'changed'},409)
     if (!cancel && !validSeats(body.seats,booking.play.total_seats)) return ticketJson({error:'Bitte wähle ein bis fünf gültige Sitzplätze.'},400)
     const seats = body.seats as number[]
-    const result = cancel ? await cancelBooking(env.DB,booking) : await updateBookingSeats(env.DB,booking,seats)
+    const bookedSeats = cancel ? [] : await getBookedSeatsForPlay(env.DB,booking.play_id)
+    if (!cancel) {
+      const occupied = bookedSeats.filter(seat=>!booking.seats.includes(seat))
+      if (seats.some(seat=>occupied.includes(seat))) return ticketJson({error:'Ein Platz wurde inzwischen reserviert. Bitte prüfe deine Auswahl.',code:'seat_conflict',bookedSeats},409)
+      const policy = seatPolicy(booking.play.total_seats,occupied,seats,booking.seats)
+      if (policy.issue) return ticketJson({error:policy.issue.message,code:'seat_policy',reason:policy.issue.code,bookedSeats},409)
+    }
+    const result = cancel ? await cancelBooking(env.DB,booking) : await updateBookingSeats(env.DB,booking,seats,bookedSeats)
     if (!result.success) {
       const latest = await getBookingById(env.DB,booking.id)
       const changed = !latest || latest.version !== booking.version || latest.status !== 'confirmed'

@@ -46,3 +46,57 @@ test('seat layout contains exactly the configured capacity and blocks the front 
   assert.equal(tickets.validSeats([1, 1], 68), false)
   assert.equal(tickets.validSeats([69], 68), true)
 })
+
+test('Wallet save flow creates an event and pass, signs an object-only link, and queues failed updates', async t => {
+  const keys = await webcrypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['sign', 'verify'])
+  const der = await webcrypto.subtle.exportKey('pkcs8', keys.privateKey)
+  const state = { ...booking, seats: [1, 2], version: 0, wallet_issued: 0, wallet_sync_pending: 0 }
+  const configured = { ...env, GOOGLE_WALLET_ENABLED: 'true', GOOGLE_WALLET_CLIENT_EMAIL: 'wallet-test@example.invalid', GOOGLE_WALLET_PRIVATE_KEY: `-----BEGIN PRIVATE KEY-----\n${Buffer.from(der).toString('base64')}\n-----END PRIVATE KEY-----`, DB: {
+    prepare(sql) { return {
+      bind() { return this },
+      async first() { return sql.includes('FROM plays') ? play : { ...state } },
+      async all() { return { results: state.seats.map(seat_number => ({ seat_number })) } },
+      async run() {
+        if (sql.includes('wallet_issued = 1')) state.wallet_issued = 1
+        if (sql.includes('wallet_sync_pending = 1')) state.wallet_sync_pending = 1
+        if (sql.includes('wallet_sync_pending = 0')) state.wallet_sync_pending = 0
+        return { meta: { changes: 1 } }
+      },
+    } },
+  } }
+  let stored, unavailable = false
+  const writes = []
+  t.mock.method(globalThis, 'fetch', async (url, options = {}) => {
+    if (url === 'https://oauth2.googleapis.com/token') return Response.json({ access_token: 'ephemeral-test-token' })
+    assert.ok(url.startsWith('https://walletobjects.googleapis.com/walletobjects/v1/'))
+    assert.equal(options.headers.Authorization, 'Bearer ephemeral-test-token')
+    if (url.includes('eventticketclass')) {
+      if (options.method === 'GET') return new Response(null, { status: 404 })
+      writes.push(JSON.parse(options.body))
+      return Response.json({})
+    }
+    if (unavailable) return new Response(null, { status: 503 })
+    if (options.method === 'PATCH' && !stored) return new Response(null, { status: 404 })
+    stored = JSON.parse(options.body)
+    writes.push(stored)
+    return Response.json(stored)
+  })
+  const link = await wallet.createWalletLink(configured, state, 'https://kolpingtheater-ramsen.de')
+  const [header, payload, signature] = link.split('/').at(-1).split('.')
+  assert.equal(await webcrypto.subtle.verify('RSASSA-PKCS1-v1_5', keys.publicKey, Buffer.from(signature, 'base64url'), Buffer.from(`${header}.${payload}`)), true)
+  const claims = JSON.parse(Buffer.from(payload, 'base64url'))
+  assert.deepEqual(claims.payload, { eventTicketObjects: [{ id: '12345.ticket_public-admission-code' }] })
+  assert.deepEqual(claims.origins, ['kolpingtheater-ramsen.de'])
+  assert.equal(state.wallet_issued, 1)
+  assert.equal(state.wallet_sync_pending, 0)
+  assert.ok(writes.some(value => value.dateTime?.start === '2026-12-27T19:30:00+01:00'))
+  assert.equal(stored.seatInfo.seat.defaultValue.value, 'A2, A3')
+  state.status = 'cancelled'; state.seats = []; state.version++
+  unavailable = true
+  await wallet.syncWalletPass(configured, state.id)
+  assert.equal(state.wallet_sync_pending, 1)
+  unavailable = false
+  await wallet.syncWalletPass(configured, state.id)
+  assert.equal(stored.state, 'INACTIVE')
+  assert.equal(state.wallet_sync_pending, 0)
+})

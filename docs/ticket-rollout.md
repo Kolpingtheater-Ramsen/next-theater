@@ -5,6 +5,10 @@ The ticket pages contain six performances of Romeo und Julia on 27, 28 and
 68 bookable seats and free admission. A booking contains at most five seats.
 No duration is assumed. Navigation and homepage content are unchanged.
 
+For subsequent seat-selection rules and Wallet credential setup, see
+[seat-policy-and-wallet.md](seat-policy-and-wallet.md). Apply migration 0006
+before deploying the seat-policy changes.
+
 ## Database and deployment order
 
 Deploying the application requires the new database columns. Before pushing a

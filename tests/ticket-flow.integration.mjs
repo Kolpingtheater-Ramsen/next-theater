@@ -43,9 +43,13 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
     assert.equal((await api(`/api/bookings/${current.id}/wallet`, 'POST', {})).status, 503)
   })
   await t.test('update, prevent stale changes and preserve selected seats', async () => {
-    const updated = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [21, 22, 23], version: 0 })
+    const invalid = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [21, 22, 23], version: 0 })
+    assert.equal(invalid.status, 409)
+    assert.equal(invalid.data.reason, 'single_seat_gap')
+    assert.deepEqual((await api(`/api/bookings/${current.id}`)).data.booking.seats, [20, 21])
+    const updated = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [20, 21, 22], version: 0 })
     assert.equal(updated.status, 200)
-    assert.deepEqual(updated.data.booking.seats, [21, 22, 23])
+    assert.deepEqual(updated.data.booking.seats, [20, 21, 22])
     current = updated.data.booking
     const stale = await api(`/api/bookings/${current.id}`, 'PATCH', { seats: [24], version: 0 })
     assert.equal(stale.status, 409)
@@ -58,15 +62,32 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
   })
   await t.test('concurrent same-email requests yield one booking', async () => {
     const email = `duplicate-${run}@example.invalid`
-    const results = await Promise.all([api('/api/bookings', 'POST', booking(play, [31], email)), api('/api/bookings', 'POST', booking(play, [32], email))])
+    const results = await Promise.all([api('/api/bookings', 'POST', booking(play, [31], email)), api('/api/bookings', 'POST', booking(play, [34], email))])
     assert.deepEqual(results.map(r => r.status).sort(), [201, 409])
     assert.equal(results.find(r => r.status === 409).data.code, 'duplicate_booking')
   })
   await t.test('replayed simultaneous requests return the same booking', async () => {
-    const same = booking(play, [33])
+    const same = booking(play, [40])
     const results = await Promise.all([api('/api/bookings', 'POST', same), api('/api/bookings', 'POST', same)])
     assert.ok(results.every(r => r.status === 200 || r.status === 201), JSON.stringify(results.map(r => ({status:r.status,data:r.data}))))
     assert.equal(results[0].data.bookingId, results[1].data.bookingId)
+  })
+  await t.test('server rejects orphan seats and split groups even when bypassing the UI', async () => {
+    for (const [seats, reason] of [[[2], 'single_seat_gap'], [[1, 8], 'split_group']]) {
+      const result = await api('/api/bookings', 'POST', booking(play, seats))
+      assert.equal(result.status, 409)
+      assert.equal(result.data.reason, reason)
+    }
+  })
+  await t.test('concurrent disjoint bookings cannot create a single seat between them', async () => {
+    const results = await Promise.all([
+      api('/api/bookings', 'POST', booking(play, [50, 51])),
+      api('/api/bookings', 'POST', booking(play, [53, 54])),
+    ])
+    assert.deepEqual(results.map(r => r.status).sort(), [201, 409])
+    const occupied = (await api(`/api/plays/${play}/seats`)).data.bookedSeats
+    assert.ok(!(occupied.includes(51) && occupied.includes(53)))
+    assert.ok(['seat_policy', 'seat_conflict'].includes(results.find(r => r.status === 409).data.code))
   })
   await t.test('admin session rejects forged credentials and supports admission-only scanning', async () => {
     assert.equal((await api('/api/admin/bookings', 'GET', undefined, { Authorization: `Bearer ${Buffer.from(JSON.stringify({ role: 'admin', exp: Date.now() + 86400000 })).toString('base64')}` })).status, 401)
@@ -88,7 +109,7 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
     assert.equal(read.data.booking.status, 'cancelled')
     assert.deepEqual(read.data.booking.seats, [])
     const availability = await api(`/api/plays/${play}/seats`)
-    assert.ok([21, 22, 23].every(seat => !availability.data.bookedSeats.includes(seat)))
+    assert.ok([20, 21, 22].every(seat => !availability.data.bookedSeats.includes(seat)))
     assert.equal((await api('/api/admin/logout', 'POST', {}, { Cookie: cookie })).status, 200)
     assert.equal((await api('/api/admin/bookings', 'GET', undefined, { Cookie: cookie })).status, 401)
   })
