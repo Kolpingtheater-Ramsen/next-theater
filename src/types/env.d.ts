@@ -35,6 +35,7 @@ export interface D1Result<T = unknown> {
   success: boolean
   error?: string
   meta: {
+    changes?: number
     duration: number
     size_after: number
     rows_read: number

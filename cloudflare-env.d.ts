@@ -3,6 +3,10 @@
 
 declare global {
   interface CloudflareEnv {
+    GOOGLE_WALLET_ENABLED?: string
+    GOOGLE_WALLET_ISSUER_ID?: string
+    GOOGLE_WALLET_CLIENT_EMAIL?: string
+    GOOGLE_WALLET_PRIVATE_KEY?: string
     DB: D1Database
     ADMIN_PASSWORD_HASH?: string
     RESEND_API_KEY?: string

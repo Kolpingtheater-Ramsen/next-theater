@@ -1,358 +1,143 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
-import LoadingSpinner from '@/components/LoadingSpinner'
-import MessageModal from '@/components/MessageModal'
-// import CountdownTimer from '@/components/CountdownTimer'
+import BookingSummary from '@/components/booking/BookingSummary'
+import { DEFAULT_VENUE, formatDay, MAX_SEATS } from '@/lib/tickets'
 import type { PlayWithAvailability } from '@/types/database'
 
-export type Play = {
-  id: string
-  date: string
-  time: string
-  displayDate: string
-}
-
-export type Booking = {
-  id: string
-  playId: string
-  email: string
-  name: string
-  seats: number[]
-  timestamp: number
-}
+type Step = 'date' | 'seats' | 'details'
 
 export default function BookingPage() {
-  const [plays, setPlays] = useState<PlayWithAvailability[]>([])
-  const [selectedPlay, setSelectedPlay] = useState<PlayWithAvailability | null>(null)
-  const [selectedSeats, setSelectedSeats] = useState<number[]>([])
-  const [bookedSeats, setBookedSeats] = useState<number[]>([])
-  const [bookingStep, setBookingStep] = useState<'play-selection' | 'seat-selection' | 'form' | 'confirmation'>('play-selection')
-  const [bookingData, setBookingData] = useState<{ name: string; email: string } | null>(null)
-  const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null)
-  const [isMounted, setIsMounted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingSeats, setIsLoadingSeats] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [messageModal, setMessageModal] = useState<{ message: string; type?: 'error' | 'success' | 'info' } | null>(null)
   const router = useRouter()
+  const [plays, setPlays] = useState<PlayWithAvailability[]>([])
+  const [play, setPlay] = useState<PlayWithAvailability | null>(null)
+  const [step, setStep] = useState<Step>('date')
+  const [seats, setSeats] = useState<number[]>([])
+  const [booked, setBooked] = useState<number[]>([])
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [seatLoading, setSeatLoading] = useState(false)
+  const [seatsReady, setSeatsReady] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [field, setField] = useState<string>()
+  const request = useRef({ payload: '', key: '' })
+  const seatRequest = useRef(0)
+  const heading = useRef<HTMLHeadingElement>(null)
+  const submitting = useRef(false)
 
-  // Fetch plays on mount
-  useEffect(() => {
-    setIsMounted(true)
-    fetchPlays()
-  }, [])
-
-  const fetchPlays = async () => {
+  async function loadPlays() {
+    setLoading(true)
+    setError('')
     try {
-      setIsLoading(true)
-      const response = await fetch('/api/plays')
+      const response = await fetch('/api/plays', { cache: 'no-store' })
       const data = await response.json() as { success: boolean; plays: PlayWithAvailability[] }
-      
-      if (data.success) {
-        setPlays(data.plays)
-      } else {
-        setError('Failed to load plays')
-      }
-    } catch (err) {
-      console.error('Error fetching plays:', err)
-      setError('Failed to load plays')
-    } finally {
-      setIsLoading(false)
-    }
+      if (!response.ok || !data.success) throw new Error()
+      setPlays(data.plays)
+    } catch { setError('Die Termine konnten nicht geladen werden. Bitte versuche es erneut.') }
+    finally { setLoading(false) }
   }
+  useEffect(() => { void loadPlays() }, [])
+  useEffect(() => {
+    const back = () => {
+      const hash = window.location.hash.slice(1)
+      setStep(hash === 'details' && play && seats.length ? 'details' : hash === 'seats' && play ? 'seats' : 'date')
+      setError('')
+    }
+    window.addEventListener('popstate', back)
+    return () => window.removeEventListener('popstate', back)
+  }, [play, seats.length])
 
-  const fetchBookedSeats = async (playId: string) => {
+  function go(next: Step) {
+    setStep(next)
+    setError('')
+    window.history.pushState(null, '', next === 'date' ? '/booking' : `#${next}`)
+    requestAnimationFrame(() => { heading.current?.focus(); heading.current?.scrollIntoView({ block: 'start' }) })
+  }
+  async function loadSeats(selected: PlayWithAvailability) {
+    const current = ++seatRequest.current
+    setSeatLoading(true)
+    setSeatsReady(false)
+    setError('')
     try {
-      setIsLoadingSeats(true)
-      const response = await fetch(`/api/plays/${playId}/seats`)
+      const response = await fetch(`/api/plays/${selected.id}/seats`, { cache: 'no-store' })
       const data = await response.json() as { success: boolean; bookedSeats: number[] }
-      
-      if (data.success) {
-        setBookedSeats(data.bookedSeats)
-      } else {
-        console.error('Failed to load booked seats')
-      }
-    } catch (err) {
-      console.error('Error fetching booked seats:', err)
-    } finally {
-      setIsLoadingSeats(false)
-    }
+      if (!response.ok || !data.success) throw new Error()
+      if (current !== seatRequest.current) return
+      setBooked(data.bookedSeats)
+      setSeats(existing => existing.filter(seat => !data.bookedSeats.includes(seat)))
+      setSeatsReady(true)
+    } catch {
+      if (current === seatRequest.current) setError('Die freien Plätze konnten nicht geladen werden. Bitte lade sie erneut, bevor du buchst.')
+    } finally { if (current === seatRequest.current) setSeatLoading(false) }
   }
-
-  const handlePlaySelect = async (play: PlayWithAvailability) => {
-    setSelectedPlay(play)
-    setSelectedSeats([])
-    setBookingStep('seat-selection')
-    await fetchBookedSeats(play.id)
+  function choose(selected: PlayWithAvailability) {
+    if (play?.id !== selected.id) setSeats([])
+    setPlay(selected)
+    go('seats')
+    void loadSeats(selected)
   }
-
-  const handleSeatSelection = (seats: number[]) => {
-    setSelectedSeats(seats)
-    if (seats.length > 0) {
-      setBookingStep('form')
-    }
-  }
-
-  const handleFormSubmit = async (name: string, email: string) => {
-    if (!selectedPlay) return
-
+  async function reserve() {
+    if (!play || submitting.current || !seatsReady || !seats.length) return
+    submitting.current = true
+    setBusy(true)
+    setError('')
+    setField(undefined)
+    const payload = JSON.stringify({ playId: play.id, seats, name: name.trim(), email: email.trim() })
+    if (request.current.payload !== payload) request.current = { payload, key: crypto.randomUUID() }
     try {
-      setIsLoading(true)
-      setError(null)
-
       const response = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          playId: selectedPlay.id,
-          name,
-          email,
-          seats: selectedSeats,
-        }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...JSON.parse(payload), requestKey: request.current.key }),
       })
-
-      const data = await response.json() as { success: boolean; bookingId: string; error?: string }
-
+      const data = await response.json() as { success: boolean; bookingId: string; code?: string; bookedSeats: number[]; field?: string; error?: string }
       if (!response.ok || !data.success) {
-        setMessageModal({ message: data.error || 'Fehler beim Erstellen der Buchung', type: 'error' })
+        if (data.code === 'seat_conflict') {
+          setBooked(data.bookedSeats)
+          setSeats(existing => existing.filter(seat => !data.bookedSeats.includes(seat)))
+          go('seats')
+        }
+        setField(data.field)
+        setError(data.error || 'Deine Buchung konnte nicht gespeichert werden. Bitte versuche es erneut.')
         return
       }
-
-      // Create booking object for confirmation
-      const booking: Booking = {
-        id: data.bookingId,
-        playId: selectedPlay.id,
-        email,
-        name,
-        seats: selectedSeats,
-        timestamp: Date.now(),
-      }
-
-      setBookingData({ name, email })
-      setConfirmedBooking(booking)
-      setBookingStep('confirmation')
-    } catch (err) {
-      console.error('Error creating booking:', err)
-      setMessageModal({ message: 'Fehler beim Erstellen der Buchung. Bitte versuchen Sie es erneut.', type: 'error' })
-    } finally {
-      setIsLoading(false)
-    }
+      router.push(`/booking/view/${encodeURIComponent(data.bookingId)}?new=true`)
+    } catch { setError('Die Verbindung wurde unterbrochen. Deine Angaben bleiben erhalten. Bitte versuche es erneut.') }
+    finally { setBusy(false); submitting.current = false }
   }
 
-  const handleBackToPlaySelection = () => {
-    setSelectedPlay(null)
-    setSelectedSeats([])
-    setBookingStep('play-selection')
-  }
-
-  const handleBackToSeatSelection = () => {
-    setSelectedSeats([])
-    setBookingStep('seat-selection')
-  }
-
-  useEffect(() => {
-    if (bookingStep === 'confirmation' && confirmedBooking && selectedPlay && bookingData) {
-      router.push(`/booking/view/${confirmedBooking.id}?new=true`)
-    }
-  }, [bookingStep, confirmedBooking, selectedPlay, bookingData, router])
-
-  return (
-    <div className='max-w-5xl mx-auto'>
-      <div className='mb-8'>
-        <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>
-          Winterstück 2025
-        </h1>
-        <p className='text-xl text-site-100 mb-1'>Schicksalsfäden</p>
-        <p className='text-site-100'>
-          Kostenfrei • Maximal 5 Sitzplätze pro Buchung
-        </p>
-      </div>
-
-      {bookingStep === 'play-selection' && (
-        <div>
-          <h2 className='text-2xl font-display font-bold mb-4'>Vorstellung wählen</h2>
-          
-          {error && (
-            <div className='glass rounded-xl p-4 mb-4 border border-red-700 bg-red-900/20'>
-              <p className='text-red-400'>{error}</p>
-            </div>
-          )}
-          
-          {isLoading ? (
-            <LoadingSpinner text='Lade Vorstellungen...' size='lg' />
-          ) : plays.length === 0 ? (
-            <div className='glass rounded-xl p-12 text-center'>
-              <p className='text-site-100 text-lg'>Aktuell sind keine Vorstellungen verfügbar.</p>
-              <p className='text-site-200 text-sm mt-2'>Bitte schauen Sie später noch einmal vorbei.</p>
-            </div>
-          ) : (
-            <div className='grid gap-4 md:grid-cols-2'>
-              {plays.map((play) => {
-                const isSoldOut = play.is_sold_out
-                const availablePercent = isMounted ? (play.available_seats / play.total_seats) * 100 : 100
-                const bookedPercent = 100 - availablePercent
-
-                return (
-                  <button
-                    key={play.id}
-                    onClick={() => !isSoldOut && handlePlaySelect(play)}
-                    disabled={isSoldOut}
-                    className={`glass rounded-xl p-6 text-left transition-all ${
-                      isSoldOut
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:border-kolping-400 cursor-pointer'
-                    }`}
-                  >
-                    <div className='text-lg font-semibold mb-2'>{play.display_date}</div>
-                    <div className='text-site-100 text-sm mb-3'>
-                      {isMounted && isSoldOut ? (
-                        <span className='text-red-400'>Ausgebucht</span>
-                      ) : (
-                        <span>
-                          {isMounted ? `${play.available_seats} von ${play.total_seats} Plätzen verfügbar` : `${play.total_seats} von ${play.total_seats} Plätzen verfügbar`}
-                        </span>
-                      )}
-                    </div>
-                    {/* Availability bar */}
-                    <div className='relative h-2 bg-site-700 rounded-full overflow-hidden'>
-                      <div
-                        className='absolute inset-y-0 left-0 bg-kolping-500 rounded-full transition-all duration-500'
-                        style={{ width: `${bookedPercent}%` }}
-                      />
-                      <div
-                        className='absolute inset-y-0 right-0 bg-green-500 rounded-full transition-all duration-500'
-                        style={{ width: `${availablePercent}%` }}
-                      />
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-          )}
-
-          {/* Additional Information Section */}
-          <div className='mt-12 space-y-6'>
-            <div className='glass rounded-xl p-6'>
-              <h3 className='text-xl font-display font-bold mb-4'>Über die Vorstellung</h3>
-              <p className='text-site-100 mb-4'>
-                „Schicksalsfäden“ ist ein selbst geschriebenes Stück der Kolping Kreativbühne. Die Tragödie greift die griechischen Schicksalsgöttinnen, die Moiren, auf und erzählt von ihrem Eingriff in das Schicksal der Nymphe Eurydike.
-                Dabei verbindet das Stück verschiedene Figuren und Geschichten der griechischen Mythologie auf der Bühne.
-              </p>
-            </div>
-
-            <div className='glass rounded-xl p-6'>
-              <h3 className='text-xl font-display font-bold mb-4'>Wichtige Informationen</h3>
-              <ul className='space-y-3 text-site-100'>
-                <li className='flex items-start gap-3'>
-                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-                  </svg>
-                  <span>Die Buchung ist kostenfrei. Falls du doch nicht kommen kannst, storniere bitte, damit andere den Platz nutzen können.</span>
-                </li>
-                <li className='flex items-start gap-3'>
-                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-                  </svg>
-                  <span>Du kannst maximal 5 Sitzplätze pro Buchung reservieren</span>
-                </li>
-                <li className='flex items-start gap-3'>
-                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' />
-                  </svg>
-                  <span>Du erhältst eine Bestätigungs-E-Mail mit allen Details</span>
-                </li>
-                <li className='flex items-start gap-3'>
-                  <svg className='w-5 h-5 text-kolping-400 mt-0.5 flex-shrink-0' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
-                  </svg>
-                  <span>Bitte sei 15 Minuten vor Vorstellungsbeginn da</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className='glass rounded-xl p-6'>
-              <h3 className='text-xl font-display font-bold mb-4'>Kontakt & Fragen</h3>
-              <p className='text-site-100 mb-4'>
-                Hast du Fragen zur Buchung oder zur Vorstellung? Wir helfen dir gern weiter.
-              </p>
-              <p className='text-site-100'>
-                Schau auf unsere <a href='/contact' className='text-kolping-400 hover:text-kolping-300 underline transition-colors'>Kontaktseite</a> oder 
-                schreib uns direkt. Wir freuen uns auf dich!
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {bookingStep === 'seat-selection' && selectedPlay && (
-        <div>
-          <div className='flex items-center gap-4 mb-6'>
-            <button
-              onClick={handleBackToPlaySelection}
-              className='text-site-100 hover:text-kolping-400 transition-colors'
-            >
-              ← Zurück
-            </button>
-            <div>
-              <h2 className='text-xl font-display font-bold'>Sitzplätze wählen</h2>
-              <p className='text-site-100'>{selectedPlay.display_date}</p>
-            </div>
-          </div>
-          {isLoadingSeats ? (
-            <div className='glass rounded-xl p-8'>
-              <LoadingSpinner text='Lade Sitzplätze...' size='lg' />
-            </div>
-          ) : (
-            <SeatSelection
-              playId={selectedPlay.id}
-              bookedSeats={bookedSeats}
-              selectedSeats={selectedSeats}
-              onSeatSelection={handleSeatSelection}
-              maxSeats={5}
-              onShowMessage={(message, type) => setMessageModal({ message, type })}
-            />
-          )}
-        </div>
-      )}
-
-      {bookingStep === 'form' && selectedPlay && (
-        <div>
-          <div className='flex items-center gap-4 mb-6'>
-            <button
-              onClick={handleBackToSeatSelection}
-              className='text-site-100 hover:text-kolping-400 transition-colors'
-              disabled={isLoading}
-            >
-              ← Zurück
-            </button>
-            <div>
-              <h2 className='text-xl font-display font-bold'>Deine Daten</h2>
-              <p className='text-site-100'>{selectedPlay.display_date} • {selectedSeats.length} Plätze</p>
-            </div>
-          </div>
-          {isLoading ? (
-            <div className='glass rounded-xl p-8'>
-              <LoadingSpinner text='Erstelle Buchung...' size='lg' />
-            </div>
-          ) : (
-            <BookingForm onSubmit={handleFormSubmit} />
-          )}
-        </div>
-      )}
-
-      {messageModal && (
-        <MessageModal
-          message={messageModal.message}
-          type={messageModal.type}
-          onClose={() => setMessageModal(null)}
-        />
-      )}
-    </div>
-  )
+  const days = [...new Set(plays.map(item => item.date))]
+  return <>
+    <header className='ticket-intro'>
+      <div><p className='ticket-eyebrow'>Kolpingtheater Ramsen · Wintertheater</p><h1 className='ticket-heading'>{play?.title || plays[0]?.title || 'Romeo und Julia'}</h1><p className='ticket-muted'>Ein Abend im Theater. Deine Plätze warten auf dich.</p></div>
+      <span className='ticket-badge'>Eintritt frei</span>
+    </header>
+    <ol className='ticket-steps' aria-label='Buchungsschritte'>
+      {(['date', 'seats', 'details'] as const).map((item, i) => <li key={item} aria-current={step === item ? 'step' : undefined}>{['Termin', 'Plätze', 'Deine Daten'][i]}</li>)}
+    </ol>
+    {step !== 'date' && <button type='button' className='ticket-back' disabled={busy} onClick={() => go(step === 'details' ? 'seats' : 'date')}>← {step === 'details' ? 'Zurück zu deinen Plätzen' : 'Anderen Termin wählen'}</button>}
+    <h2 className='ticket-section-title' ref={heading} tabIndex={-1}>{step === 'date' ? 'Wann kommst du ins Theater?' : step === 'seats' ? 'Such dir deine Plätze aus' : 'Fast geschafft.'}</h2>
+    {play && step !== 'date' && <p className='ticket-muted'>{formatDay(play.date, true)} · {play.time} Uhr</p>}
+    {error && <div className='ticket-error' role='alert' id='ticket-server-error'>{error}{step === 'date' && <button className='ticket-back block' onClick={loadPlays}>Erneut versuchen</button>}</div>}
+    {step === 'date' && <>
+      {loading ? <p className='ticket-empty' role='status'>Die Vorstellungen werden geladen …</p> : !plays.length && !error ? <div className='ticket-empty'><p>Aktuell sind keine Vorstellungen zur Buchung verfügbar.</p><p className='ticket-muted mt-2'>Bitte schau später wieder vorbei.</p></div> : <div className='ticket-day-grid'>
+        {days.map(date => <section className='ticket-day' key={date} aria-label={formatDay(date, true)}>
+          <div className='ticket-day-header'><span className='ticket-day-number'>{Number(date.slice(-2))}</span><div><span className='ticket-day-name'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { weekday: 'long', timeZone: 'UTC' })}</span><span className='ticket-day-month'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</span></div></div>
+          <div className='ticket-times'>{plays.filter(item => item.date === date).map(item => <button className='ticket-time' key={item.id} disabled={item.is_sold_out || item.booking_open === 0} onClick={() => choose(item)} aria-label={`${formatDay(item.date)}, ${item.time} Uhr, ${item.booking_open === 0 ? 'Buchung geschlossen' : item.is_sold_out ? 'ausgebucht' : `${item.available_seats} Plätze frei`}`}><span><strong>{item.time} <span className='text-sm'>Uhr</span></strong><small>{item.booking_open === 0 ? 'Buchung geschlossen' : item.is_sold_out ? 'Ausgebucht' : `${item.available_seats} Plätze frei`}</small></span><span className='ticket-time-arrow' aria-hidden='true'>↗</span></button>)}</div>
+        </section>)}
+      </div>}
+      <div className='ticket-notes'><div><strong>Dein Besuch</strong><p>{plays[0]?.venue || DEFAULT_VENUE}</p></div><div><strong>Zusammen ins Theater</strong><p>Bis zu {MAX_SEATS} Plätze pro Buchung. Alle Plätze einer Buchung werden gemeinsam eingecheckt.</p></div><div><strong>Flexibel bleiben</strong><p>Über deinen privaten Ticketlink kannst du Plätze ändern oder freigeben, solange die Vorstellung noch nicht begonnen hat.</p></div></div>
+    </>}
+    {step === 'seats' && play && <>
+      {seatLoading ? <p className='ticket-empty' role='status'>Freie Plätze werden geladen …</p> : !seatsReady ? <button className='ticket-button' onClick={() => loadSeats(play)}>Plätze erneut laden</button> : <SeatSelection totalSeats={play.total_seats} bookedSeats={booked} selectedSeats={seats} onChange={setSeats} onContinue={() => go('details')} />}
+    </>}
+    {step === 'details' && play && <div className='ticket-form-grid'>
+      <BookingForm name={name} email={email} onChange={(key, value) => { (key === 'name' ? setName : setEmail)(value); setField(undefined) }} onSubmit={reserve} busy={busy} serverField={field} />
+      <BookingSummary play={play} seats={seats} onEdit={busy ? undefined : () => go('seats')} />
+    </div>}
+  </>
 }

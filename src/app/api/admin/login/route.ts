@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminPassword, generateAdminToken } from '@/lib/admin-auth'
+import { sameOrigin, rateLimit } from '@/lib/ticket-http'
 import { getRequestContext } from '@cloudflare/next-on-pages'
 
 /**
@@ -13,7 +14,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json() as { password?: string }
     const { password } = body
     
-    if (!password) {
+    if (!sameOrigin(request)) return NextResponse.json({ error: 'Ungültige Anfrage' }, { status: 403 })
+    if (typeof password !== 'string' || password.length > 256 || !password) {
       return NextResponse.json(
         { success: false, error: 'Password is required' },
         { status: 400 }
@@ -23,6 +25,10 @@ export async function POST(request: NextRequest) {
     // Get admin password hash from environment
     const { env } = getRequestContext()
     const adminPasswordHash = env.ADMIN_PASSWORD_HASH
+    if (!adminPasswordHash) return NextResponse.json({ error: 'Admin-Zugang nicht eingerichtet' }, { status: 503 })
+    if (!(await rateLimit(env.DB, `login:${request.headers.get('cf-connecting-ip') || 'local'}`, 10, 900))) {
+      return NextResponse.json({ error: 'Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.' }, { status: 429 })
+    }
     
     // Verify password
     const isValid = await verifyAdminPassword(password, adminPasswordHash)
@@ -35,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Generate token
-    const token = generateAdminToken()
+    const token = await generateAdminToken(env.DB)
     
     // Set cookie
     const response = NextResponse.json({

@@ -1,263 +1,62 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
-import {
-  getPlayById,
-  getBookedSeatsForPlay,
-  hasExistingBooking,
-  createBooking
-} from '@/lib/db'
-import { sendBookingConfirmation } from '@/lib/email'
+import { createBooking, getBookingByRequestKey, getBookedSeatsForPlay, getPlayById } from '@/lib/db'
+import { emailConfig, sendBookingConfirmation } from '@/lib/email'
 import { sendDiscordSeatUpdate } from '@/lib/discord'
+import { isBookingOpen, validSeats } from '@/lib/tickets'
+import { rateLimit, sameOrigin, ticketJson } from '@/lib/ticket-http'
 
-/**
- * POST /api/bookings
- * Creates a new booking with validation and double-booking prevention
- */
 export const runtime = 'edge'
-
-interface CreateBookingRequest {
-  playId: string
-  name: string
-  email: string
-  seats: number[]
-}
-
-function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
-}
-
-function generateBookingId(): string {
-  return `booking-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`
-}
-
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
+  if (!sameOrigin(request)) return ticketJson({ error: 'Ungültige Anfrage.' },403)
   try {
-    // Get D1 database from Cloudflare context
     const { env } = getRequestContext()
-    const db = env.DB
-    
-    if (!db) {
-      return NextResponse.json(
-        { success: false, error: 'Database not available' },
-        { status: 500 }
-      )
+    const body = await request.json() as Record<string,unknown>
+    const { playId, seats, requestKey } = body
+    if (typeof playId !== 'string' || typeof body.name !== 'string' || typeof body.email !== 'string' || typeof requestKey !== 'string' || !/^[a-f0-9-]{36}$/.test(requestKey)) {
+      return ticketJson({ error: 'Bitte prüfe deine Angaben.' },400)
     }
-    
-    // Parse request body
-    let body: CreateBookingRequest
-    try {
-      body = await request.json()
-    } catch {
-      return NextResponse.json(
-        { success: false, error: 'Invalid request body' },
-        { status: 400 }
-      )
-    }
-    
-      const { playId, name, email, seats } = body
-    
-    // Validation: Required fields
-    if (!playId || !name || !email || !seats) {
-      return NextResponse.json(
-        { success: false, error: 'Missing required fields' },
-        { status: 400 }
-      )
-    }
-    
-    // Validation: Name
-    if (name.trim().length < 2) {
-      return NextResponse.json(
-        { success: false, error: 'Name must be at least 2 characters' },
-        { status: 400 }
-      )
-    }
-    
-    // Validation: Email
-    if (!validateEmail(email)) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid email address' },
-        { status: 400 }
-      )
-    }
-    
-    // Validation: Seats
-    if (!Array.isArray(seats) || seats.length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'At least one seat must be selected' },
-        { status: 400 }
-      )
-    }
-    
-    if (seats.length > 5) {
-      return NextResponse.json(
-        { success: false, error: 'Maximum 5 seats per booking' },
-        { status: 400 }
-      )
-    }
-    
-    // Check for duplicate seats in request
-    if (new Set(seats).size !== seats.length) {
-      return NextResponse.json(
-        { success: false, error: 'Doppelte Plätze in der Auswahl' },
-        { status: 400 }
-      )
-    }
-    
-    // Verify play exists
-    const play = await getPlayById(db, playId)
-    if (!play) {
-      return NextResponse.json(
-        { success: false, error: 'Vorstellung nicht gefunden' },
-        { status: 404 }
-      )
-    }
-    
-    // Validate seat numbers are valid (0-based indexing, seats 0 and 9 are blocked)
-    const BLOCKED_SEATS = [0, 9] // A1 and A10 don't exist
-    const maxSeatIndex = play.total_seats + BLOCKED_SEATS.length // total_seats is bookable seats, add blocked to get max index
-    const invalidSeats = seats.filter(s => !Number.isInteger(s) || s < 0 || s >= maxSeatIndex || BLOCKED_SEATS.includes(s))
-    if (invalidSeats.length > 0) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid seat numbers' },
-        { status: 400 }
-      )
-    }
-    
-    // Check if user already has a booking for this play
-      const normalizedEmail = email.trim().toLowerCase()
-      const alreadyBooked = await hasExistingBooking(db, playId, normalizedEmail)
-    if (alreadyBooked) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Sie haben bereits eine Buchung für diese Vorstellung' 
-        },
-        { status: 409 }
-      )
-    }
-    
-      // Check if seats are already booked
-      const bookedSeats = await getBookedSeatsForPlay(db, playId)
-      const conflictingSeats = seats.filter(s => bookedSeats.includes(s))
-      
-      if (conflictingSeats.length > 0) {
-        return NextResponse.json(
-          { 
-            success: false, 
-            error: 'Einige ausgewählte Plätze sind bereits gebucht',
-            conflictingSeats 
-          },
-          { status: 409 }
-        )
+    const name = body.name.trim(), email = body.email.trim().toLowerCase()
+    if (name.length < 2 || name.length > 120) return ticketJson({ error: 'Bitte gib deinen vollständigen Namen ein (2 bis 120 Zeichen).', field: 'name' },400)
+    if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return ticketJson({ error: 'Bitte gib eine gültige E-Mail-Adresse ein.', field: 'email' },400)
+    const existing = await getBookingByRequestKey(env.DB,requestKey)
+    const replay = (booking: NonNullable<typeof existing>) => {
+      if (booking.play_id !== playId || booking.email !== email || booking.name !== name || !Array.isArray(seats) || JSON.stringify([...booking.seats].sort((a,b)=>a-b)) !== JSON.stringify([...seats].sort((a,b)=>a-b))) {
+        return ticketJson({ error: 'Diese Anfrage wurde schon verarbeitet. Bitte öffne dein Ticket oder starte eine neue Buchung.' },409)
       }
-      // Check if enough seats available
-      const availableSeatsBefore = play.total_seats - bookedSeats.length
-      if (seats.length > availableSeatsBefore) {
-        return NextResponse.json(
-          { 
-            success: false, 
-            error: 'Nicht genügend Plätze verfügbar',
-            availableSeats: availableSeatsBefore
-          },
-          { status: 409 }
-        )
-      }
-    
-    // Create booking
-      const bookingId = generateBookingId()
-      const result = await createBooking(db, {
-        id: bookingId,
-        playId,
-        name: name.trim(),
-        email: normalizedEmail,
-        seats
-      })
-    
+      return ticketJson({ success: true, bookingId: booking.id, emailStatus: booking.email_status })
+    }
+    if (existing) return replay(existing)
+    if (!(await rateLimit(env.DB,`book:${request.headers.get('cf-connecting-ip') || 'local'}`,30,900))) return ticketJson({ error: 'Zu viele Anfragen. Bitte versuche es später erneut.' },429)
+    const play = await getPlayById(env.DB,playId)
+    if (!play || !isBookingOpen(play)) return ticketJson({ error: 'Diese Vorstellung ist nicht zur Buchung geöffnet.' },409)
+    if (!validSeats(seats,play.total_seats)) return ticketJson({ error: 'Bitte wähle ein bis fünf verfügbare Sitzplätze.' },400)
+    const bookedSeats = await getBookedSeatsForPlay(env.DB,play.id)
+    if (seats.some(seat=>bookedSeats.includes(seat))) {
+      // The first copy of this request may have committed since our initial lookup.
+      const completed = await getBookingByRequestKey(env.DB,requestKey)
+      if (completed) return replay(completed)
+      return ticketJson({ error: 'Ein Platz wurde gerade reserviert. Bitte prüfe deine Auswahl.', code:'seat_conflict', bookedSeats },409)
+    }
+    const id = `booking-${crypto.randomUUID()}`
+    const result = await createBooking(env.DB,{id,playId,name,email,seats,requestKey,admissionToken:crypto.randomUUID()})
     if (!result.success) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: result.error || 'Fehler beim Erstellen der Buchung'
-        },
-        { status: 500 }
-      )
+      // Another identical request may have committed while this request was waiting.
+      const completed = await getBookingByRequestKey(env.DB,requestKey)
+      if (completed) return replay(completed)
+      if (result.error === 'duplicate_booking') return ticketJson({ error:'Für diese E-Mail-Adresse gibt es bereits eine Buchung für diesen Termin. Öffne den Ticketlink aus deiner Bestätigung, um Plätze zu ändern.', code:'duplicate_booking' },409)
+      if (result.error === 'seat_conflict') return ticketJson({ error:'Ein Platz wurde gerade reserviert. Bitte prüfe deine Auswahl.', code:'seat_conflict', bookedSeats:await getBookedSeatsForPlay(env.DB,play.id) },409)
+      return ticketJson({ error:'Die Buchung konnte nicht gespeichert werden. Deine Angaben bleiben erhalten.' },503)
     }
-    
-    // Send confirmation email (await to catch errors during development)
-    let emailStatus = 'not_configured'
-    let emailError = null
-    if (env.RESEND_API_KEY) {
-      emailStatus = 'sending'
-      // Get the full URL for the booking link
-      const baseUrl = new URL(request.url).origin
-      
-      try {
-        // Await email send to catch errors
-        const emailResult = await sendBookingConfirmation(
-            {
-            name: name.trim(),
-            email: normalizedEmail,
-            id: bookingId,
-            },
-          play,
-          seats,
-          {
-            apiKey: env.RESEND_API_KEY,
-            fromEmail: env.FROM_EMAIL || 'ticket-noreply@kolpingtheater-ramsen.de',
-            theaterName: env.THEATER_NAME || 'Kolpingtheater Ramsen',
-            replyToEmail: env.REPLY_TO_EMAIL || env.FROM_EMAIL || 'kolpingtheaterramsen@gmail.com',
-          },
-          baseUrl
-        )
-        
-        if (emailResult.success) {
-          emailStatus = 'sent'
-        } else {
-          emailStatus = 'failed'
-          emailError = emailResult.error || 'Unknown error'
-        }
-      } catch (error) {
-        emailStatus = 'failed'
-        emailError = error instanceof Error ? error.message : String(error)
-        console.error('Failed to send confirmation email:', error)
-      }
-    } else {
-      console.warn('RESEND_API_KEY not configured - skipping email')
-    }
-
-      // Notify Discord webhook if configured
-      const availableSeatsAfterBooking = Math.max(availableSeatsBefore - seats.length, 0)
-      const showLabel = play.display_date || `${play.date} ${play.time}`
-      await sendDiscordSeatUpdate({
-        webhookUrl: env.DISCORD_WEBHOOK_URL,
-        showLabel,
-        seatCount: seats.length,
-        availableSeatCount: availableSeatsAfterBooking,
-        action: 'booked',
-      })
-    
-    // Return success with booking ID
-    return NextResponse.json(
-      {
-        success: true,
-        bookingId,
-        message: 'Booking created successfully',
-        debug_email_status: emailStatus, // Remove this after debugging
-        debug_email_error: emailError // Remove this after debugging
-      },
-      { status: 201 }
-    )
-    
+    // A reservation stays successful even when a notification fails.
+    const sent = await sendBookingConfirmation({id,name,email},play,seats,emailConfig(env),new URL(request.url).origin)
+    try {
+      await env.DB.prepare('UPDATE bookings SET email_status = ? WHERE id = ?').bind(sent.status,id).run()
+    } catch { console.error('Could not record email delivery status') }
+    getRequestContext().ctx.waitUntil(sendDiscordSeatUpdate({webhookUrl:env.DISCORD_WEBHOOK_URL,showLabel:play.display_date,seatCount:seats.length,availableSeatCount:play.total_seats-bookedSeats.length-seats.length,action:'booked'}))
+    return ticketJson({success:true,bookingId:id,emailStatus:sent.status},201)
   } catch (error) {
-    console.error('Error creating booking:', error)
-    return NextResponse.json(
-      { 
-        success: false,
-        error: 'Failed to create booking',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    )
+    if (error instanceof SyntaxError) return ticketJson({error:'Ungültige Anfrage.'},400)
+    console.error('Booking request failed')
+    return ticketJson({error:'Die Verbindung ist gerade gestört. Bitte versuche dieselbe Anfrage noch einmal.'},503)
   }
 }

@@ -1,0 +1,11 @@
+name = "next-theater-wallet-sync"
+main = "workers/wallet-sync.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+[triggers]
+crons = ["*/5 * * * *"]
+[[d1_databases]]
+binding = "DB"
+database_name = "theater-bookings"
+database_id = "034c0741-9715-41d0-8808-ed1925bc0266"
+# Set the same GOOGLE_WALLET_* secrets as on Pages before enabling Wallet.

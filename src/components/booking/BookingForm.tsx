@@ -1,105 +1,22 @@
-"use client"
-
+'use client'
 import { useState } from 'react'
-
-type BookingFormProps = {
-  onSubmit: (name: string, email: string) => void
-}
-
-export default function BookingForm({ onSubmit }: BookingFormProps) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [errors, setErrors] = useState<{ name?: string; email?: string }>({})
-
-  const validateForm = (): boolean => {
-    const newErrors: { name?: string; email?: string } = {}
-
-    if (!name.trim()) {
-      newErrors.name = 'Bitte gib deinen Namen ein.'
-    }
-
-    if (!email.trim()) {
-      newErrors.email = 'Bitte gib deine E-Mail-Adresse ein.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Bitte gib eine gültige E-Mail-Adresse ein.'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
+type Props={name:string;email:string;onChange:(field:'name'|'email',value:string)=>void;onSubmit:()=>void;busy:boolean;serverField?:string}
+export default function BookingForm({name,email,onChange,onSubmit,busy,serverField}:Props) {
+  const [errors,setErrors]=useState<{name?:string;email?:string}>({})
+  function submit(e:React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (validateForm()) {
-      onSubmit(name.trim(), email.trim())
-    }
+    const next:typeof errors={}
+    if(name.trim().length<2) next.name='Bitte gib deinen vollständigen Namen ein.'
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email='Bitte prüfe deine E-Mail-Adresse.'
+    setErrors(next)
+    if(Object.keys(next).length) { e.currentTarget.querySelector<HTMLInputElement>(`#ticket-${next.name?'name':'email'}`)?.focus(); return }
+    onSubmit()
   }
-
-  return (
-    <div className='glass rounded-xl p-6 md:p-8 max-w-xl mx-auto'>
-      <form onSubmit={handleSubmit} className='space-y-6'>
-        <div>
-          <label htmlFor='name' className='block text-sm font-medium mb-2'>
-            Name *
-          </label>
-          <input
-            type='text'
-            id='name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={`
-              w-full px-4 py-3 rounded-lg bg-site-800 border 
-              ${errors.name ? 'border-red-500' : 'border-site-700'} 
-              text-site-50 placeholder-site-500
-              focus:outline-none focus:ring-2 focus:ring-kolping-400
-              transition-colors
-            `}
-            placeholder='Dein vollständiger Name'
-          />
-          {errors.name && (
-            <p className='mt-2 text-sm text-red-400'>{errors.name}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor='email' className='block text-sm font-medium mb-2'>
-            E-Mail-Adresse *
-          </label>
-          <input
-            type='email'
-            id='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`
-              w-full px-4 py-3 rounded-lg bg-site-800 border 
-              ${errors.email ? 'border-red-500' : 'border-site-700'} 
-              text-site-50 placeholder-site-500
-              focus:outline-none focus:ring-2 focus:ring-kolping-400
-              transition-colors
-            `}
-            placeholder='deine.email@beispiel.de'
-          />
-          {errors.email && (
-            <p className='mt-2 text-sm text-red-400'>{errors.email}</p>
-          )}
-          <p className='mt-2 text-xs text-site-300'>
-            Du erhältst deine Buchungsbestätigung an diese E-Mail-Adresse.
-          </p>
-        </div>
-
-        <div className='pt-4'>
-          <button
-            type='submit'
-            className='w-full py-3 px-6 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold shadow-lg transition-colors'
-          >
-            Buchung abschließen
-          </button>
-        </div>
-
-        <p className='text-xs text-site-300 text-center'>
-          * Pflichtfelder
-        </p>
-      </form>
-    </div>
-  )
+  return <form onSubmit={submit} noValidate className='ticket-panel' aria-busy={busy}>
+    <div className='ticket-field'><label htmlFor='ticket-name'>Dein Name</label><input id='ticket-name' name='name' autoComplete='name' required minLength={2} maxLength={120} value={name} onChange={e=>onChange('name',e.target.value)} disabled={busy} placeholder='Vor- und Nachname' aria-invalid={!!errors.name||serverField==='name'} aria-describedby={errors.name?'ticket-name-error':serverField==='name'?'ticket-server-error':undefined}/>{errors.name&&<p id='ticket-name-error' className='ticket-field-error'>{errors.name}</p>}</div>
+    <div className='ticket-field'><label htmlFor='ticket-email'>E-Mail-Adresse</label><input id='ticket-email' name='email' type='email' autoComplete='email' inputMode='email' required maxLength={254} value={email} onChange={e=>onChange('email',e.target.value)} disabled={busy} placeholder='du@beispiel.de' aria-invalid={!!errors.email||serverField==='email'} aria-describedby={errors.email?'ticket-email-error':serverField==='email'?'ticket-server-error':'ticket-email-hint'}/>{errors.email&&<p id='ticket-email-error' className='ticket-field-error'>{errors.email}</p>}<p id='ticket-email-hint' className='ticket-muted text-xs mt-2'>An diese Adresse senden wir dein Ticket. Bitte prüfe sie vor dem Buchen.</p></div>
+    <button className='ticket-button ticket-button-primary w-full' type='submit' disabled={busy}>{busy?'Plätze werden reserviert …':'Kostenfrei reservieren'}{!busy&&<span aria-hidden='true'>→</span>}</button>
+    <p className='ticket-muted text-xs mt-4'>Deine Reservierung ist verbindlich. Falls du nicht kommen kannst, gib die Plätze über deinen Ticketlink wieder frei.</p>
+    <p className='ticket-muted text-xs mt-3'>Informationen zur Verarbeitung deiner Angaben findest du in unserer <a className='underline' href='/privacy' target='_blank' rel='noreferrer'>Datenschutzerklärung</a>.</p>
+  </form>
 }

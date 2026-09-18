@@ -1,87 +1,41 @@
-// Admin authentication utilities
+import { getRequestContext } from '@cloudflare/next-on-pages'
+import type { D1Database } from '@/types/env'
+import { digest, sameOrigin } from './ticket-http'
 
-/**
- * Simple password-based authentication for admin access
- * Password should be set in environment variable ADMIN_PASSWORD
- */
-
-const ADMIN_PASSWORD_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918' // Default: "admin" (change this!)
-
-/**
- * Hash a password using SHA-256
- */
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(password)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+export async function verifyAdminPassword(password: string, expectedHash?: string) {
+  if (!expectedHash || typeof password !== 'string') return false
+  return (await digest(password)) === expectedHash
 }
 
-/**
- * Verify admin password
- */
-export async function verifyAdminPassword(password: string, envPasswordHash?: string): Promise<boolean> {
-  const expectedHash = envPasswordHash || ADMIN_PASSWORD_HASH
-  const providedHash = await hashPassword(password)
-  return providedHash === expectedHash
+export async function generateAdminToken(db: D1Database) {
+  const token = `${crypto.randomUUID()}${crypto.randomUUID()}`
+  await db.batch([
+    db.prepare('DELETE FROM admin_sessions WHERE expires_at <= ?').bind(Date.now()),
+    db.prepare('INSERT INTO admin_sessions (token_hash, expires_at) VALUES (?, ?)')
+      .bind(await digest(token), Date.now() + 86400000),
+  ])
+  return token
 }
 
-/**
- * Generate auth token (simple JWT-like token)
- */
-export function generateAdminToken(): string {
-  const token = crypto.randomUUID()
-  return btoa(JSON.stringify({
-    token,
-    type: 'admin',
-    exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
-  }))
-}
-
-/**
- * Verify admin token
- */
-export function verifyAdminToken(token: string): boolean {
-  try {
-    const decoded = JSON.parse(atob(token))
-    return decoded.type === 'admin' && decoded.exp > Date.now()
-  } catch {
-    return false
-  }
-}
-
-/**
- * Extract token from Authorization header or cookie
- */
 export function extractAdminToken(request: Request): string | null {
-  // Check Authorization header
-  const authHeader = request.headers.get('Authorization')
-  if (authHeader?.startsWith('Bearer ')) {
-    return authHeader.substring(7)
-  }
-  
-  // Check cookie
-  const cookieHeader = request.headers.get('Cookie')
-  if (cookieHeader) {
-    const cookies = Object.fromEntries(
-      cookieHeader.split('; ').map(c => {
-        const [key, ...v] = c.split('=')
-        // URL-decode the cookie value
-        return [key, decodeURIComponent(v.join('='))]
-      })
-    )
-    return cookies['admin-token'] || null
-  }
-  
-  return null
+  const header = request.headers.get('authorization')
+  if (header?.startsWith('Bearer ')) return header.slice(7)
+  try {
+    const cookie = request.headers.get('cookie')?.split(';').map(c => c.trim()).find(c => c.startsWith('admin-token='))
+    return cookie ? decodeURIComponent(cookie.slice('admin-token='.length)) : null
+  } catch { return null }
 }
 
-/**
- * Middleware to check admin authentication
- */
-export function requireAdminAuth(request: Request): boolean {
+export async function requireAdminAuth(request: Request) {
   const token = extractAdminToken(request)
-  return token ? verifyAdminToken(token) : false
+  if (!token || !/^[a-f0-9-]{72}$/.test(token) || !sameOrigin(request)) return false
+  const { env } = getRequestContext()
+  const session = await env.DB.prepare('SELECT expires_at FROM admin_sessions WHERE token_hash = ?')
+    .bind(await digest(token)).first<{ expires_at: number }>()
+  return !!session && session.expires_at > Date.now()
 }
 
+export async function revokeAdminToken(request: Request) {
+  const token = extractAdminToken(request)
+  if (token) await getRequestContext().env.DB.prepare('DELETE FROM admin_sessions WHERE token_hash = ?').bind(await digest(token)).run()
+}

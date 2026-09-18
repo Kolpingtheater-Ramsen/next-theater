@@ -71,6 +71,7 @@ export default function AdminScanPage() {
   }, [])
 
   const extractBookingIdFromUrl = (url: string): string | null => {
+    if (/^KTR1:[a-f0-9-]+$/.test(url)) return url
     try {
       // Handle full URLs like: https://example.com/booking/view/booking-123?new=true
       const urlObj = new URL(url)
@@ -168,7 +169,7 @@ export default function AdminScanPage() {
     setShowEmail(false)
 
     try {
-      const response = await fetch(`/api/bookings/${bookingId}`, {
+      const response = await fetch(`/api/admin/tickets?code=${encodeURIComponent(bookingId)}`, {
         credentials: 'include'
       })
       

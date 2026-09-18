@@ -82,7 +82,7 @@ export const runtime = 'edge'
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
-    if (!requireAdminAuth(request)) {
+    if (!(await requireAdminAuth(request))) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }

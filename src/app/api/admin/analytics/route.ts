@@ -73,7 +73,7 @@ export interface AnalyticsResponse {
  */
 export async function GET(request: NextRequest): Promise<NextResponse<AnalyticsResponse>> {
   try {
-    if (!requireAdminAuth(request)) {
+    if (!(await requireAdminAuth(request))) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }

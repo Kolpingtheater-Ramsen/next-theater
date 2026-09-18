@@ -8,6 +8,11 @@ export interface Play {
   display_date: string
   total_seats: number
   created_at: string
+  published?: number
+  booking_open?: number
+  venue?: string
+  timezone?: string
+  duration_minutes?: number | null
 }
 
 export interface Booking {
@@ -19,6 +24,12 @@ export interface Booking {
   status: 'confirmed' | 'cancelled' | 'checked_in'
   cancelled_at: string | null
   checked_in_at: string | null
+  admission_token?: string
+  request_key?: string | null
+  email_status?: string
+  version?: number
+  wallet_sync_pending?: number
+  wallet_issued?: number
 }
 
 export interface BookedSeat {
