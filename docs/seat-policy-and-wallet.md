@@ -69,9 +69,17 @@ Wallet endpoint correctly remains unavailable (503). The banner was checked
 on desktop and at a 390-pixel viewport.
 
 Public issuance remains disabled because the Google issuer
-is still in demo mode. The console shows two of three onboarding steps complete;
-clicking Request publishing access does not open a form or confirm submission.
-No successful publishing request or public approval has been established.
+is still in demo mode. The publishing request was submitted on 19 September 2026.
+The console shows all three onboarding steps complete and says a response will
+arrive by email; this status persisted after reloading. The request dialog gives
+a review estimate of two to three business days. Public approval is still pending.
+
+Console and network debugging identified why the request button initially did
+nothing: Google's dialog handler awaits an Analytics callback, while Brave's
+tracker-blocking replacement script does not invoke that callback. Temporarily
+turning off Shields for `pay.google.com` allowed the normal form to open and be
+submitted. Google returned HTTP 200 for the submission RPCs and the UI confirmed
+completion. The original site Shields settings were restored afterward.
 
 Real API validation exposed and fixed two issues: Google's REST resource paths
 are case-sensitive (`eventTicketClass` and `eventTicketObject`), and an existing
@@ -95,12 +103,47 @@ titles, times, seats and QR codes remain native accessible fields.
 
 ## Remaining activation
 
-Complete the issuer's publishing request in the Google Pay & Wallet console and
-verify that Google has granted publishing access. Demo passes can be saved by
+The publishing request is submitted. Verify that Google has granted publishing
+access in the Google Pay & Wallet console. Demo passes can be saved by
 issuer administrators/developers or approved test accounts. Once public access
 is granted, set `GOOGLE_WALLET_ENABLED=true` on the worker and Pages, redeploy
 Pages and verify issuance with a permitted test reservation. Do not expose the
 public Wallet button while the issuer is restricted to demo accounts.
+
+## Availability and data retention (19 September 2026)
+
+Each performance shows the occupied share of its configured seat capacity under
+the time button, with a percentage and an accessible meter. The bar is green
+below 60%, amber from 60%, and red from 85%. A non-full performance never rounds
+to 100%. The three introductory advice blocks below the dates have been removed.
+
+`purgeExpiredBookings` deletes all booking statuses 14 days after each performance
+start (plus `duration_minutes` when configured), using the venue timezone. The
+existing five-minute worker runs cleanup before Wallet synchronization, including
+when Wallet is disabled. The manual admin purge endpoint calls the same helper.
+Deletion cascades to seats and Wallet synchronization jobs, removing names,
+emails, management/admission tokens, request keys and delivery/check-in fields.
+Expired rate-limit hashes and admin sessions are also removed. The deletion
+transaction checks that the performance has not been rescheduled since selection.
+
+The privacy notice at `/privacy#ticketbuchung` describes the actual fields,
+reservation/delivery/admission purposes, service providers and optional Wallet
+passes. It distinguishes active-database deletion from provider retention:
+Cloudflare recovery history can persist up to 30 days after deletion; Resend's
+standard email/log retention is 30 days from sending, with seven-day backups.
+Email copies and Google Wallet passes saved in a guest's account are not remotely
+deleted by the database cleanup. See the linked provider policies in the notice.
+
+After restoring a database backup, keep public/admin access closed and run the
+same retention cleanup before reopening the service. Do not retain manual data
+exports past their operational purpose or reintroduce expired records.
+
+Validation: six retention tests cover the expiry boundary, timezone/duration,
+all booking states, cascading deletion, postponed performances, transactional
+rollback, idempotency and Wallet-disabled execution. The packaged local worker's
+scheduled event deleted an expired synthetic booking, seat and sync job while
+preserving five later fixture bookings. Browser QA covered 0%, 35%, 60%, 85%, 99%
+and 100% occupancy, closed bookings, desktop and a 390-pixel viewport.
 
 To verify credentials without printing secrets:
 

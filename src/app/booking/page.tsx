@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
 import BookingSummary from '@/components/booking/BookingSummary'
-import { DEFAULT_VENUE, formatDay, MAX_SEATS } from '@/lib/tickets'
+import { formatDay } from '@/lib/tickets'
 import type { PlayWithAvailability } from '@/types/database'
 
 type Step = 'date' | 'seats' | 'details'
@@ -133,10 +133,29 @@ export default function BookingPage() {
       {loading ? <p className='ticket-empty' role='status'>Die Vorstellungen werden geladen …</p> : !plays.length && !error ? <div className='ticket-empty'><p>Aktuell sind keine Vorstellungen zur Buchung verfügbar.</p><p className='ticket-muted mt-2'>Bitte schau später wieder vorbei.</p></div> : <div className='ticket-day-grid'>
         {days.map(date => <section className='ticket-day' key={date} aria-label={formatDay(date, true)}>
           <div className='ticket-day-header'><span className='ticket-day-number'>{Number(date.slice(-2))}</span><div><span className='ticket-day-name'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { weekday: 'long', timeZone: 'UTC' })}</span><span className='ticket-day-month'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</span></div></div>
-          <div className='ticket-times'>{plays.filter(item => item.date === date).map(item => <button className='ticket-time' key={item.id} disabled={item.is_sold_out || item.booking_open === 0} onClick={() => choose(item)} aria-label={`${formatDay(item.date)}, ${item.time} Uhr, ${item.booking_open === 0 ? 'Buchung geschlossen' : item.is_sold_out ? 'ausgebucht' : `${item.available_seats} Plätze frei`}`}><span><strong>{item.time} <span className='text-sm'>Uhr</span></strong><small>{item.booking_open === 0 ? 'Buchung geschlossen' : item.is_sold_out ? 'Ausgebucht' : `${item.available_seats} Plätze frei`}</small></span><span className='ticket-time-arrow' aria-hidden='true'>↗</span></button>)}</div>
+          <div className='ticket-times'>{plays.filter(item => item.date === date).map(item => {
+            const occupancy = item.total_seats > 0 ? Math.min(100, Math.max(0, item.booked_seats / item.total_seats * 100)) : 0
+            const percent = occupancy < 100 ? Math.min(99, Math.round(occupancy)) : 100
+            const level = occupancy >= 85 ? 'high' : occupancy >= 60 ? 'medium' : 'low'
+            const availability = item.booking_open === 0 ? 'Buchung geschlossen' : item.is_sold_out ? 'Ausgebucht' : `${item.available_seats} ${item.available_seats === 1 ? 'Platz' : 'Plätze'} frei`
+            return <div className='ticket-performance' key={item.id}>
+              <button className='ticket-time' disabled={item.is_sold_out || item.booking_open === 0} onClick={() => choose(item)} aria-label={`${formatDay(item.date)}, ${item.time} Uhr, ${availability}`}>
+                <span><strong>{item.time} <span className='text-sm'>Uhr</span></strong><small>{availability}</small></span>
+                <span className='ticket-time-arrow' aria-hidden='true'>↗</span>
+              </button>
+              {item.total_seats > 0 && <div className='ticket-occupancy' data-level={level}>
+                <span className='ticket-occupancy-label' aria-hidden='true'>{percent} % belegt</span>
+                <div className='ticket-occupancy-track' role='meter'
+                  aria-label={`Auslastung am ${formatDay(item.date)} um ${item.time} Uhr`}
+                  aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}
+                  aria-valuetext={`${item.booked_seats} von ${item.total_seats} Plätzen belegt (${percent} Prozent)`}>
+                  <span className='ticket-occupancy-fill' style={{ width: `${occupancy}%` }} />
+                </div>
+              </div>}
+            </div>
+          })}</div>
         </section>)}
       </div>}
-      <div className='ticket-notes'><div><strong>Dein Besuch</strong><p>{plays[0]?.venue || DEFAULT_VENUE}</p></div><div><strong>Zusammen ins Theater</strong><p>Bis zu {MAX_SEATS} Plätze pro Buchung. Alle Plätze einer Buchung werden gemeinsam eingecheckt.</p></div><div><strong>Flexibel bleiben</strong><p>Über deinen privaten Ticketlink kannst du Plätze ändern oder freigeben, solange die Vorstellung noch nicht begonnen hat.</p></div></div>
     </>}
     {step === 'seats' && play && <>
       {seatLoading ? <p className='ticket-empty' role='status'>Freie Plätze werden geladen …</p> : !seatsReady ? <button className='ticket-button' onClick={() => loadSeats(play)}>Plätze erneut laden</button> : <SeatSelection totalSeats={play.total_seats} bookedSeats={booked} selectedSeats={seats} onChange={setSeats} onContinue={() => go('details')} />}

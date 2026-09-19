@@ -143,6 +143,102 @@ export default function PrivacyPage() {
           </div>
         </section>
 
+        <section id='ticketbuchung' className='space-y-4 border-t border-site-700 pt-8 scroll-mt-24'>
+          <h2 className='font-display text-2xl font-bold text-site-50'>Ticketbuchung und Einlass</h2>
+          <div className='space-y-6 text-site-100 text-sm'>
+            <div className='space-y-2'>
+              <h3 className='font-semibold text-site-50'>Welche Angaben wir benötigen</h3>
+              <p>
+                Für eine Reservierung erfassen wir deinen Namen, deine E-Mail-Adresse, die gewählte
+                Aufführung und deine Sitzplätze. Dazu speichern wir Buchungs- und Einlasskennungen,
+                den Buchungszeitpunkt sowie den Status und Zeitpunkt von Änderungen, Stornierung
+                und Einlass, soweit diese im Ticketsystem anfallen. Außerdem speichern wir, ob die
+                Ticket-E-Mail versendet und ein Google-Wallet-Pass angefordert wurde.
+              </p>
+            </div>
+            <div className='space-y-2'>
+              <h3 className='font-semibold text-site-50'>Wofür wir die Daten verwenden</h3>
+              <p>
+                Wir benötigen diese Angaben, um deine Plätze zu reservieren, dir das Ticket und
+                Buchungsänderungen zuzusenden, deine Reservierung zu verwalten und den Einlass
+                zur Aufführung zu prüfen. Name und E-Mail-Adresse sind für die Onlinebuchung
+                erforderlich. Wir verwenden die Buchungsdaten nicht für Werbung oder Newsletter.
+              </p>
+              <p>
+                Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO: die Bearbeitung deiner angefragten
+                Reservierung und die Durchführung des Theaterbesuchs. Für den Schutz vor
+                missbräuchlichen Anfragen verwenden wir kurzzeitig einen nicht im Klartext
+                gespeicherten Prüfwert der IP-Adresse auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
+              </p>
+            </div>
+            <div className='space-y-2'>
+              <h3 className='font-semibold text-site-50'>Wer die Daten erhält</h3>
+              <p>
+                Zugriff erhält das zuständige Buchungs- und Einlassteam. Für den Betrieb des
+                Ticketsystems und die Speicherung setzen wir Cloudflare ein. Resend erhält zum
+                E-Mail-Versand deine E-Mail-Adresse und den Inhalt der Ticketnachricht, einschließlich
+                Name, Aufführung, Plätzen und privatem Ticketlink. Diese Dienstleister verarbeiten
+                die Daten als Auftragsverarbeiter. Interne Belegungsmeldungen an Discord enthalten
+                nur den Aufführungstermin und Platzzahlen, keine Namen, E-Mail-Adressen oder Ticketlinks.
+              </p>
+              <p>
+                Dabei können Daten außerhalb der EU, insbesondere in den USA, verarbeitet werden.
+                Die Anbieter beschreiben ihre vertraglichen Schutzmaßnahmen, einschließlich
+                EU-Standardvertragsklauseln, in den{' '}
+                <a className='underline' href='https://www.cloudflare.com/cloudflare-customer-dpa/' target='_blank' rel='noreferrer'>Cloudflare-Datenschutzvereinbarungen</a>{' '}
+                und den{' '}
+                <a className='underline' href='https://resend.com/security/gdpr' target='_blank' rel='noreferrer'>Datenschutzinformationen von Resend</a>.
+              </p>
+            </div>
+            <div className='space-y-2'>
+              <h3 className='font-semibold text-site-50'>Löschung nach der Aufführung</h3>
+              <p>
+                Wir löschen deine Buchungsdaten automatisch 14 Tage nach dem jeweiligen
+                Aufführungstermin aus unserem aktiven Ticketsystem. Das umfasst Namen,
+                E-Mail-Adresse, Platzzuordnung, Buchungs- und Einlasscodes sowie die zugehörigen
+                Versand-, Einlass- und Wallet-Verarbeitungsdaten. Danach ist dein privater
+                Ticketlink nicht mehr abrufbar. Diese Frist gilt auch für stornierte Buchungen.
+                Die Löschung wird regelmäßig automatisch ausgeführt.
+              </p>
+              <p>
+                Technische Sicherungskopien bei Cloudflare können gelöschte Daten noch bis zu
+                30 Tage enthalten und dienen ausschließlich der Wiederherstellung. Bei einer
+                Wiederherstellung müssen bereits abgelaufene Buchungen erneut gelöscht werden,
+                bevor das Ticketsystem wieder genutzt wird. Resend bewahrt E-Mail-Inhalte und
+                Versandprotokolle nach seinen Angaben grundsätzlich 30 Tage ab Versand auf;
+                Sicherungskopien bestehen dort weitere sieben Tage. Diese technischen Fristen
+                sind von der 14-Tage-Frist in unserem Ticketsystem zu unterscheiden. Bereits
+                zugestellte E-Mails und von dir gespeicherte Kopien kannst du selbst löschen.
+              </p>
+              <p>
+                Einzelheiten zu Sicherungskopien findest du bei{' '}
+                <a className='underline' href='https://developers.cloudflare.com/d1/reference/time-travel/' target='_blank' rel='noreferrer'>Cloudflare</a>{' '}
+                und zu Versanddaten bei{' '}
+                <a className='underline' href='https://resend.com/security/gdpr' target='_blank' rel='noreferrer'>Resend</a>.
+              </p>
+            </div>
+            <div className='space-y-2'>
+              <h3 className='font-semibold text-site-50'>Google Wallet als freiwillige Zusatzfunktion</h3>
+              <p>
+                Wenn Google Wallet für die Buchung verfügbar ist und du die Funktion auswählst,
+                übermitteln wir deinen Namen, Aufführung, Sitzplätze, Ticketstatus und Einlasscode
+                an Google, um den angeforderten Pass bereitzustellen und aktuell zu halten.
+                Deine E-Mail-Adresse und der private Link zur Buchungsverwaltung werden nicht
+                in den Pass übernommen. Rechtsgrundlage für die von dir angeforderte
+                Zusatzfunktion ist Art. 6 Abs. 1 lit. b DSGVO. Du kannst dein Ticket auch ohne
+                Google Wallet verwenden.
+              </p>
+              <p>
+                Ein in deinem Google-Konto gespeicherter Pass wird durch die Löschung unserer
+                Buchungsdaten nicht automatisch aus deinem Konto oder Gerät entfernt.
+                Du kannst ihn in Google Wallet selbst entfernen. Für die weitere Verarbeitung
+                durch Google gilt die{' '}
+                <a className='underline' href='https://policies.google.com/privacy?hl=de' target='_blank' rel='noreferrer'>Datenschutzerklärung von Google</a>.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Web Analytics */}
         <section className='space-y-4 border-t border-site-700 pt-8'>
           <div className='flex items-center gap-3'>
