@@ -63,14 +63,6 @@ export default function AnalyticsPage() {
     fetchAnalytics()
   }, [fetchAnalytics])
 
-  const handleLogout = async () => {
-    await fetch('/api/admin/logout', {
-      method: 'POST',
-      credentials: 'include',
-    })
-    router.push('/admin')
-  }
-
   const getSeatLabel = (seatNumber: number): string => {
     const row = Math.floor(seatNumber / 10)
     const seatInRow = seatNumber % 10
@@ -129,27 +121,9 @@ export default function AnalyticsPage() {
 
   return (
     <div className='max-w-7xl mx-auto'>
-      {/* Header */}
-      <div className='mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-        <div>
-          <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>Analysen</h1>
-          <p className='text-site-100'>Buchungsstatistiken und Trends</p>
-        </div>
-        <div className='flex gap-3'>
-          <a
-            href='/admin/dashboard'
-            className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
-          >
-            ← Dashboard
-          </a>
-          <button
-            onClick={handleLogout}
-            className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
-          >
-            Abmelden
-          </button>
-        </div>
-      </div>
+      <header className='admin-heading'>
+        <div><h1>Auswertung</h1><p>Buchungen, Auslastung und Einlass im Überblick.</p></div>
+      </header>
 
       {/* Summary Cards */}
       <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8'>

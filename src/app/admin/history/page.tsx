@@ -15,6 +15,7 @@ export default function HistoryPage() {
   const [selectedPlayId, setSelectedPlayId] = useState<string>('all')
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [showEmails, setShowEmails] = useState(false)
   const router = useRouter()
 
   const fetchPlays = async () => {
@@ -75,14 +76,6 @@ export default function HistoryPage() {
     const interval = setInterval(fetchHistory, 10000)
     return () => clearInterval(interval)
   }, [fetchHistory])
-
-  const handleLogout = async () => {
-    await fetch('/api/admin/logout', {
-      method: 'POST',
-      credentials: 'include',
-    })
-    router.push('/admin')
-  }
 
   const getSeatLabel = (seatNumber: number): string => {
     const row = Math.floor(seatNumber / 10)
@@ -169,7 +162,7 @@ export default function HistoryPage() {
                     Eingecheckt
                   </span>
                 </div>
-                <div className='text-sm text-site-100 truncate'>{entry.email}</div>
+                <div className='text-sm text-site-100 truncate'>{showEmails ? entry.email : 'E-Mail verborgen'}</div>
               </div>
 
               <div className='flex flex-wrap gap-1'>
@@ -197,27 +190,9 @@ export default function HistoryPage() {
 
   return (
     <div className='max-w-5xl mx-auto'>
-      {/* Header */}
-      <div className='mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-        <div>
-          <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>Check-In Historie</h1>
-          <p className='text-site-100'>Zuletzt eingecheckte Gäste (aktualisiert automatisch)</p>
-        </div>
-        <div className='flex gap-3'>
-          <a
-            href='/admin/dashboard'
-            className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
-          >
-            ← Dashboard
-          </a>
-          <button
-            onClick={handleLogout}
-            className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
-          >
-            Abmelden
-          </button>
-        </div>
-      </div>
+      <header className='admin-heading'>
+        <div><h1>Einlassverlauf</h1><p>Eingecheckte Gäste, alle zehn Sekunden aktualisiert.</p></div>
+      </header>
 
       {/* Filter */}
       <div className='glass rounded-xl p-4 mb-6'>
@@ -241,7 +216,10 @@ export default function HistoryPage() {
             </select>
           </div>
 
-          <div className='flex items-center gap-4'>
+          <div className='flex flex-wrap items-center gap-4'>
+            <button type='button' className='admin-button' onClick={() => setShowEmails(!showEmails)} aria-pressed={showEmails}>
+              {showEmails ? 'E-Mails verbergen' : 'E-Mails anzeigen'}
+            </button>
             <div className='text-sm text-site-100'>
               <span className='font-semibold text-site-50'>{history.length}</span> Check-Ins
             </div>
@@ -285,7 +263,7 @@ export default function HistoryPage() {
             />
           </svg>
           <p className='text-site-100 text-lg'>Noch keine Check-Ins vorhanden</p>
-          <p className='text-site-200 text-sm mt-2'>Eingecheckte Gäste erscheinen hier in Echtzeit</p>
+          <p className='text-site-200 text-sm mt-2'>Eingecheckte Gäste erscheinen hier nach der nächsten Aktualisierung.</p>
         </div>
       ) : (
         <>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import MessageModal from '@/components/MessageModal'
@@ -43,6 +43,8 @@ export default function AdminDashboardPage() {
   const [playFormLoading, setPlayFormLoading] = useState(false)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const router = useRouter()
+  const bookingRequest = useRef(0)
+  const [updatingBooking, setUpdatingBooking] = useState<string | null>(null)
 
   const ROWS = 7
   const SEATS_PER_SIDE = 5
@@ -186,15 +188,13 @@ export default function AdminDashboardPage() {
   }
 
   const fetchBookings = useCallback(async () => {
+    const requestId = ++bookingRequest.current
     try {
       setIsLoading(true)
       setError('')
       const params = new URLSearchParams()
       if (selectedPlayId !== 'all') {
         params.append('playId', selectedPlayId)
-      }
-      if (debouncedSearchTerm) {
-        params.append('query', debouncedSearchTerm)
       }
       const queryString = params.toString()
       const url = queryString ? `/api/admin/bookings?${queryString}` : '/api/admin/bookings'
@@ -210,6 +210,7 @@ export default function AdminDashboardPage() {
       
       const data = await response.json() as { success: boolean; bookings?: BookingWithSeats[]; error?: string }
       
+      if (requestId !== bookingRequest.current) return
       if (data.success && data.bookings) {
         setBookings(data.bookings)
       } else {
@@ -217,11 +218,11 @@ export default function AdminDashboardPage() {
       }
     } catch (err) {
       console.error('Error fetching bookings:', err)
-      setError('Fehler beim Laden der Buchungen')
+      if (requestId === bookingRequest.current) setError('Fehler beim Laden der Buchungen')
     } finally {
-      setIsLoading(false)
+      if (requestId === bookingRequest.current) setIsLoading(false)
     }
-  }, [selectedPlayId, router, debouncedSearchTerm])
+  }, [selectedPlayId, router])
 
   const handleExportCsv = useCallback(async () => {
     try {
@@ -232,6 +233,7 @@ export default function AdminDashboardPage() {
       if (debouncedSearchTerm) {
         params.append('query', debouncedSearchTerm)
       }
+      if (showOnlyNotCheckedIn) params.append('status', 'confirmed')
       params.append('format', 'csv')
       const url = `/api/admin/bookings?${params.toString()}`
 
@@ -272,7 +274,7 @@ export default function AdminDashboardPage() {
       console.error('Error exporting bookings:', err)
       setMessageModal({ message: 'Export fehlgeschlagen. Bitte erneut versuchen.', type: 'error' })
     }
-  }, [selectedPlayId, debouncedSearchTerm, router, plays])
+  }, [selectedPlayId, debouncedSearchTerm, router, plays, showOnlyNotCheckedIn])
 
   const handlePurgeOldBookings = useCallback(async () => {
     try {
@@ -319,21 +321,7 @@ export default function AdminDashboardPage() {
     }
   }, [router, fetchBookings])
 
-  useEffect(() => {
-    if (plays.length > 0) {
-      fetchBookings()
-    } else {
-      setIsLoading(false)
-    }
-  }, [selectedPlayId, plays.length, fetchBookings])
-
-  const handleLogout = async () => {
-    await fetch('/api/admin/logout', { 
-      method: 'POST',
-      credentials: 'include'
-    })
-    router.push('/admin')
-  }
+  useEffect(() => { void fetchBookings() }, [fetchBookings])
 
   const getSeatLabel = (seatNumber: number): string => {
     const row = Math.floor(seatNumber / 10)
@@ -391,6 +379,8 @@ export default function AdminDashboardPage() {
   }
 
   const handleToggleCheckIn = async (bookingId: string, currentStatus: string) => {
+    if (updatingBooking) return
+    setUpdatingBooking(bookingId)
     try {
       if (currentStatus === 'confirmed') {
         // Check in
@@ -407,7 +397,7 @@ export default function AdminDashboardPage() {
         
         if (data.success) {
           // Update local state
-          setBookings(bookings.map(b => 
+          setBookings(current => current.map(b =>
             b.id === bookingId ? { ...b, status: 'checked_in' } : b
           ))
         } else {
@@ -428,7 +418,7 @@ export default function AdminDashboardPage() {
         
         if (data.success) {
           // Update local state
-          setBookings(bookings.map(b => 
+          setBookings(current => current.map(b =>
             b.id === bookingId ? { ...b, status: 'confirmed' } : b
           ))
         } else {
@@ -438,7 +428,7 @@ export default function AdminDashboardPage() {
     } catch (err) {
       console.error('Error toggling check-in:', err)
       setMessageModal({ message: 'Fehler beim Aktualisieren des Status', type: 'error' })
-    }
+    } finally { setUpdatingBooking(null) }
   }
 
   const getStatusBadge = (status: string) => {
@@ -455,101 +445,56 @@ export default function AdminDashboardPage() {
     )
   }
 
-  const filteredBookings = showOnlyNotCheckedIn 
-    ? bookings.filter(b => b.status === 'confirmed')
-    : bookings
+  const filteredBookings = bookings.filter(booking => {
+    const query = debouncedSearchTerm.toLocaleLowerCase('de-DE')
+    return (!showOnlyNotCheckedIn || booking.status === 'confirmed') &&
+      (!query || booking.name.toLocaleLowerCase('de-DE').includes(query) || booking.email.toLowerCase().includes(query))
+  })
+  const selectedPlay = plays.find(play => play.id === selectedPlayId)
 
   return (
     <div className='max-w-7xl mx-auto'>
-      {/* Header */}
-      <div className='mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-        <div>
-          <h1 className='font-display text-3xl md:text-4xl font-bold mb-2'>
-            Admin-Dashboard
-          </h1>
-          <p className='text-site-100'>
-            Buchungen verwalten und Statistiken anzeigen
-          </p>
-        </div>
-        <div className='flex gap-3'>
-          <a
-            href='/admin/analytics'
-            className='px-4 py-2 rounded-lg border border-kolping-400 hover:bg-kolping-500/10 text-kolping-100 font-semibold transition-colors flex items-center gap-2'
-          >
-            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' />
-            </svg>
-            Analysen
-          </a>
-          <a
-            href='/admin/history'
-            className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors flex items-center gap-2'
-          >
-            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
-            </svg>
-            Historie
-          </a>
-          <a
-            href='/admin/scan'
-            className='px-4 py-2 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors flex items-center gap-2'
-          >
-            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z' />
-            </svg>
-            Tickets Scannen
-          </a>
-          <button
-            onClick={() => setPurgeConfirm(true)}
-            disabled={isPurging}
-            className='px-4 py-2 rounded-lg border border-red-700 hover:bg-red-900/30 text-red-400 font-semibold transition-colors flex items-center gap-2 disabled:opacity-50'
-          >
-            <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
-            </svg>
-            Alte Daten löschen
-          </button>
-          <button
-            onClick={handleLogout}
-            className='px-4 py-2 rounded-lg border border-site-700 hover:border-site-600 bg-site-800 transition-colors'
-          >
-            Abmelden
-          </button>
-        </div>
-      </div>
+      <header className='admin-heading'>
+        <div><h1>Buchungen &amp; Aufführungen</h1><p>Termin auswählen, Buchungen finden und Einlass prüfen.</p></div>
+        <a href='/admin/scan' className='admin-button admin-button-primary'>Einlass öffnen ↗</a>
+      </header>
 
-      {plays.length > 0 && (<>
-      {/* Stats */}
-      <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-8'>
-        <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Buchungen Gesamt</p>
-          <p className='text-3xl font-bold'>{bookings.length}</p>
+      <section aria-label='Aufführungen'>
+        <div className='admin-section-heading'>
+          <h2>Aufführungen</h2>
+          {selectedPlayId !== 'all' && <button type='button' className='admin-button admin-button-quiet' onClick={() => setSelectedPlayId('all')}>Alle anzeigen</button>}
         </div>
-        <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Gebuchte Plätze</p>
-          <p className='text-3xl font-bold'>{getTotalSeats()}</p>
+        <div className='admin-performance-grid'>
+          {plays.map(play => {
+            const occupancy = play.total_seats > 0 ? Math.min(100, Math.max(0, play.booked_seats / play.total_seats * 100)) : 0
+            const percent = occupancy < 100 ? Math.min(99, Math.round(occupancy)) : 100
+            return <button key={play.id} type='button' className='admin-performance' aria-pressed={selectedPlayId === play.id} onClick={() => setSelectedPlayId(play.id)}>
+              <strong>{new Date(`${play.date}T12:00:00`).toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: '2-digit' })} · {play.time} Uhr</strong>
+              <span>{play.title}</span>
+              <span className='admin-performance-meta'><span>{play.available_seats} {play.available_seats === 1 ? 'Platz' : 'Plätze'} frei</span><span>{percent} % belegt</span></span>
+              <div className='admin-meter' data-level={occupancy >= 85 ? 'high' : occupancy >= 60 ? 'medium' : 'low'} aria-hidden='true'><i style={{ width: `${occupancy}%` }} /></div>
+            </button>
+          })}
         </div>
-        <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Eingecheckt</p>
-          <p className='text-3xl font-bold text-green-400'>
-            {bookings.filter(b => b.status === 'checked_in').length}
-          </p>
-        </div>
-        <div className='glass rounded-xl p-6'>
-          <p className='text-sm text-site-100 mb-1'>Noch nicht eingecheckt</p>
-          <p className='text-3xl font-bold text-blue-400'>
-            {bookings.filter(b => b.status === 'confirmed').length}
-          </p>
-        </div>
-      </div>
+      </section>
+
+      <div className='admin-section-heading'><h2>{selectedPlay ? selectedPlay.display_date : 'Alle Aufführungen'}</h2></div>
+      <dl className='admin-stats' aria-busy={isLoading}>
+        <div className='admin-stat'><dt>Buchungen</dt><dd>{isLoading ? '…' : bookings.length}</dd><small>ohne Stornierungen</small></div>
+        <div className='admin-stat'><dt>Reservierte Plätze</dt><dd>{isLoading ? '…' : getTotalSeats()}</dd><small>in dieser Auswahl</small></div>
+        <div className='admin-stat'><dt>Gäste im Saal</dt><dd>{isLoading ? '…' : bookings.filter(b => b.status === 'checked_in').reduce((sum, b) => sum + b.seats.length, 0)}</dd><small>bereits eingecheckte Plätze</small></div>
+        <div className='admin-stat'><dt>Noch erwartet</dt><dd>{isLoading ? '…' : bookings.filter(b => b.status === 'confirmed').reduce((sum, b) => sum + b.seats.length, 0)}</dd><small>noch offene Plätze beim Einlass</small></div>
+      </dl>
 
       {/* Play Management Section */}
       <div className='glass rounded-xl mb-8'>
         <button
           onClick={() => setPlaysExpanded(!playsExpanded)}
+          aria-expanded={playsExpanded}
+          aria-controls='admin-play-management'
           className='w-full flex items-center justify-between p-6 text-left'
         >
-          <h2 className='text-xl font-display font-bold'>Stücke verwalten</h2>
+          <h2 className='text-xl font-display font-bold'>Aufführungen verwalten</h2>
           <svg
             className={`w-5 h-5 transition-transform duration-200 ${playsExpanded ? 'rotate-180' : ''}`}
             fill='none' stroke='currentColor' viewBox='0 0 24 24'
@@ -559,7 +504,7 @@ export default function AdminDashboardPage() {
         </button>
 
         {playsExpanded && (
-          <div className='px-6 pb-6'>
+          <div id='admin-play-management' className='px-6 pb-6'>
             {/* New Play Button */}
             {!showPlayForm && !editingPlayId && (
               <button
@@ -572,38 +517,38 @@ export default function AdminDashboardPage() {
                 <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
                 </svg>
-                Neues Stück anlegen
+                Neue Aufführung anlegen
               </button>
             )}
 
             {/* Inline Create Form */}
             {showPlayForm && (
               <div className='mb-4 p-4 rounded-lg bg-site-800/50 border border-site-700'>
-                <h3 className='text-sm font-semibold mb-3'>Neues Stück anlegen</h3>
+                <h3 className='text-sm font-semibold mb-3'>Neue Aufführung anlegen</h3>
                 <div className='grid grid-cols-1 md:grid-cols-5 gap-3'>
                   <input
                     type='text'
                     placeholder='Titel'
-                    value={playForm.title}
+                    aria-label='Titel' value={playForm.title}
                     onChange={(e) => setPlayForm({ ...playForm, title: e.target.value })}
                     className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                   />
                   <input
                     type='date'
-                    value={playForm.date}
+                    aria-label='Datum' value={playForm.date}
                     onChange={(e) => setPlayForm({ ...playForm, date: e.target.value })}
                     className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                   />
                   <input
                     type='time'
-                    value={playForm.time}
+                    aria-label='Uhrzeit' value={playForm.time}
                     onChange={(e) => setPlayForm({ ...playForm, time: e.target.value })}
                     className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                   />
                   <input
                     type='number'
                     placeholder='Plätze'
-                    value={playForm.total_seats}
+                    aria-label='Anzahl Plätze' value={playForm.total_seats}
                     onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 68 })}
                     className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                   />
@@ -652,7 +597,7 @@ export default function AdminDashboardPage() {
                         <td className='py-2 px-2'>
                           <input
                             type='text'
-                            value={playForm.title}
+                            aria-label='Titel' value={playForm.title}
                             onChange={(e) => setPlayForm({ ...playForm, title: e.target.value })}
                             className='w-full px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                           />
@@ -660,7 +605,7 @@ export default function AdminDashboardPage() {
                         <td className='py-2 px-2'>
                           <input
                             type='date'
-                            value={playForm.date}
+                            aria-label='Datum' value={playForm.date}
                             onChange={(e) => setPlayForm({ ...playForm, date: e.target.value })}
                             className='px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                           />
@@ -668,7 +613,7 @@ export default function AdminDashboardPage() {
                         <td className='py-2 px-2'>
                           <input
                             type='time'
-                            value={playForm.time}
+                            aria-label='Uhrzeit' value={playForm.time}
                             onChange={(e) => setPlayForm({ ...playForm, time: e.target.value })}
                             className='px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                           />
@@ -679,7 +624,7 @@ export default function AdminDashboardPage() {
                         <td className='py-2 px-2'>
                           <input
                             type='number'
-                            value={playForm.total_seats}
+                            aria-label='Anzahl Plätze' value={playForm.total_seats}
                             onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 68 })}
                             className='w-20 px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                           />
@@ -788,70 +733,10 @@ export default function AdminDashboardPage() {
         )}
       </div>
 
-      {/* Seats Available per Show Chart */}
-      {plays.length > 0 && (
-        <div className='glass rounded-xl p-6 mb-8'>
-          <h2 className='text-xl font-display font-bold mb-6'>Verfügbare Plätze pro Vorstellung</h2>
-          <div className='space-y-4'>
-            {plays.map((play) => {
-              const availablePercent = (play.available_seats / play.total_seats) * 100
-              const bookedPercent = 100 - availablePercent
-              
-              return (
-                <div key={play.id} className='group'>
-                  <div className='flex justify-between items-center mb-2'>
-                    <span className='text-sm font-medium truncate mr-4'>{play.display_date}</span>
-                    <span className='text-sm text-site-100 whitespace-nowrap'>
-                      {play.available_seats} / {play.total_seats} verfügbar
-                    </span>
-                  </div>
-                  <div className='relative h-8 bg-site-800 rounded-lg overflow-hidden border border-site-700'>
-                    {/* Booked seats (background) */}
-                    <div
-                      className='absolute inset-y-0 left-0 bg-gradient-to-r from-kolping-600 to-kolping-500 transition-all duration-500 ease-out'
-                      style={{ width: `${bookedPercent}%` }}
-                    />
-                    {/* Available seats indicator */}
-                    <div
-                      className='absolute inset-y-0 right-0 bg-gradient-to-r from-green-600/80 to-green-500/80 transition-all duration-500 ease-out'
-                      style={{ width: `${availablePercent}%` }}
-                    />
-                    {/* Labels inside bar */}
-                    <div className='absolute inset-0 flex items-center justify-between px-3 text-xs font-semibold'>
-                      <span className={`${bookedPercent > 15 ? 'text-white' : 'text-transparent'}`}>
-                        {play.booked_seats} gebucht
-                      </span>
-                      <span className={`${availablePercent > 15 ? 'text-white' : 'text-transparent'}`}>
-                        {play.available_seats} frei
-                      </span>
-                    </div>
-                  </div>
-                  {/* Sold out indicator */}
-                  {play.is_sold_out && (
-                    <p className='text-xs text-red-400 mt-1 font-semibold'>⚠️ Ausgebucht</p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-          {/* Legend */}
-          <div className='flex flex-wrap justify-center gap-6 mt-6 pt-4 border-t border-site-700'>
-            <div className='flex items-center gap-2'>
-              <div className='w-4 h-4 rounded bg-gradient-to-r from-kolping-600 to-kolping-500' />
-              <span className='text-sm text-site-100'>Gebucht</span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <div className='w-4 h-4 rounded bg-gradient-to-r from-green-600/80 to-green-500/80' />
-              <span className='text-sm text-site-100'>Verfügbar</span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Seat Map Stats */}
-      {selectedPlayId !== 'all' && (
+      {selectedPlayId !== 'all' && !isLoading && (
         <div className='glass rounded-xl p-6 mb-6'>
-          <div className='flex justify-between items-center mb-4'>
+          <div className='flex flex-wrap gap-3 justify-between items-center mb-4'>
             <h2 className='text-xl font-display font-bold'>Sitzplatz-Übersicht</h2>
             <button
               onClick={() => setShowSeatMap(!showSeatMap)}
@@ -1013,7 +898,7 @@ export default function AdminDashboardPage() {
               <option value='all'>Alle Vorstellungen</option>
               {plays.map((play) => (
                 <option key={play.id} value={play.id}>
-                  {play.display_date} ({play.available_seats} Plätze verfügbar)
+                  {play.display_date} ({play.available_seats} {play.available_seats === 1 ? 'Platz' : 'Plätze'} verfügbar)
                 </option>
               ))}
             </select>
@@ -1073,7 +958,7 @@ export default function AdminDashboardPage() {
           <div className='flex gap-3 flex-wrap'>
             <button
               type='button'
-              onClick={() => fetchBookings()}
+              onClick={() => { void fetchBookings(); void fetchPlays(); void fetchAdminPlays() }}
               disabled={isLoading}
               className='inline-flex items-center justify-center gap-2 rounded-lg border border-site-700 px-4 py-2 text-sm font-semibold hover:bg-site-700/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
             >
@@ -1133,7 +1018,7 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           <div className='overflow-x-auto'>
-            <table className='w-full'>
+            <table className='w-full admin-booking-table'>
               <thead>
                 <tr className='border-b border-site-700'>
                   <th className='text-left py-3 px-2 text-sm font-semibold text-site-100'>Name</th>
@@ -1149,31 +1034,33 @@ export default function AdminDashboardPage() {
               <tbody>
                 {filteredBookings.map((booking) => (
                   <tr key={booking.id} className='border-b border-site-800 hover:bg-site-800/30'>
-                    <td className='py-3 px-2 text-sm'>{booking.name}</td>
-                    <td className='py-3 px-2 text-sm text-site-100'>
+                    <td data-label='Name' className='py-3 px-2 text-sm'>{booking.name}</td>
+                    <td data-label='E-Mail' className='py-3 px-2 text-sm text-site-100'>
                       {showEmails ? booking.email : maskEmail(booking.email)}
                     </td>
-                    <td className='py-3 px-2 text-sm text-site-100'>
+                    <td data-label='Vorstellung' className='py-3 px-2 text-sm text-site-100'>
                       {booking.play?.display_date || 'N/A'}
                     </td>
-                    <td className='py-3 px-2 text-sm'>
+                    <td data-label='Plätze' className='py-3 px-2 text-sm'>
                       <div className='flex flex-wrap gap-1'>
-                        {booking.seats.sort((a, b) => a - b).map((seat) => (
+                        {[...booking.seats].sort((a, b) => a - b).map((seat) => (
                           <span key={seat} className='px-2 py-0.5 bg-site-700 rounded text-xs'>
                             {getSeatLabel(seat)}
                           </span>
                         ))}
                       </div>
                     </td>
-                    <td className='py-3 px-2 text-sm'>
+                    <td data-label='Status' className='py-3 px-2 text-sm'>
                       {getStatusBadge(booking.status)}
                     </td>
-                    <td className='py-3 px-2 text-sm text-site-100'>
+                    <td data-label='Gebucht am' className='py-3 px-2 text-sm text-site-100'>
                       {new Date(booking.created_at).toLocaleDateString('de-DE')}
                     </td>
-                    <td className='py-3 px-2 text-sm'>
+                    <td data-label='Einlass' className='py-3 px-2 text-sm'>
                       <button
                         onClick={() => handleToggleCheckIn(booking.id, booking.status)}
+                        disabled={updatingBooking !== null}
+                        aria-label={`${booking.status === 'confirmed' ? 'Einchecken' : 'Check-in zurücknehmen'}: ${booking.name}`}
                         className={`px-3 py-1 rounded text-xs font-semibold transition-colors ${
                           booking.status === 'confirmed'
                             ? 'bg-green-600 hover:bg-green-700 text-white'
@@ -1183,7 +1070,7 @@ export default function AdminDashboardPage() {
                         {booking.status === 'confirmed' ? 'Einchecken' : 'Check-In rückgängig'}
                       </button>
                     </td>
-                    <td className='py-3 px-2 text-sm'>
+                    <td data-label='Ticket' className='py-3 px-2 text-sm'>
                       <a
                         href={`/booking/view/${booking.id}`}
                         target='_blank'
@@ -1200,21 +1087,27 @@ export default function AdminDashboardPage() {
           </div>
         )}
       </div>
-      </>)}
 
       {plays.length === 0 && !isLoading && (
         <div className='glass rounded-xl p-12 text-center'>
-          <p className='text-site-100 text-lg'>Keine Stücke angelegt.</p>
-          <p className='text-site-200 text-sm mt-2'>Erstelle über &quot;Stücke verwalten&quot; oben eine neue Vorstellung.</p>
+          <p className='text-site-100 text-lg'>Noch keine Aufführungen angelegt.</p>
+          <p className='text-site-200 text-sm mt-2'>Erstelle über &quot;Aufführungen verwalten&quot; oben eine neue Vorstellung.</p>
         </div>
       )}
+
+      <aside className='admin-retention'>
+        <div><h2 className='font-semibold mb-1'>Buchungsdaten werden automatisch gelöscht</h2>
+          <p className='admin-muted'>14 Tage nach der jeweiligen Aufführung entfernt das Ticketsystem die zugehörigen Buchungsdaten. Heruntergeladene CSV-Dateien bitte ebenfalls löschen.</p>
+        </div>
+        <button type='button' className='admin-button admin-button-quiet' onClick={() => setPurgeConfirm(true)} disabled={isPurging}>Löschlauf jetzt ausführen</button>
+      </aside>
 
       {/* Purge Confirmation Dialog */}
       {purgeConfirm && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
           <div className='glass rounded-xl p-6 max-w-md mx-4 border border-red-700'>
             <h3 className='text-xl font-display font-bold text-red-400 mb-3'>
-              ⚠️ Alte Buchungen löschen
+              Abgelaufene Buchungen löschen
             </h3>
             <p className='text-site-100 mb-2'>
               Alle Buchungen für Vorstellungen, die <strong>älter als 2 Wochen</strong> sind, werden unwiderruflich gelöscht.
@@ -1261,4 +1154,3 @@ export default function AdminDashboardPage() {
     </div>
   )
 }
-

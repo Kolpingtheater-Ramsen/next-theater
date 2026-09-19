@@ -68,6 +68,7 @@ const createCsvResponse = (bookings: BookingWithSeats[], filenameSuffix: string)
     status: 200,
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
+      'Cache-Control': 'private, no-store',
       'Content-Disposition': `attachment; filename="${filename}"`
     }
   })
@@ -95,6 +96,8 @@ export async function GET(request: NextRequest) {
     const rawSearchQuery = searchParams.get('query')
     const normalizedSearchQuery = rawSearchQuery ? rawSearchQuery.trim().toLowerCase() : ''
     const hasSearchQuery = normalizedSearchQuery.length > 0
+    const status = searchParams.get('status')
+    const statusCondition = status === 'confirmed' ? " AND b.status = 'confirmed'" : ''
     const searchCondition = hasSearchQuery
       ? ' AND (LOWER(b.name) LIKE ? OR LOWER(b.email) LIKE ?)'
       : ''
@@ -127,7 +130,7 @@ export async function GET(request: NextRequest) {
         FROM bookings b
         LEFT JOIN booked_seats bs ON b.id = bs.booking_id
         LEFT JOIN plays p ON b.play_id = p.id
-        WHERE b.play_id = ? AND b.status != 'cancelled'${searchCondition}
+        WHERE b.play_id = ? AND b.status != 'cancelled'${searchCondition}${statusCondition}
         GROUP BY b.id
         ORDER BY b.created_at DESC
       `
@@ -144,7 +147,7 @@ export async function GET(request: NextRequest) {
         FROM bookings b
         LEFT JOIN booked_seats bs ON b.id = bs.booking_id
         LEFT JOIN plays p ON b.play_id = p.id
-        WHERE b.status != 'cancelled'${searchCondition}
+        WHERE b.status != 'cancelled'${searchCondition}${statusCondition}
         GROUP BY b.id
         ORDER BY b.created_at DESC
       `
@@ -190,7 +193,7 @@ export async function GET(request: NextRequest) {
       success: true,
       bookings,
       total: bookings.length
-    })
+    }, { headers: { 'Cache-Control': 'private, no-store' } })
   } catch (error) {
     console.error('Error fetching admin bookings:', error)
     return NextResponse.json(

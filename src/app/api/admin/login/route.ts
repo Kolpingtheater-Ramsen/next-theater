@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     if (!sameOrigin(request)) return NextResponse.json({ error: 'Ungültige Anfrage' }, { status: 403 })
     if (typeof password !== 'string' || password.length > 256 || !password) {
       return NextResponse.json(
-        { success: false, error: 'Password is required' },
+        { success: false, error: 'Bitte das Passwort eingeben.' },
         { status: 400 }
       )
     }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     
     if (!isValid) {
       return NextResponse.json(
-        { success: false, error: 'Invalid password' },
+        { success: false, error: 'Das Passwort ist nicht korrekt.' },
         { status: 401 }
       )
     }
@@ -46,8 +46,8 @@ export async function POST(request: NextRequest) {
     // Set cookie
     const response = NextResponse.json({
       success: true,
-      message: 'Login successful'
-    })
+      message: 'Angemeldet'
+    }, { headers: { 'Cache-Control': 'private, no-store' } })
     
     response.cookies.set('admin-token', token, {
       httpOnly: true,
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Admin login error:', error)
     return NextResponse.json(
-      { success: false, error: 'Login failed' },
+      { success: false, error: 'Anmeldung fehlgeschlagen.' },
       { status: 500 }
     )
   }

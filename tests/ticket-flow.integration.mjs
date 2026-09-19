@@ -104,6 +104,17 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
     assert.equal((await api('/api/admin/checkin', 'POST', { bookingId: current.id }, { Cookie: cookie })).status, 200)
     current = (await api(`/api/bookings/${current.id}`)).data.booking
     assert.equal(current.status, 'checked_in')
+    const confirmed = await api(`/api/admin/bookings?playId=${play}&status=confirmed`, 'GET', undefined, { Cookie: cookie })
+    assert.equal(confirmed.status, 200)
+    assert.ok(confirmed.data.bookings.length > 0)
+    assert.ok(confirmed.data.bookings.every(b => b.status === 'confirmed' && b.id !== current.id))
+    assert.ok(confirmed.headers.get('cache-control').includes('no-store'))
+    const csv = await fetch(`${base}/api/admin/bookings?playId=${play}&status=confirmed&format=csv`, { headers: { Cookie: cookie } })
+    assert.equal(csv.status, 200)
+    assert.ok(csv.headers.get('cache-control').includes('no-store'))
+    const csvText = await csv.text()
+    assert.ok(!csvText.includes(current.id))
+    assert.ok(confirmed.data.bookings.every(b => csvText.includes(b.id)))
     assert.equal((await api(`/api/bookings/${current.id}`, 'DELETE', { version: current.version })).status, 409)
     assert.equal((await api('/api/admin/checkout', 'POST', { bookingId: current.id }, { Cookie: cookie })).status, 200)
     current = (await api(`/api/bookings/${current.id}`)).data.booking
