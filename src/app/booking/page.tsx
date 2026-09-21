@@ -132,7 +132,10 @@ export default function BookingPage() {
     {step === 'date' && <>
       {loading ? <p className='ticket-empty' role='status'>Die Vorstellungen werden geladen …</p> : !plays.length && !error ? <div className='ticket-empty'><p>Aktuell sind keine Vorstellungen zur Buchung verfügbar.</p><p className='ticket-muted mt-2'>Bitte schau später wieder vorbei.</p></div> : <div className='ticket-day-grid'>
         {days.map(date => <section className='ticket-day' key={date} aria-label={formatDay(date, true)}>
-          <div className='ticket-day-header'><span className='ticket-day-number'>{Number(date.slice(-2))}</span><div><span className='ticket-day-name'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { weekday: 'long', timeZone: 'UTC' })}</span><span className='ticket-day-month'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { month: 'long', year: 'numeric', timeZone: 'UTC' })}</span></div></div>
+          <h3 className='ticket-day-header'>
+            <span className='ticket-day-name'>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { weekday: 'long', timeZone: 'UTC' })}</span>
+            <time className='ticket-day-date' dateTime={date}>{new Date(`${date}T12:00:00Z`).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}</time>
+          </h3>
           <div className='ticket-times'>{plays.filter(item => item.date === date).map(item => {
             const occupancy = item.total_seats > 0 ? Math.min(100, Math.max(0, item.booked_seats / item.total_seats * 100)) : 0
             const percent = occupancy < 100 ? Math.min(99, Math.round(occupancy)) : 100
