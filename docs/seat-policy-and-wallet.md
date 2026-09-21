@@ -68,11 +68,11 @@ production domain. The booking API returns all six performances, and the public
 Wallet endpoint correctly remains unavailable (503). The banner was checked
 on desktop and at a 390-pixel viewport.
 
-Public issuance remains disabled because the Google issuer
-is still in demo mode. The publishing request was submitted on 19 September 2026.
-The console shows all three onboarding steps complete and says a response will
-arrive by email; this status persisted after reloading. The request dialog gives
-a review estimate of two to three business days. Public approval is still pending.
+At the initial deployment, public issuance stayed disabled while the issuer was
+in demo mode. The publishing request was submitted on 19 September 2026.
+All three onboarding steps were complete, and the console confirmed that the
+decision would arrive by email. Google granted access on 21 September 2026;
+the activation and current production status are documented below.
 
 Console and network debugging identified why the request button initially did
 nothing: Google's dialog handler awaits an Analytics callback, while Brave's
@@ -101,14 +101,37 @@ The Romeo und Julia artwork is generated with the built-in Imagegen tool:
 is illustrative, not a photograph of the real cast or set. It contains no text;
 titles, times, seats and QR codes remain native accessible fields.
 
-## Remaining activation
+## Public activation (21 September 2026)
 
-The publishing request is submitted. Verify that Google has granted publishing
-access in the Google Pay & Wallet console. Demo passes can be saved by
-issuer administrators/developers or approved test accounts. Once public access
-is granted, set `GOOGLE_WALLET_ENABLED=true` on the worker and Pages, redeploy
-Pages and verify issuance with a permitted test reservation. Do not expose the
-public Wallet button while the issuer is restricted to demo accounts.
+Google's approval email arrived at 14:40 UTC, and the Google Pay & Wallet console
+confirmed the issuer's access without the demo or publishing-request banner.
+`GOOGLE_WALLET_ENABLED=true` is now installed on both the retry worker and
+production Pages. The worker's active version is
+`17c16ec4-b7ff-46a5-97c0-830304e46e12`. Pages deployment `027706b1` publishes the
+tested application from commit `882fa935` with the enabled setting.
+The next scheduled production execution at 14:50 UTC completed with outcome
+`ok`, on that worker version, without exceptions.
+
+The production ticket API returns `walletAvailable: true` for an existing
+confirmed reservation. Its response remains private and non-cacheable. Brave
+shows an enabled "Zu Google Wallet hinzufügen" button with no console errors.
+The Wallet endpoint rejects a nonexistent booking with 409 and a foreign origin
+with 403. `/booking` and `/api/plays` both return 200 with six performances.
+
+The existing synthetic pass was reissued using the live Google API, without
+creating or changing production reservations. Read-back verifies seat changes,
+check-in (`COMPLETED`), checkout (`ACTIVE`) and cancellation (`INACTIVE`).
+Google Wallet's web UI displays the saved pass with the updated seats and Romeo
+und Julia artwork, without a demo label or console errors. The synthetic pass
+was cancelled after validation, and the web UI confirmed "Storniert". Android saving and
+delivery of cancellation updates were verified on 19 September as described
+above; no Android device was connected for the 21 September check.
+
+The existing ticket implementation needed no source changes. The activation
+build and Pages packaging pass, as do TypeScript and all 19 focused Wallet and
+retention tests. Keep all credentials in the existing encrypted secret stores.
+To disable issuance again, set `GOOGLE_WALLET_ENABLED=false` on Pages and the
+worker and redeploy Pages. This preserves bookings and the retention schedule.
 
 ## Availability and data retention (19 September 2026)
 
@@ -166,8 +189,8 @@ a secure local store, never in Git or chat.
   including the parent test) against isolated local D1. This includes concurrent
   bookings, optional seat guidance, admission-only scanning and cancellation.
 - TypeScript, changed-file lint, Next.js production build and Pages packaging pass.
-- Live Google API and Pixel checks are described above. Public activation remains
-  a separate Google publishing gate.
+- Live Google API, Pixel checks and the completed public activation are described
+  above. The initial publishing gate is cleared.
 
 References:
 

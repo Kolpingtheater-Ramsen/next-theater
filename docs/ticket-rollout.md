@@ -39,6 +39,12 @@ and ticket behavior, so prefer correcting the new deployment where possible.
 
 ## Google Wallet
 
+Public Wallet issuance was activated on 21 September 2026 after Google's approval
+email and console verification. Both production Pages and the retry worker have
+the enabled setting. Existing confirmed tickets now show the Wallet button; see
+[the activation record](seat-policy-and-wallet.md#public-activation-21-september-2026)
+for deployment identifiers and the exact verification scope.
+
 Wallet stays hidden unless all four settings are configured on Pages:
 
 - `GOOGLE_WALLET_ENABLED=true`
