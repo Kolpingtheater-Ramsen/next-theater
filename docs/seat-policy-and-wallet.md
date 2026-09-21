@@ -29,6 +29,15 @@ existing save confirmation, with "Trotzdem speichern". Selections without a new
 gap continue normally. The API still permits these choices; this is a deliberate
 confirmation step, not a seat-layout rejection.
 
+The warning on the seat map and in the confirmation dialog offers a replacement
+with the same seat count that introduces no new isolated free seats. It prefers
+fewer separate groups, retaining chosen seats, then nearby seats. Row boundaries,
+the aisle, blocked corners, other bookings and seats released during an edit are
+included in the search. Existing gaps elsewhere do not invalidate a suggestion.
+If no alternative exists, the warning says so. "Empfehlung übernehmen" changes
+only the current selection and returns to the map for review; it does not create
+or save a booking. Keeping the original selection still requires confirmation.
+
 ## Seat-rule verification (18 September 2026)
 
 The release passes 21 unit tests and 11 lifecycle scenarios against the packaged

@@ -1,11 +1,13 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { MAX_SEATS, SEATS_PER_ROW, seatLabel, seatNumbers } from '@/lib/tickets'
-import { seatPolicy } from '@/lib/seat-policy'
+import { seatPolicy, type SeatPolicyResult } from '@/lib/seat-policy'
+import SeatWarning from './SeatWarning'
 
-type Props={bookedSeats:number[];selectedSeats:number[];originalSeats?:number[];onChange:(seats:number[])=>void;onContinue:(seatNotice:string|null)=>void;totalSeats:number;disabled?:boolean;continueLabel?:string}
+type Props={bookedSeats:number[];selectedSeats:number[];originalSeats?:number[];onChange:(seats:number[])=>void;onContinue:(policy:SeatPolicyResult)=>void;totalSeats:number;disabled?:boolean;continueLabel?:string}
 export default function SeatSelection({bookedSeats,selectedSeats,originalSeats=[],onChange,onContinue,totalSeats,disabled=false,continueLabel='Weiter'}:Props) {
   const [notice,setNotice]=useState('')
+  const continueButton=useRef<HTMLButtonElement>(null)
   const numbers=seatNumbers(totalSeats), allowed=new Set(numbers)
   const rows=Math.ceil((totalSeats+2)/SEATS_PER_ROW)
   const policy=seatPolicy(totalSeats,bookedSeats,selectedSeats,originalSeats)
@@ -35,11 +37,11 @@ export default function SeatSelection({bookedSeats,selectedSeats,originalSeats=[
         </div>
       </div>
     </div>
-    {policy.notice&&<p className='ticket-notice ticket-notice-warning' role='status' aria-live='polite'>{policy.notice}</p>}
+    <SeatWarning policy={policy} disabled={disabled} onAcceptSuggestion={suggestion=>{setNotice('');onChange(suggestion);requestAnimationFrame(()=>continueButton.current?.focus())}}/>
     {notice&&<p role='alert' className='ticket-error'>{notice}</p>}
     <div className='ticket-seat-footer'>
       <div className='ticket-seat-summary' aria-live='polite'>{selectedSeats.length} von {MAX_SEATS} Plätzen<strong>{selectedSeats.length?selectedSeats.map(seatLabel).join(' · '):'Wähle deine Plätze'}</strong></div>
-      <button type='button' className='ticket-button ticket-button-primary' onClick={()=>onContinue(policy.notice)} disabled={disabled||!selectedSeats.length}>{continueLabel} <span aria-hidden='true'>→</span></button>
+      <button ref={continueButton} type='button' className='ticket-button ticket-button-primary' onClick={()=>onContinue(policy)} disabled={disabled||!selectedSeats.length}>{continueLabel} <span aria-hidden='true'>→</span></button>
     </div>
     <p className='ticket-muted text-xs mt-4'>Die Plätze sind nach Abschluss deiner Buchung verbindlich reserviert.</p>
   </>
