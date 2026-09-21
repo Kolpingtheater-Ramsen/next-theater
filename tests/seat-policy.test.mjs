@@ -48,15 +48,28 @@ test('prefers sitting together, without treating the aisle as an adjacent seat',
   assert.equal(seatPolicy(68, [], suggested).notice, null)
 })
 
-test('finds split alternatives when no complete group fits and never uses occupied seats', () => {
+test('does not offer split alternatives when no complete group fits', () => {
   const free = [1, 2, 3, 4, 10, 11, 12, 13]
   const booked = seatBlocks(68).flat().filter(seat => !free.includes(seat))
   const selected = [1, 2, 3, 10, 11]
   const suggested = seatPolicy(68, booked, selected).suggestedSeats
-  assert.deepEqual(suggested, [1, 2, 3, 4, 10])
-  assert.ok(suggested.every(seat => free.includes(seat)))
-  assert.equal(seatPolicy(68, booked, suggested).notice, null)
+  assert.equal(suggested, null)
   assert.deepEqual(selected, [1, 2, 3, 10, 11])
+})
+
+test('keeps the screenshot group together instead of moving C4 across the aisle to C6', () => {
+  const booked = [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13]
+  const policy = seatPolicy(68, booked, [20, 21, 22, 23])
+  assert.match(policy.notice, /C5/)
+  assert.equal(policy.suggestedSeats, null)
+})
+
+test('offers a whole nearby group when a gap-free adjacent alternative exists', () => {
+  const booked = [1, 2, 3, 4, 5, 6, 7, 8, 10]
+  const suggested = seatPolicy(68, booked, [20, 21, 22, 23]).suggestedSeats
+  assert.deepEqual(suggested, [11, 12, 13, 14])
+  assert.ok(suggested.every(seat => !booked.includes(seat)))
+  assert.equal(seatPolicy(68, booked, suggested).notice, null)
 })
 
 test('reports no alternative when every available choice would leave a new single seat', () => {
@@ -96,7 +109,9 @@ test('recommendations agree with an exhaustive search for every eight-seat booki
     const policy = seatPolicy(8, booked, selected)
     if (!policy.notice) { assert.equal(policy.suggestedSeats, null); continue }
     const existing = singles(booked)
-    const valid = candidate => !singles([...booked, ...candidate]).some(seat => !existing.includes(seat))
+    const valid = candidate => blocks.some(block => candidate.every(seat => block.includes(seat))) &&
+      candidate.every((seat, index) => seat === candidate[0] + index) &&
+      !singles([...booked, ...candidate]).some(seat => !existing.includes(seat))
     const feasible = choices(seats.filter(seat => !booked.includes(seat)), selected.length).some(valid)
     assert.equal(policy.suggestedSeats !== null, feasible, `layout ${layout}`)
     if (policy.suggestedSeats) {

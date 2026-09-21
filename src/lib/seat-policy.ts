@@ -22,11 +22,11 @@ function singleSeats(blocks: number[][], occupied: Set<number>): number[] {
     (index === block.length - 1 || occupied.has(block[index + 1]))))
 }
 
-type Candidate = { seats: number[]; groups: number; changes: number; distance: number }
+type Candidate = { seats: number[]; changes: number; distance: number }
 
 function prefer(candidate: Candidate, current: Candidate | undefined) {
   if (!current) return true
-  for (const key of ['groups', 'changes', 'distance'] as const) {
+  for (const key of ['changes', 'distance'] as const) {
     if (candidate[key] !== current[key]) return candidate[key] < current[key]
   }
   const different = candidate.seats.findIndex((seat, index) => seat !== current.seats[index])
@@ -41,45 +41,25 @@ function suggestSeats(blocks: number[][], booked: number[], selected: number[], 
   const distance = (seat: number) => Math.min(...selected.map(other =>
     Math.abs(Math.floor(seat / SEATS_PER_ROW) - Math.floor(other / SEATS_PER_ROW)) * SEATS_PER_ROW +
     Math.abs(column(seat) - column(other))))
-  let best: (Candidate | undefined)[] = Array(count + 1)
-  best[0] = { seats: [], groups: 0, changes: 0, distance: 0 }
+  let best: Candidate | undefined
 
-  // Each physical block has at most five seats. Enumerate its small set of
-  // choices, then combine the best result for each seat count across blocks.
-  // This also checks newly freed seats outside the selected row when editing.
+  // Only suggest a complete group of adjacent seats within one physical block.
+  // Never split guests across an aisle or rows to avoid a single free seat.
   for (const block of blocks) {
-    const free = block.filter(seat => !occupied.has(seat))
-    const options: Candidate[] = []
-    for (let mask = 0; mask < 2 ** free.length; mask++) {
-      const seats = free.filter((_, index) => mask & (1 << index))
-      if (seats.length > count) continue
-      const chosen = new Set(seats)
-      if (singleSeats([block], new Set([...occupied, ...seats])).some(seat => !existingSingles.has(seat))) continue
-      options.push({
+    for (let start = 0; start <= block.length - count; start++) {
+      const seats = block.slice(start, start + count)
+      if (seats.some(seat => occupied.has(seat))) continue
+      // Include gaps caused by releasing original seats in other rows on edits.
+      if (singleSeats(blocks, new Set([...occupied, ...seats])).some(seat => !existingSingles.has(seat))) continue
+      const candidate = {
         seats,
-        groups: seats.filter(seat => seat === block[0] || !chosen.has(seat - 1)).length,
         changes: seats.filter(seat => !preferred.has(seat)).length,
         distance: seats.reduce((sum, seat) => sum + distance(seat), 0),
-      })
-    }
-    const next: (Candidate | undefined)[] = Array(count + 1)
-    for (const previous of best) {
-      if (!previous) continue
-      for (const option of options) {
-        const size = previous.seats.length + option.seats.length
-        if (size > count) continue
-        const candidate = {
-          seats: [...previous.seats, ...option.seats],
-          groups: previous.groups + option.groups,
-          changes: previous.changes + option.changes,
-          distance: previous.distance + option.distance,
-        }
-        if (prefer(candidate, next[size])) next[size] = candidate
       }
+      if (prefer(candidate, best)) best = candidate
     }
-    best = next
   }
-  return best[count]?.seats ?? null
+  return best?.seats ?? null
 }
 
 // Seat layout is guidance only. Availability and booking limits are enforced separately.
