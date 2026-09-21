@@ -45,6 +45,8 @@
 .ticket-flow .ticket-back:hover{color:var(--ticket-accent)}
 .ticket-error{border:1px solid #a44949;background:rgba(180,50,50,.08);border-radius:12px;padding:14px 16px;line-height:1.6;margin:16px 0;color:var(--color-site-50);font-size:.9rem}
 .ticket-notice{background:var(--ticket-paper);border:1px solid var(--color-site-700);padding:16px;border-radius:12px;font-size:.85rem;line-height:1.7;margin:16px 0}
+.ticket-notice-warning{background:#332d0b;border-color:#eab308;color:#fef08a}
+[data-theme='light'] .ticket-notice-warning{background:#fffbeb;color:#713f12}
 .ticket-empty{padding:45px 24px;text-align:center;border:1px dashed var(--color-site-700);border-radius:16px;margin:24px 0}
 .ticket-seat-toolbar{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:20px 0}
 .ticket-seat-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.7rem;color:var(--color-site-100)}

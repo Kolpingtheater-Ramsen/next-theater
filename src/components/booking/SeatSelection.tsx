@@ -35,7 +35,7 @@ export default function SeatSelection({bookedSeats,selectedSeats,originalSeats=[
         </div>
       </div>
     </div>
-    {policy.notice&&<p className='ticket-notice' role='status' aria-live='polite'>{policy.notice}</p>}
+    {policy.notice&&<p className='ticket-notice ticket-notice-warning' role='status' aria-live='polite'>{policy.notice}</p>}
     {notice&&<p role='alert' className='ticket-error'>{notice}</p>}
     <div className='ticket-seat-footer'>
       <div className='ticket-seat-summary' aria-live='polite'>{selectedSeats.length} von {MAX_SEATS} Plätzen<strong>{selectedSeats.length?selectedSeats.map(seatLabel).join(' · '):'Wähle deine Plätze'}</strong></div>
