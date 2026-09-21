@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
 import BookingSummary from '@/components/booking/BookingSummary'
+import ConfirmDialog from '@/components/booking/ConfirmDialog'
 import { formatDay } from '@/lib/tickets'
 import type { PlayWithAvailability } from '@/types/database'
 
@@ -25,6 +26,7 @@ export default function BookingPage() {
   const [seatsReady, setSeatsReady] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [seatNotice, setSeatNotice] = useState<string | null>(null)
   const [field, setField] = useState<string>()
   const request = useRef({ payload: '', key: '' })
   const seatRequest = useRef(0)
@@ -56,6 +58,7 @@ export default function BookingPage() {
   function go(next: Step) {
     setStep(next)
     setError('')
+    setSeatNotice(null)
     window.history.pushState(null, '', next === 'date' ? '/booking' : `#${next}`)
     requestAnimationFrame(() => { heading.current?.focus(); heading.current?.scrollIntoView({ block: 'start' }) })
   }
@@ -161,7 +164,8 @@ export default function BookingPage() {
       </div>}
     </>}
     {step === 'seats' && play && <>
-      {seatLoading ? <p className='ticket-empty' role='status'>Freie Plätze werden geladen …</p> : !seatsReady ? <button className='ticket-button' onClick={() => loadSeats(play)}>Plätze erneut laden</button> : <SeatSelection totalSeats={play.total_seats} bookedSeats={booked} selectedSeats={seats} onChange={setSeats} onContinue={() => go('details')} />}
+      {seatLoading ? <p className='ticket-empty' role='status'>Freie Plätze werden geladen …</p> : !seatsReady ? <button className='ticket-button' onClick={() => loadSeats(play)}>Plätze erneut laden</button> : <SeatSelection totalSeats={play.total_seats} bookedSeats={booked} selectedSeats={seats} onChange={setSeats} onContinue={notice => { if (notice) setSeatNotice(notice); else go('details') }} />}
+      {seatNotice && <ConfirmDialog title='Mit Sitzlücke fortfahren?' confirmLabel='Ja, Auswahl bestätigen' cancelLabel='Plätze ändern' onCancel={() => setSeatNotice(null)} onConfirm={() => go('details')}><p className='ticket-notice ticket-notice-warning'>{seatNotice}</p></ConfirmDialog>}
     </>}
     {step === 'details' && play && <div className='ticket-form-grid'>
       <BookingForm name={name} email={email} onChange={(key, value) => { (key === 'name' ? setName : setEmail)(value); setField(undefined) }} onSubmit={reserve} busy={busy} serverField={field} />

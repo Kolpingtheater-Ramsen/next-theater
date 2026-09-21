@@ -21,6 +21,14 @@ No seat-policy migration or change to existing reservations is required.
 
 `src/lib/seat-policy.ts` provides the notice shared by new bookings and edits.
 
+Since 21 September 2026, the seat-gap notice is yellow and continuing with a new
+gap requires explicit confirmation in the UI. New bookings show a dialog before
+the personal-details step; "Plätze ändern" or Escape returns to the seat map,
+and "Ja, Auswahl bestätigen" continues. Edits include the same warning in their
+existing save confirmation, with "Trotzdem speichern". Selections without a new
+gap continue normally. The API still permits these choices; this is a deliberate
+confirmation step, not a seat-layout rejection.
+
 ## Seat-rule verification (18 September 2026)
 
 The release passes 21 unit tests and 11 lifecycle scenarios against the packaged

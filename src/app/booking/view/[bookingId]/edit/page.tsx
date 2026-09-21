@@ -20,6 +20,7 @@ export default function EditBookingPage() {
   const [ready, setReady] = useState(false)
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
+  const [seatNotice, setSeatNotice] = useState<string | null>(null)
   const [error, setError] = useState('')
   const endpoint = `/api/bookings/${encodeURIComponent(bookingId)}`
   const load = useCallback(async () => {
@@ -68,9 +69,9 @@ export default function EditBookingPage() {
     {error && <div role='alert' className='ticket-error'>{error}</div>}
     {loading ? <p className='ticket-empty' role='status'>Deine Plätze werden geladen …</p> : !editable ? <p className='ticket-notice'>Diese Buchung kann nicht mehr geändert werden. Bitte wende dich bei Fragen an das Theater.</p> : !ready ? <button className='ticket-button' onClick={load}>Ticket und freie Plätze erneut laden</button> : <>
       <p className='ticket-notice'>Bisher reserviert: <strong>{booking.seats.map(seatLabel).join(' · ')}</strong>. Deine bisherigen Plätze bleiben reserviert, bis du die Änderung bestätigst.</p>
-      <SeatSelection totalSeats={booking.play!.total_seats} selectedSeats={seats} originalSeats={booking.seats} bookedSeats={booked} onChange={setSeats} disabled={busy} continueLabel='Änderung prüfen' onContinue={() => { if (changed) setConfirm(true); else setError('Deine Auswahl ist unverändert.') }} />
+      <SeatSelection totalSeats={booking.play!.total_seats} selectedSeats={seats} originalSeats={booking.seats} bookedSeats={booked} onChange={setSeats} disabled={busy} continueLabel='Änderung prüfen' onContinue={notice => { if (changed) { setSeatNotice(notice); setConfirm(true) } else setError('Deine Auswahl ist unverändert.') }} />
     </>}
     {!loading && !booking && <button className='ticket-button' onClick={load}>Erneut laden</button>}
-    {confirm && <ConfirmDialog title='Diese Plätze reservieren?' confirmLabel='Änderung speichern' busy={busy} onCancel={() => setConfirm(false)} onConfirm={save}><p>Neue Auswahl: <strong>{seats.map(seatLabel).join(' · ')}</strong>.</p><p className='mt-3'>Nicht mehr ausgewählte Plätze werden wieder freigegeben.</p></ConfirmDialog>}
+    {confirm && <ConfirmDialog title={seatNotice ? 'Trotz Sitzlücke speichern?' : 'Diese Plätze reservieren?'} confirmLabel={seatNotice ? 'Trotzdem speichern' : 'Änderung speichern'} cancelLabel='Plätze ändern' busy={busy} onCancel={() => setConfirm(false)} onConfirm={save}>{seatNotice && <p className='ticket-notice ticket-notice-warning'>{seatNotice}</p>}<p>Neue Auswahl: <strong>{seats.map(seatLabel).join(' · ')}</strong>.</p><p className='mt-3'>Nicht mehr ausgewählte Plätze werden wieder freigegeben.</p></ConfirmDialog>}
   </>
 }
