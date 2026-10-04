@@ -9,7 +9,7 @@ import timeline from '@/data/timeline.json'
 export const metadata: Metadata = {
   title: 'Für den Deutschen Engagementpreis 2026 nominiert | Kolpingtheater Ramsen',
   description:
-    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Mehr über die Nominierung und das Publikumsvoting erfahren.',
+    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Jetzt beim Publikumsvoting für uns abstimmen!',
   openGraph: {
     title: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
     description:
@@ -158,17 +158,26 @@ export default function Home() {
               nominiert. Vorgeschlagen hat uns der
               Jugend-Engagement-Wettbewerb RLP „Sich einmischen – was bewegen“.
             </p>
+            <p className='nomination-copy'>
+              Jetzt könnt ihr uns beim Publikumspreis unterstützen. Gebt unserem
+              Theater eure Stimme. Wir freuen uns über eure Unterstützung!
+            </p>
             <div className='nomination-actions'>
-              <Link href='/engagementpreis-2026' className='nomination-button'>
+              <a
+                href='https://www.deutscher-engagementpreis.de/publikumspreis/nominierte/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='nomination-button'
+              >
+                Jetzt für uns abstimmen <span aria-hidden>↗</span>
+              </a>
+              <Link href='/engagementpreis-2026' className='nomination-link'>
                 Mehr zur Nominierung <span aria-hidden>→</span>
               </Link>
-              <a href='https://www.deutscher-engagementpreis.de/' target='_blank' rel='noopener noreferrer' className='nomination-link'>
-                Zur Preiswebsite <span aria-hidden>↗</span>
-              </a>
             </div>
             <p className='nomination-date'>
               <span aria-hidden className='nomination-dot' />
-              Publikumsvoting: 1.–29. Oktober 2026
+              Abstimmen bis 29. Oktober 2026, 17:59 Uhr
             </p>
           </div>
         </div>

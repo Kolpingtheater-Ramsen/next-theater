@@ -7,7 +7,7 @@ export const dynamic = 'force-static'
 export const metadata: Metadata = {
   title: 'Nominierung Deutscher Engagementpreis 2026 | Kolpingtheater Ramsen',
   description:
-    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Alle Informationen zur Nominierung und zum Publikumsvoting.',
+    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Jetzt beim Publikumsvoting für uns abstimmen!',
   alternates: { canonical: '/engagementpreis-2026' },
   openGraph: {
     title: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
@@ -67,13 +67,18 @@ export default function EngagementpreisPage() {
                 den Deutschen Engagementpreis vorgeschlagen. Darüber freuen
                 wir uns riesig.
               </p>
+              <p className='nomination-copy'>
+                Das Publikumsvoting ist geöffnet. Unterstützt unser
+                ehrenamtliches Theater und gebt uns eure Stimme beim
+                Publikumspreis!
+              </p>
               <div className='nomination-actions'>
-                <a href='https://www.deutscher-engagementpreis.de/' target='_blank' rel='noopener noreferrer' className='nomination-button'>
-                  Zur Preiswebsite <span aria-hidden>↗</span>
+                <a href='https://www.deutscher-engagementpreis.de/publikumspreis/nominierte/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater' target='_blank' rel='noopener noreferrer' className='nomination-button'>
+                  Jetzt für uns abstimmen <span aria-hidden>↗</span>
                 </a>
                 <Link href='/about' className='nomination-link'>Unsere Geschichte <span aria-hidden>→</span></Link>
               </div>
-              <p className='nomination-date'><span aria-hidden className='nomination-dot' />Publikumsvoting: 1.–29. Oktober 2026</p>
+              <p className='nomination-date'><span aria-hidden className='nomination-dot' />Abstimmen bis 29. Oktober 2026, 17:59 Uhr</p>
             </div>
           </div>
         </header>
@@ -124,8 +129,8 @@ export default function EngagementpreisPage() {
                       1.–29. Oktober 2026
                     </p>
                     <p className='mt-2 text-sm leading-relaxed text-site-100'>
-                      In diesem Zeitraum findet das öffentliche
-                      Publikumsvoting statt.
+                      Jetzt könnt ihr für uns abstimmen. Das Publikumsvoting
+                      endet am 29. Oktober um 17:59 Uhr.
                     </p>
                   </div>
                   <div>
@@ -171,24 +176,25 @@ export default function EngagementpreisPage() {
             <div className='grid gap-8 p-8 sm:p-12 md:grid-cols-[1fr_auto] md:items-end'>
               <div>
                 <p className='font-mono text-[10px] uppercase tracking-[0.4em] text-kolping-400 sm:text-xs'>
-                  Bleibt mit uns dran
+                  Eure Stimme zählt
                 </p>
                 <h2 className='mt-4 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-site-50 sm:text-5xl'>
-                  Neuigkeiten zur{' '}
-                  <span className='italic text-kolping-400'>Nominierung.</span>
+                  Unterstützt unser{' '}
+                  <span className='italic text-kolping-400'>Theater.</span>
                 </h2>
                 <p className='mt-5 max-w-2xl text-sm leading-relaxed text-site-100 sm:text-base'>
-                  Sobald das Publikumsvoting startet, teilen wir alle weiteren
-                  Informationen auf unserer Website und auf Instagram.
+                  Stimmt bis zum 29. Oktober 2026 um 17:59 Uhr für uns ab.
+                  Über den Button gelangt ihr direkt zu unserem Projekt auf der
+                  offiziellen Abstimmungsseite des Deutschen Engagementpreises.
                 </p>
               </div>
               <a
-                href='https://www.instagram.com/kolpingtheater_ramsen/'
+                href='https://www.deutscher-engagementpreis.de/publikumspreis/nominierte/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-black transition-colors hover:bg-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
               >
-                Instagram folgen <span aria-hidden>↗</span>
+                Jetzt für uns abstimmen <span aria-hidden>↗</span>
               </a>
             </div>
             <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
