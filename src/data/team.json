@@ -522,26 +522,6 @@
       "images": 3
     },
     {
-      "id": "Raphael",
-      "roles": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        "Ensemble",
-        "Liebhaber/ Ensemble",
-        null,
-        null,
-        "Ensemble",
-        "Hades",
-        "Diener"
-      ],
-      "images": 3
-    },
-    {
       "id": "Sebastian",
       "roles": [
         "Regie",
@@ -679,6 +659,28 @@
         "Lothar von Greifenfels",
         null,
         "Dr. Adrian Düsterwald"
+      ],
+      "images": 3
+    }
+  ],
+  "former": [
+    {
+      "id": "Raphael",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Ensemble",
+        "Liebhaber/ Ensemble",
+        null,
+        null,
+        "Ensemble",
+        "Hades",
+        null
       ],
       "images": 3
     }
