@@ -17,7 +17,7 @@ export default function BookingComingSoon() {
             Reservierung ab <em>1. Dezember.</em>
           </h1>
           <p className='ticket-muted'>
-            Unsere Online-Sitzplatzreservierung öffnet bald.
+            Unsere Online-Sitzplatzreservierung für „Romeo &amp; Julia – Ein Minidrama“ öffnet am 1. Dezember 2026.
           </p>
         </div>
         <span className='ticket-badge'>Eintritt frei</span>
@@ -29,9 +29,11 @@ export default function BookingComingSoon() {
         </h2>
         <p className='ticket-muted mt-2 max-w-2xl'>
           Ab Dienstag, 1. Dezember 2026 um 00:00 Uhr kannst du hier deine
-          kostenlosen Plätze für das neue Stück der Kreativbühne reservieren.
-          Alle Infos zum Stück und den Vorstellungen geben wir ebenfalls ab dem
-          1. Dezember auf unserer Startseite bekannt.
+          kostenlosen festen Sitzplätze (78 Plätze pro Vorstellung, Reihen A bis H)
+          für „Romeo &amp; Julia – Ein Minidrama“ am 27. und 28. Dezember 2026
+          (jeweils 17:00 &amp; 19:30 Uhr, ca. 50 Minuten) im Pfarrheim in Ramsen
+          reservieren. Alle Infos zum Stück und häufige Fragen findest du schon
+          jetzt auf unserer Startseite.
         </p>
 
         <div className='mt-6'>
@@ -43,7 +45,7 @@ export default function BookingComingSoon() {
 
         <div className='ticket-actions mt-8 mb-0'>
           <Link href='/' className='ticket-button ticket-button-primary'>
-            Zur Startseite <span aria-hidden>→</span>
+            Infos &amp; Termine ansehen <span aria-hidden>→</span>
           </Link>
           <a
             href='https://www.instagram.com/kolpingtheater_ramsen/'

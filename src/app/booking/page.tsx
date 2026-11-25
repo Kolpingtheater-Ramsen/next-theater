@@ -14,11 +14,12 @@ type BookingPageProps = { searchParams?: ReleaseSearchParams }
 export async function generateMetadata({
   searchParams,
 }: BookingPageProps): Promise<Metadata> {
-  const { live } = await getWinterReleaseState(searchParams)
+  const { live, preview } = await getWinterReleaseState(searchParams)
   return {
     title: live
       ? 'Tickets · Romeo & Julia | Kolpingtheater Ramsen'
-      : 'Tickets | Kolpingtheater Ramsen',
+      : 'Tickets ab 1. Dezember · Romeo & Julia | Kolpingtheater Ramsen',
+    ...(preview ? { robots: { index: false, follow: false } } : {}),
   }
 }
 

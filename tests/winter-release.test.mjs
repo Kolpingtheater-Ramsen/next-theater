@@ -24,7 +24,7 @@ async function loadTs(entry) {
 
 const {
   bookingHref,
-  isLocalHost,
+  homeHref,
   isWinterReleaseLive,
   shouldShowWinterRelease,
 } = await loadTs('src/lib/winter-release.ts')
@@ -50,45 +50,45 @@ test('winter release activates at exactly 2026-12-01 00:00 CET', () => {
   assert.equal(isWinterReleaseLive(Date.parse('2026-12-27T17:00:00+01:00')), true)
 })
 
-test('preview parameter only enables winter release on localhost before Dec 1', () => {
+test('preview parameter enables winter preview on both localhost and production before Dec 1', () => {
   const before = Date.parse('2026-11-26T12:00:00+01:00')
   const after = Date.parse('2026-12-01T00:00:00+01:00')
-
-  assert.equal(isLocalHost('localhost:3000'), true)
-  assert.equal(isLocalHost('127.0.0.1:8788'), true)
-  assert.equal(isLocalHost('[::1]:3000'), true)
-  assert.equal(isLocalHost('kolpingtheater-ramsen.de'), false)
-  assert.equal(isLocalHost('localhost.evil.com'), false)
 
   assert.deepEqual(
     shouldShowWinterRelease({ now: before, previewValue: 'winter', host: 'localhost:3000', envPreview: false }),
     { live: true, preview: true },
   )
   assert.deepEqual(
-    shouldShowWinterRelease({ now: before, previewValue: 'winter', host: '127.0.0.1:8788', envPreview: false }),
+    shouldShowWinterRelease({ now: before, previewValue: 'winter', host: 'kolpingtheater-ramsen.de', envPreview: false }),
     { live: true, preview: true },
   )
   assert.deepEqual(
-    shouldShowWinterRelease({ now: before, previewValue: 'winter', host: 'kolpingtheater-ramsen.de', envPreview: false }),
+    shouldShowWinterRelease({ now: before, previewValue: 'other', host: 'localhost:3000', envPreview: false }),
     { live: false, preview: false },
   )
   assert.deepEqual(
-    shouldShowWinterRelease({ now: before, previewValue: undefined, host: 'localhost:3000', envPreview: false }),
+    shouldShowWinterRelease({ now: before, previewValue: undefined, host: 'kolpingtheater-ramsen.de', envPreview: false }),
     { live: false, preview: false },
   )
   assert.deepEqual(
-    shouldShowWinterRelease({ now: after, previewValue: 'winter', host: 'localhost:3000', envPreview: false }),
+    shouldShowWinterRelease({ now: after, previewValue: 'winter', host: 'kolpingtheater-ramsen.de', envPreview: false }),
     { live: true, preview: false },
   )
 
   assert.equal(bookingHref(true), '/booking?preview=winter')
   assert.equal(bookingHref(false), '/booking')
+  assert.equal(homeHref(true), '/?preview=winter')
+  assert.equal(homeHref(false), '/')
 })
 
-test('homepage configures dynamic edge rendering, Kreativbuehne branding, 50 min duration, FAQ and support', () => {
+test('homepage configures dynamic edge rendering, Kreativbuehne branding, 50 min duration, FAQ, support and preview noindex', () => {
   assert.match(homeSource, /export const runtime = 'edge'/)
   assert.match(homeSource, /export const dynamic = 'force-dynamic'/)
-  assert.match(homeSource, /winter-show/)
+  assert.match(homeSource, /data-home-state='winter-show'/)
+  assert.doesNotMatch(homeSource, /data-home-state='post-show'/)
+  assert.match(homeSource, /<WinterReleaseRefresh \/>/)
+  assert.match(homeSource, /Reservierung ab 1\. Dezember/)
+  assert.match(homeSource, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/)
   assert.match(homeSource, /RomeoJuliaPoster/)
   assert.match(homeSource, /bookingHref\(preview\)/)
   assert.match(homeSource, /Kreativbühne/)
@@ -112,9 +112,10 @@ test('homepage configures dynamic edge rendering, Kreativbuehne branding, 50 min
   assert.ok(Array.isArray(romeoFaq) && romeoFaq.length >= 6)
 })
 
-test('booking routes use Kreativbuehne branding, support contact, and gate Romeo before Dec 1', () => {
+test('booking routes use Kreativbuehne branding, support contact, preview noindex, and gate booking until Dec 1', () => {
   assert.match(bookingPageSource, /export const runtime = 'edge'/)
   assert.match(bookingPageSource, /export const dynamic = 'force-dynamic'/)
+  assert.match(bookingPageSource, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/)
   assert.match(bookingPageSource, /BookingComingSoon/)
   assert.match(bookingPageSource, /BookingFlow/)
 
@@ -123,15 +124,18 @@ test('booking routes use Kreativbuehne branding, support contact, and gate Romeo
     assert.doesNotMatch(src, /Wintertheater/)
     assert.match(src, /TicketSupportNotice/)
   }
+  assert.match(bookingComingSoonSource, /1\. Dezember/)
+  assert.match(bookingComingSoonSource, /Romeo &(?:amp;)? Julia/)
+  assert.match(bookingFlowSource, /window\.location\.search/)
   assert.match(bookingFlowSource, /50 Minuten|durationMinutes/)
   assert.match(bookingFlowSource, /verkürzte/)
   assert.match(supportSource, /kolpingtheaterramsen@gmail\.com/)
-  assert.doesNotMatch(bookingComingSoonSource, /Romeo|romeo-und-julia-2026/i)
   assert.doesNotMatch(bookingLayoutSource, /Romeo|romeo-und-julia-2026/i)
 })
 
-test('header gates Tickets via winter-release without useSearchParams', () => {
+test('header gates Tickets via winter-release without useSearchParams and preserves preview links', () => {
   assert.match(headerSource, /winter-release/)
+  assert.match(headerSource, /homeHref/)
   assert.doesNotMatch(headerSource, /useSearchParams/)
 })
 

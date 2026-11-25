@@ -62,7 +62,7 @@ export default function BookingFlow() {
     setStep(next)
     setError('')
     setSeatNotice(null)
-    window.history.pushState(null, '', next === 'date' ? '/booking' : `#${next}`)
+    window.history.pushState(null, '', next === 'date' ? `${window.location.pathname}${window.location.search}` : `#${next}`)
     requestAnimationFrame(() => { heading.current?.focus(); heading.current?.scrollIntoView({ block: 'start' }) })
   }
   async function loadSeats(selected: PlayWithAvailability) {

@@ -40,7 +40,7 @@ export function isWinterPreviewEnabled(input?: PreviewInput): boolean {
 
   const rawPreview = input?.previewValue
   const value = Array.isArray(rawPreview) ? rawPreview[0] : rawPreview
-  return value === WINTER_PREVIEW_PARAM && isLocalHost(input?.host)
+  return value === WINTER_PREVIEW_PARAM
 }
 
 export function shouldShowWinterRelease(
@@ -55,4 +55,8 @@ export function shouldShowWinterRelease(
 
 export function bookingHref(preview: boolean): string {
   return preview ? `/booking?preview=${WINTER_PREVIEW_PARAM}` : '/booking'
+}
+
+export function homeHref(preview: boolean): string {
+  return preview ? `/?preview=${WINTER_PREVIEW_PARAM}` : '/'
 }

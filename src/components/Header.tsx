@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import ThemeToggle from '@/components/ThemeToggle'
 import {
   bookingHref,
+  homeHref,
   MAX_TIMEOUT_MS,
   shouldShowWinterRelease,
   WINTER_RELEASE_MS,
@@ -22,7 +23,6 @@ export default function Header() {
       const params = new URLSearchParams(window.location.search)
       const next = shouldShowWinterRelease({
         previewValue: params.get('preview'),
-        host: window.location.hostname,
       })
       setTicketState((current) =>
         current.live === next.live && current.preview === next.preview
@@ -52,11 +52,12 @@ export default function Header() {
   }, [pathname])
 
   const ticketsHref = bookingHref(ticketState.preview)
+  const homeLinkHref = homeHref(ticketState.preview)
 
   return (
     <header className='sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-site-900/80 bg-site-900/95 border-b border-site-700'>
       <div className='mx-auto max-w-6xl px-4 py-3 flex items-center gap-4'>
-        <Link href='/' className='flex items-center gap-2 font-semibold text-site-50 flex-1 min-w-0'>
+        <Link href={homeLinkHref} className='flex items-center gap-2 font-semibold text-site-50 flex-1 min-w-0'>
           <Image
             src='/img/logo.png'
             alt=''
@@ -68,7 +69,7 @@ export default function Header() {
           <span className='truncate'>Kolpingtheater Ramsen</span>
         </Link>
         <nav className='ml-auto hidden md:flex items-center gap-6 text-sm'>
-          <Link href='/' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
+          <Link href={homeLinkHref} className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Home
           </Link>
           {ticketState.live && (
@@ -129,7 +130,7 @@ export default function Header() {
       {isMobileOpen && (
         <div id='mobile-menu' className='md:hidden border-t border-site-700'>
           <nav className='mx-auto max-w-6xl px-4 py-3 flex flex-col gap-3 text-sm'>
-            <Link href='/' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
+            <Link href={homeLinkHref} className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Home
             </Link>
             {ticketState.live && (

@@ -7,30 +7,22 @@ const aboutSource = readFileSync(new URL('../src/app/about/page.tsx', import.met
 const pressSource = readFileSync(new URL('../src/app/presse/page.tsx', import.meta.url), 'utf8')
 const timeline = JSON.parse(readFileSync(new URL('../src/data/timeline.json', import.meta.url), 'utf8'))
 
-test('homepage shows the post-show thank-you message', () => {
-  assert.match(source, /Danke für euren Besuch/)
-  assert.match(source, /Das war die\{' '\}[\s\S]*Creepshow\./)
-  assert.match(
-    source,
-    /Danke an alle, die bei unseren Vorstellungen auf der Kolpingwiese[\s\S]*dabei waren\./,
-  )
-})
-
-test('homepage announces where winter and summer news will appear', () => {
-  assert.match(source, /Wie es weitergeht/)
-  assert.match(source, /welches Stück wir[\s\S]*im Winter spielen/)
-  assert.match(source, /was im nächsten Sommer auf die Bühne[\s\S]*kommt/)
+test('homepage presents the live Romeo & Julia winter production and gates booking CTA until Dec 1', () => {
+  assert.match(source, /data-home-state='winter-show'/)
+  assert.doesNotMatch(source, /data-home-state='post-show'/)
+  assert.match(source, /Romeo &(?:amp;)? Julia – Ein Minidrama \| Kolpingtheater Ramsen/)
+  assert.match(source, /Ein Minidrama/)
+  assert.match(source, /Kreativbühne/)
+  assert.match(source, /50 Minuten/)
+  assert.match(source, /Eintritt frei/)
+  assert.match(source, /images: \['\/img\/romeo-und-julia-2026-poster\.jpg'\]/)
+  assert.match(source, /Reservierung ab 1\. Dezember/)
+  assert.match(source, /Plätze reservieren/)
 })
 
 test('homepage uses the established social channel URLs', () => {
   assert.match(source, /https:\/\/www\.instagram\.com\/kolpingtheater_ramsen\//)
   assert.match(source, /https:\/\/www\.youtube\.com\/@kolpingtheaterramsen/)
-})
-
-test('homepage metadata describes the theater and uses the Creepshow artwork', () => {
-  assert.match(source, /Danke für euren Besuch \| Kolpingtheater Ramsen/)
-  assert.match(source, /images: \['\/img\/creepshow-banner\.webp'\]/)
-  assert.match(source, /data-home-state='post-show'/)
 })
 
 test('the removed national nomination is no longer promoted on the site', () => {
@@ -48,13 +40,9 @@ test('homepage preserves the historical productions and repertoire', () => {
   assert.match(source, /<FeaturedProductions items=\{featuredItems\}/)
 })
 
-test('homepage keeps finished Creepshow FAQ omitted before Dec 1 and gates Romeo FAQ to winter-show', () => {
+test('homepage renders the Romeo & Julia FAQ and omits the legacy Creepshow FAQ', () => {
   assert.doesNotMatch(source, /@\/data\/faq\.json/)
-  const winterStart = source.indexOf("data-home-state='winter-show'")
-  const postStart = source.indexOf("data-home-state='post-show'")
-  const faqIndex = source.indexOf("id='faq'")
-  assert.ok(winterStart !== -1 && postStart !== -1 && faqIndex !== -1)
-  assert.ok(faqIndex > winterStart && faqIndex < postStart)
+  assert.match(source, /id='faq'/)
 })
 
 test('homepage preserves non-current-show sections', () => {
