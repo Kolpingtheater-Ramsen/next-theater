@@ -39,18 +39,22 @@ export default function AdminDashboardPage() {
   const [playsExpanded, setPlaysExpanded] = useState(false)
   const [showPlayForm, setShowPlayForm] = useState(false)
   const [editingPlayId, setEditingPlayId] = useState<string | null>(null)
-  const [playForm, setPlayForm] = useState({ title: '', date: '', time: '', total_seats: 68 })
+  const [playForm, setPlayForm] = useState({ title: '', date: '', time: '', total_seats: 78 })
   const [playFormLoading, setPlayFormLoading] = useState(false)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const router = useRouter()
   const bookingRequest = useRef(0)
   const [updatingBooking, setUpdatingBooking] = useState<string | null>(null)
 
-  const ROWS = 7
   const SEATS_PER_SIDE = 5
   const TOTAL_SEATS_PER_ROW = SEATS_PER_SIDE * 2
   const BLOCKED_SEATS = [0, 9] // A1 and A10 don't exist
-  const TOTAL_SEATS = 68 + BLOCKED_SEATS.length // 68 bookable + 2 blocked = 70 physical seats
+  const selectedPlayCapacity =
+    (selectedPlayId !== 'all'
+      ? plays.find((p) => p.id === selectedPlayId)?.total_seats
+      : Math.max(...plays.map((p) => p.total_seats), 78)) || 78
+  const TOTAL_SEATS = selectedPlayCapacity + BLOCKED_SEATS.length
+  const ROWS = Math.ceil(TOTAL_SEATS / TOTAL_SEATS_PER_ROW)
 
   useEffect(() => {
     fetchPlays()
@@ -111,7 +115,7 @@ export default function AdminDashboardPage() {
       })
       const data = await response.json() as { success: boolean; error?: string }
       if (data.success) {
-        setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+        setPlayForm({ title: '', date: '', time: '', total_seats: 78 })
         setShowPlayForm(false)
         fetchAdminPlays()
         fetchPlays()
@@ -140,7 +144,7 @@ export default function AdminDashboardPage() {
       const data = await response.json() as { success: boolean; error?: string }
       if (data.success) {
         setEditingPlayId(null)
-        setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+        setPlayForm({ title: '', date: '', time: '', total_seats: 78 })
         fetchAdminPlays()
         fetchPlays()
         setMessageModal({ message: 'Vorstellung aktualisiert', type: 'success' })
@@ -184,7 +188,7 @@ export default function AdminDashboardPage() {
 
   const cancelEditPlay = () => {
     setEditingPlayId(null)
-    setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+    setPlayForm({ title: '', date: '', time: '', total_seats: 78 })
   }
 
   const fetchBookings = useCallback(async () => {
@@ -510,7 +514,7 @@ export default function AdminDashboardPage() {
               <button
                 onClick={() => {
                   setShowPlayForm(true)
-                  setPlayForm({ title: '', date: '', time: '', total_seats: 68 })
+                  setPlayForm({ title: '', date: '', time: '', total_seats: 78 })
                 }}
                 className='mb-4 px-4 py-2 rounded-lg bg-kolping-500 hover:bg-kolping-600 text-white font-semibold transition-colors text-sm flex items-center gap-2'
               >
@@ -549,7 +553,7 @@ export default function AdminDashboardPage() {
                     type='number'
                     placeholder='Plätze'
                     aria-label='Anzahl Plätze' value={playForm.total_seats}
-                    onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 68 })}
+                    onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 78 })}
                     className='px-3 py-2 rounded-lg bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                   />
                   <div className='flex gap-2'>
@@ -625,7 +629,7 @@ export default function AdminDashboardPage() {
                           <input
                             type='number'
                             aria-label='Anzahl Plätze' value={playForm.total_seats}
-                            onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 68 })}
+                            onChange={(e) => setPlayForm({ ...playForm, total_seats: parseInt(e.target.value) || 78 })}
                             className='w-20 px-2 py-1 rounded bg-site-800 border border-site-700 text-site-50 text-sm focus:outline-none focus:ring-2 focus:ring-kolping-400'
                           />
                         </td>

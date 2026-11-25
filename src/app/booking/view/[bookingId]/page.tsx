@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { QRCodeSVG } from 'qrcode.react'
 import ConfirmDialog from '@/components/booking/ConfirmDialog'
+import TicketSupportNotice from '@/components/booking/TicketSupportNotice'
 import { admissionCode, DEFAULT_VENUE, formatDay, hasStarted, seatLabel, ticketCalendar } from '@/lib/tickets'
 import type { BookingWithSeats } from '@/types/database'
 
@@ -83,7 +84,7 @@ export default function BookingViewPage() {
       <header className='ticket-stub-header'><p className='ticket-eyebrow'>Kolpingtheater Ramsen · Dein Ticket</p><h1>{play.title}</h1><span className='ticket-badge'>Eintritt frei</span></header>
       <div className={`ticket-status ${booking.status === 'cancelled' ? 'cancelled' : ''}`}>{status}</div>
       <div className='ticket-stub-body'>
-        <div className='ticket-stub-details'><dl><div><dt>Vorstellung</dt><dd>{formatDay(play.date, true)}<br/><strong>{play.time} Uhr</strong></dd></div><div><dt>Spielort</dt><dd>{play.venue || DEFAULT_VENUE}</dd></div><div><dt>Reserviert für</dt><dd>{booking.name}</dd></div><div><dt>Deine Plätze</dt><dd><div className='ticket-chips'>{booking.seats.length ? booking.seats.map(seat => <span className='ticket-chip' key={seat}>{seatLabel(seat)}</span>) : 'Keine reservierten Plätze'}</div></dd></div></dl></div>
+        <div className='ticket-stub-details'><dl><div><dt>Vorstellung</dt><dd>{formatDay(play.date, true)}<br/><strong>{play.time} Uhr</strong>{play.duration_minutes ? ` · ca. ${play.duration_minutes} Minuten` : ''}</dd></div><div><dt>Spielort</dt><dd>{play.venue || DEFAULT_VENUE}</dd></div><div><dt>Reserviert für</dt><dd>{booking.name}</dd></div><div><dt>Deine Plätze</dt><dd><div className='ticket-chips'>{booking.seats.length ? booking.seats.map(seat => <span className='ticket-chip' key={seat}>{seatLabel(seat)}</span>) : 'Keine reservierten Plätze'}</div></dd></div></dl></div>
         <div className='ticket-stub-qr'>{valid && booking.admission_token ? <><div className='ticket-qr'><QRCodeSVG value={admissionCode(booking.admission_token)} size={200} level='M' title='QR-Code für den Einlass'/></div><p>Am Einlass vorzeigen.<br/>Gilt für alle {booking.seats.length} {booking.seats.length === 1 ? 'reservierten Platz' : 'reservierten Plätze'}.</p></> : <p>{booking.status === 'cancelled' ? 'Dieses Ticket ist nicht mehr gültig.' : booking.status === 'checked_in' ? 'Viel Freude bei der Vorstellung!' : 'Bitte wende dich an das Team am Einlass.'}</p>}</div>
       </div>
     </article>
@@ -104,5 +105,6 @@ export default function BookingViewPage() {
       {!valid && <Link href='/booking' className='ticket-button'>Zu den Vorstellungen</Link>}
     </div>
     {cancel && <ConfirmDialog title='Buchung stornieren?' onCancel={() => setCancel(false)} onConfirm={() => action('cancel')} busy={busy === 'cancel'} confirmLabel='Plätze freigeben'><p>Du gibst alle {booking.seats.length} Plätze für {formatDay(play.date)} um {play.time} Uhr frei. Das lässt sich nicht rückgängig machen.</p></ConfirmDialog>}
+    <TicketSupportNotice />
   </div>
 }

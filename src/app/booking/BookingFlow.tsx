@@ -8,6 +8,7 @@ import BookingForm from '@/components/booking/BookingForm'
 import BookingSummary from '@/components/booking/BookingSummary'
 import ConfirmDialog from '@/components/booking/ConfirmDialog'
 import SeatWarning from '@/components/booking/SeatWarning'
+import TicketSupportNotice from '@/components/booking/TicketSupportNotice'
 import type { SeatPolicyResult } from '@/lib/seat-policy'
 import { formatDay } from '@/lib/tickets'
 import type { PlayWithAvailability } from '@/types/database'
@@ -117,6 +118,9 @@ export default function BookingFlow() {
   }
 
   const days = [...new Set(plays.map(item => item.date))]
+  const activeTitle = play?.title || plays[0]?.title || 'Romeo & Julia – Ein Minidrama'
+  const [mainTitle, subtitleFromTitle] = activeTitle.split(' – ')
+  const durationMinutes = play?.duration_minutes ?? plays[0]?.duration_minutes ?? 50
   return <>
     {step === 'date' && (!plays.length || plays[0].id.startsWith('romeo-julia-2026-')) && <Image
       className='ticket-production-banner' src='/img/banners/romeo-und-julia-2026.webp'
@@ -124,7 +128,12 @@ export default function BookingFlow() {
       width={2172} height={724} priority unoptimized
     />}
     <header className='ticket-intro'>
-      <div><p className='ticket-eyebrow'>Kolpingtheater Ramsen · Wintertheater</p><h1 className='ticket-heading'>{play?.title || plays[0]?.title || 'Romeo und Julia'}</h1><p className='ticket-muted'>Ein Abend im Theater. Deine Plätze warten auf dich.</p></div>
+      <div>
+        <p className='ticket-eyebrow'>Kolpingtheater Ramsen · Kreativbühne</p>
+        <h1 className='ticket-heading'>{mainTitle}</h1>
+        <p className='ticket-subtitle'>{subtitleFromTitle || 'Ein Minidrama'} · Dauer ca. {durationMinutes} Minuten</p>
+        <p className='ticket-muted'>Unsere verkürzte Bühnenfassung (ca. {durationMinutes} Minuten) – nicht die abendfüllende Originalversion. Deine festen Sitzplätze warten auf dich.</p>
+      </div>
       <span className='ticket-badge'>Eintritt frei</span>
     </header>
     <ol className='ticket-steps' aria-label='Buchungsschritte'>
@@ -173,5 +182,6 @@ export default function BookingFlow() {
       <BookingForm name={name} email={email} onChange={(key, value) => { (key === 'name' ? setName : setEmail)(value); setField(undefined) }} onSubmit={reserve} busy={busy} serverField={field} />
       <BookingSummary play={play} seats={seats} onEdit={busy ? undefined : () => go('seats')} />
     </div>}
+    <TicketSupportNotice />
   </>
 }

@@ -8,6 +8,7 @@ import Image from '@/components/ProgressiveImage'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
 import timeline from '@/data/timeline.json'
+import romeoFaq from '@/data/romeo-faq.json'
 import { bookingHref } from '@/lib/winter-release'
 import {
   getWinterReleaseState,
@@ -54,18 +55,18 @@ export async function generateMetadata({
   return {
     title: 'Romeo & Julia – Ein Minidrama | Kolpingtheater Ramsen',
     description:
-      'Das Kolpingtheater Ramsen präsentiert „Romeo & Julia – Ein Minidrama“ am 27. und 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
+      'Die Kreativbühne des Kolpingtheaters Ramsen präsentiert „Romeo & Julia – Ein Minidrama“ (verkürzte Bühnenfassung, ca. 50 Minuten) am 27. und 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
     openGraph: {
       title: 'Romeo & Julia – Ein Minidrama | Kolpingtheater Ramsen',
       description:
-        'Am 27. & 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
+        'Kreativbühne: verkürzte Bühnenfassung (ca. 50 Minuten) am 27. & 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
       images: ['/img/romeo-und-julia-2026-poster.jpg'],
     },
     twitter: {
       card: 'summary_large_image',
       title: 'Romeo & Julia – Ein Minidrama | Kolpingtheater Ramsen',
       description:
-        'Am 27. & 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
+        'Kreativbühne: verkürzte Bühnenfassung (ca. 50 Minuten) am 27. & 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
       images: ['/img/romeo-und-julia-2026-poster.jpg'],
     },
   }
@@ -323,32 +324,41 @@ export default async function Home({ searchParams }: HomeProps) {
                 27. &amp; 28. Dezember 2026 · 17:00 &amp; 19:30 Uhr
               </span>
               <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.22em] text-white uppercase'>
-                Eintritt frei · Reservierung notwendig
+                Dauer: ca. 50 Minuten · 78 Plätze pro Vorstellung
               </span>
             </div>
 
             <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs sm:tracking-[0.45em]'>
-              Das Kolpingtheater Ramsen präsentiert · Wintertheater
+              Das Kolpingtheater Ramsen präsentiert · Kreativbühne
             </p>
 
             <h1 className='mt-4 animate-curtain-rise font-display text-4xl font-black uppercase leading-[0.94] tracking-tight text-site-50 text-shadow-lg sm:text-6xl xl:text-7xl'>
               Romeo &amp;{' '}
               <span className='italic text-kolping-400'>Julia</span>
-              <span className='mt-3 block font-mono text-xs font-semibold tracking-[0.3em] text-site-100 sm:text-sm'>
-                – Ein Minidrama –
+              <span className='mt-3 block font-mono text-xs font-semibold tracking-[0.28em] text-site-100 sm:text-sm'>
+                – Ein Minidrama · ca. 50 Minuten –
               </span>
             </h1>
 
             <div className='hairline-gold mt-6 w-24' />
 
             <p className='mt-6 max-w-xl text-base leading-relaxed text-site-100 sm:text-lg'>
-              An zwei Winterabenden bringen wir unser neues Minidrama auf die
-              Bühne im Pfarrheim in Ramsen (Klosterhof 7). Der Eintritt ist
-              frei – für deinen Besuch ist eine kostenlose
-              Sitzplatzreservierung vorab notwendig.
+              Unsere Kreativbühne zeigt eine eigene, verkürzte Bühnenfassung
+              (ca. 50 Minuten, nicht das abendfüllende Original) am 27. und 28.
+              Dezember im Pfarrheim in Ramsen (Klosterhof 7).
             </p>
 
-            <div className='mt-8 flex flex-wrap items-center gap-3'>
+            <div className='mt-6 inline-flex flex-wrap items-center gap-x-4 gap-y-2 rounded-sm border-2 border-emerald-400/70 bg-emerald-950/75 px-5 py-3 shadow-[0_0_28px_rgba(52,211,153,0.18)] backdrop-blur-sm'>
+              <span className='inline-flex items-center gap-2.5 font-display text-xl font-black uppercase tracking-[0.08em] text-emerald-300 sm:text-2xl'>
+                <span className='h-2.5 w-2.5 rounded-full bg-emerald-400' aria-hidden />
+                Eintritt frei
+              </span>
+              <span className='font-mono text-xs font-semibold uppercase tracking-[0.18em] text-site-100'>
+                Kostenlose Sitzplatzreservierung notwendig
+              </span>
+            </div>
+
+            <div className='mt-7 flex flex-wrap items-center gap-3'>
               <Link
                 href={ticketsHref}
                 className='group inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.25em] text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.45)] focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
@@ -368,12 +378,10 @@ export default async function Home({ searchParams }: HomeProps) {
                 </span>
               </a>
               <a
-                href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
-                target='_blank'
-                rel='noopener noreferrer'
+                href='#faq'
                 className='inline-flex items-center gap-2 px-2 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-site-100 transition-colors hover:text-kolping-400'
               >
-                Anfahrt · Klosterhof 7 <span aria-hidden>↗</span>
+                FAQ <span aria-hidden>↓</span>
               </a>
             </div>
           </div>
@@ -392,7 +400,7 @@ export default async function Home({ searchParams }: HomeProps) {
           <div className='flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 sm:mb-14'>
             <div>
               <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
-                4 Vorstellungen · Eintritt frei · Reservierung notwendig
+                Kreativbühne · 4 Vorstellungen · ca. 50 Minuten · Eintritt frei
               </div>
               <h2
                 id='termine-heading'
@@ -404,8 +412,9 @@ export default async function Home({ searchParams }: HomeProps) {
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-4 text-site-100/85 text-sm sm:text-base max-w-xl leading-relaxed'>
                 Wähle deinen Wunschtermin und sichere dir kostenlos feste
-                Sitzplätze im Pfarrheim. Dein digitales Ticket erhältst du direkt
-                per E-Mail und auf Wunsch für Google Wallet.
+                Sitzplätze (78 Plätze pro Vorstellung, Reihen A bis H) im
+                Pfarrheim. Dauer ca. 50 Minuten ohne Pause. Dein digitales Ticket
+                erhältst du direkt per E-Mail und auf Wunsch für Google Wallet.
               </p>
             </div>
 
@@ -437,7 +446,7 @@ export default async function Home({ searchParams }: HomeProps) {
                         className='rounded-sm border border-site-700 bg-site-900 px-4 py-3'
                       >
                         <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-300'>
-                          Vorstellung
+                          Vorstellung · ca. 50 Min.
                         </div>
                         <div className='mt-1 font-display text-xl text-site-50'>
                           {time}
@@ -481,31 +490,144 @@ export default async function Home({ searchParams }: HomeProps) {
               </a>
             </div>
 
-            <div className='rounded-sm border border-site-700 bg-site-950 p-5 sm:p-6'>
+            <div className='rounded-sm border-2 border-kolping-400/50 bg-site-950 p-5 sm:p-6'>
               <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
                 Eintritt &amp; Plätze
               </div>
-              <div className='mt-2 font-display text-xl uppercase text-site-50'>
+              <div className='mt-2 font-display text-2xl sm:text-3xl font-black uppercase text-kolping-400'>
                 Eintritt frei
               </div>
               <p className='mt-2 text-sm text-site-100/85 leading-relaxed'>
-                Reservierung notwendig – bis zu 5 Sitzplätze pro Buchung
-                online wählbar.
+                Reservierung notwendig – 78 feste Plätze (Reihen A–H), bis zu 5
+                Plätze pro Buchung online wählbar.
               </p>
             </div>
 
             <div className='rounded-sm border border-site-700 bg-site-950 p-5 sm:p-6'>
               <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
-                Digitales Ticket
+                Dauer &amp; Digitales Ticket
               </div>
               <div className='mt-2 font-display text-xl uppercase text-site-50'>
-                QR-Code &amp; Google Wallet
+                ca. 50 Minuten
               </div>
               <p className='mt-2 text-sm text-site-100/85 leading-relaxed'>
-                Direkt nach der Reservierung verfügbar – Plätze können
-                jederzeit geändert oder storniert werden.
+                Minidrama ohne Pause. QR-Code-Ticket per E-Mail &amp; Google
+                Wallet – jederzeit änder- oder stornierbar.
               </p>
             </div>
+          </div>
+
+          <div className='mt-6 flex flex-col gap-4 rounded-sm border border-site-700 bg-site-950 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
+            <div>
+              <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
+                Support &amp; Kontakt
+              </div>
+              <p className='mt-1.5 text-sm text-site-100/90 leading-relaxed'>
+                Fragen zur Reservierung, Umbuchung oder zum Besuch? Schreib uns
+                jederzeit per E-Mail oder Instagram.
+              </p>
+            </div>
+            <div className='flex flex-wrap items-center gap-3'>
+              <a
+                href='mailto:kolpingtheaterramsen@gmail.com?subject=Support%20Romeo%20%26%20Julia'
+                className='inline-flex items-center gap-2 rounded-sm border border-site-700 bg-site-900 px-4 py-2 font-mono text-[11px] font-semibold text-kolping-400 transition-colors hover:border-kolping-400'
+              >
+                kolpingtheaterramsen@gmail.com
+              </a>
+              <a
+                href='https://www.instagram.com/kolpingtheater_ramsen/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 rounded-sm border border-site-700 bg-site-900 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-site-100 transition-colors hover:border-kolping-400 hover:text-kolping-400'
+              >
+                Instagram ↗
+              </a>
+              <Link
+                href='/contact'
+                className='inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-site-100 hover:text-kolping-400'
+              >
+                Kontakt &amp; Anfahrt →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════ FAQ · Gut zu wissen ══════ */}
+      <section
+        id='faq'
+        className='relative bg-site-950 border-t border-site-700 scroll-mt-24'
+        aria-labelledby='faq-heading'
+      >
+        <div
+          className='absolute inset-0 opacity-[0.04] pointer-events-none'
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+          aria-hidden
+        />
+        <div className='relative mx-auto max-w-7xl px-4 sm:px-8 py-14 sm:py-20'>
+          <div className='mb-10 sm:mb-14'>
+            <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
+              Gut zu wissen
+            </div>
+            <h2
+              id='faq-heading'
+              className='font-display text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.92]'
+            >
+              Häufige <span className='italic text-kolping-400'>Fragen.</span>
+            </h2>
+            <div className='hairline-gold w-24 mt-5' />
+            <p className='mt-4 text-site-100/85 text-sm sm:text-base max-w-2xl leading-relaxed'>
+              Alles Wichtige rund um „Romeo &amp; Julia – Ein Minidrama“ – von
+              Dauer und freiem Eintritt bis zu Sitzplätzen, Anfahrt und Support.
+            </p>
+          </div>
+
+          <div className='grid gap-3'>
+            {romeoFaq.map((item) => (
+              <details
+                key={item.q}
+                className='group rounded-sm border border-site-700 bg-site-800/60 open:border-kolping-400/50'
+              >
+                <summary className='flex cursor-pointer list-none items-center justify-between gap-5 p-5 font-display text-lg font-bold tracking-tight text-site-50 marker:content-none sm:p-6 sm:text-xl'>
+                  {item.q}
+                  <span
+                    className='text-2xl font-light text-kolping-400 transition-transform group-open:rotate-45'
+                    aria-hidden
+                  >
+                    +
+                  </span>
+                </summary>
+                <div className='px-5 pb-5 sm:px-6 sm:pb-6'>
+                  <div className='hairline-gold mb-4 w-10' />
+                  <p className='text-sm leading-relaxed text-site-100 sm:text-base'>
+                    {item.a}
+                  </p>
+                  {item.link ? (
+                    item.link.startsWith('/') ? (
+                      <Link
+                        href={item.link === '/booking' ? ticketsHref : item.link}
+                        className='mt-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-kolping-400 transition-colors hover:text-kolping-500'
+                      >
+                        {item.button ?? 'Mehr erfahren'} →
+                      </Link>
+                    ) : (
+                      <a
+                        href={item.link}
+                        target={item.link.startsWith('mailto:') ? undefined : '_blank'}
+                        rel={item.link.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                        className='mt-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-kolping-400 transition-colors hover:text-kolping-500'
+                      >
+                        {item.button ?? 'Mehr erfahren'} →
+                      </a>
+                    )
+                  ) : null}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>

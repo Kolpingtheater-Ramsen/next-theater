@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
       date: String(row.date),
       time: String(row.time),
       display_date: String(row.display_date),
-      total_seats: Number(row.total_seats) || 68,
+      total_seats: Number(row.total_seats) || 78,
       created_at: String(row.created_at),
       booking_count: Number(row.booking_count) || 0,
     }))
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     }
 
     const id = `play-${crypto.randomUUID()}`
-    const totalSeats = body.total_seats || 68
+    const totalSeats = body.total_seats || 78
 
     await db.prepare(`
       INSERT INTO plays (id, title, date, time, display_date, total_seats, created_at)
@@ -149,7 +149,7 @@ export async function PUT(request: NextRequest) {
     await db.prepare(`
       UPDATE plays SET title = ?, date = ?, time = ?, display_date = ?, total_seats = ?
       WHERE id = ?
-    `).bind(body.title, body.date, body.time, body.display_date, body.total_seats || 68, body.id).run()
+    `).bind(body.title, body.date, body.time, body.display_date, body.total_seats || 78, body.id).run()
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -14,8 +14,9 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
   }
   const performances = await api('/api/plays')
   const plays = performances.data.plays.filter(p => p.id.startsWith('romeo-julia-2026'))
-  assert.equal(plays.length, 6)
-  assert.deepEqual(plays.map(p => `${p.date} ${p.time}`), ['2026-12-27 17:00', '2026-12-27 19:30', '2026-12-28 17:00', '2026-12-28 19:30', '2026-12-29 17:00', '2026-12-29 19:30'])
+  assert.equal(plays.length, 4)
+  assert.deepEqual(plays.map(p => `${p.date} ${p.time}`), ['2026-12-27 17:00', '2026-12-27 19:30', '2026-12-28 17:00', '2026-12-28 19:30'])
+  assert.ok(plays.every(p => p.total_seats === 78 && p.duration_minutes === 50))
   const adminLogin = await api('/api/admin/login', 'POST', { password: process.env.TICKET_TEST_ADMIN_PASSWORD || 'local-ticket-test-only' })
   assert.equal(adminLogin.status, 200)
   const fixture = await api('/api/admin/plays', 'POST', { title: `Lokaler Test ${run}`, date: '2030-12-29', time: '19:30', display_date: 'Lokaler Test', total_seats: 68 }, { Cookie: adminLogin.headers.get('set-cookie').split(';')[0] })

@@ -1,0 +1,42 @@
+[
+  {
+    "q": "Was bedeutet „Ein Minidrama“ – und wie lange dauert die Vorstellung?",
+    "a": "Unsere Kreativbühne spielt eine eigene, verkürzte Bühnenfassung von „Romeo & Julia“ – bewusst als rund 50-minütiges Minidrama ohne Pause inszeniert, nicht als abendfüllende Originalfassung."
+  },
+  {
+    "q": "Was kostet der Eintritt und brauche ich eine Reservierung?",
+    "a": "Der Eintritt ist frei – freiwillige Spenden vor Ort sind herzlich willkommen. Da im Pfarrheim pro Vorstellung 78 feste Sitzplätze zur Verfügung stehen, ist eine kostenlose Online-Reservierung vorab notwendig.",
+    "button": "Plätze reservieren",
+    "link": "/booking"
+  },
+  {
+    "q": "Wann und wo finden die Vorstellungen statt?",
+    "a": "Wir spielen am Sonntag, 27. Dezember 2026 und Montag, 28. Dezember 2026 jeweils um 17:00 Uhr und 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7, 67305 Ramsen).",
+    "button": "Google Maps",
+    "link": "https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen"
+  },
+  {
+    "q": "Wie viele Plätze kann ich reservieren und wie funktioniert das Ticket?",
+    "a": "Pro Buchung kannst du bis zu 5 feste Sitzplätze aus den Reihen A bis H auswählen. Direkt nach der Reservierung erhältst du dein digitales QR-Code-Ticket per E-Mail, optional für Google Wallet oder zum Ausdrucken."
+  },
+  {
+    "q": "Wann sollte ich vor Ort sein?",
+    "a": "Bitte sei etwa 15 Minuten vor Vorstellungsbeginn im Pfarrheim. Ein Ticket gilt gemeinsam für alle darüber reservierten Plätze."
+  },
+  {
+    "q": "Kann ich meine Plätze nachträglich ändern oder stornieren?",
+    "a": "Ja. Über deinen persönlichen Ticketlink aus der Bestätigungs-E-Mail kannst du deine Sitzplätze vor Vorstellungsbeginn jederzeit umbuchen oder die Reservierung komplett stornieren, damit die Plätze wieder frei werden."
+  },
+  {
+    "q": "Wo kann ich parken?",
+    "a": "Parkmöglichkeiten stehen am Klosterhof sowie in unmittelbarer Nähe rund um das Pfarrheim in Ramsen zur Verfügung.",
+    "button": "Parkplatz-Karte",
+    "link": "https://goo.gl/maps/6Jr2paPszKuscUEZ9"
+  },
+  {
+    "q": "Fragen oder Probleme bei der Buchung – wen erreiche ich für Support?",
+    "a": "Bei Fragen zur Reservierung, zu Umbuchungen oder zum Besuch erreichst du uns per E-Mail an kolpingtheaterramsen@gmail.com sowie über Instagram (@kolpingtheater_ramsen).",
+    "button": "E-Mail an Support",
+    "link": "mailto:kolpingtheaterramsen@gmail.com?subject=Frage%20zu%20Romeo%20%26%20Julia"
+  }
+]

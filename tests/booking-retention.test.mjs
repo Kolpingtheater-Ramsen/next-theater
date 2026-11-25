@@ -54,7 +54,7 @@ test('never deletes early; expiry deletes every status, seats and sync jobs atom
 
 test('keeps later performances and bookings when an expired performance is purged', async t => {
   const { db, sqlite } = fixture(t)
-  const future = 'romeo-julia-2026-12-29-1930'
+  const future = 'romeo-julia-2026-12-28-1930'
   sqlite.prepare('INSERT INTO bookings (id,play_id,name,email,admission_token) VALUES (?,?,?,?,?)')
     .run('future-booking', future, 'Later Guest', 'later@example.invalid', 'future-admission')
   assert.equal((await retention.purgeExpiredBookings(db, expires)).deletedBookings, 3)

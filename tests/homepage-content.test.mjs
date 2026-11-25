@@ -48,9 +48,13 @@ test('homepage preserves the historical productions and repertoire', () => {
   assert.match(source, /<FeaturedProductions items=\{featuredItems\}/)
 })
 
-test('homepage omits the finished production FAQ', () => {
-  assert.doesNotMatch(source, /Häufige <span[^>]*>Fragen\.<\/span>/)
-  assert.doesNotMatch(source, /id=['"]faq['"]|faq-heading|@\/data\/faq\.json/)
+test('homepage keeps finished Creepshow FAQ omitted before Dec 1 and gates Romeo FAQ to winter-show', () => {
+  assert.doesNotMatch(source, /@\/data\/faq\.json/)
+  const winterStart = source.indexOf("data-home-state='winter-show'")
+  const postStart = source.indexOf("data-home-state='post-show'")
+  const faqIndex = source.indexOf("id='faq'")
+  assert.ok(winterStart !== -1 && postStart !== -1 && faqIndex !== -1)
+  assert.ok(faqIndex > winterStart && faqIndex < postStart)
 })
 
 test('homepage preserves non-current-show sections', () => {

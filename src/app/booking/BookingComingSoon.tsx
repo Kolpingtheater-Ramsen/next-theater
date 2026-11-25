@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import PremiereCountdown from '@/components/PremiereCountdown'
 import WinterReleaseRefresh from '@/components/WinterReleaseRefresh'
+import TicketSupportNotice from '@/components/booking/TicketSupportNotice'
 import { WINTER_RELEASE_ISO } from '@/lib/winter-release'
 
 export default function BookingComingSoon() {
@@ -11,7 +12,7 @@ export default function BookingComingSoon() {
       <WinterReleaseRefresh />
       <header className='ticket-intro'>
         <div>
-          <p className='ticket-eyebrow'>Kolpingtheater Ramsen · Wintertheater</p>
+          <p className='ticket-eyebrow'>Kolpingtheater Ramsen · Kreativbühne</p>
           <h1 className='ticket-heading'>
             Reservierung ab <em>1. Dezember.</em>
           </h1>
@@ -28,9 +29,9 @@ export default function BookingComingSoon() {
         </h2>
         <p className='ticket-muted mt-2 max-w-2xl'>
           Ab Dienstag, 1. Dezember 2026 um 00:00 Uhr kannst du hier deine
-          kostenlosen Plätze für unser Winterstück reservieren. Alle Infos zum
-          Stück und den Vorstellungen geben wir ebenfalls ab dem 1. Dezember auf
-          unserer Startseite bekannt.
+          kostenlosen Plätze für das neue Stück der Kreativbühne reservieren.
+          Alle Infos zum Stück und den Vorstellungen geben wir ebenfalls ab dem
+          1. Dezember auf unserer Startseite bekannt.
         </p>
 
         <div className='mt-6'>
@@ -54,6 +55,8 @@ export default function BookingComingSoon() {
           </a>
         </div>
       </section>
+
+      <TicketSupportNotice />
     </>
   )
 }

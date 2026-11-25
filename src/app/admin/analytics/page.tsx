@@ -95,9 +95,10 @@ export default function AnalyticsPage() {
 
   if (!data) return null
 
-  const ROWS = 7
   const SEATS_PER_SIDE = 5
   const TOTAL_SEATS_PER_ROW = SEATS_PER_SIDE * 2
+  const maxCapacity = Math.max(...data.playStats.map((p) => p.total_seats), 78)
+  const ROWS = Math.ceil((maxCapacity + 2) / TOTAL_SEATS_PER_ROW)
 
   const seatHeatmapMap = new Map(data.seatHeatmap.map((s) => [s.seat_number, s.booking_count]))
   const maxBookings = Math.max(...data.seatHeatmap.map((s) => s.booking_count), 1)
