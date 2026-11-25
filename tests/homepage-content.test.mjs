@@ -3,10 +3,9 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 
 const source = readFileSync(new URL('../src/app/page.tsx', import.meta.url), 'utf8')
-const nominationSource = readFileSync(
-  new URL('../src/app/engagementpreis-2026/page.tsx', import.meta.url),
-  'utf8',
-)
+const aboutSource = readFileSync(new URL('../src/app/about/page.tsx', import.meta.url), 'utf8')
+const pressSource = readFileSync(new URL('../src/app/presse/page.tsx', import.meta.url), 'utf8')
+const timeline = JSON.parse(readFileSync(new URL('../src/data/timeline.json', import.meta.url), 'utf8'))
 
 test('homepage shows the post-show thank-you message', () => {
   assert.match(source, /Danke für euren Besuch/)
@@ -28,44 +27,18 @@ test('homepage uses the established social channel URLs', () => {
   assert.match(source, /https:\/\/www\.youtube\.com\/@kolpingtheaterramsen/)
 })
 
-test('homepage metadata highlights the current nomination', () => {
-  assert.match(
-    source,
-    /Für den Deutschen Engagementpreis 2026 nominiert \| Kolpingtheater Ramsen/,
-  )
-  assert.match(source, /deutscher-engagementpreis-2026-banner\.png/)
-  assert.match(source, /post-show-nominated/)
-  assert.doesNotMatch(source, /Premiere · 22\. August 2026/)
+test('homepage metadata describes the theater and uses the Creepshow artwork', () => {
+  assert.match(source, /Danke für euren Besuch \| Kolpingtheater Ramsen/)
+  assert.match(source, /images: \['\/img\/creepshow-banner\.webp'\]/)
+  assert.match(source, /data-home-state='post-show'/)
 })
 
-const officialNominationLink =
-  "href='https://www.deutscher-engagementpreis.de/engagiertenfinder/engagiertendetails/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater'"
-
-test('homepage presents and links the nomination announcement', () => {
-  assert.match(source, /Wir sind[\s\S]*nominiert\./)
-  assert.match(source, /Jugend-Engagement-Wettbewerb RLP/)
-  assert.match(source, /href='\/engagementpreis-2026'/)
-  assert.ok(source.includes(officialNominationLink))
-  assert.match(source, /Publikumsvoting seit dem 29\. Oktober 2026 beendet/)
-})
-
-test('nomination page carries the project story and verified 2026 facts', () => {
-  assert.match(nominationSource, /Seit 2014 schreiben, bauen, organisieren und spielen/)
-  assert.match(nominationSource, /Jugend-Engagement-Wettbewerb RLP/)
-  assert.match(nominationSource, /626/)
-  assert.match(nominationSource, /170/)
-  assert.match(nominationSource, /1\.–29\. Oktober 2026/)
-  assert.match(nominationSource, /26\. November 2026/)
-  assert.match(nominationSource, /10\.000 Euro/)
-  assert.equal(nominationSource.split(officialNominationLink).length - 1, 2)
-})
-
-test('closed voting is not advertised on either page or in metadata', () => {
-  for (const pageSource of [source, nominationSource]) {
-    assert.match(pageSource, /description:\s*'[^']*Publikumsvoting ist beendet/)
-    assert.match(pageSource, /Danke an alle, die für unser/)
-    assert.doesNotMatch(pageSource, /Jetzt.+abstimmen|ist geöffnet|Abstimmen bis|Stimmt bis|publikumspreis\/nominierte/)
+test('the removed national nomination is no longer promoted on the site', () => {
+  for (const pageSource of [source, aboutSource, pressSource, JSON.stringify(timeline)]) {
+    assert.doesNotMatch(pageSource, /Deutschen? Engagementpreis|engagementpreis-2026|Publikumsvoting/i)
   }
+  assert.match(pressSource, /Jugend-Engagement-Wettbewerb RLP/)
+  assert.ok(timeline.some(entry => entry.header.includes('Jugend-Engagement')))
 })
 
 test('homepage preserves the historical productions and repertoire', () => {

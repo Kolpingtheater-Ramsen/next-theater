@@ -526,13 +526,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ══════ AUSZEICHNUNGEN / NOMINIERUNGEN ══════ */}
+      {/* ══════ AUSZEICHNUNGEN ══════ */}
       {recognitionEntries.length > 0 && (
         <section className='relative bg-site-950 border-t border-site-700'>
           <div className='mx-auto max-w-7xl px-4 sm:px-8 py-16 sm:py-24'>
             <SectionHead
               eyebrow='Honor Roll'
-              title='Ausgezeichnet & nominiert.'
+              title='Ausgezeichnet.'
             />
 
             <div className='grid md:grid-cols-2 gap-6 sm:gap-8 mt-10 sm:mt-14'>
