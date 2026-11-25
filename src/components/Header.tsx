@@ -1,12 +1,57 @@
 "use client"
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import Image from '@/components/ProgressiveImage'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ThemeToggle from '@/components/ThemeToggle'
+import {
+  bookingHref,
+  MAX_TIMEOUT_MS,
+  shouldShowWinterRelease,
+  WINTER_RELEASE_MS,
+} from '@/lib/winter-release'
 
 export default function Header() {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const pathname = usePathname()
+  const [ticketState, setTicketState] = useState({ live: false, preview: false })
+
+  useEffect(() => {
+    const sync = () => {
+      const params = new URLSearchParams(window.location.search)
+      const next = shouldShowWinterRelease({
+        previewValue: params.get('preview'),
+        host: window.location.hostname,
+      })
+      setTicketState((current) =>
+        current.live === next.live && current.preview === next.preview
+          ? current
+          : next,
+      )
+      return next
+    }
+
+    const current = sync()
+    window.addEventListener('popstate', sync)
+
+    let timer: number | undefined
+    if (!current.live) {
+      const delay = WINTER_RELEASE_MS - Date.now()
+      if (delay > 0 && delay <= MAX_TIMEOUT_MS) {
+        timer = window.setTimeout(() => {
+          sync()
+        }, delay + 250)
+      }
+    }
+
+    return () => {
+      window.removeEventListener('popstate', sync)
+      if (timer !== undefined) window.clearTimeout(timer)
+    }
+  }, [pathname])
+
+  const ticketsHref = bookingHref(ticketState.preview)
 
   return (
     <header className='sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-site-900/80 bg-site-900/95 border-b border-site-700'>
@@ -26,6 +71,14 @@ export default function Header() {
           <Link href='/' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Home
           </Link>
+          {ticketState.live && (
+            <Link
+              href={ticketsHref}
+              className='font-semibold text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'
+            >
+              Tickets
+            </Link>
+          )}
           <Link href='/about' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-900 rounded px-1 transition-colors'>
             Über uns
           </Link>
@@ -79,6 +132,15 @@ export default function Header() {
             <Link href='/' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Home
             </Link>
+            {ticketState.live && (
+              <Link
+                href={ticketsHref}
+                className='font-semibold text-kolping-400 hover:text-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors'
+                onClick={() => setIsMobileOpen(false)}
+              >
+                Tickets
+              </Link>
+            )}
             <Link href='/about' className='hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 rounded px-1 transition-colors' onClick={() => setIsMobileOpen(false)}>
               Über uns
             </Link>
@@ -103,4 +165,3 @@ export default function Header() {
     </header>
   )
 }
-

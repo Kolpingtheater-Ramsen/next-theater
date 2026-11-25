@@ -1,29 +1,87 @@
 import Marquee from '@/components/Marquee'
 import FeaturedProductions from '@/components/FeaturedProductions'
+import PremiereCountdown from '@/components/PremiereCountdown'
+import RomeoJuliaPoster from '@/components/RomeoJuliaPoster'
+import WinterReleaseRefresh from '@/components/WinterReleaseRefresh'
 import type { Metadata } from 'next'
 import Image from '@/components/ProgressiveImage'
 import Link from 'next/link'
 import teamData from '@/data/team.json'
 import timeline from '@/data/timeline.json'
+import { bookingHref } from '@/lib/winter-release'
+import {
+  getWinterReleaseState,
+  type ReleaseSearchParams,
+} from '@/lib/winter-release-server'
 
-export const metadata: Metadata = {
-  title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
-  description:
-    'Die Creepshow ist vorbei. Neuigkeiten zu unserem Winterstück und zum nächsten Sommertheater gibt es auf Instagram und YouTube.',
-  openGraph: {
-    title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
-    description:
-      'Die Creepshow ist vorbei. Neuigkeiten zu unserem Winterstück und zum nächsten Sommertheater gibt es auf Instagram und YouTube.',
-    images: ['/img/creepshow-banner.webp'],
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
+
+type HomeProps = { searchParams?: ReleaseSearchParams }
+
+const WINTER_SHOW_DAYS = [
+  {
+    weekday: 'Sonntag',
+    dateLabel: '27. Dezember 2026',
+    times: ['17:00 Uhr', '19:30 Uhr'],
   },
+  {
+    weekday: 'Montag',
+    dateLabel: '28. Dezember 2026',
+    times: ['17:00 Uhr', '19:30 Uhr'],
+  },
+] as const
+
+export async function generateMetadata({
+  searchParams,
+}: HomeProps): Promise<Metadata> {
+  const { live } = await getWinterReleaseState(searchParams)
+
+  if (!live) {
+    return {
+      title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
+      description:
+        'Die Creepshow ist vorbei. Neuigkeiten zu unserem Winterstück und zum nächsten Sommertheater gibt es auf Instagram und YouTube.',
+      openGraph: {
+        title: 'Danke für euren Besuch | Kolpingtheater Ramsen',
+        description:
+          'Die Creepshow ist vorbei. Neuigkeiten zu unserem Winterstück und zum nächsten Sommertheater gibt es auf Instagram und YouTube.',
+        images: ['/img/creepshow-banner.webp'],
+      },
+    }
+  }
+
+  return {
+    title: 'Romeo & Julia – Ein Minidrama | Kolpingtheater Ramsen',
+    description:
+      'Das Kolpingtheater Ramsen präsentiert „Romeo & Julia – Ein Minidrama“ am 27. und 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
+    openGraph: {
+      title: 'Romeo & Julia – Ein Minidrama | Kolpingtheater Ramsen',
+      description:
+        'Am 27. & 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
+      images: ['/img/romeo-und-julia-2026-poster.jpg'],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Romeo & Julia – Ein Minidrama | Kolpingtheater Ramsen',
+      description:
+        'Am 27. & 28. Dezember 2026 um 17:00 & 19:30 Uhr im Pfarrheim in Ramsen (Klosterhof 7). Eintritt frei – Reservierung notwendig.',
+      images: ['/img/romeo-und-julia-2026-poster.jpg'],
+    },
+  }
 }
 
-export default function Home() {
-  const marqueeItems = teamData.plays.map((p) => ({
-    date: String(p.year),
-    title: p.play,
-    marjor: p.location === 'Open-Air-Bühne',
-  }))
+export default async function Home({ searchParams }: HomeProps) {
+  const { live, preview } = await getWinterReleaseState(searchParams)
+  const ticketsHref = bookingHref(preview)
+
+  const marqueeItems = teamData.plays
+    .filter((p) => live || p.slug !== 'romeo-und-julia')
+    .map((p) => ({
+      date: String(p.year),
+      title: p.play,
+      marjor: p.location === 'Open-Air-Bühne',
+    }))
 
   const featuredItems = teamData.plays
     .filter((p) => p.gallery)
@@ -44,89 +102,8 @@ export default function Home() {
       }
     })
 
-  return (
-    <div className='-mx-4 -mt-8' data-home-state='post-show'>
-      {/* ══════ CURRENT SHOW · POST-SEASON THANK YOU ══════ */}
-      <section className='force-dark relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden bg-site-950 px-4 py-16 sm:px-8 sm:py-24'>
-        <Image
-          src='/img/creepshow-banner.webp'
-          alt='Das Ensemble der Creepshow auf der Kolpingwiese'
-          fill
-          priority
-          sizes='100vw'
-          className='-z-30 object-cover object-center opacity-30 grayscale-[35%]'
-        />
-        <div className='absolute inset-0 -z-20 bg-gradient-to-r from-site-950 via-site-950/90 to-site-950/55' />
-        <div className='absolute inset-0 -z-10 bg-gradient-to-t from-site-950 via-transparent to-site-950/50' />
-        <div className='grain absolute inset-0 -z-10' aria-hidden />
-
-        <span
-          className='absolute left-6 top-6 h-4 w-4 border-l-2 border-t-2 border-kolping-400/70'
-          aria-hidden
-        />
-        <span
-          className='absolute right-6 top-6 h-4 w-4 border-r-2 border-t-2 border-kolping-400/70'
-          aria-hidden
-        />
-        <span
-          className='absolute bottom-6 left-6 h-4 w-4 border-b-2 border-l-2 border-kolping-400/70'
-          aria-hidden
-        />
-        <span
-          className='absolute bottom-6 right-6 h-4 w-4 border-b-2 border-r-2 border-kolping-400/70'
-          aria-hidden
-        />
-
-        <div className='mx-auto w-full max-w-6xl'>
-          <div className='max-w-3xl'>
-            <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs sm:tracking-[0.45em]'>
-              Danke für euren Besuch
-            </p>
-            <h1 className='mt-5 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-site-50 sm:text-6xl md:text-7xl'>
-              Das war die{' '}
-              <span className='italic text-kolping-400'>Creepshow.</span>
-            </h1>
-            <div className='hairline-gold mt-6 w-24' />
-            <p className='mt-6 max-w-2xl text-base leading-relaxed text-site-100 sm:text-lg'>
-              Danke an alle, die bei unseren Vorstellungen auf der Kolpingwiese
-              dabei waren. Wir haben uns sehr über euren Besuch gefreut.
-            </p>
-
-            <div className='mt-10 border-l-2 border-kolping-400 pl-5 sm:mt-12 sm:pl-7'>
-              <p className='font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs'>
-                Wie es weitergeht
-              </p>
-              <p className='mt-3 max-w-xl text-sm leading-relaxed text-site-100 sm:text-base'>
-                Auf Instagram und YouTube geben wir bekannt, welches Stück wir
-                im Winter spielen und was im nächsten Sommer auf die Bühne
-                kommt.
-              </p>
-            </div>
-
-            <div className='mt-7 flex w-full flex-col gap-3 sm:w-auto sm:flex-row'>
-              <a
-                href='https://www.instagram.com/kolpingtheater_ramsen/'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-black transition-colors hover:bg-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
-              >
-                Instagram
-                <span aria-hidden>→</span>
-              </a>
-              <a
-                href='https://www.youtube.com/@kolpingtheaterramsen'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm border border-site-300/60 bg-site-950/60 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-site-50 backdrop-blur-sm transition-colors hover:border-kolping-400 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
-              >
-                YouTube
-                <span aria-hidden>→</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
+  const lowerSections = (
+    <>
       {/* ══════ MARQUEE · Repertoire ══════ */}
       <section className='border-y border-site-700'>
         <Marquee items={marqueeItems} />
@@ -226,28 +203,51 @@ export default function Home() {
             <div className='relative grid sm:grid-cols-[1fr_auto] gap-8 sm:gap-12 items-end'>
               <div>
                 <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-4'>
-                  Was als Nächstes kommt
+                  {live ? 'Eintritt frei · Sitzplatzreservierung' : 'Was als Nächstes kommt'}
                 </div>
                 <h3
                   id='stay-heading'
                   className='font-display text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-[0.95]'
                 >
-                  Nichts
-                  <br />
-                  <span className='italic text-kolping-400'>verpassen.</span>
+                  {live ? (
+                    <>
+                      Jetzt Plätze
+                      <br />
+                      <span className='italic text-kolping-400'>sichern.</span>
+                    </>
+                  ) : (
+                    <>
+                      Nichts
+                      <br />
+                      <span className='italic text-kolping-400'>verpassen.</span>
+                    </>
+                  )}
                 </h3>
                 <p className='mt-5 text-site-100/85 max-w-lg text-sm sm:text-base leading-relaxed'>
-                  Auf Instagram und YouTube bleibst du hinter den Kulissen
-                  dabei und erfährst zuerst, was wir als Nächstes spielen.
-                  Fragen? Schreib uns.
+                  {live
+                    ? 'Reserviere deine kostenlosen Plätze für Romeo & Julia im Pfarrheim in Ramsen und bleib auf Instagram und YouTube hinter den Kulissen dabei.'
+                    : 'Auf Instagram und YouTube bleibst du hinter den Kulissen dabei und erfährst zuerst, was wir als Nächstes spielen. Fragen? Schreib uns.'}
                 </p>
               </div>
               <div className='flex flex-col gap-3 sm:items-end'>
+                {live && (
+                  <Link
+                    href={ticketsHref}
+                    className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'
+                  >
+                    Plätze reservieren
+                    <span className='transition-transform group-hover:translate-x-1'>→</span>
+                  </Link>
+                )}
                 <a
                   href='https://www.instagram.com/kolpingtheater_ramsen/'
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'
+                  className={
+                    live
+                      ? 'group inline-flex items-center gap-3 rounded-sm border border-site-700 bg-site-800/70 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-site-100 transition-all hover:border-kolping-400/60 hover:text-kolping-400'
+                      : 'group inline-flex items-center gap-3 rounded-sm bg-kolping-400 px-7 py-3.5 font-mono text-xs uppercase tracking-[0.3em] font-bold text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.5)]'
+                  }
                 >
                   Instagram folgen
                   <span className='transition-transform group-hover:translate-x-1'>→</span>
@@ -277,6 +277,327 @@ export default function Home() {
           <div className='clapper-stripes h-6 sm:h-8' aria-hidden />
         </div>
       </section>
+    </>
+  )
+
+  return live ? (
+    <div className='-mx-4 -mt-8' data-home-state='winter-show'>
+      {/* ══════ CURRENT SHOW · ROMEO & JULIA (ACTIVE FROM 01.12.) ══════ */}
+      <section className='force-dark relative isolate overflow-hidden bg-site-950 px-4 py-14 sm:px-8 sm:py-20 lg:py-24'>
+        <Image
+          src='/img/romeo-und-julia-2026-poster.jpg'
+          alt=''
+          fill
+          priority
+          sizes='100vw'
+          className='-z-30 object-cover object-center opacity-25 blur-sm scale-105'
+          aria-hidden
+        />
+        <div className='absolute inset-0 -z-20 bg-gradient-to-r from-black/90 via-black/75 to-black/45' />
+        <div className='absolute inset-0 -z-10 bg-gradient-to-t from-black/90 via-black/30 to-black/60' />
+        <div className='vignette' />
+        <div className='footlight' />
+
+        <span
+          className='absolute left-6 top-6 h-4 w-4 border-l-2 border-t-2 border-kolping-400/70'
+          aria-hidden
+        />
+        <span
+          className='absolute right-6 top-6 h-4 w-4 border-r-2 border-t-2 border-kolping-400/70'
+          aria-hidden
+        />
+        <span
+          className='absolute bottom-6 left-6 h-4 w-4 border-b-2 border-l-2 border-kolping-400/70'
+          aria-hidden
+        />
+        <span
+          className='absolute bottom-6 right-6 h-4 w-4 border-b-2 border-r-2 border-kolping-400/70'
+          aria-hidden
+        />
+
+        <div className='relative mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(340px,440px)] xl:grid-cols-[minmax(0,1fr)_minmax(380px,460px)] xl:gap-16'>
+          <div className='max-w-2xl'>
+            <div className='animate-fade-in-up mb-5 flex flex-wrap gap-2.5'>
+              <span className='inline-flex items-center gap-2 rounded-full border border-kolping-400/50 bg-site-950/70 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-mono font-semibold tracking-[0.22em] text-kolping-400 uppercase'>
+                <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
+                27. &amp; 28. Dezember 2026 · 17:00 &amp; 19:30 Uhr
+              </span>
+              <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.22em] text-white uppercase'>
+                Eintritt frei · Reservierung notwendig
+              </span>
+            </div>
+
+            <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs sm:tracking-[0.45em]'>
+              Das Kolpingtheater Ramsen präsentiert · Wintertheater
+            </p>
+
+            <h1 className='mt-4 animate-curtain-rise font-display text-4xl font-black uppercase leading-[0.94] tracking-tight text-site-50 text-shadow-lg sm:text-6xl xl:text-7xl'>
+              Romeo &amp;{' '}
+              <span className='italic text-kolping-400'>Julia</span>
+              <span className='mt-3 block font-mono text-xs font-semibold tracking-[0.3em] text-site-100 sm:text-sm'>
+                – Ein Minidrama –
+              </span>
+            </h1>
+
+            <div className='hairline-gold mt-6 w-24' />
+
+            <p className='mt-6 max-w-xl text-base leading-relaxed text-site-100 sm:text-lg'>
+              An zwei Winterabenden bringen wir unser neues Minidrama auf die
+              Bühne im Pfarrheim in Ramsen (Klosterhof 7). Der Eintritt ist
+              frei – für deinen Besuch ist eine kostenlose
+              Sitzplatzreservierung vorab notwendig.
+            </p>
+
+            <div className='mt-8 flex flex-wrap items-center gap-3'>
+              <Link
+                href={ticketsHref}
+                className='group inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.25em] text-black transition-all hover:bg-kolping-500 hover:shadow-[0_0_30px_rgba(255,122,0,0.45)] focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
+              >
+                Plätze reservieren
+                <span className='transition-transform group-hover:translate-x-1' aria-hidden>
+                  →
+                </span>
+              </Link>
+              <a
+                href='#termine'
+                className='group inline-flex min-h-12 items-center justify-center gap-2 rounded-sm border border-white/25 bg-black/55 px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-site-50 backdrop-blur-sm transition-colors hover:border-kolping-400 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
+              >
+                Termine &amp; Infos
+                <span className='transition-transform group-hover:translate-y-0.5' aria-hidden>
+                  ↓
+                </span>
+              </a>
+              <a
+                href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex items-center gap-2 px-2 py-2 font-mono text-[11px] uppercase tracking-[0.25em] text-site-100 transition-colors hover:text-kolping-400'
+              >
+                Anfahrt · Klosterhof 7 <span aria-hidden>↗</span>
+              </a>
+            </div>
+          </div>
+
+          <RomeoJuliaPoster />
+        </div>
+      </section>
+
+      {/* ══════ TERMINE & TICKETS ══════ */}
+      <section
+        id='termine'
+        className='relative bg-site-900 border-t border-site-700 scroll-mt-24'
+        aria-labelledby='termine-heading'
+      >
+        <div className='mx-auto max-w-7xl px-4 sm:px-8 py-14 sm:py-20'>
+          <div className='flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 sm:mb-14'>
+            <div>
+              <div className='font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-kolping-400 mb-3'>
+                4 Vorstellungen · Eintritt frei · Reservierung notwendig
+              </div>
+              <h2
+                id='termine-heading'
+                className='font-display text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-site-50 leading-[0.92]'
+              >
+                Termine &amp;{' '}
+                <span className='italic text-kolping-400'>Tickets.</span>
+              </h2>
+              <div className='hairline-gold w-24 mt-5' />
+              <p className='mt-4 text-site-100/85 text-sm sm:text-base max-w-xl leading-relaxed'>
+                Wähle deinen Wunschtermin und sichere dir kostenlos feste
+                Sitzplätze im Pfarrheim. Dein digitales Ticket erhältst du direkt
+                per E-Mail und auf Wunsch für Google Wallet.
+              </p>
+            </div>
+
+            <PremiereCountdown
+              targetISO='2026-12-27T17:00:00+01:00'
+              label='Bis zur ersten Vorstellung'
+            />
+          </div>
+
+          <div className='grid md:grid-cols-2 gap-6'>
+            {WINTER_SHOW_DAYS.map((day) => (
+              <article
+                key={day.dateLabel}
+                className='flex flex-col justify-between gap-6 rounded-sm border border-site-700 bg-site-950 p-6 sm:p-8'
+              >
+                <div>
+                  <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
+                    {day.weekday}
+                  </div>
+                  <h3 className='mt-2 font-display text-2xl sm:text-3xl uppercase tracking-tight text-site-50'>
+                    {day.dateLabel}
+                  </h3>
+                  <div className='hairline-gold w-12 mt-4' />
+
+                  <div className='mt-5 grid grid-cols-2 gap-3'>
+                    {day.times.map((time) => (
+                      <div
+                        key={time}
+                        className='rounded-sm border border-site-700 bg-site-900 px-4 py-3'
+                      >
+                        <div className='font-mono text-[10px] uppercase tracking-[0.25em] text-site-300'>
+                          Vorstellung
+                        </div>
+                        <div className='mt-1 font-display text-xl text-site-50'>
+                          {time}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  href={ticketsHref}
+                  className='group inline-flex min-h-11 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.25em] text-black transition-all hover:bg-kolping-500'
+                >
+                  Plätze reservieren
+                  <span className='transition-transform group-hover:translate-x-1' aria-hidden>
+                    →
+                  </span>
+                </Link>
+              </article>
+            ))}
+          </div>
+
+          <div className='mt-6 grid md:grid-cols-3 gap-4 sm:gap-6'>
+            <div className='rounded-sm border border-site-700 bg-site-950 p-5 sm:p-6'>
+              <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
+                Spielort
+              </div>
+              <div className='mt-2 font-display text-xl uppercase text-site-50'>
+                Pfarrheim in Ramsen
+              </div>
+              <p className='mt-2 text-sm text-site-100/85 leading-relaxed'>
+                Klosterhof 7, 67305 Ramsen
+              </p>
+              <a
+                href='https://maps.google.com/?q=Klosterhof+7,+67305+Ramsen'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-kolping-400 hover:text-kolping-500'
+              >
+                In Google Maps öffnen <span aria-hidden>↗</span>
+              </a>
+            </div>
+
+            <div className='rounded-sm border border-site-700 bg-site-950 p-5 sm:p-6'>
+              <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
+                Eintritt &amp; Plätze
+              </div>
+              <div className='mt-2 font-display text-xl uppercase text-site-50'>
+                Eintritt frei
+              </div>
+              <p className='mt-2 text-sm text-site-100/85 leading-relaxed'>
+                Reservierung notwendig – bis zu 5 Sitzplätze pro Buchung
+                online wählbar.
+              </p>
+            </div>
+
+            <div className='rounded-sm border border-site-700 bg-site-950 p-5 sm:p-6'>
+              <div className='font-mono text-[10px] uppercase tracking-[0.35em] text-kolping-400'>
+                Digitales Ticket
+              </div>
+              <div className='mt-2 font-display text-xl uppercase text-site-50'>
+                QR-Code &amp; Google Wallet
+              </div>
+              <p className='mt-2 text-sm text-site-100/85 leading-relaxed'>
+                Direkt nach der Reservierung verfügbar – Plätze können
+                jederzeit geändert oder storniert werden.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {lowerSections}
+    </div>
+  ) : (
+    <div className='-mx-4 -mt-8' data-home-state='post-show'>
+      <WinterReleaseRefresh />
+
+      {/* ══════ CURRENT SHOW · POST-SEASON THANK YOU (BEFORE 01.12.) ══════ */}
+      <section className='force-dark relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden bg-site-950 px-4 py-16 sm:px-8 sm:py-24'>
+        <Image
+          src='/img/creepshow-banner.webp'
+          alt='Das Ensemble der Creepshow auf der Kolpingwiese'
+          fill
+          priority
+          sizes='100vw'
+          className='-z-30 object-cover object-center opacity-30 grayscale-[35%]'
+        />
+        <div className='absolute inset-0 -z-20 bg-gradient-to-r from-site-950 via-site-950/90 to-site-950/55' />
+        <div className='absolute inset-0 -z-10 bg-gradient-to-t from-site-950 via-transparent to-site-950/50' />
+        <div className='grain absolute inset-0 -z-10' aria-hidden />
+
+        <span
+          className='absolute left-6 top-6 h-4 w-4 border-l-2 border-t-2 border-kolping-400/70'
+          aria-hidden
+        />
+        <span
+          className='absolute right-6 top-6 h-4 w-4 border-r-2 border-t-2 border-kolping-400/70'
+          aria-hidden
+        />
+        <span
+          className='absolute bottom-6 left-6 h-4 w-4 border-b-2 border-l-2 border-kolping-400/70'
+          aria-hidden
+        />
+        <span
+          className='absolute bottom-6 right-6 h-4 w-4 border-b-2 border-r-2 border-kolping-400/70'
+          aria-hidden
+        />
+
+        <div className='mx-auto w-full max-w-6xl'>
+          <div className='max-w-3xl'>
+            <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs sm:tracking-[0.45em]'>
+              Danke für euren Besuch
+            </p>
+            <h1 className='mt-5 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-site-50 sm:text-6xl md:text-7xl'>
+              Das war die{' '}
+              <span className='italic text-kolping-400'>Creepshow.</span>
+            </h1>
+            <div className='hairline-gold mt-6 w-24' />
+            <p className='mt-6 max-w-2xl text-base leading-relaxed text-site-100 sm:text-lg'>
+              Danke an alle, die bei unseren Vorstellungen auf der Kolpingwiese
+              dabei waren. Wir haben uns sehr über euren Besuch gefreut.
+            </p>
+
+            <div className='mt-10 border-l-2 border-kolping-400 pl-5 sm:mt-12 sm:pl-7'>
+              <p className='font-mono text-[10px] font-bold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs'>
+                Wie es weitergeht
+              </p>
+              <p className='mt-3 max-w-xl text-sm leading-relaxed text-site-100 sm:text-base'>
+                Auf Instagram und YouTube geben wir bekannt, welches Stück wir
+                im Winter spielen und was im nächsten Sommer auf die Bühne
+                kommt.
+              </p>
+            </div>
+
+            <div className='mt-7 flex w-full flex-col gap-3 sm:w-auto sm:flex-row'>
+              <a
+                href='https://www.instagram.com/kolpingtheater_ramsen/'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm bg-kolping-400 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-black transition-colors hover:bg-kolping-500 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
+              >
+                Instagram
+                <span aria-hidden>→</span>
+              </a>
+              <a
+                href='https://www.youtube.com/@kolpingtheaterramsen'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='inline-flex min-h-12 items-center justify-center gap-3 rounded-sm border border-site-300/60 bg-site-950/60 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.22em] text-site-50 backdrop-blur-sm transition-colors hover:border-kolping-400 hover:text-kolping-400 focus:outline-none focus:ring-2 focus:ring-kolping-400 focus:ring-offset-2 focus:ring-offset-site-950'
+              >
+                YouTube
+                <span aria-hidden>→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {lowerSections}
     </div>
   )
 }
