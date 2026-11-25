@@ -97,6 +97,13 @@
       "year": 2026,
       "location": "Open-Air-Bühne",
       "gallery": true
+    },
+    {
+      "play": "Romeo & Julia – Ein Minidrama",
+      "slug": "romeo-und-julia",
+      "year": 2026,
+      "location": "Kreativbühne",
+      "gallery": false
     }
   ],
   "current": [
@@ -116,9 +123,32 @@
         null,
         "Maribel / Mathilde",
         null,
-        "Drusilla"
+        "Drusilla",
+        null
       ],
       "images": 3
+    },
+    {
+      "id": "Elea",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Gloria"
+      ],
+      "images": 1,
+      "placeholderAvatar": true
     },
     {
       "id": "Elena",
@@ -136,9 +166,32 @@
         "Lucy",
         "Johanna",
         "Eurydike",
-        "Lucy"
+        "Lucy",
+        null
       ],
       "images": 3
+    },
+    {
+      "id": "Emilia",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Schwester Laurentia"
+      ],
+      "images": 1,
+      "placeholderAvatar": true
     },
     {
       "id": "Fernanda",
@@ -156,7 +209,8 @@
         "Mammonia",
         "Gräfin Hedwig",
         null,
-        "Tante Heideltraut von Storchensumpf"
+        "Tante Heideltraut von Storchensumpf",
+        null
       ],
       "images": 3
     },
@@ -176,7 +230,8 @@
         null,
         "Pater Rabanus",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -196,7 +251,8 @@
         null,
         null,
         null,
-        "Karl"
+        "Karl",
+        "Mercutio"
       ],
       "images": 3
     },
@@ -216,7 +272,8 @@
         null,
         null,
         "Hermes",
-        "Bruno"
+        "Bruno",
+        "Tybalt"
       ],
       "images": 3
     },
@@ -236,7 +293,8 @@
         "Teufel",
         "Berthold von Winzingen",
         null,
-        "Vetter Viktor"
+        "Vetter Viktor",
+        null
       ],
       "images": 3
     },
@@ -256,7 +314,8 @@
         null,
         "Ensemble",
         "Melinoe",
-        "Motte"
+        "Motte",
+        "Julia Capulet"
       ],
       "images": 3
     },
@@ -276,7 +335,8 @@
         null,
         "Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -296,7 +356,8 @@
         null,
         "Ensemble",
         "Nyx",
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -316,7 +377,8 @@
         "Teufelchen",
         "Emma (jung)",
         "Lachesis",
-        "Fiona"
+        "Fiona",
+        null
       ],
       "images": 3
     },
@@ -337,7 +399,8 @@
         null,
         "Ensemble",
         "Athene",
-        "Portrait"
+        "Portrait",
+        null
       ],
       "images": 3
     },
@@ -357,7 +420,8 @@
         null,
         "Ensemble",
         null,
-        "Bote / Diener"
+        "Bote / Diener",
+        null
       ],
       "images": 3
     },
@@ -377,9 +441,32 @@
         null,
         "Barde Mattes",
         null,
-        "Graf Thaddäus von Falkenstein"
+        "Graf Thaddäus von Falkenstein",
+        null
       ],
       "images": 3
+    },
+    {
+      "id": "Lucia",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Francesca"
+      ],
+      "images": 1,
+      "placeholderAvatar": true
     },
     {
       "id": "Marcella",
@@ -397,9 +484,31 @@
         null,
         null,
         "Ensemble",
-        "Suzie"
+        "Suzie",
+        "Benvolia"
       ],
       "images": 3
+    },
+    {
+      "id": "Maren",
+      "roles": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Lady Montague"
+      ],
+      "images": 2
     },
     {
       "id": "Max",
@@ -417,7 +526,8 @@
         null,
         "Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -437,7 +547,8 @@
         null,
         "Ensemble",
         null,
-        "Ensemble"
+        "Ensemble",
+        null
       ],
       "images": 3
     },
@@ -457,7 +568,8 @@
         "Teufelchen",
         "Marie (jung)",
         "Atropos",
-        "Felia"
+        "Felia",
+        "Prinzessin Escalus"
       ],
       "images": 3
     },
@@ -477,7 +589,8 @@
         "Seele 2/Gabriel",
         "Marie",
         null,
-        "Prinzessin Iset"
+        "Prinzessin Iset",
+        null
       ],
       "images": 3
     },
@@ -497,7 +610,8 @@
         "Beelzebub",
         "Knappe Fridolin",
         "Pan",
-        "Praktikant Emil"
+        "Praktikant Emil",
+        "Romeo Montague"
       ],
       "images": 3
     },
@@ -517,7 +631,8 @@
         "Seele 1/Prof. Dr. Dr. Glutheiß",
         "Agnes",
         null,
-        "Portrait"
+        "Portrait",
+        null
       ],
       "images": 3
     },
@@ -537,7 +652,8 @@
         "Regie",
         "Konrad / Regie",
         null,
-        "Butler Wilson / Regie"
+        "Butler Wilson / Regie",
+        null
       ],
       "images": 3
     },
@@ -557,7 +673,8 @@
         null,
         "Johanna (jung)",
         "Klotho",
-        "Mia"
+        "Mia",
+        "Paris"
       ],
       "placeholderAvatar": false,
       "images": 3
@@ -578,7 +695,8 @@
         "Lillith",
         "Emma",
         null,
-        "Clara"
+        "Clara",
+        null
       ],
       "images": 3
     },
@@ -598,7 +716,8 @@
         null,
         null,
         null,
-        "Herr Schniebli"
+        "Herr Schniebli",
+        null
       ],
       "images": 3
     },
@@ -618,7 +737,8 @@
         null,
         "Ensemble",
         null,
-        "Jacques"
+        "Jacques",
+        null
       ],
       "images": 3
     },
@@ -638,7 +758,8 @@
         "Engel",
         "Ensemble",
         "Persephone",
-        "Ensemble"
+        "Ensemble",
+        "Lady Capulet"
       ],
       "images": 3
     },
@@ -658,7 +779,8 @@
         null,
         "Lothar von Greifenfels",
         null,
-        "Dr. Adrian Düsterwald"
+        "Dr. Adrian Düsterwald",
+        null
       ],
       "images": 3
     }
@@ -680,6 +802,7 @@
         null,
         "Ensemble",
         "Hades",
+        null,
         null
       ],
       "images": 3

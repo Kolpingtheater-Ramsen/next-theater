@@ -27,7 +27,7 @@ type TeamDataShape = {
 }
 
 const data = teamData as TeamDataShape
-const CURRENT_PLAY_INDEX = data.plays.length - 1 // Creepshow 2026
+const CURRENT_PLAY_INDEX = data.plays.length - 1
 const currentPlay = data.plays[CURRENT_PLAY_INDEX]
 
 function avatarPath(id: string) {
