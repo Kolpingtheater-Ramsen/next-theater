@@ -307,9 +307,6 @@ export default async function Home({ searchParams }: HomeProps) {
                 <span className='w-1.5 h-1.5 rounded-full bg-kolping-400 animate-pulse' />
                 27. &amp; 28. Dezember 2026 · 17:00 &amp; 19:30 Uhr
               </span>
-              <span className='inline-flex items-center rounded-full border border-white/20 bg-site-950/55 backdrop-blur-sm px-3 py-1.5 text-[11px] font-mono font-semibold tracking-[0.22em] text-white uppercase'>
-                Dauer: ca. 50 Minuten · 78 Plätze pro Vorstellung
-              </span>
             </div>
 
             <p className='font-mono text-[10px] font-semibold uppercase tracking-[0.35em] text-kolping-400 sm:text-xs sm:tracking-[0.45em]'>
@@ -320,7 +317,7 @@ export default async function Home({ searchParams }: HomeProps) {
               Romeo &amp;{' '}
               <span className='italic text-kolping-400'>Julia</span>
               <span className='mt-3 block font-mono text-xs font-semibold tracking-[0.28em] text-site-100 sm:text-sm'>
-                – Ein Minidrama · ca. 50 Minuten –
+                – Ein Minidrama –
               </span>
             </h1>
 
@@ -328,8 +325,8 @@ export default async function Home({ searchParams }: HomeProps) {
 
             <p className='mt-6 max-w-xl text-base leading-relaxed text-site-100 sm:text-lg'>
               Unsere Kreativbühne zeigt eine eigene, verkürzte Bühnenfassung
-              (ca. 50 Minuten, nicht das abendfüllende Original) am 27. und 28.
-              Dezember im Pfarrheim in Ramsen (Klosterhof 7).
+              (ca. 50 Minuten) am 27. und 28. Dezember im Pfarrheim in Ramsen
+              (Klosterhof 7).
             </p>
 
             <div className='mt-6 inline-flex flex-wrap items-center gap-x-4 gap-y-2 rounded-sm border-2 border-emerald-400/70 bg-emerald-950/75 px-5 py-3 shadow-[0_0_28px_rgba(52,211,153,0.18)] backdrop-blur-sm'>

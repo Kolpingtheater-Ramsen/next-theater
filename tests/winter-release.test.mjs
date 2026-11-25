@@ -109,7 +109,13 @@ test('homepage configures dynamic edge rendering, Kreativbuehne branding, 50 min
   assert.match(homeSource, /Klosterhof 7/)
   assert.match(homeSource, /Eintritt frei/)
   assert.doesNotMatch(homeSource, /29\.12|29\. Dezember/)
+  assert.doesNotMatch(homeSource, /Dauer: ca\. 50 Minuten · 78 Plätze/)
+  assert.doesNotMatch(homeSource, /nicht das abendfüllende Original/)
   assert.ok(Array.isArray(romeoFaq) && romeoFaq.length >= 6)
+  const faqSerialized = JSON.stringify(romeoFaq)
+  assert.match(faqSerialized, /Einlass beginnt 30 Minuten vor Vorstellungsbeginn/)
+  assert.match(faqSerialized, /nicht zu knapp/)
+  assert.match(faqSerialized, /Bahnhofstraße/)
 })
 
 test('booking routes use Kreativbuehne branding, support contact, preview noindex, and gate booking until Dec 1', () => {
