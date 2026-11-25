@@ -9,18 +9,18 @@ import timeline from '@/data/timeline.json'
 export const metadata: Metadata = {
   title: 'Für den Deutschen Engagementpreis 2026 nominiert | Kolpingtheater Ramsen',
   description:
-    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Jetzt beim Publikumsvoting für uns abstimmen!',
+    'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Das Publikumsvoting ist beendet. Danke für eure Unterstützung!',
   openGraph: {
     title: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
     description:
-      'Das Kolpingtheater Ramsen gehört zu den Nominierten für den Deutschen Engagementpreis 2026.',
+      'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Das Publikumsvoting ist beendet. Danke für eure Unterstützung!',
     images: ['/img/deutscher-engagementpreis-2026-banner.png'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Wir sind für den Deutschen Engagementpreis 2026 nominiert',
     description:
-      'Das Kolpingtheater Ramsen gehört zu den Nominierten für den Deutschen Engagementpreis 2026.',
+      'Das Kolpingtheater Ramsen ist für den Deutschen Engagementpreis 2026 nominiert. Das Publikumsvoting ist beendet. Danke für eure Unterstützung!',
     images: ['/img/deutscher-engagementpreis-2026-banner.png'],
   },
 }
@@ -159,17 +159,17 @@ export default function Home() {
               Jugend-Engagement-Wettbewerb RLP „Sich einmischen – was bewegen“.
             </p>
             <p className='nomination-copy'>
-              Jetzt könnt ihr uns beim Publikumspreis unterstützen. Gebt unserem
-              Theater eure Stimme. Wir freuen uns über eure Unterstützung!
+              Danke an alle, die für unser Theater abgestimmt und unsere
+              Nominierung weitergesagt haben!
             </p>
             <div className='nomination-actions'>
               <a
-                href='https://www.deutscher-engagementpreis.de/publikumspreis/nominierte/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater'
+                href='https://www.deutscher-engagementpreis.de/engagiertenfinder/engagiertendetails/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='nomination-button'
               >
-                Jetzt für uns abstimmen <span aria-hidden>↗</span>
+                Zur offiziellen Nominierung <span aria-hidden>↗</span>
               </a>
               <Link href='/engagementpreis-2026' className='nomination-link'>
                 Mehr zur Nominierung <span aria-hidden>→</span>
@@ -177,7 +177,7 @@ export default function Home() {
             </div>
             <p className='nomination-date'>
               <span aria-hidden className='nomination-dot' />
-              Abstimmen bis 29. Oktober 2026, 17:59 Uhr
+              Publikumsvoting seit dem 29. Oktober 2026 beendet
             </p>
           </div>
         </div>

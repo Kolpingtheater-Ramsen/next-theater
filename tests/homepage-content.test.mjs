@@ -38,12 +38,15 @@ test('homepage metadata highlights the current nomination', () => {
   assert.doesNotMatch(source, /Premiere · 22\. August 2026/)
 })
 
+const officialNominationLink =
+  "href='https://www.deutscher-engagementpreis.de/engagiertenfinder/engagiertendetails/6728-kolpingsfamilie-ramsen-mit-kolping-openair-theater'"
+
 test('homepage presents and links the nomination announcement', () => {
   assert.match(source, /Wir sind[\s\S]*nominiert\./)
   assert.match(source, /Jugend-Engagement-Wettbewerb RLP/)
   assert.match(source, /href='\/engagementpreis-2026'/)
-  assert.match(source, /https:\/\/www\.deutscher-engagementpreis\.de\//)
-  assert.match(source, /1\.–29\. Oktober 2026/)
+  assert.ok(source.includes(officialNominationLink))
+  assert.match(source, /Publikumsvoting seit dem 29\. Oktober 2026 beendet/)
 })
 
 test('nomination page carries the project story and verified 2026 facts', () => {
@@ -54,7 +57,15 @@ test('nomination page carries the project story and verified 2026 facts', () => 
   assert.match(nominationSource, /1\.–29\. Oktober 2026/)
   assert.match(nominationSource, /26\. November 2026/)
   assert.match(nominationSource, /10\.000 Euro/)
-  assert.match(nominationSource, /https:\/\/www\.deutscher-engagementpreis\.de\//)
+  assert.equal(nominationSource.split(officialNominationLink).length - 1, 2)
+})
+
+test('closed voting is not advertised on either page or in metadata', () => {
+  for (const pageSource of [source, nominationSource]) {
+    assert.match(pageSource, /description:\s*'[^']*Publikumsvoting ist beendet/)
+    assert.match(pageSource, /Danke an alle, die für unser/)
+    assert.doesNotMatch(pageSource, /Jetzt.+abstimmen|ist geöffnet|Abstimmen bis|Stimmt bis|publikumspreis\/nominierte/)
+  }
 })
 
 test('homepage preserves the historical productions and repertoire', () => {
