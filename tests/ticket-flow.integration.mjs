@@ -19,11 +19,27 @@ test('ticket lifecycle on local D1', { skip: !base }, async t => {
   assert.ok(plays.every(p => p.total_seats === 78 && p.duration_minutes === 50))
   const adminLogin = await api('/api/admin/login', 'POST', { password: process.env.TICKET_TEST_ADMIN_PASSWORD || 'local-ticket-test-only' })
   assert.equal(adminLogin.status, 200)
-  const fixture = await api('/api/admin/plays', 'POST', { title: `Lokaler Test ${run}`, date: '2030-12-29', time: '19:30', display_date: 'Lokaler Test', total_seats: 68 }, { Cookie: adminLogin.headers.get('set-cookie').split(';')[0] })
+  const adminCookie = adminLogin.headers.get('set-cookie').split(';')[0]
+  const fixture = await api('/api/admin/plays', 'POST', { title: `Lokaler Test ${run}`, date: '2030-12-29', time: '19:30', display_date: 'Lokaler Test', total_seats: 68 }, { Cookie: adminCookie })
   assert.equal(fixture.status, 200)
   const play = fixture.data.id
   const payload = booking(play, [20, 21], `lifecycle-${run}@example.invalid`)
   let current, cookie
+  await t.test('Romeo & Julia reservations follow the public opening and use the shared seat inventory', async () => {
+    const beforeOpening = Date.now() < Date.parse('2026-12-01T00:00:00+01:00')
+    const early = booking(plays[0].id, [79])
+    const anonymous = await api('/api/bookings', 'POST', early)
+    if (beforeOpening) {
+      assert.equal(anonymous.status, 403)
+      assert.equal((await api('/api/bookings?preview=winter', 'POST', early)).status, 403)
+    }
+    const reserved = beforeOpening ? await api('/api/bookings', 'POST', early, { Cookie: adminCookie }) : anonymous
+    assert.equal(reserved.status, 201)
+    assert.equal(reserved.data.emailStatus, 'not_configured')
+    assert.ok((await api(`/api/plays/${early.playId}/seats`)).data.bookedSeats.includes(79))
+    assert.equal((await api(`/api/bookings/${reserved.data.bookingId}`, 'DELETE', { version: 0 })).status, 200)
+    assert.ok(!(await api(`/api/plays/${early.playId}/seats`)).data.bookedSeats.includes(79))
+  })
   await t.test('reject blocked seats, duplicate seat numbers, too many seats and cross-origin requests', async () => {
     for (const seats of [[0], [9], [70], [1, 1], [1, 2, 3, 4, 5, 6]]) assert.equal((await api('/api/bookings', 'POST', booking(play, seats))).status, 400)
     assert.equal((await api('/api/bookings', 'POST', payload, { Origin: 'https://unrelated.invalid' })).status, 403)

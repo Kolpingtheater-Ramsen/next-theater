@@ -460,7 +460,10 @@ export default function AdminDashboardPage() {
     <div className='max-w-7xl mx-auto'>
       <header className='admin-heading'>
         <div><h1>Buchungen &amp; Aufführungen</h1><p>Termin auswählen, Buchungen finden und Einlass prüfen.</p></div>
-        <a href='/admin/scan' className='admin-button admin-button-primary'>Einlass öffnen ↗</a>
+        <div className='flex flex-wrap gap-2'>
+          <a href='/booking/vorab' className='admin-button'>Für VIPs und Presse reservieren</a>
+          <a href='/admin/scan' className='admin-button admin-button-primary'>Einlass öffnen ↗</a>
+        </div>
       </header>
 
       <section aria-label='Aufführungen'>

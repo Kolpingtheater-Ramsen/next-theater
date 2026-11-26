@@ -28,7 +28,8 @@ export default function AdminLoginPage() {
       const data = await response.json() as { success: boolean; error?: string }
 
       if (data.success) {
-        router.replace('/admin/dashboard')
+        const teamBooking = new URLSearchParams(window.location.search).get('weiter') === 'vorab'
+        router.replace(teamBooking ? '/booking/vorab' : '/admin/dashboard')
       } else {
         setError(data.error || 'Anmeldung fehlgeschlagen')
       }
@@ -61,7 +62,7 @@ export default function AdminLoginPage() {
             </div>
             {error && <p id='login-error' role='alert' className='admin-error'>{error}</p>}
             <button type='submit' disabled={isLoading} className='admin-button admin-button-primary admin-login-submit'>
-              {isLoading ? 'Anmelden …' : 'Zur Verwaltung'}
+              {isLoading ? 'Anmelden …' : 'Anmelden'}
             </button>
           </form>
           <a href='/booking' className='admin-login-back'>← Zur Ticketseite</a>

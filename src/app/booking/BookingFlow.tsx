@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SeatSelection from '@/components/booking/SeatSelection'
 import BookingForm from '@/components/booking/BookingForm'
@@ -9,13 +10,15 @@ import BookingSummary from '@/components/booking/BookingSummary'
 import ConfirmDialog from '@/components/booking/ConfirmDialog'
 import SeatWarning from '@/components/booking/SeatWarning'
 import TicketSupportNotice from '@/components/booking/TicketSupportNotice'
+import WinterReleaseRefresh from '@/components/WinterReleaseRefresh'
 import type { SeatPolicyResult } from '@/lib/seat-policy'
 import { formatDay } from '@/lib/tickets'
+import { isRomeoJuliaPerformance } from '@/lib/winter-release'
 import type { PlayWithAvailability } from '@/types/database'
 
 type Step = 'date' | 'seats' | 'details'
 
-export default function BookingFlow() {
+export default function BookingFlow({ forGuest = false, preview = false }: { forGuest?: boolean; preview?: boolean }) {
   const router = useRouter()
   const [plays, setPlays] = useState<PlayWithAvailability[]>([])
   const [play, setPlay] = useState<PlayWithAvailability | null>(null)
@@ -89,7 +92,7 @@ export default function BookingFlow() {
     void loadSeats(selected)
   }
   async function reserve() {
-    if (!play || submitting.current || !seatsReady || !seats.length) return
+    if (preview || !play || submitting.current || !seatsReady || !seats.length) return
     submitting.current = true
     setBusy(true)
     setError('')
@@ -121,8 +124,13 @@ export default function BookingFlow() {
   const activeTitle = play?.title || plays[0]?.title || 'Romeo & Julia – Ein Minidrama'
   const [mainTitle, subtitleFromTitle] = activeTitle.split(' – ')
   const durationMinutes = play?.duration_minutes ?? plays[0]?.duration_minutes ?? 50
+  const stepTitle = {
+    date: forGuest ? 'Für welche Vorstellung reservierst du?' : 'Wann kommst du ins Theater?',
+    seats: forGuest ? 'Wähle die Plätze' : 'Such dir deine Plätze aus',
+    details: forGuest ? 'Für wen reservierst du?' : 'Fast geschafft.',
+  }
   return <>
-    {step === 'date' && (!plays.length || plays[0].id.startsWith('romeo-julia-2026-')) && <Image
+    {step === 'date' && (!plays.length || isRomeoJuliaPerformance(plays[0].id)) && <Image
       className='ticket-production-banner' src='/img/banners/romeo-und-julia-2026.webp'
       alt='Romeo und Julia reichen sich im Mondlicht über einen Balkon die Hände.'
       width={2172} height={724} priority unoptimized
@@ -136,11 +144,20 @@ export default function BookingFlow() {
       </div>
       <span className='ticket-badge'>Eintritt frei</span>
     </header>
+    {forGuest && <div className='ticket-notice'>
+      <p className='font-semibold'>Reservierung für VIPs und Presse</p>
+      <Link href='/admin/dashboard' className='underline underline-offset-4'>Zur Theaterverwaltung</Link>
+    </div>}
+    {preview && <div className='ticket-notice'>
+      <WinterReleaseRefresh />
+      <p>Vorschau. Die öffentliche Reservierung startet am 1. Dezember.</p>
+      <Link href='/booking/vorab' prefetch={false} className='underline underline-offset-4'>Vorabreservierung fürs Theaterteam</Link>
+    </div>}
     <ol className='ticket-steps' aria-label='Buchungsschritte'>
-      {(['date', 'seats', 'details'] as const).map((item, i) => <li key={item} aria-current={step === item ? 'step' : undefined}>{['Termin', 'Plätze', 'Deine Daten'][i]}</li>)}
+      {(['date', 'seats', 'details'] as const).map((item, i) => <li key={item} aria-current={step === item ? 'step' : undefined}>{['Termin', 'Plätze', forGuest ? 'Gastdaten' : 'Deine Daten'][i]}</li>)}
     </ol>
     {step !== 'date' && <button type='button' className='ticket-back' disabled={busy} onClick={() => go(step === 'details' ? 'seats' : 'date')}>← {step === 'details' ? 'Zurück zu deinen Plätzen' : 'Anderen Termin wählen'}</button>}
-    <h2 className='ticket-section-title' ref={heading} tabIndex={-1}>{step === 'date' ? 'Wann kommst du ins Theater?' : step === 'seats' ? 'Such dir deine Plätze aus' : 'Fast geschafft.'}</h2>
+    <h2 className='ticket-section-title' ref={heading} tabIndex={-1}>{stepTitle[step]}</h2>
     {play && step !== 'date' && <p className='ticket-muted'>{formatDay(play.date, true)} · {play.time} Uhr</p>}
     {error && <div className='ticket-error' role='alert' id='ticket-server-error'>{error}{step === 'date' && <button className='ticket-back block' onClick={loadPlays}>Erneut versuchen</button>}</div>}
     {step === 'date' && <>
@@ -179,7 +196,7 @@ export default function BookingFlow() {
       {seatNotice && <ConfirmDialog title='Mit Sitzlücke fortfahren?' confirmLabel='Ja, Auswahl bestätigen' cancelLabel='Plätze ändern' onCancel={() => setSeatNotice(null)} onConfirm={() => go('details')}><SeatWarning policy={seatNotice} onAcceptSuggestion={suggestion => { setSeats(suggestion); setSeatNotice(null) }}/></ConfirmDialog>}
     </>}
     {step === 'details' && play && <div className='ticket-form-grid'>
-      <BookingForm name={name} email={email} onChange={(key, value) => { (key === 'name' ? setName : setEmail)(value); setField(undefined) }} onSubmit={reserve} busy={busy} serverField={field} />
+      <BookingForm name={name} email={email} onChange={(key, value) => { (key === 'name' ? setName : setEmail)(value); setField(undefined) }} onSubmit={reserve} busy={busy} serverField={field} forGuest={forGuest} preview={preview} />
       <BookingSummary play={play} seats={seats} onEdit={busy ? undefined : () => go('seats')} />
     </div>}
     <TicketSupportNotice />

@@ -19,6 +19,9 @@ export default function BookingComingSoon() {
           <p className='ticket-muted'>
             Unsere Online-Sitzplatzreservierung für „Romeo &amp; Julia – Ein Minidrama“ öffnet am 1. Dezember 2026.
           </p>
+          <Link href='/booking/vorab' prefetch={false} className='ticket-back mt-2 underline underline-offset-4'>
+            Vorabreservierung fürs Theaterteam
+          </Link>
         </div>
         <span className='ticket-badge'>Eintritt frei</span>
       </header>

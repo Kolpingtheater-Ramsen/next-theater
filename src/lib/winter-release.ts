@@ -13,6 +13,10 @@ export function isWinterReleaseLive(now = Date.now()): boolean {
   return now >= WINTER_RELEASE_MS
 }
 
+export function isRomeoJuliaPerformance(playId: string): boolean {
+  return playId.startsWith('romeo-julia-2026-')
+}
+
 export function isLocalHost(host: string | null | undefined): boolean {
   if (!host) return false
   const normalized = host.trim().toLowerCase()

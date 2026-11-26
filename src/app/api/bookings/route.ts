@@ -4,6 +4,8 @@ import { emailConfig, sendBookingConfirmation } from '@/lib/email'
 import { sendDiscordSeatUpdate } from '@/lib/discord'
 import { isBookingOpen, validSeats } from '@/lib/tickets'
 import { rateLimit, sameOrigin, ticketJson } from '@/lib/ticket-http'
+import { requireAdminAuth } from '@/lib/admin-auth'
+import { isRomeoJuliaPerformance, isWinterReleaseLive } from '@/lib/winter-release'
 
 export const runtime = 'edge'
 export async function POST(request: Request) {
@@ -18,6 +20,9 @@ export async function POST(request: Request) {
     const name = body.name.trim(), email = body.email.trim().toLowerCase()
     if (name.length < 2 || name.length > 120) return ticketJson({ error: 'Bitte gib deinen vollständigen Namen ein (2 bis 120 Zeichen).', field: 'name' },400)
     if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return ticketJson({ error: 'Bitte gib eine gültige E-Mail-Adresse ein.', field: 'email' },400)
+    if (isRomeoJuliaPerformance(playId) && !isWinterReleaseLive() && !(await requireAdminAuth(request))) {
+      return ticketJson({ error: 'Die öffentliche Reservierung startet am 1. Dezember. Bitte melde dich als Theaterteam an, um vorab zu reservieren.' }, 403)
+    }
     const existing = await getBookingByRequestKey(env.DB,requestKey)
     const replay = (booking: NonNullable<typeof existing>) => {
       if (booking.play_id !== playId || booking.email !== email || booking.name !== name || !Array.isArray(seats) || JSON.stringify([...booking.seats].sort((a,b)=>a-b)) !== JSON.stringify([...seats].sort((a,b)=>a-b))) {

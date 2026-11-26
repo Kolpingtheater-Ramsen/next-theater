@@ -24,6 +24,6 @@ export async function generateMetadata({
 }
 
 export default async function BookingPage({ searchParams }: BookingPageProps) {
-  const { live } = await getWinterReleaseState(searchParams)
-  return live ? <BookingFlow /> : <BookingComingSoon />
+  const { live, preview } = await getWinterReleaseState(searchParams)
+  return live ? <BookingFlow preview={preview} /> : <BookingComingSoon />
 }

@@ -26,13 +26,16 @@ export function extractAdminToken(request: Request): string | null {
   } catch { return null }
 }
 
-export async function requireAdminAuth(request: Request) {
-  const token = extractAdminToken(request)
-  if (!token || !/^[a-f0-9-]{72}$/.test(token) || !sameOrigin(request)) return false
+export async function hasAdminSession(token: string | null | undefined) {
+  if (!token || !/^[a-f0-9-]{72}$/.test(token)) return false
   const { env } = getRequestContext()
   const session = await env.DB.prepare('SELECT expires_at FROM admin_sessions WHERE token_hash = ?')
     .bind(await digest(token)).first<{ expires_at: number }>()
   return !!session && session.expires_at > Date.now()
+}
+
+export async function requireAdminAuth(request: Request) {
+  return sameOrigin(request) && await hasAdminSession(extractAdminToken(request))
 }
 
 export async function revokeAdminToken(request: Request) {
