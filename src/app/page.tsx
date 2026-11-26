@@ -395,8 +395,8 @@ export default async function Home({ searchParams }: HomeProps) {
               <div className='hairline-gold w-24 mt-5' />
               <p className='mt-4 text-site-100/85 text-sm sm:text-base max-w-xl leading-relaxed'>
                 {bookingLive
-                  ? 'Wähle deinen Wunschtermin und sichere dir kostenlos feste Sitzplätze (78 Plätze pro Vorstellung, Reihen A bis H) im Pfarrheim. Dauer ca. 50 Minuten ohne Pause. Dein digitales Ticket erhältst du direkt per E-Mail und auf Wunsch für Google Wallet.'
-                  : 'Die kostenlose Online-Sitzplatzreservierung startet am 1. Dezember 2026 um 00:00 Uhr (78 feste Plätze pro Vorstellung, Reihen A bis H im Pfarrheim). Dauer ca. 50 Minuten ohne Pause – dein digitales Ticket erhältst du direkt per E-Mail und auf Wunsch für Google Wallet.'}
+                  ? 'Wähle deinen Wunschtermin und sichere dir kostenlos feste Sitzplätze für „Romeo & Julia – Ein Minidrama“ im Pfarrheim. Dauer des Stückes ca. 50 Minuten ohne Pause. Dein digitales Ticket erhältst du nach deiner kostenlosen Reservierung direkt per E-Mail.'
+                  : 'Die kostenlose Online-Sitzplatzreservierung für „Romeo & Julia – Ein Minidrama“ startet am 1. Dezember 2026 um 00:00 Uhr. Dauer des Stückes ca. 50 Minuten ohne Pause. Dein digitales Ticket erhältst du nach deiner kostenlosen Reservierung direkt per E-Mail.'}
               </p>
             </div>
 

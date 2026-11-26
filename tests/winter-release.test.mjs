@@ -96,7 +96,11 @@ test('homepage configures dynamic edge rendering, Kreativbuehne branding, 50 min
   assert.match(homeSource, /50 Minuten/)
   assert.match(homeSource, /Ein Minidrama/)
   assert.match(homeSource, /verkürzte/)
-  assert.match(homeSource, /78 Plätze/)
+  assert.match(homeSource, /78(?: feste)? Plätze/)
+  assert.match(
+    homeSource,
+    /Die kostenlose Online-Sitzplatzreservierung für „Romeo & Julia – Ein Minidrama“ startet am 1\. Dezember 2026 um 00:00 Uhr\. Dauer des Stückes ca\. 50 Minuten ohne Pause\. Dein digitales Ticket erhältst du nach deiner kostenlosen Reservierung direkt per E-Mail\./,
+  )
   assert.match(homeSource, /Reihen A–H/)
   assert.match(homeSource, /kolpingtheaterramsen@gmail\.com/)
   assert.match(homeSource, /romeo-faq\.json/)
