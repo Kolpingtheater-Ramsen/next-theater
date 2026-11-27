@@ -124,18 +124,20 @@ export default function BookingFlow({ forGuest = false, preview = false }: { for
   const activeTitle = play?.title || plays[0]?.title || 'Romeo & Julia – Ein Minidrama'
   const [mainTitle, subtitleFromTitle] = activeTitle.split(' – ')
   const durationMinutes = play?.duration_minutes ?? plays[0]?.duration_minutes ?? 50
+  const showPoster = step === 'date' && (!plays.length || isRomeoJuliaPerformance(plays[0].id))
   const stepTitle = {
     date: forGuest ? 'Für welche Vorstellung reservierst du?' : 'Wann kommst du ins Theater?',
     seats: forGuest ? 'Wähle die Plätze' : 'Such dir deine Plätze aus',
     details: forGuest ? 'Für wen reservierst du?' : 'Fast geschafft.',
   }
   return <>
-    {step === 'date' && (!plays.length || isRomeoJuliaPerformance(plays[0].id)) && <Image
-      className='ticket-production-banner' src='/img/banners/romeo-und-julia-2026.webp'
-      alt='Romeo und Julia reichen sich im Mondlicht über einen Balkon die Hände.'
-      width={2172} height={724} priority unoptimized
-    />}
-    <header className='ticket-intro'>
+    <header className={showPoster ? 'ticket-intro ticket-intro-with-poster' : 'ticket-intro'}>
+      {showPoster && <Image
+        className='ticket-production-poster'
+        src='/img/romeo-und-julia-2026-poster.jpg'
+        alt='Plakat zu Romeo & Julia des Kolpingtheaters Ramsen'
+        width={905} height={1280} priority unoptimized
+      />}
       <div>
         <p className='ticket-eyebrow'>Kolpingtheater Ramsen · Kreativbühne</p>
         <h1 className='ticket-heading'>{mainTitle}</h1>

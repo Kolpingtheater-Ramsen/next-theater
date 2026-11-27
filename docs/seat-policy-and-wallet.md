@@ -115,11 +115,12 @@ This establishes native saving and delivery of the cancellation update. Check-in
 and checkout were verified through Google's API, not separately in Android UI.
 The admission scanner was tested against isolated local D1.
 
-The Romeo und Julia artwork is generated with the built-in Imagegen tool:
-`public/img/banners/romeo-und-julia-2026.webp` for the booking page and
-`public/img/banners/romeo-und-julia-2026-wallet.png` for event classes. The imagery
-is illustrative, not a photograph of the real cast or set. It contains no text;
-titles, times, seats and QR codes remain native accessible fields.
+At the September rollout, the booking banner and Wallet hero used a generated
+image. The booking header and admin sign-in now use the official artwork from
+`public/img/romeo-und-julia-2026-poster.jpg`. The Wallet hero uses a 1032 × 812 PNG
+crop of the same poster with the cast photo and title at
+`public/img/banners/romeo-und-julia-2026-poster-wallet.png`. Wallet displays the
+performance time, seats and admission QR code in its ticket fields.
 
 ## Public activation (21 September 2026)
 

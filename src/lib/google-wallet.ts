@@ -1,5 +1,6 @@
 import { getBookingById } from './db'
 import { admissionCode, DEFAULT_VENUE, hasStarted, performanceStart, seatLabel } from './tickets'
+import { isRomeoJuliaPerformance } from './winter-release'
 import type { BookingWithSeats, Play } from '@/types/database'
 
 const API = 'https://walletobjects.googleapis.com/walletobjects/v1'
@@ -44,7 +45,12 @@ export function walletClass(env:CloudflareEnv,play:Play) {
   return {id:`${env.GOOGLE_WALLET_ISSUER_ID}.${play.id}`,issuerName:'Kolpingtheater Ramsen',reviewStatus:'UNDER_REVIEW',
     eventName:localized(play.title),eventId:play.id,hexBackgroundColor:'#201c19',
     logo:{sourceUri:{uri:`${SITE}/img/logo.png`},contentDescription:localized('Kolpingtheater Ramsen')},
-    ...(play.id.startsWith('romeo-julia-2026-') ? {heroImage:{sourceUri:{uri:`${SITE}/img/banners/romeo-und-julia-2026-wallet.png`},contentDescription:localized('Romeo und Julia am Balkon im Mondlicht')}} : {}),
+    ...(isRomeoJuliaPerformance(play.id) && {
+      heroImage: {
+        sourceUri: { uri: `${SITE}/img/banners/romeo-und-julia-2026-poster-wallet.png` },
+        contentDescription: localized('Plakat zu Romeo & Julia des Kolpingtheaters Ramsen'),
+      },
+    }),
     venue:{name:localized('Kolpingtheater Ramsen'),address:localized(play.venue || DEFAULT_VENUE)},
     dateTime:{start:walletEventTime(play)},
     finePrint:localized('Eintritt frei. Bitte 15 Minuten vor Beginn da sein. Dieses Ticket gilt für alle angegebenen Plätze.'),

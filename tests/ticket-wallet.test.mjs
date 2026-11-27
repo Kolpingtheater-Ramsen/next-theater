@@ -31,6 +31,14 @@ test('Wallet passes expose admission codes only and follow booking status', () =
   assert.equal(wallet.walletObject(env, { ...booking, status: 'checked_in' }).state, 'COMPLETED')
   assert.equal(wallet.walletConfigured(env), false)
 })
+test('Romeo & Julia classes use the official poster', () => {
+  const production = wallet.walletClass(env, { ...play, id: 'romeo-julia-2026-12-27-1930' })
+  assert.equal(production.heroImage.sourceUri.uri,
+    'https://kolpingtheater-ramsen.de/img/banners/romeo-und-julia-2026-poster-wallet.png')
+  assert.equal(production.heroImage.contentDescription.defaultValue.value,
+    'Plakat zu Romeo & Julia des Kolpingtheaters Ramsen')
+  assert.equal(wallet.walletClass(env, play).heroImage, undefined)
+})
 test('Wallet JWT signatures verify with the public key', async () => {
   const keys = await webcrypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['sign', 'verify'])
   const der = await webcrypto.subtle.exportKey('pkcs8', keys.privateKey)

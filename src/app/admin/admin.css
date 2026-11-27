@@ -47,7 +47,7 @@
 .admin-retention p { max-width: 740px; }
 .admin-login { min-height: 65vh; display: grid; place-items: center; padding: 32px 0; }
 .admin-login-card { width: min(100%, 460px); border: 1px solid var(--color-site-700); border-radius: 20px; overflow: hidden; background: var(--color-site-800); }
-.admin-login-art { height: 130px; background: linear-gradient(0deg, var(--color-site-800), transparent 60%), url('/img/banners/romeo-und-julia-2026.webp') center 38% / cover; }
+.admin-login-art { height: 130px; background: linear-gradient(0deg, var(--color-site-800), transparent 60%), url('/img/romeo-und-julia-2026-poster.jpg') center 29% / cover; }
 .admin-login-content { padding: 24px 32px 32px; }
 .admin-login-content h1 { font-size: 1.9rem; font-weight: 600; margin-bottom: 8px; }
 .admin-login-content form { margin-top: 28px; }
